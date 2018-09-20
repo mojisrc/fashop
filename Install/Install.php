@@ -124,7 +124,6 @@ class Install
 			$this->initDirectory();
 			$this->initDb();
 			$this->insertInitDatabase();
-			$this->initJwt();
 			$this->initAdmin();
 			return true;
 		} catch( \Exception $e ){
@@ -154,20 +153,17 @@ class Install
 
 	private function initDb()
 	{
-		$target = ROOT_PATH."Conf/config/database.php";
-		if( !file_exists( $target ) ){
-			$config             = include_once $target;
-			$config['hostname'] = $this->dbHost;
-			$config['database'] = $this->dbName;
-			$config['username'] = $this->dbUsername;
-			$config['password'] = $this->dbPassword;
-			$config['hostport'] = $this->dbPort;
-			$config['prefix']   = $this->dbPrefix;
-			$content            = "<?php\n";
-			$content            .= "return ".var_export( $config, true ).";";
-			file_put_contents( $target, $content );
-		}
-
+		$target             = ROOT_PATH."Conf/config/database.php";
+		$config             = include_once $target;
+		$config['hostname'] = $this->dbHost;
+		$config['database'] = $this->dbName;
+		$config['username'] = $this->dbUsername;
+		$config['password'] = $this->dbPassword;
+		$config['hostport'] = $this->dbPort;
+		$config['prefix']   = $this->dbPrefix;
+		$content            = "<?php\n";
+		$content            .= "return ".var_export( $config, true ).";";
+		file_put_contents( $target, $content );
 	}
 
 	private function insertInitDatabase()
@@ -184,21 +180,20 @@ class Install
 
 	private function initJwt()
 	{
-		$target = ROOT_PATH."Conf/config/jwt.php";
-		if( !file_exists( $target ) ){
-			$config        = include_once $target;
-			$config['key'] = RandomKey::string( 13 );
-			$content       = "<?php \n";
-			$content       .= "return ".var_export( $config, true ).";";
-			file_put_contents( $target, $content );
-		}
+		$target        = ROOT_PATH."Conf/config/jwt.php";
+		$config        = include_once $target;
+		$config['key'] = RandomKey::string( 13 );
+		$content       = "<?php \n";
+		$content       .= "return ".var_export( $config, true ).";";
+		file_put_contents( $target, $content );
 	}
 
 	/**
 	 * 检查是否已安装
 	 * @author 韩文博
 	 */
-	public function checkStatus(){
+	public function checkStatus()
+	{
 		// todo 判断配置文件、数据库是否都已经存在
 		// todo 生成nginx 不是在这里面
 	}
@@ -241,7 +236,7 @@ class Install
 			'/App'     => is_writable( ROOT_PATH."App" ) ? true : false,
 			'/Conf'    => is_writable( ROOT_PATH."Conf" ) ? true : false,
 			'/vendor'  => is_writable( ROOT_PATH."vendor" ) ? true : false,
-//			'/Backup'  => is_writable( ROOT_PATH."Backup" ) ? true : false,
+			//			'/Backup'  => is_writable( ROOT_PATH."Backup" ) ? true : false,
 		];
 	}
 
