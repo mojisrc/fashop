@@ -1,0 +1,50 @@
+{
+    "name": "fashop",
+    "description": "FaShop商城系统",
+    "type": "project",
+    "keywords": [
+        "fashop",
+        "shop",
+        "mojikeji"
+    ],
+    "homepage": "http://www.fashop.cn/",
+    "authors": [{
+        "name": "hanwenbo",
+        "email": "9476400@qq.com"
+    }],
+    "require": {
+        "php": "^7.2",
+        "easyswoole/easyswoole": "v2.1.1",
+        "hanwenbo/ezswoole": "^2.0",
+        "phpFastCache/phpFastCache": "^6.0",
+        "overtrue/wechat": "4.1.1",
+        "firebase/php-jwt": "^5.0",
+        "intervention/image": "^2.4",
+        "overtrue/easy-sms": "^0.0.9",
+        "vlucas/phpdotenv": "^2.4",
+        "hashids/hashids": "^2.0",
+        "robmorgan/phinx": "^0.9.2",
+        "yansongda/pay": "dev-master",
+        "easyswoole/wsdebug": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "EasySwoole\\Core\\": "src/Core/",
+            "EasySwoole\\" : "Conf/",
+            "App\\": "App/",
+            "FaShopTest\\":"tests/",
+            "Install\\": "Install/",
+            "Plugin\\": "Plugin/"
+        },
+        "files": ["vendor/hanwenbo/ezswoole/src/helper/helper.php"]
+    },
+    "require-dev": {
+        "easyswoole/swoole-ide-helper": "dev-master"
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.laravel-china.org"
+        }
+    }
+}
