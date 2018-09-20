@@ -1,0 +1,21 @@
+# ide
+/.idea/
+/.svn/
+# composer
+/vendor/
+composer.lock
+
+# easySwoole
+/Log/
+/Temp/
+easyswoole
+easyswoole.install
+src/swoole_log.txt
+
+#fashop
+/App/Conf/Config.php
+/Runtime/Cache/*
+/Runtime/Log/*
+/Runtime/Temp/*
+/Upload/*
+/dist/*
