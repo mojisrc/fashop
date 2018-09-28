@@ -154,7 +154,7 @@ class Install
 	private function initDb()
 	{
 		$target             = ROOT_PATH."Conf/config/database.php";
-		$config             = include_once $target;
+		$config             = require $target;
 		$config['hostname'] = $this->dbHost;
 		$config['database'] = $this->dbName;
 		$config['username'] = $this->dbUsername;
@@ -162,7 +162,7 @@ class Install
 		$config['hostport'] = $this->dbPort;
 		$config['prefix']   = $this->dbPrefix;
 		$content            = "<?php\n";
-		$content            .= "return ".var_export( $config, true ).";";
+		$content            .= "return ".var_export( $config,true ).";";
 		file_put_contents( $target, $content );
 	}
 
@@ -181,7 +181,7 @@ class Install
 	private function initJwt()
 	{
 		$target        = ROOT_PATH."Conf/config/jwt.php";
-		$config        = include_once $target;
+		$config        = require $target;
 		$config['key'] = RandomKey::string( 13 );
 		$content       = "<?php \n";
 		$content       .= "return ".var_export( $config, true ).";";
