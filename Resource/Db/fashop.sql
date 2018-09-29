@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : localhost
+ Source Server         : 虚拟机
  Source Server Type    : MySQL
- Source Server Version : 50719
- Source Host           : localhost:3306
+ Source Server Version : 50722
+ Source Host           : 192.168.178.128:3306
  Source Schema         : fashop
 
  Target Server Type    : MySQL
- Target Server Version : 50719
+ Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 26/09/2018 17:12:54
+ Date: 29/09/2018 15:48:28
 */
 
 SET NAMES utf8mb4;
@@ -4687,9 +4687,9 @@ CREATE TABLE `fa_page`  (
   `is_system` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '系统级 默认0自定义 1系统',
   `background_color` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '背景颜色',
   `type` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '模板类型',
-  `create_time` int(10) NOT NULL COMMENT '创建时间',
-  `update_time` int(10) NOT NULL COMMENT '更新时间',
-  `module` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '模块名字',
+  `create_time` int(10) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` int(10) NOT NULL DEFAULT 0 COMMENT '更新时间',
+  `module` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '模块名字',
   `delete_time` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '软删除时间',
   `clone_from_id` int(10) UNSIGNED NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
