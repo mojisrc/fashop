@@ -11,7 +11,7 @@
  Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 29/09/2018 15:48:28
+ Date: 30/09/2018 17:25:33
 */
 
 SET NAMES utf8mb4;
@@ -4467,11 +4467,11 @@ CREATE TABLE `fa_order_extend`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '订单索引id',
   `tracking_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '配送时间',
   `tracking_no` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '物流单号',
-  `shipper_id` tinyint(1) NOT NULL DEFAULT 0 COMMENT '商家物流地址id',
+  `shipper_id` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '商家物流地址id',
   `express_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '物流公司id，默认为0 代表不需要物流',
   `message` varchar(300) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '买家留言',
-  `voucher_price` int(11) NULL DEFAULT NULL COMMENT '代金券面额',
-  `voucher_id` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '代金券id',
+  `voucher_price` smallint(5) UNSIGNED NOT NULL DEFAULT 0 COMMENT '代金券面额',
+  `voucher_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '代金券id',
   `voucher_code` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '代金券编码',
   `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '发货备注',
   `reciver_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '收货人姓名',
@@ -4480,7 +4480,7 @@ CREATE TABLE `fa_order_extend`  (
   `reciver_province_id` mediumint(8) UNSIGNED NOT NULL DEFAULT 0 COMMENT '收货人省级ID',
   `reciver_city_id` int(10) NULL DEFAULT NULL,
   `reciver_area_id` int(10) NULL DEFAULT NULL,
-  `invoice_info` json NOT NULL COMMENT '发票信息 json',
+  `invoice_info` json NULL COMMENT '发票信息 json',
   `promotion_info` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '促销信息备注',
   `evaluate_time` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '评价时间',
   `service_remarks` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '后台客服对此订单做出的备注',
@@ -4500,20 +4500,20 @@ DROP TABLE IF EXISTS `fa_order_goods`;
 CREATE TABLE `fa_order_goods`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '订单商品表索引id',
   `user_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '买家ID',
-  `order_id` int(11) NOT NULL DEFAULT 0 COMMENT '订单id',
-  `goods_id` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '商品主表id',
-  `goods_sku_id` int(11) NOT NULL DEFAULT 0 COMMENT '商品id',
+  `order_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '订单id',
+  `goods_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '商品主表id',
+  `goods_sku_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '商品id',
   `goods_title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '商品名称',
-  `goods_price` decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '商品价格',
-  `goods_pay_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '商品实际支付费用',
+  `goods_price` decimal(10, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '商品价格',
+  `goods_pay_price` decimal(10, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '商品实际支付费用',
   `goods_num` smallint(5) UNSIGNED NOT NULL DEFAULT 1 COMMENT '商品数量',
   `goods_img` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品图片',
   `goods_spec` json NULL COMMENT '商品规格',
-  `goods_type` tinyint(4) NOT NULL DEFAULT 1 COMMENT '1默认2团购商品3限时折扣商品4组合套装5赠品',
-  `goods_freight_way` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品运费方式',
-  `goods_freight_fee` decimal(10, 2) UNSIGNED NULL DEFAULT NULL COMMENT '商品的运费',
-  `evaluate_state` tinyint(1) NOT NULL DEFAULT 0 COMMENT '评价状态 0未评价，1已评价，2已追评',
-  `evaluate_time` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '评价时间',
+  `goods_type` tinyint(4) UNSIGNED NOT NULL DEFAULT 1 COMMENT '1默认2团购商品3限时折扣商品4组合套装5赠品',
+  `goods_freight_way` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品运费方式',
+  `goods_freight_fee` decimal(10, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '商品的运费',
+  `evaluate_state` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '评价状态 0未评价，1已评价，2已追评',
+  `evaluate_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '评价时间',
   `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建时间',
   `coupon_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '线上卡券 大于0线上卡券 微信卡券表表ID 一个规格的商品对应一张微信卡券',
   `coupon_card_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '线上卡券 微信卡券表微信卡券ID',
