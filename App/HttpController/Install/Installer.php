@@ -43,14 +43,15 @@ class Installer extends Controller
 		$isSsl = request()->isSsl();
 		$host  = request()->host();
 		$port  = \Easyswoole\Config::getInstance()->getConf( "MAIN_SERVER.PORT" );
-		if(filter_var($host, FILTER_VALIDATE_IP)){
+		if( filter_var( $host, FILTER_VALIDATE_IP ) ){
 			$url = "{$host}:{$port}";
-		}else{
+		} else{
 			$url = $host;
 		}
-		$apiHost = $isSsl? 'https://'.$url : 'http://'.$url;
-		$time = time();
-		$html = <<<EOT
+		$apiHost = $isSsl ? 'https://'.$url : 'http://'.$url;
+		$time    = time();
+		$html
+		         = <<<EOT
 <!doctype html>
 <html lang="zh-CN">
 <head>
@@ -193,12 +194,12 @@ EOT;
 					'status'  => $dir_status['/vendor'],
 					'help'    => "vendor目录无法写入，影响系统升级",
 				],
-//				[
-//					'name'    => "/Backup",
-//					'require' => "可读写",
-//					'status'  => $dir_status['/Backup'],
-//					'help'    => "Backup目录无法写入，影响备份",
-//				],
+				//				[
+				//					'name'    => "/Backup",
+				//					'require' => "可读写",
+				//					'status'  => $dir_status['/Backup'],
+				//					'help'    => "Backup目录无法写入，影响备份",
+				//				],
 			];
 
 			$dir = [

@@ -190,8 +190,8 @@ class Relevance
 
 		$data['wechat_openid'] = null;
 
-		if( isset( $this->options['wechat_oepnid'] ) ){
-			$wechat_openid = $this->options['wechat_oepnid'];
+		if( isset( $this->options['wechat_openid'] ) ){
+			$wechat_openid = $this->options['wechat_openid'];
 			$this->setWechatOpenid( $wechat_openid );
 			$wechat_openid = $this->getWechatOpenid();
 
@@ -231,7 +231,7 @@ class Relevance
 	 */
 	private function byWechatOpenid()
 	{
-		$wechat_openid = $this->options['wechat_oepnid'];
+		$wechat_openid = $this->options['wechat_openid'];
 		$this->setWechatOpenid( $wechat_openid );
 		try{
             $wechatApi                  = new \App\Logic\Wechat\Factory();
