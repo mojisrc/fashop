@@ -58,3 +58,9 @@ cd dist
 <img src="https://ws1.sinaimg.cn/large/006tNbRwgy1fvex0xgx3dj31kw0se44y.jpg" width="260px">
 <img src="https://ws4.sinaimg.cn/large/006tNbRwgy1fvex15ecmdj31kw0tbdmd.jpg" width="260px">
 </p>
+
+## 命令行介绍
+```bash
+php fashop build fashop-v1.0.1
+// build后跟fashop-v会自动生成压缩包fashop-v1.0.1.tar.gz，由于github远程下载比较卡，所以升级包是放在国内的服务器，这个命令是方便创建生产环境的压缩包。
+```

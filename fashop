@@ -36,10 +36,20 @@ Class Command
 
 	static function exec()
 	{
+		global $argv;
 		$info = Command::parse();
 		switch( $info['command'] ){
 		case 'build':
-			Command::build();
+			$buildResult = Command::build();
+			if($buildResult && isset($argv[2]) && strstr($argv[2],'fashop-v')){
+			    $copyResult = \EasySwoole\Core\Utility\File::copyDir('dist',$argv[2]);
+			    if($copyResult===true){
+				    shell_exec( "tar -zcvf {$argv[2]}.tar.gz ./{$argv[2]} && rm -rf ./{$argv[2]}" );
+				    echo "\e[32m./$argv[2].tar.gz 版本创建完毕\n\e[0m";
+			    }else{
+				    echo "\e[32m./$argv[2].tar.gz 版本创建失败\n\e[0m";
+                }
+            }
 		break;
 		default:
 			Core::getInstance();
@@ -131,7 +141,8 @@ Class Command
 		File::deleteDir( $dist.'/App/Task' );
 		File::deleteDir( $dist.'/App/Update' );
 		// todo 加版权和版本号
-		echo "\e[32m创建完毕\n\e[0m";
+		echo "\e[32m编译完成\n\e[0m";
+		return true;
 	}
 }
 
