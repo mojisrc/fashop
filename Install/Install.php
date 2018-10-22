@@ -216,7 +216,7 @@ class Install
 			'gd2'             => function_exists( 'imagecreatefromgd2' ) ? true : false,
 			'dom'             => in_array( "dom", $extensions ) ? true : false,
 			'openssl'         => in_array( "openssl", $extensions ) ? true : false,
-			'swoole'          => version_compare( $env->getSwooleVersion(), '1.9.0', '>' ) && version_compare( $env->getSwooleVersion(), '1.11', '<' ) ? true : false,
+			'swoole'          => version_compare( $env->getSwooleVersion(), '1.9.23', '>=' ) && version_compare( $env->getSwooleVersion(), '2.2.0', '<=' ) ? true : false,
 			'imagick'         => in_array( "imagick", $extensions ) ? true : false,
 		];
 	}
