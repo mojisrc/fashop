@@ -67,7 +67,7 @@ class Router extends \EasySwoole\Core\Http\AbstractInterface\Router
 		}
 		$originHost = 'http://127.0.0.1:9510';
 		$localHost  = ($isSsl ? 'https://' : 'http://').$url;
-		$content    = file_get_contents( ROOT_PATH.'Public/index.html' );
+		$content    = file_get_contents( ROOT_PATH.'a/index.html' );
 		$response->write( str_replace( $originHost, $localHost, $content ) );
 		$response->end();
 	}

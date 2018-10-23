@@ -169,7 +169,7 @@ class Install
 	private function insertInitDatabase()
 	{
 		$sql = file_get_contents( ROOT_PATH."Install/fashop.sql" );
-		$sql = str_replace( "ez_", $this->dbPrefix, $sql );
+		$sql = str_replace( "fa_", $this->dbPrefix, $sql );
 		$db  = new \PDO( "mysql:host={$this->dbHost};port={$this->dbPort};dbname={$this->dbName};", $this->dbUsername, $this->dbPassword );
 		try{
 			$db->query( $sql );

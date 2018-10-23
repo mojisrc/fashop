@@ -139,7 +139,7 @@ EOT;
 				],
 				[
 					'name'    => "Swoole",
-					'require' => ">=1.10.0",
+					'require' => ">=1.9.23 && <= 2.2.0",
 					'status'  => $status['swoole'],
 					'url'     => "https://www.fashop.cn/guide/",
 				],
