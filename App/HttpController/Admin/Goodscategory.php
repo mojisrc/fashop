@@ -69,13 +69,11 @@ class Goodscategory extends Admin
 		if( $this->validate( $this->post, 'Admin/GoodsCategory.edit' ) !== true ){
 			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
 		} else{
-			$data = [
-				'name' => $this->post['name'],
-			];
-			if( isset( $data['pid'] ) && $this->post['id'] !== $data['pid'] ){
+			$data = ['name' => $this->post['name']];
+			if( isset( $this->post['pid'] ) && $this->post['id'] !== $this->post['pid'] ){
 				$data['pid'] = $this->post['pid'];
 			}
-			if( isset( $data['icon'] ) ){
+			if( isset( $this->post['icon'] ) ){
 				$data['icon'] = $this->post['icon'];
 			}
 			$model = model( 'GoodsCategory' );
