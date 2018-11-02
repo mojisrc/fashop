@@ -397,8 +397,8 @@ class Goods
 		if( isset( $options['freight_id'] ) ){
 			$this->freightTemplateId = $options['freight_id'];
 		}
-		if( isset( $options['freight'] ) ){
-			$this->freight = $options['freight'];
+		if( isset( $options['freight_fee'] ) ){
+			$this->freight = $options['freight_fee'];
 		}
 		if( isset( $options['sale_time'] ) ){
 			$this->saleTime = $options['sale_time'];
@@ -501,13 +501,13 @@ class Goods
 		if( $this->freightTemplateId ){
 			$addData['freight_id'] = $this->freightTemplateId;
 		} else{
-			$addData['freight'] = $this->freight;
+			$addData['freight_fee'] = $this->freight;
 		}
 
 		if( $this->freightTemplateId ){
 			$addData['freight_id'] = $this->freightTemplateId;
 		} else{
-			$addData['freight'] = $this->freight;
+			$addData['freight_fee'] = $this->freight;
 		}
 
 		$addData['base_sale_time'] = ($this->baseSaleNum > 0) ? $this->baseSaleNum : 0;
@@ -553,7 +553,7 @@ class Goods
 		if( $this->freightTemplateId ){
 			$data['freight_id'] = $this->freightTemplateId;
 		} else{
-			$data['freight'] = $this->freight;
+			$data['freight_fee'] = $this->freight;
 		}
 
 
