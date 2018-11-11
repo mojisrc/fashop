@@ -28,17 +28,17 @@ class Page extends Server
 	public function list()
 	{
 		try{
-			$shop  = Db::name( 'Shop' )->where( ['id' => 1] )->field( 'host,salt' )->find();
+//			$shop  = Db::name( 'Shop' )->where( ['id' => 1] )->field( 'host,salt' )->find();
 			$model = model( 'Page' );
 			$total = $model->where( [] )->count();
 			$list  = $model->getPageList( [], '*', 'id desc', $this->getPageLimit() );
 
-			$hashids = new Hashids( $shop['salt'] );
-			if( !empty( $list ) ){
-				foreach( $list as $key => $site ){
-					$list[$key]['id'] = $hashids->encode( $site['id'] );
-				}
-			}
+//			$hashids = new Hashids( $shop['salt'] );
+//			if( !empty( $list ) ){
+//				foreach( $list as $key => $site ){
+//					$list[$key]['id'] = $hashids->encode( $site['id'] );
+//				}
+//			}
 			$this->send( Code::success, [
 				'list'         => $list,
 				'total_number' => $total,
@@ -60,6 +60,7 @@ class Page extends Server
          ]);
         $pageGoodsLogic = new PageGoodsLogic();
         $info['body']   = $pageGoodsLogic->filterGoods($info['body']);
+
 		$this->send( Code::success, [
 			'info' => $info,
 		] );
@@ -78,11 +79,12 @@ class Page extends Server
 			$this->send( Code::param_error );
 		} else{
 			try{
-                $shop           = Db::name('Shop')->where(['id' => 1])->field('host,salt')->find();
-                $hashids        = new Hashids($shop['salt']);
-                $page_id        = (int)$hashids->decode($this->get['id']);
+				// todo 不是刚需下个版本
+//                $shop           = Db::name('Shop')->where(['id' => 1])->field('host,salt')->find();
+//                $hashids        = new Hashids($shop['salt']);
+//                $page_id        = (int)$hashids->decode($this->get['id']);
                 $info           = model( "Page" )->getPageInfo( [
-                     'id' => $page_id,
+                     'id' => $this->get['id'],
                  ] );
                 $pageGoodsLogic = new PageGoodsLogic();
                 $info['body']   = $pageGoodsLogic->filterGoods($info['body']);

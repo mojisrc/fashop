@@ -28,7 +28,7 @@ class BodyFormat
 	const top_menu_type        = 'top_menu';
 	const title_type           = 'title';
 	const text_nav_type        = 'text_nav';
-
+	const actionLinkTypes = ['portal', 'page', 'goods','goods_category'];
 	/**
 	 * @param array $body
 	 * @return array
@@ -179,8 +179,8 @@ class BodyFormat
 					],
 					'title' => (string)$item['title'],
 					'link'  => [
-						'action' => in_array( $item['link']['action'], ['portal', 'page', 'goods'] ) ? (string)$item['link']['action'] : 'portal',
-						'param'  => in_array( $item['link']['action'], ['portal', 'page', 'goods'] ) ? (array)$item['link']['param'] : [],
+						'action' => in_array( $item['link']['action'],self::actionLinkTypes ) ? (string)$item['link']['action'] : 'portal',
+						'param'  => in_array( $item['link']['action'],self::actionLinkTypes ) ? (array)$item['link']['param'] : [],
 					],
 				];
 			}
@@ -204,8 +204,8 @@ class BodyFormat
 					],
 					'title' => (string)$item['title'],
 					'link'  => [
-						'action' => in_array( $item['link']['action'], ['portal', 'page', 'goods'] ) ? (string)$item['link']['action'] : 'portal',
-						'param'  => in_array( $item['link']['action'], ['portal', 'page', 'goods'] ) ? (array)$item['link']['param'] : [],
+						'action' => in_array( $item['link']['action'],self::actionLinkTypes ) ? (string)$item['link']['action'] : 'portal',
+						'param'  => in_array( $item['link']['action'],self::actionLinkTypes ) ? (array)$item['link']['param'] : [],
 					],
 				];
 			}
@@ -230,8 +230,8 @@ class BodyFormat
 					],
 					'title' => (string)$item['title'],
 					'link'  => [
-						'action' => in_array( $item['link']['action'], ['portal', 'page', 'goods'] ) ? (string)$item['link']['action'] : 'portal',
-						'param'  => in_array( $item['link']['action'], ['portal', 'page', 'goods'] ) ? (array)$item['link']['param'] : [],
+						'action' => in_array( $item['link']['action'],self::actionLinkTypes ) ? (string)$item['link']['action'] : 'portal',
+						'param'  => in_array( $item['link']['action'],self::actionLinkTypes ) ? (array)$item['link']['param'] : [],
 					],
 				];
 			}
@@ -264,8 +264,8 @@ class BodyFormat
 					],
 					'title'            => (string)$item['title'],
 					'link'             => [
-						'action' => in_array( $item['link']['action'], ['portal', 'page', 'goods'] ) ? (string)$item['link']['action'] : 'portal',
-						'param'  => in_array( $item['link']['action'], ['portal', 'page', 'goods'] ) ? (array)$item['link']['param'] : [],
+						'action' => in_array( $item['link']['action'],self::actionLinkTypes ) ? (string)$item['link']['action'] : 'portal',
+						'param'  => in_array( $item['link']['action'],self::actionLinkTypes ) ? (array)$item['link']['param'] : [],
 					],
 					'background_color' => (string)$item['background_color'],
 					'font_color'       => (string)$item['font_color'],
@@ -310,8 +310,8 @@ class BodyFormat
 					],
 					'title' => (string)$item['title'],
 					'link'  => [
-						'action' => in_array( $item['link']['action'], ['portal', 'page', 'goods'] ) ? (string)$item['link']['action'] : 'portal',
-						'param'  => in_array( $item['link']['action'], ['portal', 'page', 'goods'] ) ? (array)$item['link']['param'] : [],
+						'action' => in_array( $item['link']['action'],self::actionLinkTypes ) ? (string)$item['link']['action'] : 'portal',
+						'param'  => in_array( $item['link']['action'],self::actionLinkTypes ) ? (array)$item['link']['param'] : [],
 					],
 				];
 			}
