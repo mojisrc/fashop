@@ -121,7 +121,7 @@ class Buy extends Server
 					} else{
 						$condition['pay_sn'] = $pay_sn;
 						$condition['state']  = ['in', [\App\Logic\Order::state_new, \App\Logic\Order::state_pay]];
-						$order_info          = $order_model->getOrderInfo( $condition, 'id,state,pay_name,amount,sn' );
+						$order_info          = $order_model->getOrderInfo( $condition, '', 'id,state,pay_name,amount,sn' );
 						if( empty( $order_info ) ){
 							return $this->send( Code::error, [], '未找到需要支付的订单' );
 						}
@@ -178,7 +178,7 @@ class Buy extends Server
 						$order_info  = $order_model->getOrderInfo( [
 							'pay_sn' => $this->post['pay_sn'],
 							'state'  => \App\Logic\Order::state_new,
-						], 'id,pay_sn,amount' );
+						], '', 'id,pay_sn,amount' );
 						$amount      = $order_info['amount'] * 100;
 						if( empty( $pay_info ) || empty( $order_info ) ){
 							return $this->send( Code::error, [], '该订单不存在' );
@@ -190,9 +190,18 @@ class Buy extends Server
 									'out_trade_no' => $order_info['pay_sn'],
 									'body'         => '商品购买_'.$pay_info['pay_sn'],
 									'total_fee'    => "{$amount}",
-									'openid'       => model( 'UserOpen' )->getUserOpenValue( ['user_id' => $user['id']], '', 'openid' ),
+									'openid'       => model( 'UserOpen' )->getUserOpenValue( ['user_id' => $user['id'],'genre'=>2], '', 'openid' ),
 								] );
 							break;
+                                case 'wechat_app':
+                                    $options = Pay::wechat( $this->getPayConfig( $payment['config'], $this->post['payment_channel'] ) )->app( [
+                                                                                                                                                      'attach'       => 'goods_buy',
+                                                                                                                                                      'out_trade_no' => $order_info['pay_sn'],
+                                                                                                                                                      'body'         => '商品购买_'.$pay_info['pay_sn'],
+                                                                                                                                                      'total_fee'    => "{$amount}",
+                                                                                                                                                      'openid'       => model( 'UserOpen' )->getUserOpenValue( ['user_id' => $user['id'],'genre'=>1], '', 'openid' ),
+                                                                                                                                                  ] );
+
 							default:
 								# code...
 							break;
@@ -262,7 +271,33 @@ class Buy extends Server
 			Log::write( "微信支付通知处理失败：".$e->getMessage() );
 		}
 	}
-
+    /**
+     * 微信app异步通知处理
+     * @method GET+post
+     * @author 韩文博
+     *
+     */
+    public function wechatAppNotify()
+    {
+        try{
+            $payment = model( "Payment" )->getPaymentInfo( ['type' => 'wechat'] );
+            $notice  = PayNoticeFacade::wechat( $this->getPayConfig( $payment['config'], 'wechat_app' ) );
+            if( $notice->check() === true ){
+                $data       = $notice->getData();
+                $orderLogic = new \App\Logic\Order();
+                $result     = $orderLogic->pay( (string)$data->out_trade_no, 'wechat', (string)$data->transaction_id );
+                if( $result ){
+                    $this->response()->write( 'success' );
+                } else{
+                    Log::write( "微信支付处理订单失败" );
+                }
+            } else{
+                Log::write( "微信支付通知验证失败" );
+            }
+        } catch( \Exception $e ){
+            Log::write( "微信支付通知处理失败：".$e->getMessage() );
+        }
+    }
 	/**
 	 * @param array $config
      * @param string $payment_channel 支付渠道
@@ -280,7 +315,7 @@ class Buy extends Server
                 $notify_url = "https://demo.fashop.cn/Server/Buy/wechatMiniNotify";
                 break;
             case 'wechat_app':
-                $notify_url = "";
+                $notify_url = "https://demo.fashop.cn/Server/Buy/wechatAppNotify";
                 break;
         }
 
