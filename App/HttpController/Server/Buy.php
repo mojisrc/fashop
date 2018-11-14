@@ -285,7 +285,7 @@ class Buy extends Server
             if( $notice->check() === true ){
                 $data       = $notice->getData();
                 $orderLogic = new \App\Logic\Order();
-                $result     = $orderLogic->pay( (string)$data->out_trade_no, 'wechat', (string)$data->transaction_id );
+                $result     = $orderLogic->pay( (string)$data->out_trade_no, 'wechat_app', (string)$data->transaction_id );
                 if( $result ){
                     $this->response()->write( 'success' );
                 } else{
