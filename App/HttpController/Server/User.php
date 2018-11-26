@@ -70,7 +70,7 @@ class User extends Server
 			$validate_scene['wechat_mini']   = 'Server/Login.wechatMini';
 
 			if( $this->validate( $this->post, $validate_scene[$this->post['login_type']] ) !== true ){
-				$this->send( code::param_error, [], $this->getValidate()->getError() );
+				$this->send( $this->getValidate()->getError() );
 			} else{
 				try{
 					$loginLogic   = new LoginLogic( (array)$this->post );
