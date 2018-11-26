@@ -68,6 +68,9 @@ class Order extends Validate
 				'express_id',
 				'tracking_no',
 			],
+            'groupInfo'           => [
+                'id',
+            ],
 		];
 
 }

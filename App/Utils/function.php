@@ -241,4 +241,34 @@ function time_format($time = NULL, $format = 'Y-m-d H:i') {
 }
 ////////////////////////////////////////行为管理////////////////////////////////////////////////////
 
+
+
+/**
+ * 校验日期格式是否正确
+ *
+ * @param string $date 日期 2017-12
+ * @param string $formats 需要检验的格式数组
+ * @return boolean
+ */
+function check_date($date, $formats = array("Y-m-d", "Y/m/d")){
+    $unixTime = strtotime($date);
+
+    if(!is_numeric($unixTime)){
+		return false; //如果不是数字格式，则直接返回
+    }
+
+    //小于当前时间则不对
+    if($unixTime <= time()){
+        return false;
+    }
+
+    //校验日期的有效性，只要满足其中一个格式就OK
+    foreach ($formats as $format) {
+        if (date($format, $unixTime) == $date) {
+            return true;
+        }
+    }
+
+    return false;
+}
 ?>

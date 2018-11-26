@@ -73,15 +73,15 @@ class Discount extends Validate
 			],
 
 			'selectableGoods' => [
-				'id',
+				'discount_id',
 			],
 
 			'selectedGoods' => [
-				'id',
+				'discount_id',
 			],
 
 			'choiceGoods' => [
-				'id',
+				'discount_id',
 				'goods_id',
 			],
 

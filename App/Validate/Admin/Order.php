@@ -56,7 +56,9 @@ class Order extends Validate
 				'tracking_no',
 
 			],
-
+            'groupInfo' => [
+                'id',
+            ],
 
 		];
 

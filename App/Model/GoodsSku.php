@@ -24,8 +24,10 @@ class GoodsSku extends Model
 
 	protected $type
 		= [
-			'spec' => 'json',
-		];
+			'spec'       => 'json',
+            'goods_spec' => 'json',
+
+        ];
 
 	const STATE1   = 1; // 出售中
 	const STATE0   = 0; // 下架
