@@ -62,7 +62,7 @@ class Login extends Validate
 	protected function checkUsername( $value, $rule, $data )
 	{
 		if( is_numeric( $value ) ){
-			if( !$this->is( $value, 'phone', $data ) ){
+			if( !$this->phone( $value ) ){
 				return Code::user_username_or_email_error;
 			}
 
@@ -84,7 +84,7 @@ class Login extends Validate
 	 */
 	protected function checkPhone( $value, $rule, $data )
 	{
-		if( !$this->is( $value, 'phone', $data ) ){
+		if( !$this->phone( $value ) ){
 			return Code::user_phone_format_error;
 		}
 		$condition['phone'] = $value;
