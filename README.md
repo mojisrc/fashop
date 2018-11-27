@@ -11,6 +11,7 @@
 
 后台前端项目地址：[https://github.com/mojisrc/fashop-admin](https://github.com/mojisrc/fashop-admin)
 
+App项目地址：[https://github.com/mojisrc/fashop-client-react-native](https://github.com/mojisrc/fashop-client-react-native)
 ## 编译项目
 ```bash
 php fashop build
