@@ -38,6 +38,7 @@ class User extends Admin
 		$param = !empty( $this->post ) ? $this->post : $this->get;
 
 		$userLogic = new \App\Logic\UserSearch( (array)$param );
+        $userLogic->page($this->getPageLimit());
 		$this->send( Code::success, [
 			'total_number' => $userLogic->count(),
 			'list'         => $userLogic->list(),

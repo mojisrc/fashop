@@ -300,6 +300,10 @@ class UserSearch
 		$this->lastCostTime = $lastCostTime;
 	}
 
+	public function page(string $page) : void
+    {
+        $this->page = $page;
+    }
 	public function buildCondition() : void
 	{
         $this->condition               = [];
