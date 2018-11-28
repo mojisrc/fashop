@@ -201,7 +201,12 @@ class Buy extends Server
                                                                                                                                                       'total_fee'    => "{$amount}",
                                                                                                                                                       'openid'       => $this->post['openid'] ? $this->post['openid'] : model( 'UserOpen' )->getUserOpenValue( ['user_id' => $user['id'],'genre'=>1], '', 'openid' ),
                                                                                                                                                   ] );
-                                break;
+
+                                $data = (array)$options;
+                                unset($options);
+                                $options = json_decode($data["\0*\0data"]);
+
+                                    break;
 							default:
 								# code...
 							break;
