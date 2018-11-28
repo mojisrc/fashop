@@ -136,14 +136,13 @@ class Login extends Validate
 	 */
 	protected function checkWechatOpenid( $value, $rule, $data )
 	{
-		$condition['wenchat_openid'] = $value;
-		$wechat_openid               = Db::name( 'User' )->where( $condition )->value( 'wechat_openid' );
+		$condition['openid'] = $value;
+		$wechat_openid               = Db::name( 'UserOpen' )->where( $condition )->value( 'openid' );
 		if( !$wechat_openid ){
 			return Code::user_wechat_openid_not_exist;
 		} else{
 			return true;
 		}
 	}
-
 
 }
