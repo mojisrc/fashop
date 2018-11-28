@@ -201,7 +201,7 @@ class Buy extends Server
                                                                                                                                                       'total_fee'    => "{$amount}",
                                                                                                                                                       'openid'       => model( 'UserOpen' )->getUserOpenValue( ['user_id' => $user['id'],'genre'=>1], '', 'openid' ),
                                                                                                                                                   ] );
-
+                                break;
 							default:
 								# code...
 							break;
