@@ -386,6 +386,38 @@ class Order extends Server
         }
     }
 
+    /**
+     * 拼团订单列表自动过期 设置拼团失败
+     * @method GET
+     */
+    public function antoSetOrderGroup()
+    {
+        $order_model                  = model('Order');
+        $condition['state']           = 20;              //已付款
+        $condition['group_end_time']  = ['lt', time()];  //拼团时限已过期
+        $condition['group_state']     = 1;               //正在进行中(待开团)
+        $condition['goods_type']      = 2;               //拼团订单
+        $condition['group_identity']  = 1;               //团长
+        $condition['group_fail_time'] = 0;               //拼团失败时间
+        $condition_string             = 'group_men_num<group_people_num';
+        $group                        = 'group_sign';
+        $list                         = $order_model->getOrderCommonList($condition, $condition_string, '*', 'id desc', '', $group);
+        if ($list) {
+            $group_sign_arr = array_column($list, 'group_sign');
+            if ($group_sign_arr && is_array($group_sign_arr)) {
+                //未付款的已经被关闭的跟团的拼团订单 也会更改他的拼团状态为失败
+                $result = $order_model->editOrder(['group_sign' => ['in', $group_sign_arr]], ['group_state' => 3, 'group_fail_time' => time()]);
+                if (!$result) {
+                    return $this->send(Code::param_error, [], '更改拼团订单状态失败');
+                } else {
+                    return $this->send(Code::success);
+                }
+            }
+        } else {
+            return $this->send(Code::success, [], '暂无数据');
+        }
+    }
+
 
 }
 // /**
