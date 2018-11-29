@@ -386,6 +386,8 @@ class Register
                             $user_model->rollback();
                             return null;
                         }
+                        $user_model->commit();
+                        return ['id' => $unionid_user_id];
 
                     } else {
                         //创建用户
