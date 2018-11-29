@@ -50,6 +50,7 @@ class User extends Server
      * @param string $login_type password smscode  wechat_openid  wechat_mini wechat_app
      * @param string $username
      * @param string $password
+     * @param string $wechat_openid  微信openid ，登陆方式为wechat_openid 或者 wechat_app必填
      * @param string $wechat_mini_code
      * @author   韩文博
      */
@@ -105,7 +106,7 @@ class User extends Server
      *
      * @param array $wechat_mini_param (数组必须包含code，encryptedData，iv)
      *
-     * @param string $wechat_openid
+     * @param string $wechat_openid 注册方式为wechat_openid 或者 wechat_app必填
      * @param string $wechat_app 和$register_type为wechat_openid 参数一样
      * @author 韩文博
      */
