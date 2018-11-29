@@ -566,7 +566,7 @@ class Group extends Admin
     /**
      * 删除拼团活动
      * @method POST
-     * @param int id $express表ID
+     * @param int id 拼团活动id
      */
     public function del()
     {
