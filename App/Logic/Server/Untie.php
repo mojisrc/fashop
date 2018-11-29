@@ -195,8 +195,8 @@ class Untie
             $open_batch_updata = [];
 
             foreach ($open_list as $key => $value) {
-                $open_batch_updata['id']         = $value['id'];
-                $open_batch_updata['state']      = 0;
+                $open_batch_updata[$key]['id']         = $value['id'];
+                $open_batch_updata[$key]['state']      = 0;
             }
 
             $user_result = $user_open_model->editUser(['id'=>$user_id], ['phone'=>null] );

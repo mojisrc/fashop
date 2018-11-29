@@ -190,7 +190,7 @@ class Buy extends Server
 									'out_trade_no' => $order_info['pay_sn'],
 									'body'         => '商品购买_'.$pay_info['pay_sn'],
 									'total_fee'    => "{$amount}",
-									'openid'       => $this->post['openid'] ? $this->post['openid'] : model( 'UserOpen' )->getUserOpenValue( ['user_id' => $user['id'],'genre'=>2], '', 'openid' ),
+									'openid'       => $this->post['openid'] ? $this->post['openid'] : model( 'UserOpen' )->getUserOpenValue( ['user_id' => $user['id'],'genre'=>1], '', 'mini_openid' ),
 								] );
 							break;
                                 case 'wechat_app':
@@ -199,7 +199,7 @@ class Buy extends Server
                                                                                                                                                       'out_trade_no' => $order_info['pay_sn'],
                                                                                                                                                       'body'         => '商品购买_'.$pay_info['pay_sn'],
                                                                                                                                                       'total_fee'    => "{$amount}",
-                                                                                                                                                      'openid'       => $this->post['openid'] ? $this->post['openid'] : model( 'UserOpen' )->getUserOpenValue( ['user_id' => $user['id'],'genre'=>1], '', 'openid' ),
+                                                                                                                                                      'openid'       => $this->post['openid'] ? $this->post['openid'] : model( 'UserOpen' )->getUserOpenValue( ['user_id' => $user['id'],'genre'=>1], '', 'app_openid' ),
                                                                                                                                                   ] );
 
                                 $data = (array)$options;

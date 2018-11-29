@@ -178,6 +178,8 @@ class Login
 			return $this->byWechatOpenid();
 		case 'wechat_mini':
 			return $this->byWechatMini();
+        case 'wechat_app':
+             return $this->byWechatAppOpenid();
 		default:
 			throw new \Exception( "login_type not exist" );
 		}
@@ -211,7 +213,7 @@ class Login
 
 	private function byWechatOpenid() : ? array
 	{
-		$this->setWechatOpenid( $this->options['wechat_openid'] );
+        $this->setWechatOpenid( $this->options['wechat_openid'] );
         $user_id = model('UserOpen')->getUserOpenValue(['openid' => $this->getWechatOpenid()], '', 'user_id');
 		if( $user_id > 0 ){
 			return $this->createAccessToken( $user_id);
@@ -235,14 +237,23 @@ class Login
 		// @error 这儿报错了
 		$session = $wechatminiApi->getApp()->auth->session($this->options['wechat_mini_code']);
 		if(is_array($session) && array_key_exists('openid',$session)){
-            $user_id = model('UserOpen')->getUserOpenValue(['openid' => $session['openid']], '', 'user_id');
+            $user_id = model('UserOpen')->getUserOpenValue(['mini_openid' => $session['openid']], '', 'user_id');
             if( $user_id > 0 ){
 				return $this->createAccessToken( $user_id );
 			}
 		}
 		return null;
 	}
-
+    private function byWechatAppOpenid() : ? array
+    {
+        $this->setWechatOpenid( $this->options['wechat_openid'] );
+        $user_id = model('UserOpen')->getUserOpenValue(['app_openid' => $this->getWechatOpenid()], '', 'user_id');
+        if( $user_id > 0 ){
+            return $this->createAccessToken( $user_id);
+        } else{
+            return null;
+        }
+    }
 }
 
 ?>
