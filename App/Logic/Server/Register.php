@@ -268,10 +268,13 @@ class Register
                 if ($unionid_user_id > 0) {
                     //修改$unionid对应的用户
                     $update_open_result = $user_open_model->updateUserOpen(['unionid' => $unionid], [$open_id_param => $wechat_openid]);
+
                     if (!$update_open_result) {
                         $user_model->rollback();
                         return null;
                     }
+                    $user_model->commit();
+                    return ['id' => $unionid_user_id];
 
                 } else {
                     //创建用户
