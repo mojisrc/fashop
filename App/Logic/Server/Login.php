@@ -234,7 +234,7 @@ class Login
 	private function byWechatMini() : ? array
 	{
 		$wechatminiApi   = new \App\Logic\Wechatmini\Factory();
-		// @error 这儿报错了
+		// todo @error 这儿报错了
 		$session = $wechatminiApi->getApp()->auth->session($this->options['wechat_mini_code']);
 		if(is_array($session) && array_key_exists('openid',$session)){
             $user_id = model('UserOpen')->getUserOpenValue(['mini_openid' => $session['openid']], '', 'user_id');

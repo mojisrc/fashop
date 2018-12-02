@@ -25,7 +25,17 @@ class Factory
 
 	public function __construct()
 	{
-		$config    = \EasySwoole\Config::getInstance()->getConf( 'wechatmini' );
+		// todo 临时写法，后台ui需要更改
+		$info               = model( 'Payment' )->getPaymentInfo( ['type' => 'wechat'] );
+		$config    = [
+			'app_id' => $info['config']['mini_app_id'],
+			'secret' => $info['config']['mini_app_secret'],
+			'response_type' => 'array',
+			'log' => [
+				'level' => 'debug',
+				'file' => EASYSWOOLE_ROOT.'/Runtime/Log/wechatmini.log',
+			],
+		];
 		$this->app = EasyWeChatFactory::miniProgram($config);
 
 	}

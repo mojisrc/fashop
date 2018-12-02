@@ -58,18 +58,30 @@ class Upload extends Admin
 	 */
 	public function addCert()
 	{
-		$cert        = $this->request->file( 'cert' );
-		$timeRand    = time().rand( 100, 999 );
-		$cert_path   = "Upload/cert/";
-		$upload_path = ROOT_PATH.$cert_path;
-		File::createDir( $upload_path );
-		$targetPathName = $upload_path.$timeRand."-".$cert['name'];
-		$moveResult     = File::copyFile( $cert['tmp_name'], $targetPathName );
-		if( $moveResult !== true ){
-			$this->send( Code::error, [], '创建文件失败' );
+		if( $this->verifyResourceRequest() === true ){
+			try{
+				$cert = $this->request->file( 'cert' );
+				if( $cert ){
+					$timeRand    = time().rand( 100, 999 );
+					$cert_path   = "Upload/cert/";
+					$upload_path = ROOT_PATH.$cert_path;
+					File::createDir( $upload_path );
+					$targetPathName = $upload_path.$timeRand."-".$cert['name'];
+					$moveResult     = File::copyFile( $cert['tmp_name'], $targetPathName );
+					if( $moveResult !== true ){
+						$this->send( Code::error, [], '创建文件失败' );
+					} else{
+						$path = $cert_path.$timeRand."-".$cert['name'];
+						$this->send( Code::success, ['path' => $path] );
+					}
+				} else{
+					$this->send( Code::param_error );
+				}
+			} catch( \Exception $e ){
+				$this->send( Code::error, [], $e->getMessage() );
+			}
 		} else{
-			$path = $cert_path.$timeRand."-".$cert['name'];
-			$this->send( Code::success, ['path' => $path] );
+			return $this->send( Code::user_not_login );
 		}
 	}
 }

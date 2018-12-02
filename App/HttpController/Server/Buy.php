@@ -152,7 +152,7 @@ class Buy extends Server
 	 * @param string $payment_code      支付方式的标识码，在该接口上级的逻辑的接口上有返回，用来调起服务器端的支付方式的策略
 	 *                                  支付方式 wechat wechat_app wechat_mini wechat_wap
 	 * @param string $openid            微信的openid 非必需 只有微信支付的情况下可能需要
-     * @param string $payment_channel   支付渠道 "wechat"  "wechat_mini" "wechat_app"
+	 * @param string $payment_channel   支付渠道 "wechat"  "wechat_mini" "wechat_app"
 	 * @author   韩文博
 	 */
 	public function pay()
@@ -190,23 +190,23 @@ class Buy extends Server
 									'out_trade_no' => $order_info['pay_sn'],
 									'body'         => '商品购买_'.$pay_info['pay_sn'],
 									'total_fee'    => "{$amount}",
-									'openid'       => $this->post['openid'] ? $this->post['openid'] : model( 'UserOpen' )->getUserOpenValue( ['user_id' => $user['id'],'genre'=>1], '', 'mini_openid' ),
+									'openid'       => $this->post['openid'] ? $this->post['openid'] : model( 'UserOpen' )->getUserOpenValue( ['user_id' => $user['id'], 'genre' => 1], '', 'mini_openid' ),
 								] );
 							break;
-                                case 'wechat_app':
-                                    $options = Pay::wechat( $this->getPayConfig( $payment['config'], $this->post['payment_channel'] ) )->app( [
-                                                                                                                                                      'attach'       => 'goods_buy',
-                                                                                                                                                      'out_trade_no' => $order_info['pay_sn'],
-                                                                                                                                                      'body'         => '商品购买_'.$pay_info['pay_sn'],
-                                                                                                                                                      'total_fee'    => "{$amount}",
-                                                                                                                                                      'openid'       => $this->post['openid'] ? $this->post['openid'] : model( 'UserOpen' )->getUserOpenValue( ['user_id' => $user['id'],'genre'=>1], '', 'app_openid' ),
-                                                                                                                                                  ] );
+							case 'wechat_app':
+								$options = Pay::wechat( $this->getPayConfig( $payment['config'], $this->post['payment_channel'] ) )->app( [
+									'attach'       => 'goods_buy',
+									'out_trade_no' => $order_info['pay_sn'],
+									'body'         => '商品购买_'.$pay_info['pay_sn'],
+									'total_fee'    => "{$amount}",
+									'openid'       => $this->post['openid'] ? $this->post['openid'] : model( 'UserOpen' )->getUserOpenValue( ['user_id' => $user['id'], 'genre' => 1], '', 'app_openid' ),
+								] );
 
-                                $data = (array)$options;
-                                unset($options);
-                                $options = json_decode($data["\0*\0data"]);
+								$data = (array)$options;
+								unset( $options );
+								$options = json_decode( $data["\0*\0data"] );
 
-                                    break;
+							break;
 							default:
 								# code...
 							break;
@@ -276,65 +276,67 @@ class Buy extends Server
 			Log::write( "微信支付通知处理失败：".$e->getMessage() );
 		}
 	}
-    /**
-     * 微信app异步通知处理
-     * @method GET+post
-     * @author 韩文博
-     *
-     */
-    public function wechatAppNotify()
-    {
-        try{
-            $payment = model( "Payment" )->getPaymentInfo( ['type' => 'wechat'] );
-            $notice  = PayNoticeFacade::wechat( $this->getPayConfig( $payment['config'], 'wechat_app' ) );
-            if( $notice->check() === true ){
-                $data       = $notice->getData();
-                $orderLogic = new \App\Logic\Order();
-                $result     = $orderLogic->pay( (string)$data->out_trade_no, 'wechat_app', (string)$data->transaction_id );
-                if( $result ){
-                    $this->response()->write( 'success' );
-                } else{
-                    Log::write( "微信支付处理订单失败" );
-                }
-            } else{
-                Log::write( "微信支付通知验证失败" );
-            }
-        } catch( \Exception $e ){
-            Log::write( "微信支付通知处理失败：".$e->getMessage() );
-        }
-    }
+
 	/**
-	 * @param array $config
-     * @param string $payment_channel 支付渠道
+	 * 微信app异步通知处理
+	 * @method GET+post
+	 * @author 韩文博
+	 *
+	 */
+	public function wechatAppNotify()
+	{
+		try{
+			$payment = model( "Payment" )->getPaymentInfo( ['type' => 'wechat'] );
+			$notice  = PayNoticeFacade::wechat( $this->getPayConfig( $payment['config'], 'wechat_app' ) );
+			if( $notice->check() === true ){
+				$data       = $notice->getData();
+				$orderLogic = new \App\Logic\Order();
+				$result     = $orderLogic->pay( (string)$data->out_trade_no, 'wechat_app', (string)$data->transaction_id );
+				if( $result ){
+					$this->response()->write( 'success' );
+				} else{
+					Log::write( "微信支付处理订单失败" );
+				}
+			} else{
+				Log::write( "微信支付通知验证失败" );
+			}
+		} catch( \Exception $e ){
+			Log::write( "微信支付通知处理失败：".$e->getMessage() );
+		}
+	}
+
+	/**
+	 * @param array  $config
+	 * @param string $payment_channel 支付渠道
 	 * @return array
 	 * @author 韩文博
 	 */
 	private function getPayConfig( array $config, string $payment_channel ) : array
 	{
-	    $notify_url = "";
-        switch ($payment_channel) {
-            case 'wechat':
-                $notify_url = "https://demo.fashop.cn/Server/Buy/wechatNotify";
-                break;
-            case 'wechat_mini':
-                $notify_url = "https://demo.fashop.cn/Server/Buy/wechatMiniNotify";
-                break;
-            case 'wechat_app':
-                $notify_url = "https://demo.fashop.cn/Server/Buy/wechatAppNotify";
-                break;
-        }
+		$notify_url = "";
+		switch( $payment_channel ){
+		case 'wechat':
+			$notify_url = $this->request->domain()."/Server/Buy/wechatNotify";
+		break;
+		case 'wechat_mini':
+			$notify_url = $this->request->domain()."/Server/Buy/wechatMiniNotify";
+		break;
+		case 'wechat_app':
+			$notify_url = $this->request->domain()."/Server/Buy/wechatAppNotify";
+		break;
+		}
 
 		return [
 			'appid'       => isset( $config['appid'] ) ? $config['appid'] : null,// APP APPID
 			'app_id'      => isset( $config['app_id'] ) ? $config['app_id'] : null, // 公众号 APPID
-			'miniapp_id'  => isset( $config['miniapp_id'] ) ? $config['miniapp_id'] : null,// 小程序 APPID
+			'miniapp_id'  => isset( $config['mini_app_id'] ) ? $config['mini_app_id'] : null,// 小程序 APPID
 			'mch_id'      => isset( $config['mch_id'] ) ? $config['mch_id'] : null,
 			'key'         => isset( $config['key'] ) ? $config['key'] : null,
 			'notify_url'  => $notify_url,
 			'cert_client' => EASYSWOOLE_ROOT."/".isset( $config['apiclient_cert'] ) ? $config['apiclient_cert'] : null,
 			'cert_key'    => EASYSWOOLE_ROOT."/".isset( $config['apiclient_key'] ) ? $config['apiclient_key'] : null,
 			'log'         => [
-				'file'  => EASYSWOOLE_ROOT.'/Log/wechat.log',
+				'file'  => EASYSWOOLE_ROOT.'/Log/wechatpay.log',
 				'level' => 'debug', // todo
 			],
 		];
