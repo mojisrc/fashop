@@ -562,7 +562,7 @@ class Goods
 		$goodsModel = model( "Goods" );
 		$goodsModel->startTrans();
 		try{
-			$result = $goodsModel->editGoods( ['id' => $this->id], $data );
+			$goodsModel->editGoods( ['id' => $this->id], $data );
 
 			GoodsSku::make( ['goods_id' => $this->id, 'skus' => $this->skus] )->edit();
 

@@ -30,10 +30,12 @@ class Goods extends Server
 	{
 		if( $this->post ){
 			$param = $this->post;
-		}else{
+		} else{
 			$param = $this->get;
 		}
-		$param['page'] = $this->getPageLimit();
+		$param['page']       = $this->getPageLimit();
+		$param['sale_time']  = ['gt', time()];
+		$param['is_on_sale'] = 1;
 
 		$goodsLogic = new \App\Logic\GoodsSearch( $param );
 
@@ -133,11 +135,11 @@ class Goods extends Server
 	/**
 	 * 获得某条商品的评价信息
 	 * @method GET
-	 * @param int $type      默认为全部评价，好评positive 、中评 moderate、差评negative
-	 * @param int $has_image 1有图
-	 * @param int $goods_id  商品id  goods_id
-     * @param array $ids          id数组
-     * @param int page 页数
+	 * @param int   $type      默认为全部评价，好评positive 、中评 moderate、差评negative
+	 * @param int   $has_image 1有图
+	 * @param int   $goods_id  商品id  goods_id
+	 * @param array $ids       id数组
+	 * @param int page 页数
 	 * @param int rows 条数
 	 * @author 韩文博
 	 */
@@ -177,9 +179,9 @@ class Goods extends Server
 				$condition['evaluate.images'] = ['neq', 'null'];
 			}
 
-            if(isset($get['ids']) && is_array($get['ids'])){
-                $condition['evaluate.id'] = ['in', $get['ids']];
-            }
+			if( isset( $get['ids'] ) && is_array( $get['ids'] ) ){
+				$condition['evaluate.id'] = ['in', $get['ids']];
+			}
 
 			$count = $goods_evaluate_model->alias( 'evaluate' )->join( 'order order', 'evaluate.order_id = order.id', 'LEFT' )->group( 'evaluate.id' )->where( $condition )->count();
 			$list  = $goods_evaluate_model->alias( 'evaluate' )->join( 'order order', 'evaluate.order_id = order.id', 'LEFT' )->join( 'order_goods goods', 'evaluate.order_goods_id = goods.id' )->join( 'user user', 'evaluate.user_id = user.id', 'LEFT' )->join( 'user_profile user_profile', 'user.id = user_profile.user_id', 'LEFT' )->where( $condition )->field( 'evaluate.id,score,evaluate.goods_img,evaluate.content,evaluate.create_time,evaluate.images,additional_content,additional_images,additional_time,reply_content,reply_content2,display,top,goods.goods_spec,user.phone,user_profile.nickname,user_profile.avatar' )->order( 'evaluate.id desc' )->page( $this->getPageLimit() )->group( 'evaluate.id' )->select();
