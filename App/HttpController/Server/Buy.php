@@ -265,6 +265,7 @@ class Buy extends Server
 				$orderLogic = new \App\Logic\Order();
 				$result     = $orderLogic->pay( (string)$data->out_trade_no, 'wechat_mini', (string)$data->transaction_id );
 				if( $result ){
+					// todo 退款成功需要修改订单状态
 					$this->response()->write( 'success' );
 				} else{
 					Log::write( "微信支付处理订单失败" );
