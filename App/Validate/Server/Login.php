@@ -51,6 +51,9 @@ class Login extends Validate
 			'wechatMini'   => [
 				'wechat_mini_code',
 			],
+            'wechatApp' => [
+                'wechat_openid',
+            ],
 		];
 
 	/**
@@ -136,8 +139,13 @@ class Login extends Validate
 	 */
 	protected function checkWechatOpenid( $value, $rule, $data )
 	{
-		$condition['openid'] = $value;
-		$wechat_openid               = Db::name( 'UserOpen' )->where( $condition )->value( 'openid' );
+		if($data['login_type'] == 'wechat_openid'){
+            $wechat_openid               = Db::name( 'UserOpen' )->where( ['openid'=>$value] )->value( 'openid' );
+
+        }else{
+            $wechat_openid               = Db::name( 'UserOpen' )->where( ['app_openid'=>$value] )->value( 'app_openid' );
+
+        }
 		if( !$wechat_openid ){
 			return Code::user_wechat_openid_not_exist;
 		} else{

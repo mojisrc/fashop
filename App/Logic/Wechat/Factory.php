@@ -68,10 +68,33 @@ class Factory
 
 	private $app;
 
+	/**
+	 * Factory constructor.
+	 * @throws \phpFastCache\Exceptions\phpFastCacheDriverCheckException
+	 */
 	public function __construct()
 	{
-		$config    = \EasySwoole\Config::getInstance()->getConf( 'wechat' );
-		$this->app = EasyWeChatFactory::officialAccount( $config );
+		$info               = model( 'Payment' )->getPaymentInfo( ['type' => 'wechat'] );
+		$config             = [
+			'debug'         => \EasySwoole\Config::getInstance()->getConf( 'DEBUG' ),
+			'app_id'        => $info['config']['app_id'], // AppID
+			'secret'        => $info['config']['app_secret'], // AppSecret
+			'token'         => '', // Token todo 等待微信公众平台模块开放时开发
+			'aes_key'       => '', // EncodingAESKey，安全模式下请一定要填写！！！
+			'response_type' => 'array',
+			'log'           => [
+				'level'      => 'debug',
+				'permission' => 0777,
+				'file'       => EASYSWOOLE_ROOT.'/Runtime/Log/easywechat.log',
+			],
+			'http'          => [
+				'retries'     => 1,
+				'retry_delay' => 5000,
+				'timeout'     => 50.0,
+				'base_uri'    => 'https://api.weixin.qq.com/',
+			],
+		];
+		$this->app          = EasyWeChatFactory::officialAccount( $config );
 		$this->app['cache'] = new \ezswoole\Cache();
 		\App\Utils\Request::clearRequestFactory();
 		$this->app->request = \App\Utils\Request::createFromGlobals();

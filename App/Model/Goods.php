@@ -34,11 +34,6 @@ class Goods extends Model
 
 	const STATE1   = 1; // 出售中
 	const STATE0   = 0; // 下架
-	// const STATE10  = 10; // 违规
-	// const VERIFY1  = 1; // 审核通过
-	// const VERIFY0  = 0; // 审核失败
-	// const VERIFY10 = 10; // 等待审核
-
 	/**
 	 * 新增商品数据
 	 * @author CM
@@ -110,21 +105,6 @@ class Goods extends Model
 		$condition['is_on_sale'] = self::STATE0;
 		return $this->getGoodsList( $condition, $field, $order, $page );
 	}
-
-	/**
-	 * 违规的商品列表
-	 * @author CM
-	 * @param array  $condition 条件
-	 * @param array  $field     字段
-	 * @param string $page      分页
-	 * @param string $order     排序
-	 * @return array
-	 */
-	// public function getGoodsLockUpList( $condition, $field = '*', $order = "id desc", $page = '1,10' )
-	// {
-	// 	$condition['is_on_sale'] = self::STATE10;
-	// 	return $this->getGoodsList( $condition, $field, $order, $page );
-	// }
 
 	/**
 	 * 计算商品库存
@@ -270,22 +250,6 @@ class Goods extends Model
 		return $this->getGoodsCount( $condition );
 	}
 
-	public function getGoodsAsGoodsShowInfo( $condition, $field = '*' )
-	{
-		$field = $this->_asGoodsShow( $field );
-		return $this->getGoodsInfo( $condition, $field );
-	}
-
-	/**
-	 * show = 1 为出售中，show = 0为未出售（仓库中，违规，等待审核）
-	 * @author CM
-	 * @param string $field
-	 * @return string
-	 */
-	private function _asGoodsShow( $field )
-	{
-		return $field.',(`is_on_sale`='.self::STATE1.') as `show`';
-	}
 
 	public function comments()
 	{

@@ -25,11 +25,7 @@ class Factory
 
 	public function __construct()
 	{
-        $config = [
-            'app_id' => 'wx4f2de1f3a45e5e77',
-            'secret' => '35246e56523a261917330686c8cf0e5f',
-            'response_type' => 'array'
-        ];
+		$config    = \EasySwoole\Config::getInstance()->getConf( 'wechatmini' );
 		$this->app = EasyWeChatFactory::miniProgram($config);
 
 	}

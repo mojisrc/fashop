@@ -55,6 +55,9 @@ class Register extends Validate
 			'wechatMini' => [
 				'wechat_mini_param'
 			],
+            'wechatApp' => [
+                'wechat_openid',
+            ],
 		];
 
 	/**

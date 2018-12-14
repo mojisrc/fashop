@@ -264,8 +264,9 @@ class Binding
 
             $user_phone       = $user_model->getUserValue(['id'=>$user_id], 'phone');
             $owner            = $user_phone ? 1 : 0;
-
-            $open_data = $user_open_model->getUserOpenInfo(['openid'=>$wechat_openid], '', '*');
+            //如果没有unionid的话 此处会存在bug 因为同一个微信号会有多个微信用户 只能绑定其中的一个
+            $condition_str = 'openid='.$wechat_openid.' OR app_openid='.$wechat_openid.' OR mini_openid='.$wechat_openid;
+            $open_data = $user_open_model->getUserOpenInfo(['openid'=>$wechat_openid], $condition_str, '*');
             if($open_data){
 
                 //state 是否绑定主帐号 0否 1是
@@ -299,7 +300,7 @@ class Binding
 
             }else{
                 $open_data['user_id']        = $user_id;
-                $open_data['genre']          = 1; //类型 1微信 2小程序 3QQ 4微博....
+                $open_data['genre']          = 1; //类型 1微信(app 小程序 公众号 unionid区分) 2QQ 3微博....
                 $open_data['openid']         = $wechat_openid;
                 $open_data['state']          = $owner; //是否绑定主帐号 默认0否 1是
                 $open_data['unionid']        = isset($this->options['wechat']['unionid']) ? $this->options['wechat']['unionid'] : null;

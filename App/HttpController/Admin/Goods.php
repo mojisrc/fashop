@@ -33,8 +33,9 @@ class Goods extends Admin
 	 */
 	public function list()
 	{
-		$param      = !empty( $this->post ) ? $this->post : $this->get;
-		$goodsLogic = new \App\Logic\GoodsSearch( $param );
+		$param         = !empty( $this->post ) ? $this->post : $this->get;
+		$param['page'] = $this->getPageLimit();
+		$goodsLogic    = new \App\Logic\GoodsSearch( $param );
 		return $this->send( Code::success, [
 			'total_number' => $goodsLogic->count(),
 			'list'         => $goodsLogic->list(),
