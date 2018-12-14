@@ -20,7 +20,7 @@ class AutoReply extends BaseAbstract
 	/**
 	 * 获取当前设置的回复规则
 	 * @method GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function current()
 	{

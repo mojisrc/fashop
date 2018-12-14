@@ -40,7 +40,7 @@ class SmsProvider extends Model
 	/**
 	 * 获得支付方式列表
 	 * @datetime 2017-05-18 18:11:40
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array  $condition
 	 * @param    string $field
 	 * @param    string $order

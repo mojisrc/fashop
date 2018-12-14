@@ -22,7 +22,7 @@ class Version extends Admin {
 	}
 	/**
 	 * 模板列表
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function index() {
 		$list = model('Version')->paginate(10);
@@ -33,7 +33,7 @@ class Version extends Admin {
 	}
 	/**
 	 * 添加
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function add() {
 		if ($this->post) {
@@ -51,7 +51,7 @@ class Version extends Admin {
 	}
 	/**
 	 * 修改
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function edit() {
 		if ($this->post) {
@@ -67,7 +67,7 @@ class Version extends Admin {
 	}
 	/**
 	 * 删除
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function del() {
 		$ids = input('post.ids');

@@ -382,7 +382,7 @@ class Order extends Logic
 
     /**
      * 支付订单
-     * @author   韩文博
+     * @author   CM
      * @param    string $pay_sn
      * @param    string $payment_code
      * @param    string $trade_no

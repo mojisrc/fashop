@@ -20,7 +20,7 @@ class Date
 	 * 最近的星期几日期，抛去开始日期
 	 * @param string $start_date
 	 * @param int    $week
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public static function nearlyWeekDate( string $start_date, int $week )
 	{
@@ -83,7 +83,7 @@ class Date
 	 * 获得周
 	 * @param mixed $day int|date
 	 * @return false|int|string
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public static function week($day){
 		if(is_numeric($day)){

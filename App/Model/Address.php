@@ -23,7 +23,7 @@ class Address extends Model {
 	/**
 	 * 取得买家默认收货地址
 	 * @datetime 2017-04-18T22:57:31+0800
-	 * @author 韩文博
+	 * @author CM
 	 * @param    array $condition
 	 * @return   array
 	 */
@@ -36,7 +36,7 @@ class Address extends Model {
 	/**
 	 * 获得某条收获地址的详情
 	 * @datetime 2017-04-18T22:57:54+0800
-	 * @author 韩文博
+	 * @author CM
 	 * @param    array $condition
 	 * @return   array
 	 */
@@ -48,7 +48,7 @@ class Address extends Model {
 	/**
 	 * 获得收获地址列表
 	 * @datetime 2017-04-19 09:56:04
-	 * @author 韩文博
+	 * @author CM
 	 * @param    array $condition
 	 * @param    string $field
 	 * @param    string $group
@@ -64,7 +64,7 @@ class Address extends Model {
 	/**
 	 * 新增地址
 	 * @datetime 2017-04-18T22:59:13+0800
-	 * @author 韩文博
+	 * @author CM
 	 * @param    array $data
 	 * @return   integer pk
 	 */
@@ -79,7 +79,7 @@ class Address extends Model {
 	/**
 	 * 更新地址信息
 	 * @datetime 2017-04-18T23:01:19+0800
-	 * @author 韩文博
+	 * @author CM
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -90,7 +90,7 @@ class Address extends Model {
 	/**
 	 * 删除地址
 	 * @datetime 2017-04-18T23:02:06+0800
-	 * @author 韩文博
+	 * @author CM
 	 * @param    array $condition
 	 * @return   boolean
 	 */

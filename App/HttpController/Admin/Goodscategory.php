@@ -91,7 +91,7 @@ class Goodscategory extends Admin
 	 * 商品分类详情
 	 * @method GET
 	 * @param  int $id ID
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function info()
 	{
@@ -143,7 +143,7 @@ class Goodscategory extends Admin
 	 * 分类排序
 	 * @method POST
 	 * @param array $sorts [{id:d,index:d}]
-	 * @author   韩文博
+	 * @author   CM
 	 */
 	public function sort()
 	{

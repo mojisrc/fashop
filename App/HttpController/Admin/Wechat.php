@@ -36,7 +36,7 @@ class Wechat extends Admin
 	 * 获得token
 	 * @method GET
 	 * @param bool $refresh
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function getToken()
 	{
@@ -91,7 +91,7 @@ class Wechat extends Admin
 	 * @method POST
 	 * @param int $menu_id
 	 * 有两种删除方式，一种是全部删除，另外一种是根据菜单 ID 来删除(删除个性化菜单时用，ID 从查询接口获取)
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function menuDelete()
 	{
@@ -115,7 +115,7 @@ class Wechat extends Admin
 	 * @param array  $resent_visit_time
 	 * @param array  $register_time
 	 * @param array user_tag
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function broadcastUserSearch()
 	{
@@ -208,7 +208,7 @@ class Wechat extends Admin
 	 * @method GET
 	 * @param string $condition_type 1全部粉丝  2按条件筛选 3手动选择粉丝
 	 * @param int $send_time
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function broadcastSurplus()
 	{
@@ -251,7 +251,7 @@ class Wechat extends Admin
 	 * @param array  $condition
 	 * @param int    $send_time
 	 * @param array  $send_content
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function broadcastCreate()
 	{
@@ -295,7 +295,7 @@ class Wechat extends Admin
 	/**
 	 * 群发记录
 	 * @method GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function broadcastRecords()
 	{
@@ -319,7 +319,7 @@ class Wechat extends Admin
 	 * 群发记录删除
 	 * @method POST
 	 * @param int $id
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function broadcastRecordsDel()
 	{
@@ -351,7 +351,7 @@ class Wechat extends Admin
 	 * 获取多个用户信息
 	 * @method POST
 	 * @param array $openids
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function userSelect()
 	{
@@ -367,7 +367,7 @@ class Wechat extends Admin
 	 * 获取用户列表
 	 * @method GET
 	 * @param string $next_openid 非必填，不填默认为第一页
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function userList()
 	{
@@ -384,7 +384,7 @@ class Wechat extends Admin
 	 * @method POST
 	 * @param string $openid
 	 * @param string $remark
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function userRemark()
 	{
@@ -399,7 +399,7 @@ class Wechat extends Admin
 	/**
 	 * 拉黑用户
 	 * @method POST
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $openids
 	 */
 	public function userBlock()
@@ -416,7 +416,7 @@ class Wechat extends Admin
 	 * 取消拉黑用户
 	 * @method POST
 	 * @param array $openids
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function userUnblock()
 	{
@@ -432,7 +432,7 @@ class Wechat extends Admin
 	 * 黑名单列表
 	 * @method GET
 	 * @param string $begin_openid
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function userBlackList()
 	{
@@ -451,7 +451,7 @@ class Wechat extends Admin
 	 * 上传图片
 	 * @method POST
 	 * @param file $media
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function materialUploadImage()
 	{
@@ -483,7 +483,7 @@ class Wechat extends Admin
 	 * 上传声音
 	 * @method POST
 	 * @param file $media
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function materialUploadVoice()
 	{
@@ -517,7 +517,7 @@ class Wechat extends Admin
 	 * @param string $title
 	 * @param string $description
 	 * @param file   $media
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function materialUploadVideo()
 	{
@@ -555,7 +555,7 @@ class Wechat extends Admin
 	 * 用于视频封面或者音乐封面
 	 * @method POST
 	 * @param file $media
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function materialUploadThumb( )
 	{
@@ -586,7 +586,7 @@ class Wechat extends Admin
 	 * 微信永久素材图文消息创建
 	 * @method POST
 	 * @param array $media 多组图文
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function materialUploadArticle()
 	{
@@ -608,7 +608,7 @@ class Wechat extends Admin
 	 * @param string $media_id 要更新的文章的 mediaId
 	 * @param array  $article  文章内容
 	 * @param int    $index    要更新的文章在图文消息中的位置（多图文消息时，此字段才有意义，单图片忽略此参数），第一篇为 0；
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function materialUpdateArticle()
 	{
@@ -629,7 +629,7 @@ class Wechat extends Admin
 	 * 上传图片
 	 * @method POST
 	 * @param file $media
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function materialUploadArticleImage()
 	{
@@ -660,7 +660,7 @@ class Wechat extends Admin
 	 * 微信永久素材获取单条
 	 * @method GET
 	 * @param string $media_id 素材id
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function materialGet()
 	{
@@ -678,7 +678,7 @@ class Wechat extends Admin
 	 * @param int    $offset
 	 * @param int    $count
 	 * @method GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function materialList()
 	{
@@ -693,7 +693,7 @@ class Wechat extends Admin
 	/**
 	 * 获取素材计数
 	 * @method GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function materialStats()
 	{
@@ -705,7 +705,7 @@ class Wechat extends Admin
 	 * 删除永久素材
 	 * @method POST
 	 * @param string $media_id 素材id
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function materialDelete()
 	{
@@ -721,7 +721,7 @@ class Wechat extends Admin
 	 * 本地图文添加
 	 * @method POST
 	 * @param array $media
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function localNewsAdd()
 	{
@@ -751,7 +751,7 @@ class Wechat extends Admin
 	 * @method POST
 	 * @param int   $id
 	 * @param array $media
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function localNewsEdit()
 	{
@@ -779,7 +779,7 @@ class Wechat extends Admin
 	/**
 	 * 本地图文删除
 	 * @method POST
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function localNewsDel()
 	{
@@ -796,7 +796,7 @@ class Wechat extends Admin
 	 * @method GET
 	 * @param int $page
 	 * @param int $rows
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function localNews()
 	{
@@ -814,7 +814,7 @@ class Wechat extends Admin
 	 * 本地图文详情
 	 * @method GET
 	 * @param int $id
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function localNewsInfo()
 	{
@@ -944,7 +944,7 @@ class Wechat extends Admin
 	 * @method POST
 	 * @param int   $id      标签id
 	 * @param array $openids 用户openid数组
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function userTagTagUsers()
 	{
@@ -992,7 +992,7 @@ class Wechat extends Admin
 	 * @param string $app_secret
 	 * @param string $headimg
 	 * @param string $qrcode
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function confSet()
 	{
@@ -1037,7 +1037,7 @@ class Wechat extends Admin
 	/**
 	 * 绑定信息获取
 	 * @method GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function getConf()
 	{
@@ -1048,7 +1048,7 @@ class Wechat extends Admin
 	/**
 	 * 查看接口状态
 	 * @method GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function checkApiStatus()
 	{
@@ -1064,7 +1064,7 @@ class Wechat extends Admin
 	 * 被关注自动回复
 	 * @method POST
 	 * @param array $reply_ceontent
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function autoReplySubscribeSet()
 	{
@@ -1081,7 +1081,7 @@ class Wechat extends Admin
 	 * 被关注回复设置获得
 	 * @method POST
 	 * @param array $reply_ceontent
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function autoReplySubscribeGet()
 	{
@@ -1092,7 +1092,7 @@ class Wechat extends Admin
 	/**
 	 * 自动回复开关获取
 	 * @method GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function autoReplyStatusGet()
 	{
@@ -1104,7 +1104,7 @@ class Wechat extends Admin
 	 * 自动回复开关设置
 	 * @method POST
 	 * @param int status
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function autoReplyStatusSet()
 	{
@@ -1120,7 +1120,7 @@ class Wechat extends Admin
 	 * 关键词规则列表
 	 * @method GET
 	 * @param string $keywords 搜索关键词/规则名称
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function replyKeywordsList()
 	{
@@ -1144,7 +1144,7 @@ class Wechat extends Admin
 	 * @param string $reply_mode
 	 * @param array  $reply_content
 	 * @param array  $keywords key最多10个,回复内容最多5条
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function autoReplyKeywordsAdd()
 	{
@@ -1207,7 +1207,7 @@ class Wechat extends Admin
 	 * @param string $reply_mode
 	 * @param array  $reply_content
 	 * @param array  $keywords key最多10个,回复内容最多5条
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function autoReplyKeywordsEdit()
 	{
@@ -1271,7 +1271,7 @@ class Wechat extends Admin
 	 * 关键词规则删除
 	 * @method POST
 	 * @param int $id
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function autoReplyKeywordsDel()
 	{
@@ -1312,7 +1312,7 @@ class Wechat extends Admin
 	 * 关键词规则详情
 	 * @method GET
 	 * @param int $id
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function autoReplyKeywordsInfo()
 	{

@@ -28,7 +28,7 @@ class Voucher extends Model {
 	/**
 	 * 添加优惠券
 	 * @datetime 2017-06-21T02:16:16+0800
-	 * @author 韩文博
+	 * @author CM
 	 * @param    int $coupon_template_id
 	 * @param    int $owner_id
 	 * @param    string $message_title

@@ -98,7 +98,7 @@ abstract class AccessTokenAbstract extends Controller
     /**
      * 获得用户的相关信息
      * @throws \App\Utils\Exception
-     * @author 韩文博
+     * @author CM
      */
     final protected function getUserInfo($user_id)
     {

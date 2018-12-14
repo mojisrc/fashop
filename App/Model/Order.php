@@ -33,7 +33,7 @@ class Order extends Model
 	 * @throws \ezswoole\db\exception\DataNotFoundException
 	 * @throws \ezswoole\db\exception\ModelNotFoundException
 	 * @throws \ezswoole\exception\DbException
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function getOrderInfo( $condition = [], $condition_string = '', $fields = '*', $extend = [] )
 	{
@@ -99,7 +99,7 @@ class Order extends Model
 	 * @throws \ezswoole\db\exception\DataNotFoundException
 	 * @throws \ezswoole\db\exception\ModelNotFoundException
 	 * @throws \ezswoole\exception\DbException
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function getOrderExtendInfo( $condition = [], $field = '*' )
 	{
@@ -113,7 +113,7 @@ class Order extends Model
 	 * @throws \ezswoole\db\exception\DataNotFoundException
 	 * @throws \ezswoole\db\exception\ModelNotFoundException
 	 * @throws \ezswoole\exception\DbException
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function getOrderPayInfo( $condition = [] )
 	{
@@ -130,7 +130,7 @@ class Order extends Model
 	 * @param string $page
 	 * @param array  $extend
 	 * @return array
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function getOrderList( $condition = [], $condition_string = '', $field = '*', $order = 'id desc', $page = '1,20', $extend = [] )
 	{
@@ -344,7 +344,7 @@ class Order extends Model
 	 * @param string $fields
 	 * @param string $order
 	 * @return mixed
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function getOrderGoodsInfo( $condition = [], $fields = '*', $order = 'id asc' )
 	{
@@ -487,7 +487,7 @@ class Order extends Model
 	 * @throws \ezswoole\db\exception\DataNotFoundException
 	 * @throws \ezswoole\db\exception\ModelNotFoundException
 	 * @throws \ezswoole\exception\DbException
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function getOrderLogList( $condition )
 	{
@@ -501,7 +501,7 @@ class Order extends Model
 	 * @param $operate
 	 * @param $order_info
 	 * @return bool
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function getOrderOperateState( $operate, $order_info )
 	{
@@ -640,7 +640,7 @@ class Order extends Model
 	 * @param $extend_msg
 	 * @return bool
 	 * @throws \ezswoole\exception\PDOException
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function userChangeState( $state_type, $order_info, $user_id, $username, $extend_msg ) : bool
 	{
@@ -667,7 +667,7 @@ class Order extends Model
 	/**
 	 * 取消订单操作
 	 * @datetime 2017-05-30T19:34:04+0800
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array  $order_info 订单信息
 	 * @param    int    $user_id
 	 * @param    string $username

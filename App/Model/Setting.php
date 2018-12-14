@@ -22,7 +22,7 @@ class Setting extends Model {
 	/**
 	 * 添加
 	 * @datetime 2017-04-19 09:58:56
-	 * @author 韩文博
+	 * @author CM
 	 * @param  array $data
 	 * @return int pk
 	 */
@@ -38,7 +38,7 @@ class Setting extends Model {
 	/**
 	 * 添加多条
 	 * @datetime 2017-04-19 09:58:56
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $data
 	 * @return boolean
 	 */
@@ -48,7 +48,7 @@ class Setting extends Model {
 	/**
 	 * 修改
 	 * @datetime 2017-04-19 09:58:56
-	 * @author 韩文博
+	 * @author CM
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -59,7 +59,7 @@ class Setting extends Model {
 	/**
 	 * 删除
 	 * @datetime 2017-04-19 09:58:56
-	 * @author 韩文博
+	 * @author CM
 	 * @param    array $condition
 	 * @return   boolean
 	 */
@@ -69,7 +69,7 @@ class Setting extends Model {
 	/**
 	 * 计算数量
 	 * @datetime 2017-04-19 09:58:56
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -79,7 +79,7 @@ class Setting extends Model {
 	/**
 	 * 获取设置单条数据
 	 * @datetime 2017-04-19 09:58:56
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $condition 条件
 	 * @param string $field 字段
 	 * @return array
@@ -91,7 +91,7 @@ class Setting extends Model {
 	/**
 	 * 获得设置列表
 	 * @datetime 2017-04-19 09:58:56
-	 * @author 韩文博
+	 * @author CM
 	 * @param    array $condition
 	 * @param    string $field
 	 * @param    string $group

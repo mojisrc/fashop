@@ -25,7 +25,7 @@ class Goodsevaluate extends Server
      * @param array $ids          id数组
      * @param int $page           页数
      * @param int $rows           条数
-     * @author 韩文博
+     * @author CM
      */
     public function list()
     {
@@ -77,7 +77,7 @@ class Goodsevaluate extends Server
      * 评价详情
      * @method GET
      * @param int order_goods_id
-     * @author 韩文博
+     * @author CM
      */
     public function detail()
     {
@@ -112,7 +112,7 @@ class Goodsevaluate extends Server
      * @param array images 评价图片 数组
      * @param int is_anonymous 是否匿名 1是0否
      * @param string content 评价内容
-     * @author 韩文博
+     * @author CM
      */
     public function add()
     {
@@ -145,7 +145,7 @@ class Goodsevaluate extends Server
      * @param int   order_goods_id      订单商品表的id
      * @param array additional_images   评价图片 数组
      * @param string additional_content 评价内容
-     * @author 韩文博
+     * @author CM
      */
     public function append()
     {
@@ -176,7 +176,7 @@ class Goodsevaluate extends Server
     //  /**
     //   * 当前用户的评价列表
     //   * @method GET
-    //   * @author 韩文博
+    //   * @author CM
     //   */
     //  public function mine()
     //  {

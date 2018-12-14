@@ -178,7 +178,7 @@ class Order extends Server
      * 订单详细
      * @method GET
      * @param int $id 订单id
-     * @author 韩文博
+     * @author CM
      */
     public function info()
     {
@@ -240,7 +240,7 @@ class Order extends Server
      * @method POST
      * @param int $id 订单id
      * @param string $state_remark 状态备注，如：取消原因（改买其他商品、改配送方式、其他原因等等）
-     * @author 韩文博
+     * @author CM
      */
     public function cancel()
     {
@@ -270,7 +270,7 @@ class Order extends Server
      * 确认收货
      * @method POST
      * @param int $id 订单id
-     * @author 韩文博
+     * @author CM
      */
     public function confirmReceipt()
     {
@@ -300,7 +300,7 @@ class Order extends Server
      * 订单商品列表
      * @method     GET
      * @param int $id 订单id
-     * @author  韩文博
+     * @author  CM
      */
     public function goodsList()
     {
@@ -325,7 +325,7 @@ class Order extends Server
      * 订单商品信息
      * @method     GET
      * @param int $id 订单id
-     * @author          韩文博
+     * @author          CM
      *
      */
     public function goodsInfo()
@@ -424,7 +424,7 @@ class Order extends Server
 //  * 物流跟踪
 //  * @method GET
 //  * @param string $id 订单id
-//  * @author 韩文博
+//  * @author CM
 //  */
 // public function deliver()
 // {

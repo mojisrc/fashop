@@ -21,7 +21,7 @@ class UserWechat extends Model
 	/**
 	 * 添加
 	 * @datetime 2018-02-05 17:20:37
-	 * @author   韩文博
+	 * @author   CM
 	 * @param  array $data
 	 * @return int pk
 	 */
@@ -34,7 +34,7 @@ class UserWechat extends Model
 	/**
 	 * 添加多条
 	 * @datetime 2018-02-05 17:20:37
-	 * @author   韩文博
+	 * @author   CM
 	 * @param array $data
 	 * @return boolean
 	 */
@@ -46,7 +46,7 @@ class UserWechat extends Model
 	/**
 	 * 修改
 	 * @datetime 2018-02-05 17:20:37
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -59,7 +59,7 @@ class UserWechat extends Model
 	/**
 	 * 删除
 	 * @datetime 2018-02-05 17:20:37
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array $condition
 	 * @return   boolean
 	 */
@@ -71,7 +71,7 @@ class UserWechat extends Model
 	/**
 	 * 计算数量
 	 * @datetime 2018-02-05 17:20:37
-	 * @author   韩文博
+	 * @author   CM
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -83,7 +83,7 @@ class UserWechat extends Model
 	/**
 	 * 获取用户微信表单条数据
 	 * @datetime 2018-02-05 17:20:37
-	 * @author   韩文博
+	 * @author   CM
 	 * @param array  $condition 条件
 	 * @param string $field     字段
 	 * @return array | false
@@ -97,7 +97,7 @@ class UserWechat extends Model
 	/**
 	 * 获得用户微信表列表
 	 * @datetime 2018-02-05 17:20:37
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array  $condition
 	 * @param    string $field
 	 * @param    string $order

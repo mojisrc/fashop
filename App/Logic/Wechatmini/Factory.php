@@ -25,7 +25,11 @@ class Factory
 
 	public function __construct()
 	{
-		$config    = \EasySwoole\Config::getInstance()->getConf( 'wechatmini' );
+        $config = [
+            'app_id' => 'wx4f2de1f3a45e5e77',
+            'secret' => '35246e56523a261917330686c8cf0e5f',
+            'response_type' => 'array'
+        ];
 		$this->app = EasyWeChatFactory::miniProgram($config);
 
 	}
@@ -38,7 +42,7 @@ class Factory
 	 * @param $data
 	 * @return mixed
 	 * @throws \Exception
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function checkUser( array $data )
 	{

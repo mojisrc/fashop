@@ -44,7 +44,7 @@ class Shipper extends Admin
 	/**
 	 * 物流地址信息
 	 * @method GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function info()
 	{

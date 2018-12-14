@@ -36,7 +36,7 @@ class Image extends Admin
 	 * 应用图片列表
 	 * @method GET
 	 * @param array $create_time
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function list()
 	{
@@ -60,7 +60,7 @@ class Image extends Admin
 	 * @method GET
 	 * @param int $offset
 	 * @param int $count
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function wechat()
 	{
@@ -78,7 +78,7 @@ class Image extends Admin
 	 * @param string $name
 	 * @param string $image
 	 * @param string $is_save
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function add()
 	{
@@ -88,7 +88,7 @@ class Image extends Admin
 			try{
 				$images = ImageClass::getInstance()->create( $this->post->image )->crop()->getImages();
 				if( $images ){
-					$host = $this->request->domain()."/";
+					$host = "https://hyx.gzbxwa.com/";
 					if( isset( $this->post['is_save'] ) && $this->post['is_save'] == 1 ){
 						$data = [
 							'url'  => $host.$images['origin']['path'],
@@ -116,7 +116,7 @@ class Image extends Admin
 	/**
 	 * 删除图片
 	 * @method POST
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function del()
 	{
@@ -132,7 +132,7 @@ class Image extends Admin
 	 * 提取网络图片
 	 * @method POST
 	 * @param string $url
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function remoteGrab()
 	{
@@ -143,7 +143,7 @@ class Image extends Admin
 	 * 商品图列表
 	 * @method GET
 	 * @param string $keywords
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function goodsImageList()
 	{

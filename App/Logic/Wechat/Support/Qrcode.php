@@ -23,7 +23,7 @@ class Qrcode extends BaseAbstract
 	 * 是有过期时间的，最长可以设置为在二维码生成后的 30天后过期，但能够生成较多数量。临时二维码主要用于帐号绑定等不要求二维码永久保存的业务场景
 	 * @method GET
 	 * @param  $
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function temporary()
 	{
@@ -39,7 +39,7 @@ class Qrcode extends BaseAbstract
 	/**
 	 * 永久二维码，是无过期时间的，但数量较少（目前为最多10万个）。永久二维码主要用于适用于帐号绑定、用户来源统计等场景。
 	 * @method GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function forever()
 	{
@@ -54,7 +54,7 @@ class Qrcode extends BaseAbstract
 	/**
 	 * @method GET
 	 * @param string $ticket
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function url()
 	{

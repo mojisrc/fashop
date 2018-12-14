@@ -41,7 +41,7 @@ class Goods extends Model
 
 	/**
 	 * 新增商品数据
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $insert 数据
 	 * @return integer pk
 	 */
@@ -67,7 +67,7 @@ class Goods extends Model
 
 	/**
 	 * 商品列表
-	 * @author 韩文博
+	 * @author CM
 	 * @param array  $condition 条件
 	 * @param array  $field     字段
 	 * @param string $page      分页
@@ -82,7 +82,7 @@ class Goods extends Model
 
 	/**
 	 * 出售中的商品列表
-	 * @author 韩文博
+	 * @author CM
 	 * @param array  $condition 条件
 	 * @param array  $field     字段
 	 * @param string $page      分页
@@ -98,7 +98,7 @@ class Goods extends Model
 
 	/**
 	 * 仓库中的商品列表
-	 * @author 韩文博
+	 * @author CM
 	 * @param array  $condition 条件
 	 * @param array  $field     字段
 	 * @param string $page      分页
@@ -113,7 +113,7 @@ class Goods extends Model
 
 	/**
 	 * 违规的商品列表
-	 * @author 韩文博
+	 * @author CM
 	 * @param array  $condition 条件
 	 * @param array  $field     字段
 	 * @param string $page      分页
@@ -128,7 +128,7 @@ class Goods extends Model
 
 	/**
 	 * 计算商品库存
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $goods_list
 	 * @return array|boolean
 	 */
@@ -174,7 +174,7 @@ class Goods extends Model
 
 	/**
 	 * 更新商品数据
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $update    更新数据
 	 * @param array $condition 条件
 	 * @return boolean
@@ -186,7 +186,7 @@ class Goods extends Model
 
 	/**
 	 * 更新商品数据
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $update    更新数据
 	 * @param array $condition 条件
 	 * @return boolean
@@ -199,7 +199,7 @@ class Goods extends Model
 
 	/**
 	 * 锁定商品
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $condition
 	 * @return boolean
 	 */
@@ -211,7 +211,7 @@ class Goods extends Model
 
 	/**
 	 * 解锁商品
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $condition
 	 * @return boolean
 	 */
@@ -223,7 +223,7 @@ class Goods extends Model
 
 	/**
 	 * 获取单条商品信息
-	 * @author 韩文博
+	 * @author CM
 	 * @param array  $condition
 	 * @param string $field
 	 * @return array
@@ -236,7 +236,7 @@ class Goods extends Model
 
 	/**
 	 * 获得商品数量
-	 * @author 韩文博
+	 * @author CM
 	 * @param array  $condition
 	 * @param string $field
 	 * @return int
@@ -248,7 +248,7 @@ class Goods extends Model
 
 	/**
 	 * 出售中的商品数量
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $condition
 	 * @return int
 	 */
@@ -260,7 +260,7 @@ class Goods extends Model
 
 	/**
 	 * 仓库中的商品数量
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $condition
 	 * @return int
 	 */
@@ -278,7 +278,7 @@ class Goods extends Model
 
 	/**
 	 * show = 1 为出售中，show = 0为未出售（仓库中，违规，等待审核）
-	 * @author 韩文博
+	 * @author CM
 	 * @param string $field
 	 * @return string
 	 */

@@ -24,7 +24,7 @@ class GoodsCollect extends Model
 	/**
 	 * 添加
 	 * @datetime 2017-04-19 09:47:46
-	 * @author   韩文博
+	 * @author   CM
 	 * @param  array $data
 	 * @return int pk
 	 */
@@ -41,7 +41,7 @@ class GoodsCollect extends Model
 	/**
 	 * 修改
 	 * @datetime 2017-04-19 09:47:46
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -54,7 +54,7 @@ class GoodsCollect extends Model
 	/**
 	 * 删除
 	 * @datetime 2017-04-19 09:47:46
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array $condition
 	 * @return   boolean
 	 */
@@ -66,7 +66,7 @@ class GoodsCollect extends Model
 	/**
 	 * 计算数量
 	 * @datetime 2017-04-19 09:47:46
-	 * @author   韩文博
+	 * @author   CM
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -78,7 +78,7 @@ class GoodsCollect extends Model
 	/**
 	 * 获取收藏单条数据
 	 * @datetime 2017-04-19 09:47:46
-	 * @author   韩文博
+	 * @author   CM
 	 * @param array  $condition 条件
 	 * @param string $field     字段
 	 * @return array
@@ -92,7 +92,7 @@ class GoodsCollect extends Model
 	/**
 	 * 获得收藏列表
 	 * @datetime 2017-04-19 09:47:46
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array  $condition
 	 * @param    string $field
 	 * @param    string $group

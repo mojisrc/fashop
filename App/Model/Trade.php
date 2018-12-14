@@ -230,7 +230,7 @@ class Trade extends Model {
 	/**
 	 * 处理邀请的好友购买成功送优惠券的逻辑
 	 * @datetime 2017-06-15T16:37:05+0800
-	 * @author 韩文博
+	 * @author CM
 	 * @return   [type]
 	 */
 	// public function handleFriendBuied() {

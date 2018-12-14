@@ -28,7 +28,7 @@ class Pdcash extends Admin {
 	/**
 	 * 提现列表
 	 * @datetime 2017-04-20T19:49:00+0800
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function index() {
 		$get = $this->get;
@@ -65,7 +65,7 @@ class Pdcash extends Admin {
 	/**
 	 * 删除提现记录
 	 * @datetime 2017-04-20T19:49:07+0800
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function del() {
 		$id = intval($get["id"]);
@@ -108,7 +108,7 @@ class Pdcash extends Admin {
 	/**
 	 * 更改提现为支付状态
 	 * @datetime 2017-04-20T19:49:18+0800
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function pay() {
 		$id = intval($get['id']);
@@ -161,7 +161,7 @@ class Pdcash extends Admin {
 	/**
 	 * 查看提现信息
 	 * @datetime 2017-04-20T19:49:28+0800
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function detail() {
 		$id = intval(input('get.id'));

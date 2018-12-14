@@ -71,7 +71,7 @@ class Article extends Model
 	/**
 	 * 计算数量
 	 * @datetime 2017-04-20 18:07:52
-	 * @author   韩文博
+	 * @author   CM
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -94,7 +94,7 @@ class Article extends Model
 
 	/**
 	 * 获得文章列表
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array  $condition
 	 * @param    string $field
 	 * @param    string $order

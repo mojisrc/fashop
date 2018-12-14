@@ -25,7 +25,7 @@ class Smsprovider extends Admin
 
 	/**
 	 * 短信服务商列表
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function list()
 	{
@@ -41,7 +41,7 @@ class Smsprovider extends Admin
 	 * @param string $type aliyun 阿里云
 	 * @param array  $config
 	 * @param int    $status
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function edit()
 	{
@@ -69,7 +69,7 @@ class Smsprovider extends Admin
 	/**
 	 * 详情
 	 * @param string $type aliyun 阿里云
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function info()
 	{

@@ -67,7 +67,7 @@ class Area extends Server
 	 * @param string $up_level ,默认2，向上两层 @todo
 	 * @todo   拓展其他方式的获取 如id
 	 *                         为：不只为微信端做服务
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function info()
 	{

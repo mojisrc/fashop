@@ -150,7 +150,7 @@ class Untie
      * @method GET
      * @return array|null
      * @throws \App\Utils\Exception
-     * @author 韩文博
+     * @author CM
      */
     public function untie() : ? array
     {
@@ -171,7 +171,7 @@ class Untie
     /**
      * @return mixed
      * @throws \App\Utils\Exception
-     * @author 韩文博
+     * @author CM
      */
     private function phone()
     {
@@ -221,7 +221,7 @@ class Untie
 
     /**
      * @throws \App\Utils\Exception
-     * @author 韩文博
+     * @author CM
      */
     private function wechat()
     {

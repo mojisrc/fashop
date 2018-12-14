@@ -22,7 +22,7 @@ class CustomerService extends BaseAbstract
 	}
 	/**
 	 * 获取所有客服
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function list()
 	{
@@ -31,7 +31,7 @@ class CustomerService extends BaseAbstract
 
 	/**
 	 * 获取所有在线的客服
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function online()
 	{
@@ -43,7 +43,7 @@ class CustomerService extends BaseAbstract
 	 * 添加客服
 	 * @param  string $account
 	 * @param  string $name
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function create( string $account, string $name )
 	{
@@ -53,7 +53,7 @@ class CustomerService extends BaseAbstract
 
 	/**
 	 * 修改客服
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function update( string $account, string $name )
 	{
@@ -63,7 +63,7 @@ class CustomerService extends BaseAbstract
 
 	/**
 	 * 删除账号
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function delete( string $account )
 	{
@@ -72,7 +72,7 @@ class CustomerService extends BaseAbstract
 
 	/**
 	 * 设置客服头像
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function setAvatar( string $account, string $avatarPath )
 	{
@@ -81,7 +81,7 @@ class CustomerService extends BaseAbstract
 
 	/**
 	 * 获取客服与客户聊天记录
-	 * @author 韩文博
+	 * @author CM
 	 *         示例:
 	 *
 	 * $records = $this->app->customer_service->messages('2015-06-07', '2015-06-21', 1, 20000);
@@ -101,7 +101,7 @@ class CustomerService extends BaseAbstract
 	 * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
 	 * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
 	 * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function message( $message, $openId = null, $from = null, $to = null )
 	{
@@ -123,7 +123,7 @@ class CustomerService extends BaseAbstract
 	 * 邀请微信用户加入客服
 	 *
 	 * 以账号 foo@test 邀请 openid 为 openidxxxx 的微信用户加入客服。
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function invite()
 	{
@@ -132,7 +132,7 @@ class CustomerService extends BaseAbstract
 
 	/**
 	 * 创建会话
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function sessionCreate()
 	{
@@ -142,7 +142,7 @@ class CustomerService extends BaseAbstract
 
 	/**
 	 * 关闭会话
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function sessionClose()
 	{
@@ -152,7 +152,7 @@ class CustomerService extends BaseAbstract
 
 	/**
 	 * 获取客户会话状态
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function sessionGet()
 	{
@@ -162,7 +162,7 @@ class CustomerService extends BaseAbstract
 
 	/**
 	 * 获取客服会话列表
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function sessionList()
 	{

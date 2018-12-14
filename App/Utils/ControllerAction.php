@@ -8,7 +8,7 @@
  * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
- * @author     韩文博
+ * @author     CM
  * @since      File available since Release v1.1
  */
 
@@ -79,7 +79,7 @@ class ControllerAction
 	/**
 	 * 获得模块下的控制器列表，去除module自身
 	 * @method GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function getControllerNameList()
 	{
@@ -115,7 +115,7 @@ class ControllerAction
 
 	/**
 	 * 获得实例化里的所有方法列表
-	 * @author   韩文博
+	 * @author   CM
 	 * @return   array
 	 */
 	private function getFunctionList( $controllerName )
@@ -284,7 +284,7 @@ class ControllerAction
 	/**
 	 * @method     GET
 	 * @datetime 2017-06-29T12:19:13+0800
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    string $module
 	 * @param    string $controller
 	 * @param    string $action

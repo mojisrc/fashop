@@ -19,7 +19,7 @@ class Login
 	 * PC 下 密码登陆记录
 	 * @param string $username
 	 * @return bool
-	 * @author 韩文博
+	 * @author CM
 	 * todo 3次密码登陆错误 禁止一定时间不允许登陆
 	 */
 	public function pcPasswordLogin( string $username ) : ? array

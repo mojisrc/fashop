@@ -24,7 +24,7 @@ class Upload extends Admin
 	 * @datetime 2017-05-02T16:03:25+0800
 	 * @param string $type file | base64
 	 * @param mixed  $image
-	 * @author   韩文博
+	 * @author   CM
 	 */
 	public function addImage()
 	{
@@ -54,7 +54,7 @@ class Upload extends Admin
 	 * 证书上传
 	 * @method POST
 	 * @param file $cert
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function addCert()
 	{

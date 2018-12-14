@@ -194,7 +194,7 @@ class Message extends Server {
 	 * 未读消息分组数量
 	 * @method     GET
 	 * @datetime 2017-06-21T11:25:51+0800
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function unreadGroupCount() {
 
@@ -302,7 +302,7 @@ class Message extends Server {
 	 * @method     GET
 	 * @param string $type 类型
 	 * @datetime 2017-06-21T15:44:41+0800
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function setGroupAllRead() {
 

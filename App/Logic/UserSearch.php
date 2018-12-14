@@ -74,6 +74,10 @@ class UserSearch
 	 * @var string
 	 */
 	private $order = 'id desc';
+    /**
+     * @var int
+     */
+	private $isSeller;
 
 	public function __construct( array $data = null )
 	{
@@ -105,6 +109,9 @@ class UserSearch
 		if( isset( $data['last_cost_time'] ) ){
 			$this->lastCostTime = $data['last_cost_time'];
 		}
+        if( isset( $data['isSeller'] ) ){
+            $this->isSeller = $data['isSeller'];
+        }
 	}
 
 	/**
@@ -138,7 +145,21 @@ class UserSearch
 	{
 		$this->page = $page;
 	}
+    /**
+     * @return string
+     */
+    public function getIsSeller() : int
+    {
+        return $this->isSeller;
+    }
 
+    /**
+     * @param string $isSeller
+     */
+    public function setIsSeller( int $isSeller ) : void
+    {
+        $this->isSeller = $isSeller;
+    }
 	/**
 	 * @return \App\Model\User
 	 */
@@ -308,7 +329,10 @@ class UserSearch
 	{
         $this->condition               = [];
         $this->condition['is_discard'] = 0;         //被丢弃 默认0否 1是[用于绑定后的失效的占位行]
-        $this->condition['id']         = ['gt', 1]; //临时解决后台超级管理员账号问题[不显示后台超级管理员]
+        $this->condition['id']         = ['gt', 2]; //临时解决后台超级管理员账号问题[不显示后台超级管理员]
+        if( !empty( $this->isSeller ) ){
+            $this->condition['is_seller'] = $this->isSeller;
+        }
 
         $table_prefix                  = config('database.prefix');
         $table_user                    = $table_prefix . 'user';
@@ -379,6 +403,8 @@ class UserSearch
 				[$this->lastCostTime],
 			];
 		}
+
+
 
 		//1购次多到少 2购次少到多 3累计消费多到少 4累计消费少到多 5客单价多到少 6客单价少到多 7最后消费早到晚 8最后消费晚到早
 		//buy_times购买次数  cost_total累计消费  cost_average客单价(平均消费)  last_cost_time最后消费时间

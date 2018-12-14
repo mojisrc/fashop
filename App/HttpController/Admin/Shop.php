@@ -31,7 +31,7 @@ class Shop extends Admin
 	 * @param  string $contact_number
 	 * @param  string $description
 	 * @param  string $host
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function setBaseInfo()
 	{
@@ -59,11 +59,51 @@ class Shop extends Admin
 		}
 	}
 
+    /**
+     * 首页信息设置
+     * @method POST
+     * @param  string $top_desc
+     * @param  string $ads_status
+     * @param  string $ads_img
+     * @param  string $ads_title
+     * @param  string $ads_title_sec
+     * @param  string $ads_body
+     * @author CM
+     */
+    public function setIndexInfo()
+    {
+        if( $this->validate( $this->post, 'Admin/Shop.setBaseInfo' ) !== true ){
+            $this->send( Code::param_error, [], $this->getValidate()->getError() );
+        } else{
+            $data = [];
+            if( isset( $this->post['top_desc'] ) ){
+                $data['top_desc'] = $this->post['top_desc'];
+            }
+            if( isset( $this->post['ads_status'] ) ){
+                $data['ads_status'] = $this->post['ads_status'];
+            }
+            if( isset( $this->post['ads_img'] ) ){
+                $data['ads_img'] = $this->post['ads_img'];
+            }
+            if( isset( $this->post['ads_title'] ) ){
+                $data['ads_title'] = $this->post['ads_title'];
+            }
+            if( isset( $this->post['ads_title_sec'] ) ){
+                $data['ads_title_sec'] = $this->post['ads_title_sec'];
+            }
+            if( isset( $this->post['ads_body'] ) ){
+                $data['ads_body'] = $this->post['ads_body'];
+            }
+            model( 'Shop' )->editShop( ['id' => 1], $data );
+            $this->send( Code::success, [$data['ads_body']] );
+        }
+    }
+
 	/**
 	 * 店铺配色方案设置
 	 * @method POST
 	 * @param  string $color_scheme
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function setColorScheme()
 	{
@@ -79,7 +119,7 @@ class Shop extends Admin
 	 * 店铺首页模板选择【废弃】
 	 * @method POST
 	 * @param  int $portal_template_id
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function setPortalTemplate()
 	{
@@ -94,7 +134,7 @@ class Shop extends Admin
 	/**
 	 * 店铺信息
 	 * @method GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function info()
 	{
@@ -112,7 +152,7 @@ class Shop extends Admin
 	 * 店铺分类页风格设置
 	 * @method POST
 	 * @param  int $goods_category_style
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function setGoodsCategoryStyle()
 	{
@@ -130,7 +170,7 @@ class Shop extends Admin
 	 * @param int $order_auto_close_expires         待付款订单N秒后自动关闭订单，默认604800秒
 	 * @param int $order_auto_confirm_expires       已发货订单后自动确认收货，默认604800秒
 	 * @param int $order_auto_close_refound_expires 已收货订单后关闭退款／退货功能，0代表确认收货后无法维权，默认0秒
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function setOrderExpires()
 	{

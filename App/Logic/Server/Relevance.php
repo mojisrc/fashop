@@ -113,7 +113,7 @@ class Relevance
 	 * @method GET
 	 * @return array|null
 	 * @throws \App\Utils\Exception
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function binding() : ? array
 	{
@@ -138,7 +138,7 @@ class Relevance
      * @method GET
      * @return array|null
      * @throws \App\Utils\Exception
-     * @author 韩文博
+     * @author CM
      */
     public function untie() : ? array
     {
@@ -163,7 +163,7 @@ class Relevance
 	 * TODO wechat_openid没有处理
 	 * @return mixed
 	 * @throws \App\Utils\Exception
-	 * @author 韩文博
+	 * @author CM
 	 */
 	private function byPassword()
 	{
@@ -227,7 +227,7 @@ class Relevance
 
 	/**
 	 * @throws \App\Utils\Exception
-	 * @author 韩文博
+	 * @author CM
 	 */
 	private function byWechatOpenid()
 	{
@@ -320,7 +320,7 @@ class Relevance
 
 	/**
 	 * @throws \App\Utils\Exception
-	 * @author 韩文博
+	 * @author CM
 	 */
 	private function byWechatMini()
 	{
@@ -398,7 +398,7 @@ class Relevance
     /**
 	 * 插入用户相关的信息
      * @throws \App\Utils\Exception
-     * @author 韩文博
+     * @author CM
      */
     private function insertUserInfo($user_id, $profile_data = [], $assets_data = [], $open_data = [])
     {

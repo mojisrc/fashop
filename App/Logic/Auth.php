@@ -154,7 +154,7 @@ class Auth
 	 * 创建token
 	 * @method     GET
 	 * @datetime 2017-10-16T22:46:22+0800
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    int    $user_id
 	 * @param    string $access_token
 	 * @return   string
@@ -182,7 +182,7 @@ class Auth
 	/**
 	 * 获得tokenInfo
 	 * @datetime 2017-10-16T21:26:38+0800
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    string $token_string
 	 * @return array
 	 * todo 让整个操作更简便一些，如果错了就返回错误类似validate->check()

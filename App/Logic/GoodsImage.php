@@ -61,7 +61,7 @@ class GoodsImage
 	/**
 	 * @return bool
 	 * @throws \Exception
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function add() : bool
 	{
@@ -92,7 +92,7 @@ class GoodsImage
 	/**
 	 * @return bool
 	 * @throws \Exception
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function del() : bool
 	{

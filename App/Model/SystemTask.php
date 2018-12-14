@@ -21,7 +21,7 @@ class SystemTask extends Model {
 	/**
 	 * 添加
 	 * @datetime 2017-11-03 14:17:37
-	 * @author 韩文博
+	 * @author CM
 	 * @param  array $data
 	 * @return int pk
 	 */
@@ -36,7 +36,7 @@ class SystemTask extends Model {
 	/**
 	 * 添加多条
 	 * @datetime 2017-11-03 14:17:37
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $data
 	 * @return boolean
 	 */
@@ -46,7 +46,7 @@ class SystemTask extends Model {
 	/**
 	 * 修改
 	 * @datetime 2017-11-03 14:17:37
-	 * @author 韩文博
+	 * @author CM
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -57,7 +57,7 @@ class SystemTask extends Model {
 	/**
 	 * 删除
 	 * @datetime 2017-11-03 14:17:37
-	 * @author 韩文博
+	 * @author CM
 	 * @param    array $condition
 	 * @return   boolean
 	 */
@@ -67,7 +67,7 @@ class SystemTask extends Model {
 	/**
 	 * 计算数量
 	 * @datetime 2017-11-03 14:17:37
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -77,7 +77,7 @@ class SystemTask extends Model {
 	/**
 	 * 获取消息推送单条数据
 	 * @datetime 2017-11-03 14:17:37
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $condition 条件
 	 * @param string $field 字段
 	 * @return array | false
@@ -89,7 +89,7 @@ class SystemTask extends Model {
 	/**
 	 * 获得消息推送列表
 	 * @datetime 2017-11-03 14:17:37
-	 * @author 韩文博
+	 * @author CM
 	 * @param    array $condition
 	 * @param    string $field
 	 * @param    string $order

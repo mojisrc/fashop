@@ -64,7 +64,7 @@ abstract class Admin extends AccessTokenAbstract
 	 * @param \Throwable $throwable
 	 * @param            $actionName
 	 * @throws \Throwable
-	 * @author 韩文博
+	 * @author CM
 	 */
 	protected function onException(\Throwable $throwable,$actionName):void
 	{

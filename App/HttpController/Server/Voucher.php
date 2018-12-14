@@ -21,7 +21,7 @@ class Voucher extends Server {
 	/**
 	 * 某店优惠券模板
 	 * @method GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function getVoucherTemplateList() {
 		$get  = $this->get;
@@ -38,7 +38,7 @@ class Voucher extends Server {
 	/**
 	 * 某人的优惠券
 	 * @method GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function getUserVoucherList() {
 		$this->checkLogin();
@@ -56,7 +56,7 @@ class Voucher extends Server {
 	 * 领取优惠券
 	 * @method GET
 	 * @param $template_id 优惠券模板id
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function receiveVoucher() {
 		$this->checkLogin();
@@ -103,7 +103,7 @@ class Voucher extends Server {
 	 * 个人中心优惠券
 	 * @method GET
 	 * @param  [int] $state，不传为全部 优惠券状态(1-未用,2-已用,3-过期)[非必填]
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function userVoucherList() {
 		$this->checkLogin();

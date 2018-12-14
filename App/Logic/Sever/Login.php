@@ -22,7 +22,7 @@ class Login
 	 * @param string $username
 	 * @param string $wechat_qr_sign wechat_qr表的sign
 	 * @return bool
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function pcPasswordLogin( string $username, string $wechat_qr_sign = null ) : ? array
 	{
@@ -54,7 +54,7 @@ class Login
 	 * PC 下 短信验证码登陆
 	 * @param string $phone
 	 * @return bool
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function pcSmsCodeLogin( string $phone, string $wechat_qr_sign = null ) : ?array
 	{
@@ -75,7 +75,7 @@ class Login
 	 * PC 下 微信验证码登陆
 	 * @param string $wechat_qr_sign
 	 * @return bool
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function pcWechatQrLogin( string $wechat_qr_sign ) : ?array
 	{

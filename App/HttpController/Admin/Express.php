@@ -134,7 +134,7 @@ class Express extends Admin
 	 * 物流信息
 	 * @method GET
 	 * @param int $id
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function info()
 	{

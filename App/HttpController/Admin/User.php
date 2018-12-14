@@ -230,10 +230,17 @@ class User extends Admin
 	 * @param string name 用户姓名
 	 * @param string password 用户密码
 	 * @param string repassword 用户确认密码
+     * @param string seller_name 门店名称
+     * @param string seller_phone 门店联系电话
+     * @param string seller_address 门店地址
+     * @param string lat 门店经度
+     * @param string lng 门店纬度
+     * @param string area 门店地区
+     * @param string city 门店城市
+     * @param string userType 分销级别
 	 */
 	public function edit()
 	{
-
 		if( $this->validate( $this->post, 'Admin/User.edit' ) !== true ){
 			$this->send( Code::error, [], $this->getValidate()->getError() );
 		} else{
@@ -252,16 +259,62 @@ class User extends Admin
 				} else{
 					$updata['password'] = $this->post['password'];
 				}
-			}
+            } elseif( isset( $this->post['userType'] ) ) {//修改用户分销信息
+                $updata['is_seller'] = $this->post['userType'];
+                if( isset( $this->post['seller_name'] ) ) {//门店名称
+                    $updata['seller_name'] = $this->post['seller_name'];
+                }else{
+                    $updata['seller_name'] = "";
+                }
+                if( isset( $this->post['seller_phone'] ) ) {//门店联系电话
+                    $updata['seller_phone'] = $this->post['seller_phone'];
+                }else{
+                    $updata['seller_phone'] = "";
+                }
+                if( isset( $this->post['seller_address'] ) ) {//门店地址
+                    $updata['seller_address'] = $this->post['seller_address'];
+                    $updata['seller_area'] = $this->post['area'];
+                    $updata['seller_city'] = $this->post['city'];
+                }else{
+                    $updata['seller_address'] = "";
+                    $updata['seller_area'] = "";
+                    $updata['seller_city'] = "";
+                }
+                if( isset( $this->post['lat'] ) && isset( $this->post['lng'] )  ) {//门店经纬度
+                    $updata['seller_lat'] = $this->post['lat'];
+                    $updata['seller_lng'] = $this->post['lng'];
+                }else{
+                    $updata['seller_lat'] = "";
+                    $updata['seller_lng'] = "";
+                }
+            }
 			if( !$updata ){
 				$this->send( Code::param_error );
 			} else{
-				$updata['password'] = \App\Logic\User::encryptPassword( $this->post['password'] );
+//				$updata['password'] = \App\Logic\User::encryptPassword( $this->post['password'] );
 				model( 'User' )->editUser( $condition, $updata );
-				$this->send( Code::success );
+				$this->send( Code::success,[], '成功！' );
 			}
 		}
 	}
+
+    /**
+     * 客户详情-分销设置
+     * @method GET
+     * @param int id 用户id
+     */
+    public function retailInfo()
+    {
+        if( $this->validate( $this->get, 'Admin/User.info' ) !== true ){
+            $this->send( Code::error, [], $this->getValidate()->getError() );
+        } else{
+            $condition            = [];
+            $condition['id'] = $this->get['id'];
+            $field                = 'is_seller,seller_address,seller_lat,seller_lng,seller_name,seller_phone,seller_area,seller_city';
+            $user                 = model( 'User' )->getUserInfo($condition, $field);
+            $this->send( Code::success, ['info' => $user] );
+        }
+    }
 
 
 }

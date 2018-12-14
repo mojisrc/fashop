@@ -25,7 +25,7 @@ class Payment extends Admin
 
 	/**
 	 * 支付方式
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function list()
 	{
@@ -41,7 +41,7 @@ class Payment extends Admin
 	 * @param string $type wechat 微信
 	 * @param array  $config
 	 * @param int    $status
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function edit()
 	{
@@ -64,7 +64,7 @@ class Payment extends Admin
 	/**
 	 * 详情
 	 * @param string $type wechat 微信支付
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function info()
 	{

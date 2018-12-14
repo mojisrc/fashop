@@ -406,7 +406,7 @@ class Buy
 	 * 计算
 	 * @throws \Exception
 	 * @return \App\Logic\Server\Buy\CalculateResult
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function calculate() : \App\Logic\Server\Buy\CalculateResult
 	{
@@ -448,7 +448,7 @@ class Buy
 
 	/**
 	 * 创建订单
-	 * @author   韩文博
+	 * @author   CM
 	 * @throws \Exception
 	 */
 	public function createOrder() : CreateOrderResult

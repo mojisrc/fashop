@@ -142,7 +142,7 @@ class Cart
 	 * 将商品添加到购物车中
 	 * @param array $goods_info 商品数据信息
 	 * @param int   $quantity   购物数量
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function add( $goods_info = [], $quantity = null )
 	{
@@ -175,7 +175,7 @@ class Cart
 	 * 更新购物车
 	 * @param array $condition
 	 * @param array $data
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function edit( $condition, $data )
 	{
@@ -187,7 +187,7 @@ class Cart
 	 * 购物车列表
 	 * @param int   $user_id 用户id
 	 * @param array $condition
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function getCartList( $user_id, $condition = [] )
 	{
@@ -208,7 +208,7 @@ class Cart
 	 * @throws \ezswoole\db\exception\DataNotFoundException
 	 * @throws \ezswoole\db\exception\ModelNotFoundException
 	 * @throws \ezswoole\exception\DbException
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function list( array $condition = [] )
 	{
@@ -251,7 +251,7 @@ class Cart
 	 * @throws \ezswoole\db\exception\DataNotFoundException
 	 * @throws \ezswoole\db\exception\ModelNotFoundException
 	 * @throws \ezswoole\exception\DbException
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function info( array $condition = [] )
 	{
@@ -289,7 +289,7 @@ class Cart
 	/**
 	 * 删除购物车商品
 	 * @param array $condition
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function delCart( $condition = [] )
 	{
@@ -304,7 +304,7 @@ class Cart
 	/**
 	 * 清空购物车
 	 * @param array $condition
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function clearCart( $condition = [] )
 	{
@@ -314,7 +314,7 @@ class Cart
 	/**
 	 * 计算购物车总商品数和总金额
 	 * @param array $condition 只有登录后操作购物车表时才会用到该参数
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function getCartNum( $condition = [] )
 	{
@@ -336,7 +336,7 @@ class Cart
 	 * @param int $goods_sku_id 所购商品ID
 	 * @param int $quantity     购买数量
 	 * @return array
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function getGoodsOnlineInfo( $goods_sku_id, $quantity )
 	{
@@ -384,7 +384,7 @@ class Cart
 	 * @datetime 2017-05-26T17:00:17+0800
 	 * @param int   $user_id  用户id
 	 * @param array $cart_ids 购物车id集合（用户要购买的购物车id集合）
-	 * @author   韩文博
+	 * @author   CM
 	 * @return   array
 	 */
 	public function getCartOnlineGoodsList( int $user_id, array $cart_ids = [] )
@@ -440,7 +440,7 @@ class Cart
 	/**
 	 * 从购物车数组中得到商品列表
 	 * @param $cart_list
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function getGoodsListByCartGoodsList( $cart_list )
 	{
@@ -498,7 +498,7 @@ class Cart
 	 * 商品金额计算(分别对每个商品/优惠套装小计、每个小计)
 	 * @param array $cart_list 以ID分组的购物车商品信息
 	 * @return array
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function calculateCartList( $cart_list )
 	{
@@ -524,7 +524,7 @@ class Cart
 	 * 计算商品总金额
 	 * @param $cart_list
 	 * @return float
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function calculateCartListGoodsTotal( $cart_list ) : float
 	{
@@ -545,7 +545,7 @@ class Cart
 	 * @param array | int $event_info  优惠活动内容
 	 * @param string      $event_type  优惠类型
 	 * @return array 返回扣除优惠后的商品总金额
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function calculateGoodsTotalByEvent( $goods_total, $event_info, $event_type )
 	{

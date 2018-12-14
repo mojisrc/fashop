@@ -20,7 +20,7 @@ class User extends BaseAbstract
 	/**
 	 * 获取单个用户
 	 * @param string $openid
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function get( string $openid ) : array
 	{
@@ -31,7 +31,7 @@ class User extends BaseAbstract
 	 * 获取多个
 	 * @param array $openids
 	 * @return mixed
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function select( array $openids ) : array
 	{
@@ -41,7 +41,7 @@ class User extends BaseAbstract
 	/**
 	 * 获取用户列表
 	 * @param string $next_openid [可选]
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function list( string $next_openid = null ) : array
 	{
@@ -52,7 +52,7 @@ class User extends BaseAbstract
 	 * 修改用户备注
 	 * @param string $openid
 	 * @param string $remark
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function remark( string $openid, string $remark )
 	{
@@ -63,7 +63,7 @@ class User extends BaseAbstract
 	/**
 	 * 拉黑用户
 	 * @param array $openids
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function block( array $openids )
 	{
@@ -73,7 +73,7 @@ class User extends BaseAbstract
 	/**
 	 * 取消拉黑用户
 	 * @param array $openids
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function unblock( array $openids )
 	{
@@ -83,7 +83,7 @@ class User extends BaseAbstract
 	/**
 	 * 黑名单列表
 	 * @param string $begin_openid [可选]
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function blacklist(string $begin_openid = null) : array
 	{

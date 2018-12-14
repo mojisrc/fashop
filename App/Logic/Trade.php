@@ -20,7 +20,7 @@ class Trade
 	 * 订单处理天数
 	 * @method     GET
 	 * @datetime 2017-05-29T10:53:23+0800
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    string $day_type
 	 * @return   int | array
 	 */
@@ -48,7 +48,7 @@ class Trade
 	/**
 	 * 获得订单状态
 	 * @datetime 2017-05-29T10:53:34+0800
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    string $type
 	 * @return   int | array
 	 */
@@ -71,7 +71,7 @@ class Trade
 	/**
 	 * 更新订单
 	 * @datetime 2017-05-29T10:54:31+0800
-	 * @author   韩文博
+	 * @author   CM
 	 * @param  integer $user_id
 	 * @return bool
 	 */
@@ -130,7 +130,7 @@ class Trade
 	 * @param int      $order_id 订单编号
 	 * @param    array $log_data 订单记录信息
 	 * @datetime 2017-05-29T10:53:23+0800
-	 * @author   韩文博
+	 * @author   CM
 	 */
 	public function editOrderCancel( $order_id, $log_data )
 	{
@@ -165,7 +165,7 @@ class Trade
 	 * 更新退款申请
 	 * @param int $user_id 会员编号
 	 * @datetime 2017-05-29T10:53:23+0800
-	 * @author   韩文博
+	 * @author   CM
 	 */
 	public function editRefundConfirm( $user_id = 0 )
 	{
@@ -206,7 +206,7 @@ class Trade
 	 * @param int      $order_id 订单编号
 	 * @param    array $log_data 订单记录信息
 	 * @datetime 2017-05-29T10:53:23+0800
-	 * @author   韩文博
+	 * @author   CM
 	 */
 	public function editOrderFinish( $order_id, $log_data = [] )
 	{

@@ -21,7 +21,7 @@ class Orderrefund extends Server
 	 * 退款原因
 	 * @method GET
 	 * @param int refund_type 1为仅退款,2为退货退款
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function reasonList()
 	{

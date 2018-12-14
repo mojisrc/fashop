@@ -77,7 +77,7 @@ class GoodsSku
 	/** todo spec id 验证int
 	 * @return bool
 	 * @throws \Exception
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function add() : bool
 	{
@@ -123,7 +123,7 @@ class GoodsSku
 	 * todo spec id 验证int
 	 * @return bool
 	 * @throws \Exception
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function edit() : bool
 	{
@@ -247,7 +247,7 @@ class GoodsSku
 	/**
 	 * 获取商品收藏排行
 	 * TODO
-	 * @author 韩文博
+	 * @author CM
 	 * @param int $limit 数量
 	 * @return array    商品信息
 	 */
@@ -266,7 +266,7 @@ class GoodsSku
 	/**
 	 * 计算商品库存
 	 * TODO
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $goods_list
 	 * @return array|boolean
 	 */
@@ -367,7 +367,7 @@ class GoodsSku
 	 * stock,visit_count,share_count,sale_num,evaluate_good_star,evaluate_count
 	 * @datetime 2017-05-28T21:04:17+0800
 	 * @param int $id 商品主表id
-	 * @author   韩文博
+	 * @author   CM
 	 * @return   boolean
 	 */
 	public function syncGoodsCommonByGoods( $id )

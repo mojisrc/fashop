@@ -29,7 +29,7 @@ class Freight extends Model
 	/**
 	 * 添加
 	 * @datetime 2017-10-17 15:18:56
-	 * @author   韩文博
+	 * @author   CM
 	 * @param  array $data
 	 * @return int pk
 	 */
@@ -46,7 +46,7 @@ class Freight extends Model
 	/**
 	 * 添加多条
 	 * @datetime 2017-10-17 15:18:56
-	 * @author   韩文博
+	 * @author   CM
 	 * @param array $data
 	 * @return boolean
 	 */
@@ -58,7 +58,7 @@ class Freight extends Model
 	/**
 	 * 修改
 	 * @datetime 2017-10-17 15:18:56
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -72,7 +72,7 @@ class Freight extends Model
 	/**
 	 * 获取单条数据
 	 * @datetime 2017-10-17 15:18:56
-	 * @author   韩文博
+	 * @author   CM
 	 * @param array  $condition 条件
 	 * @param string $field     字段
 	 * @return array | false
@@ -98,7 +98,7 @@ class Freight extends Model
 	/**
 	 * 获得列表
 	 * @datetime 2017-10-17 15:18:56
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array  $condition
 	 * @param    string $field
 	 * @param    string $order

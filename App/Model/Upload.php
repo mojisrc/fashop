@@ -22,7 +22,7 @@ class Upload extends Model {
 	/**
 	 * 添加
 	 * @datetime 2017-05-02 17:46:04
-	 * @author 韩文博
+	 * @author CM
 	 * @param  array $data
 	 * @return int pk
 	 */
@@ -37,7 +37,7 @@ class Upload extends Model {
 	/**
 	 * 添加多条
 	 * @datetime 2017-05-02 17:46:04
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $data
 	 * @return boolean
 	 */
@@ -47,7 +47,7 @@ class Upload extends Model {
 	/**
 	 * 修改
 	 * @datetime 2017-05-02 17:46:04
-	 * @author 韩文博
+	 * @author CM
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -58,7 +58,7 @@ class Upload extends Model {
 	/**
 	 * 删除
 	 * @datetime 2017-05-02 17:46:04
-	 * @author 韩文博
+	 * @author CM
 	 * @param    array $condition
 	 * @return   boolean
 	 */
@@ -68,7 +68,7 @@ class Upload extends Model {
 	/**
 	 * 计算数量
 	 * @datetime 2017-05-02 17:46:04
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -78,7 +78,7 @@ class Upload extends Model {
 	/**
 	 * 获取上传单条数据
 	 * @datetime 2017-05-02 17:46:04
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $condition 条件
 	 * @param string $field 字段
 	 * @return array | false
@@ -90,7 +90,7 @@ class Upload extends Model {
 	/**
 	 * 获得上传列表
 	 * @datetime 2017-05-02 17:46:04
-	 * @author 韩文博
+	 * @author CM
 	 * @param    array $condition
 	 * @param    string $field
 	 * @param    string $group

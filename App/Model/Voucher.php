@@ -128,7 +128,7 @@ class Voucher extends Model {
 	/**
 	 * 添加
 	 * @datetime 2017-05-25 19:07:07
-	 * @author 韩文博
+	 * @author CM
 	 * @param  array $data
 	 * @return int pk
 	 */
@@ -144,7 +144,7 @@ class Voucher extends Model {
 	/**
 	 * 添加多条
 	 * @datetime 2017-05-25 19:07:07
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $data
 	 * @return boolean
 	 */
@@ -154,7 +154,7 @@ class Voucher extends Model {
 	/**
 	 * 修改
 	 * @datetime 2017-05-25 19:07:07
-	 * @author 韩文博
+	 * @author CM
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -165,7 +165,7 @@ class Voucher extends Model {
 	/**
 	 * 删除
 	 * @datetime 2017-05-25 19:07:07
-	 * @author 韩文博
+	 * @author CM
 	 * @param    array $condition
 	 * @return   boolean
 	 */
@@ -175,7 +175,7 @@ class Voucher extends Model {
 	/**
 	 * 计算数量
 	 * @datetime 2017-05-25 19:07:07
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -185,7 +185,7 @@ class Voucher extends Model {
 	/**
 	 * 获取优惠券单条数据
 	 * @datetime 2017-05-25 19:07:07
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $condition 条件
 	 * @param string $field 字段
 	 * @return array | false
@@ -197,7 +197,7 @@ class Voucher extends Model {
 	/**
 	 * 获得优惠券列表
 	 * @datetime 2017-05-25 19:07:07
-	 * @author 韩文博
+	 * @author CM
 	 * @param    array $condition
 	 * @param    string $field
 	 * @param    string $order

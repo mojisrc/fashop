@@ -18,7 +18,7 @@ class Behavior
 {
 	/**
 	 * 当升级包的文件覆盖完毕后
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function onFilesCoverComplete() : bool
 	{

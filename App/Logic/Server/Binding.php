@@ -56,7 +56,7 @@ class Binding
      */
     public function setPhone( string $phone ) : void
     {
-        $this->phone = phone;
+        $this->phone = $phone;
     }
 
     /**
@@ -149,12 +149,11 @@ class Binding
      * @method GET
      * @return array|null
      * @throws \App\Utils\Exception
-     * @author 韩文博
+     * @author CM
      */
-    public function binding() : ? array
+    public function binding()
     {
         $this->setType( $this->options['type'] );
-
         if( isset( $this->options['wechat'] ) ){
             return $this->wechat();
 
@@ -170,14 +169,14 @@ class Binding
     /**
      * @return mixed
      * @throws \App\Utils\Exception
-     * @author 韩文博
+     * @author CM
      */
     private function phone()
     {
         try{
             $this->setUserId( $this->options['id'] );
             $this->setPhone( $this->options['phone'] );
-            $this->setPassword( $this->options['password'] );
+//            $this->( $this->options['password'] );
 
             $user_id          = $this->getUserId();
             $phone            = $this->getPhone();
@@ -223,7 +222,7 @@ class Binding
 
                 $data['phone']    = $phone;
                 $data['username'] = $phone;
-                $data['password'] = UserLogic::encryptPassword($this->getPassword());
+//                $data['password'] = UserLogic::encryptPassword($this->getPassword());
                 $user_result      = $user_model->editUser($condition, $data );
                 if(!$user_result ){
                     $user_model->rollback();
@@ -232,7 +231,7 @@ class Binding
             }
 
             $user_model->commit();
-            return $user_id;
+            return true;
 
         } catch( \Exception $e ){
             throw new $e;
@@ -241,7 +240,7 @@ class Binding
 
     /**
      * @throws \App\Utils\Exception
-     * @author 韩文博
+     * @author CM
      */
     private function wechat()
     {
@@ -336,7 +335,7 @@ class Binding
      * @param user_id 附属用户id
      * @param master_user_id 主用户id
      * @throws \App\Utils\Exception
-     * @author 韩文博
+     * @author CM
      */
     private function assetsMerge($user_id, $master_user_id)
     {

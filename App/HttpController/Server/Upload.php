@@ -24,7 +24,7 @@ class Upload extends Server
 	 * @datetime 2017-05-02T16:03:25+0800
 	 * @param string $type file | base64
 	 * @param mixed  $image
-	 * @author   韩文博
+	 * @author   CM
 	 */
 	public function addImage()
 	{

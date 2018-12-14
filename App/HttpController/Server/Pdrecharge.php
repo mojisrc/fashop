@@ -20,7 +20,7 @@ class Pdrecharge extends Server {
 	 * 预存款充值面额列表
 	 * @method     GET
 	 * @datetime 2017-06-20T23:39:55+0800
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function pdrechargeDenominationList() {
 		$list =  [
@@ -37,7 +37,7 @@ class Pdrecharge extends Server {
 	 * 充值添加
 	 * @method POST
 	 * @param $amount 充值金额
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function pdrAdd() {
 		if( $this->verifyResourceRequest() !== true ){
@@ -95,7 +95,7 @@ class Pdrecharge extends Server {
 	/**
 	 * 充值列表
 	 * @method GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function pdrList() {
 
@@ -132,7 +132,7 @@ class Pdrecharge extends Server {
 	 * 查看充值详细
 	 * @method GET
 	 * @param $id 记录id
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function pdrDetail() {
 		if( $this->verifyResourceRequest() !== true ){
@@ -171,7 +171,7 @@ class Pdrecharge extends Server {
 	 * 删除充值记录
 	 * @method POST
 	 * @param $id 记录id
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function pdrDel() {
 
@@ -208,7 +208,7 @@ class Pdrecharge extends Server {
 	/**
 	 * 预存款变更日志
 	 * @method GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function pdLogList() {
 
@@ -243,7 +243,7 @@ class Pdrecharge extends Server {
 	 * @param $bank_name 银行名字
 	 * @param $bank_no 账号
 	 * @param $bank_user 开户名
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function pdCashAdd() {
 		if( $this->verifyResourceRequest() !== true ){
@@ -315,7 +315,7 @@ class Pdrecharge extends Server {
 	 * @method GET
 	 * @param $sn 交易码
 	 * @param $payment_state 交易状态[非必填]
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function pdcash() {
 
@@ -357,7 +357,7 @@ class Pdrecharge extends Server {
 	 * 提现记录详细
 	 * @method GET
 	 * @param $id 记录id
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function pdCashInfo() {
 

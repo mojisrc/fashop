@@ -70,7 +70,7 @@ class Mix extends Controller
 	 * 微信图片显示
 	 * @method GET
 	 * @param string $url 图片地址
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function wechatImage()
 	{

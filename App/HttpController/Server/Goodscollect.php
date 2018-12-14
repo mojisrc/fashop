@@ -21,7 +21,7 @@ class Goodscollect extends Server
 	 * 收藏
 	 * @method POST
 	 * @param  int $goods_id
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function add()
 	{
@@ -52,7 +52,7 @@ class Goodscollect extends Server
 	 * 取消收藏
 	 * @method POST
 	 * @param int $goods_id
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function del()
 	{
@@ -74,7 +74,7 @@ class Goodscollect extends Server
 	 * 收藏的状态
 	 * @method GET
 	 * @param int $goods_id
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function state()
 	{
@@ -94,7 +94,7 @@ class Goodscollect extends Server
 	/**
 	 * 我的商品收藏
 	 * @method GET
-	 * @author   韩文博
+	 * @author   CM
 	 */
 	public function mine()
 	{

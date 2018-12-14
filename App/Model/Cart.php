@@ -24,7 +24,7 @@ class Cart extends Model
 	/**
 	 * 添加
 	 * @datetime 2018-01-30 20:26:18
-	 * @author   韩文博
+	 * @author   CM
 	 * @param  array $data
 	 * @return int pk
 	 */
@@ -41,7 +41,7 @@ class Cart extends Model
 	/**
 	 * 添加多条
 	 * @datetime 2018-01-30 20:26:18
-	 * @author   韩文博
+	 * @author   CM
 	 * @param array $data
 	 * @return boolean
 	 */
@@ -53,7 +53,7 @@ class Cart extends Model
 	/**
 	 * 修改
 	 * @datetime 2018-01-30 20:26:18
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -66,7 +66,7 @@ class Cart extends Model
 	/**
 	 * 删除
 	 * @datetime 2018-01-30 20:26:18
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array $condition
 	 * @return   boolean
 	 */
@@ -78,7 +78,7 @@ class Cart extends Model
 	/**
 	 * 计算数量
 	 * @datetime 2018-01-30 20:26:18
-	 * @author   韩文博
+	 * @author   CM
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -90,7 +90,7 @@ class Cart extends Model
 	/**
 	 * 获取购物车单条数据
 	 * @datetime 2018-01-30 20:26:18
-	 * @author   韩文博
+	 * @author   CM
 	 * @param array  $condition 条件
 	 * @param string $field     字段
 	 * @return array | false
@@ -104,7 +104,7 @@ class Cart extends Model
 	/**
 	 * 获得购物车列表
 	 * @datetime 2018-01-30 20:26:18
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array  $condition
 	 * @param    string $field
 	 * @param    string $order

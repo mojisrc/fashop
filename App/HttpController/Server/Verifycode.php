@@ -27,7 +27,7 @@ class Verifycode extends Server
 	 * @param string $behavior
 	 * @param string $channel_type
 	 * @param string $receiver
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function add()
 	{

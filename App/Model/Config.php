@@ -23,7 +23,7 @@ class Config extends Model {
 	/**
 	 * 添加
 	 * @datetime 2017-04-19 09:48:42
-	 * @author 韩文博
+	 * @author CM
 	 * @param  array $data
 	 * @return int pk
 	 */
@@ -38,7 +38,7 @@ class Config extends Model {
 	/**
 	 * 修改
 	 * @datetime 2017-04-19 09:48:42
-	 * @author 韩文博
+	 * @author CM
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -49,7 +49,7 @@ class Config extends Model {
 	/**
 	 * 删除
 	 * @datetime 2017-04-19 09:48:42
-	 * @author 韩文博
+	 * @author CM
 	 * @param    array $condition
 	 * @return   boolean
 	 */
@@ -59,7 +59,7 @@ class Config extends Model {
 	/**
 	 * 计算数量
 	 * @datetime 2017-04-19 09:48:42
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -69,7 +69,7 @@ class Config extends Model {
 	/**
 	 * 获取公用配置单条数据
 	 * @datetime 2017-04-19 09:48:42
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $condition 条件
 	 * @param string $field 字段
 	 * @return array
@@ -81,7 +81,7 @@ class Config extends Model {
 	/**
 	 * 获得公用配置列表
 	 * @datetime 2017-04-19 09:48:42
-	 * @author 韩文博
+	 * @author CM
 	 * @param    array $condition
 	 * @param    string $field
 	 * @param    string $group

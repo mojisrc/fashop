@@ -30,7 +30,7 @@ class GoodsEvaluate extends Model
 	/**
 	 * 查询评价列表
 	 * @datetime 2017-05-28T21:48:45+0800
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array  $condition
 	 * @param    string $order
 	 * @param    string $field
@@ -48,7 +48,7 @@ class GoodsEvaluate extends Model
 	 * 根据编号查询商品评价
 	 * @method     GET
 	 * @datetime 2017-05-28T21:49:17+0800
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    int $id 评价id
 	 * @return   array
 	 */
@@ -68,7 +68,7 @@ class GoodsEvaluate extends Model
 	/**
 	 * 根据商品编号查询商品评价信息
 	 * @datetime 2017-05-28T21:49:53+0800
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    int $goods_id 商品id
 	 * @return   array
 	 */

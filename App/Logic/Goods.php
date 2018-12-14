@@ -589,7 +589,7 @@ class Goods
 
 	/**
 	 * 批量删除
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $ids 商品id集合
 	 */
 	public function del( $ids ) : bool
@@ -612,9 +612,9 @@ class Goods
 
 	/**
 	 * 下架
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $ids 商品id集合
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function offSale( array $ids )
 	{
@@ -630,7 +630,7 @@ class Goods
 	 * 上架
 	 * @param array $ids
 	 * @return bool
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function onSale( array $ids )
 	{

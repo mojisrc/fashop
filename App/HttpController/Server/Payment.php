@@ -21,7 +21,7 @@ class Payment extends Server
 	/**
 	 * 支付方式列表
 	 * @method GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function list()
 	{

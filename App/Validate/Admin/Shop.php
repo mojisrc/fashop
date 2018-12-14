@@ -19,15 +19,15 @@ class Shop extends Validate
 {
 	protected $rule
 		= [
-			'name'                             => 'require',
-			'logo'                             => 'require',
-			'color_scheme'                     => 'require',
-			'portal_template_id'               => 'require',
-			'goods_category_style'             => 'require',
-			'host'                             => 'checkHost',
-			'order_auto_close_expires'         => 'require|integer',
-			'order_auto_confirm_expires'       => 'require|integer',
-			'order_auto_close_refound_expires' => 'require|integer',
+//			'name'                             => 'require',
+//			'logo'                             => 'require',
+//			'color_scheme'                     => 'require',
+//			'portal_template_id'               => 'require',
+//			'goods_category_style'             => 'require',
+//			'host'                             => 'checkHost',
+//			'order_auto_close_expires'         => 'require|integer',
+//			'order_auto_confirm_expires'       => 'require|integer',
+//			'order_auto_close_refound_expires' => 'require|integer',
 		];
 	protected $message
 		= [
@@ -41,7 +41,7 @@ class Shop extends Validate
 	protected $scene
 		= [
 			'setBaseInfo'           => [
-				'name',
+//				'name',
 			],
 			'setColorScheme'        => [
 				'color_scheme',

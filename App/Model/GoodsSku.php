@@ -38,7 +38,7 @@ class GoodsSku extends Model
 
 	/**
 	 * 新增商品数据
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $insert 商品数据
 	 * @return integer pk
 	 */
@@ -62,7 +62,7 @@ class GoodsSku extends Model
 
 	/**
 	 * 循环新增商品数据
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $insert 商品数据
 	 * @return integer pk
 	 */
@@ -77,7 +77,7 @@ class GoodsSku extends Model
 
 	/**
 	 * 商品SKU列表
-	 * @author 韩文博
+	 * @author CM
 	 * @param array  $condition 条件
 	 * @param string $field     字段
 	 * @param string $order     排序
@@ -92,7 +92,7 @@ class GoodsSku extends Model
 
 	/**
 	 * 在售商品SKU列表
-	 * @author 韩文博
+	 * @author CM
 	 * @param array   $condition 条件
 	 * @param string  $field     字段
 	 * @param string  $group     分组
@@ -110,7 +110,7 @@ class GoodsSku extends Model
 
 	/**
 	 * 商品SUK列表 show = 1 为出售中，show = 0为未出售（仓库中，违规，等待审核）
-	 * @author 韩文博
+	 * @author CM
 	 * @param array  $condition
 	 * @param string $field
 	 * @return multitype:
@@ -155,7 +155,7 @@ class GoodsSku extends Model
 
 	/**
 	 * 获取单条商品SKU信息
-	 * @author 韩文博
+	 * @author CM
 	 * @param array  $condition
 	 * @param string $field
 	 * @return array
@@ -168,7 +168,7 @@ class GoodsSku extends Model
 
 	/**
 	 * 获取单条商品SKU信息
-	 * @author 韩文博
+	 * @author CM
 	 * @param array  $condition
 	 * @param string $field
 	 * @return array
@@ -188,7 +188,7 @@ class GoodsSku extends Model
 
 	/**
 	 * 获取单条商品SKU信息，show = 1 为出售中，show = 0为未出售（仓库中，违规，等待审核）
-	 * @author 韩文博
+	 * @author CM
 	 * @param array  $condition
 	 * @param string $field
 	 * @return array
@@ -201,7 +201,7 @@ class GoodsSku extends Model
 
 	/**
 	 * 获得商品SKU某字段的和
-	 * @author 韩文博
+	 * @author CM
 	 * @param array  $condition
 	 * @param string $field
 	 * @return boolean
@@ -213,7 +213,7 @@ class GoodsSku extends Model
 
 	/**
 	 * 获得商品SKU数量
-	 * @author 韩文博
+	 * @author CM
 	 * @param array  $condition
 	 * @param string $field
 	 * @return int
@@ -225,7 +225,7 @@ class GoodsSku extends Model
 
 	/**
 	 * 获得出售中商品SKU数量
-	 * @author 韩文博
+	 * @author CM
 	 * @param array  $condition
 	 * @param string $field
 	 * @return int
@@ -268,7 +268,7 @@ class GoodsSku extends Model
 
 	/**
 	 * 删除商品SKU信息
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $condition
 	 * @return boolean
 	 */

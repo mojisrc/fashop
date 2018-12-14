@@ -37,7 +37,7 @@ class UserTemp extends Model
 	/**
 	 * 添加
 	 * @datetime 2018-02-05 17:17:20
-	 * @author   韩文博
+	 * @author   CM
 	 * @param  array $data
 	 */
 	public function addUserTemp( $data = [] )
@@ -48,7 +48,7 @@ class UserTemp extends Model
 	/**
 	 * 添加多条
 	 * @datetime 2018-02-05 17:17:20
-	 * @author   韩文博
+	 * @author   CM
 	 * @param array $data
 	 * @return boolean
 	 */
@@ -60,7 +60,7 @@ class UserTemp extends Model
 	/**
 	 * 修改
 	 * @datetime 2018-02-05 17:17:20
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -73,7 +73,7 @@ class UserTemp extends Model
 	/**
 	 * 删除
 	 * @datetime 2018-02-05 17:17:20
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array $condition
 	 * @return   boolean
 	 */
@@ -85,7 +85,7 @@ class UserTemp extends Model
 	/**
 	 * 计算数量
 	 * @datetime 2018-02-05 17:17:20
-	 * @author   韩文博
+	 * @author   CM
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -97,7 +97,7 @@ class UserTemp extends Model
 	/**
 	 * 获取用户临时表单条数据
 	 * @datetime 2018-02-05 17:17:20
-	 * @author   韩文博
+	 * @author   CM
 	 * @param array  $condition 条件
 	 * @param string $field     字段
 	 * @return array | false
@@ -111,7 +111,7 @@ class UserTemp extends Model
 	/**
 	 * 获得用户临时表列表
 	 * @datetime 2018-02-05 17:17:20
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array  $condition
 	 * @param    string $field
 	 * @param    string $order

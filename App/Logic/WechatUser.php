@@ -38,7 +38,7 @@ class WechatUser
 	 * 根据openid集合批量更新微信用户信息
 	 * @param array $openids
 	 * @return bool
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function updateWechatUsersInfo( array $openids )
 	{

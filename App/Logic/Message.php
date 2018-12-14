@@ -19,7 +19,7 @@ class Message extends Model {
 	/**
 	 * 添加消息
 	 * @datetime 2017-06-20T23:56:33+0800
-	 * @author 韩文博
+	 * @author CM
 	 * @param    string $to_user_id
 	 * @param    string $title
 	 * @param    string $body
@@ -54,7 +54,7 @@ class Message extends Model {
 	 * 异步检测消息推送
 	 * @method     GET
 	 * @datetime 2017-06-21T12:29:39+0800
-	 * @author 韩文博
+	 * @author CM
 	 */
 	static function asynCheckMessagePush() {
 		ajax($_SERVER['SERVER_NAME'], str_replace('/index.php', '', \ezswoole\Request::getInstance()->root()) . '/Api/Push/checkMessage', [], 'GET', 80, array('Access-Token' => config('access_token')));

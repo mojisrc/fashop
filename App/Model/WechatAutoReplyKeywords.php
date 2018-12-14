@@ -26,7 +26,7 @@ class WechatAutoReplyKeywords extends Model
 	/**
 	 * 添加
 	 * @datetime 2018-02-05 13:32:05
-	 * @author   韩文博
+	 * @author   CM
 	 * @param  array $data
 	 * @return int pk
 	 */
@@ -43,7 +43,7 @@ class WechatAutoReplyKeywords extends Model
 	/**
 	 * 添加多条
 	 * @datetime 2018-02-05 13:32:05
-	 * @author   韩文博
+	 * @author   CM
 	 * @param array $data
 	 * @return boolean
 	 */
@@ -55,7 +55,7 @@ class WechatAutoReplyKeywords extends Model
 	/**
 	 * 修改
 	 * @datetime 2018-02-05 13:32:05
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -68,7 +68,7 @@ class WechatAutoReplyKeywords extends Model
 	/**
 	 * 删除
 	 * @datetime 2018-02-05 13:32:05
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array $condition
 	 * @return   boolean
 	 */
@@ -80,7 +80,7 @@ class WechatAutoReplyKeywords extends Model
 	/**
 	 * 计算数量
 	 * @datetime 2018-02-05 13:32:05
-	 * @author   韩文博
+	 * @author   CM
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -92,7 +92,7 @@ class WechatAutoReplyKeywords extends Model
 	/**
 	 * 获取自动回复单条数据
 	 * @datetime 2018-02-05 13:32:05
-	 * @author   韩文博
+	 * @author   CM
 	 * @param array  $condition 条件
 	 * @param string $field     字段
 	 * @return array | false
@@ -106,7 +106,7 @@ class WechatAutoReplyKeywords extends Model
 	/**
 	 * 获得自动回复列表
 	 * @datetime 2018-02-05 13:32:05
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array  $condition
 	 * @param    string $field
 	 * @param    string $order

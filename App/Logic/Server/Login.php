@@ -166,7 +166,7 @@ class Login
 	/**
 	 * @return array|null
 	 * @throws \Exception
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function login() : ? array
 	{
@@ -186,7 +186,7 @@ class Login
 	/**
 	 * @return array|null
 	 * @throws \Exception
-	 * @author 韩文博
+	 * @author CM
 	 */
 	private function byPassword() : ? array
 	{

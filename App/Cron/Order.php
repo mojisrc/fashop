@@ -19,7 +19,7 @@ class Order
 
 	/**
 	 * 待付款订单自动关闭
-	 * @author 韩文博
+	 * @author CM
 	 */
 	static function autoCloseUnpay() : void
 	{

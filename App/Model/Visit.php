@@ -26,7 +26,7 @@ class Visit extends Model {
 	 * @param int  $model_relation_id 表的关键
 	 * @param int $user_id 用户id
 	 * todo 获得当前设备，坐标，request信息
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function addVisit($model, $model_relation_id, $user_id = 0) {
 		$data = array(
@@ -44,7 +44,7 @@ class Visit extends Model {
 	/**
 	 * 添加多条
 	 * @datetime 2017-05-29 11:36:57
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $data
 	 * @return boolean
 	 */
@@ -54,7 +54,7 @@ class Visit extends Model {
 	/**
 	 * 修改
 	 * @datetime 2017-05-29 11:36:57
-	 * @author 韩文博
+	 * @author CM
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -65,7 +65,7 @@ class Visit extends Model {
 	/**
 	 * 删除
 	 * @datetime 2017-05-29 11:36:57
-	 * @author 韩文博
+	 * @author CM
 	 * @param    array $condition
 	 * @return   boolean
 	 */
@@ -75,7 +75,7 @@ class Visit extends Model {
 	/**
 	 * 计算数量
 	 * @datetime 2017-05-29 11:36:57
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -85,7 +85,7 @@ class Visit extends Model {
 	/**
 	 * 获取浏览记录单条数据
 	 * @datetime 2017-05-29 11:36:57
-	 * @author 韩文博
+	 * @author CM
 	 * @param array $condition 条件
 	 * @param string $field 字段
 	 * @return array | false
@@ -97,7 +97,7 @@ class Visit extends Model {
 	/**
 	 * 获得浏览记录列表
 	 * @datetime 2017-05-29 11:36:57
-	 * @author 韩文博
+	 * @author CM
 	 * @param    array $condition
 	 * @param    string $field
 	 * @param    string $order

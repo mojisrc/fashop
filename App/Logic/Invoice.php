@@ -20,7 +20,7 @@ class Invoice extends Model {
 	 * 获得为展示的默认发票信息
 	 * @param int $user_id 用户id
 	 * @datetime 2017-05-25T18:20:43+0800
-	 * @author 韩文博
+	 * @author CM
 	 * todo 暂时不用
 	 */
 	public function getDefaultInvoiceInfoForShow($user_id) {

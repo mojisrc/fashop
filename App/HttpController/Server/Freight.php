@@ -21,7 +21,7 @@ class Freight extends Server
 	 * 运费模板详情
 	 * @method GET
 	 * @param int $id
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function info()
 	{

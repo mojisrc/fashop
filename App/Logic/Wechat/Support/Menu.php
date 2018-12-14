@@ -19,7 +19,7 @@ class Menu extends BaseAbstract
 {
 	/**
 	 * 读取（查询）已设置菜单
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function list()
 	{
@@ -28,7 +28,7 @@ class Menu extends BaseAbstract
 
 	/**
 	 * 获取当前菜单
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function current()
 	{
@@ -39,7 +39,7 @@ class Menu extends BaseAbstract
 	 * 创建自定义菜单
 	 * @method POST
 	 * @param array $buttons
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function create( array $buttons )
 	{
@@ -50,7 +50,7 @@ class Menu extends BaseAbstract
 	 * 删除菜单
 	 * @param int $id
 	 * 有两种删除方式，一种是全部删除，另外一种是根据菜单 ID 来删除(删除个性化菜单时用，ID 从查询接口获取)
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function delete( int $menu_id = null )
 	{

@@ -16,7 +16,7 @@ class Version extends Server {
 	/**
 	 * 获得APP最新版本
 	 * @method GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function appLatestVersion() {
 
@@ -44,7 +44,7 @@ class Version extends Server {
 	 *    publish_time 发布时间
 	 *    description 版本描述
 	 * )
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function appUpdate() {
 		$get      = $this->get;

@@ -165,7 +165,7 @@ class Page extends Admin
 	 * 设为首页
 	 * @method POST
 	 * @param int $id
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function setPortal()
 	{

@@ -26,7 +26,7 @@ class User extends Server
 	/**
 	 * 刷新token
 	 * @method POST
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function token()
 	{
@@ -51,7 +51,7 @@ class User extends Server
 	 * @param string $username
 	 * @param string $password
 	 * @param string $wechat_mini_code
-	 * @author   韩文博
+	 * @author   CM
 	 */
 	public function login()
 	{
@@ -102,7 +102,7 @@ class User extends Server
 	 * @param string $wechat       文档写清楚这里面都有啥
 	 *
 	 * @param array  $wechat_mini_param (数组必须包含code，encryptedData，iv)
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function register()
 	{
@@ -135,7 +135,7 @@ class User extends Server
 	/**
 	 * 当前用户信息
 	 * @method GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function self()
 	{
@@ -151,7 +151,7 @@ class User extends Server
 	/**
 	 * 退出
 	 * @http   GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function logout()
 	{
@@ -180,7 +180,7 @@ class User extends Server
 	 * @param string $phone
 	 * @param string $password
 	 * @param string $verify_code
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function editPasswordByFind()
 	{
@@ -206,7 +206,7 @@ class User extends Server
 	 * @http   post
 	 * @param string $oldpassword 老密码
 	 * @param string $password    新密码
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function editPassword()
 	{
@@ -240,7 +240,7 @@ class User extends Server
 	 * @param int sex 性别
 	 * @param int birthday 生日时间戳
 	 * @method POST
-	 * @author   韩文博
+	 * @author   CM
 	 */
 	public function editProfile()
 	{
@@ -284,7 +284,7 @@ class User extends Server
 	 * @param string $phone       手机号
 	 * @param string $password    密码
 	 * @param string $verify_code 验证码
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function bindPhone()
 	{
@@ -293,9 +293,9 @@ class User extends Server
 		} else{
 			$user             = $this->getRequestUser();
 			$this->post['id'] = $user['id'];
-			if( $this->validate( $this->post, 'Server/BindPhone.bindPhone' ) !== true ){
-				$this->send( Code::error, [], $this->getValidate()->getError() );
-			} else{
+//			if( $this->validate( $this->post, 'Server/BindPhone.bindPhone' ) !== true ){
+//				$this->send( Code::error, [], $this->getValidate()->getError() );
+//			} else{
 
                 $this->post['type'] = 'phone';
 
@@ -304,7 +304,7 @@ class User extends Server
                 } catch( \App\Utils\Exception $e ){
                     $this->send( $e->getCode() );
                 }
-			}
+//			}
 		}
 	}
 
@@ -313,7 +313,7 @@ class User extends Server
 	 * @method POST
 	 * @param string $wechat_openid
 	 * @param string $wechat 包含字段：openid,nickname,sex,city,country,province,privilege(非必填),headimgurl,unionid（非必填）
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function bindWechat()
 	{
@@ -340,7 +340,7 @@ class User extends Server
 	 * 手机解绑微信
 	 * 该账号必须绑定了手机，或者是手机注册的，并绑定了微信
 	 * @method     POST
-	 * @author   韩文博
+	 * @author   CM
 	 */
 	public function unbindWechat()
 	{
@@ -363,7 +363,7 @@ class User extends Server
 	 * 微信解绑手机
 	 * 该账号必须绑定了微信，并绑定了手机
 	 * @method     POST
-	 * @author   韩文博
+	 * @author   CM
 	 */
 	public function unbindPhone()
 	{
@@ -382,6 +382,24 @@ class User extends Server
 		}
 	}
 
+    /**
+     * 获取账号二维码
+     * 该账号必须是二级或者三级分销
+     * @method     POST
+     * @author   CM
+     */
+    public function getUserQR()
+    {
+        $user           = $this->getRequestUser();
+        $params         = [];
+        $params['is_seller']   = $user['is_seller'];
+        try{
+            $req         = new \App\Utils\HttpRequest();
+            $this->send( (new UntieLogic( $params ))->untie() ? Code::success : Code::error );
+        } catch( \App\Utils\Exception $e ){
+            $this->send( $e->getCode() );
+        }
+    }
 }
 
 ?>

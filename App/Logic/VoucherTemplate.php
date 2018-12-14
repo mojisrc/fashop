@@ -20,7 +20,7 @@ class VoucherTemplate extends Model {
 	 * 获得可用优惠券模板的基础条件
 	 * @method     GET
 	 * @datetime 2017-06-21T02:01:40+0800
-	 * @author 韩文博
+	 * @author CM
 	 * @return   [type]
 	 */
 	public function getAvailableTemplateBasicCondition() {

@@ -25,7 +25,7 @@ class GoodsCategory extends Model
 	/**
 	 * 添加
 	 * @datetime 2017-05-16 20:36:17
-	 * @author   韩文博
+	 * @author   CM
 	 * @param  array $data
 	 * @return int pk
 	 */
@@ -42,7 +42,7 @@ class GoodsCategory extends Model
 	/**
 	 * 添加多条
 	 * @datetime 2017-05-16 20:36:17
-	 * @author   韩文博
+	 * @author   CM
 	 * @param array $data
 	 * @return boolean
 	 */
@@ -54,7 +54,7 @@ class GoodsCategory extends Model
 	/**
 	 * 修改
 	 * @datetime 2017-05-16 20:36:17
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -67,7 +67,7 @@ class GoodsCategory extends Model
 	/**
 	 * 删除
 	 * @datetime 2017-05-16 20:36:17
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array $condition
 	 * @return   boolean
 	 */

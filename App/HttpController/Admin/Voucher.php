@@ -25,7 +25,7 @@ class Voucher extends Admin {
 	 * 用户优惠券列表
 	 * @method     GET
 	 * @datetime 2017-06-04T20:37:38+0800
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function index() {
 		$get   = $this->get;
@@ -50,7 +50,7 @@ class Voucher extends Admin {
 	/**
 	 * 收回
 	 * @datetime 2017-06-04T21:04:15+0800
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function takeBack() {
 		$get        = $this->get;
@@ -93,7 +93,7 @@ class Voucher extends Admin {
 	/**
 	 * 优惠券模版添加
 	 * @datetime 2017-06-04T11:53:25+0800
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function templateAdd() {
 		if ($this->post) {
@@ -136,7 +136,7 @@ class Voucher extends Admin {
 	/**
 	 * 优惠券模版编辑
 	 * @datetime 2017-06-04T11:53:36+0800
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function templateEdit() {
 		if ($this->post) {
@@ -203,7 +203,7 @@ class Voucher extends Admin {
 	/**
 	 * 删除优惠券
 	 * @datetime 2017-06-04T11:56:58+0800
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function templateDel() {
 		$id = intval(input('post.ids'));
@@ -232,7 +232,7 @@ class Voucher extends Admin {
 	 * 发布优惠券
 	 * @method     GET
 	 * @datetime 2017-06-04T15:00:36+0800
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function publishVoucher() {
 		if ($this->post) {

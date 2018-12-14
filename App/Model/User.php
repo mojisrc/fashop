@@ -15,7 +15,7 @@ class User extends Model
 	/**
 	 * 添加用户
 	 * @param array $data 用户信息
-	 * @author 韩文博
+	 * @author CM
 	 * @throws \Exception
 	 */
 	public function addUser( array $data )
@@ -40,7 +40,7 @@ class User extends Model
 	/**
 	 * 添加多条
 	 * @datetime 2017-04-20 15:49:43
-	 * @author   韩文博
+	 * @author   CM
 	 * @param array $data
 	 * @return boolean
 	 */
@@ -52,7 +52,7 @@ class User extends Model
 	/**
 	 * 修改
 	 * @datetime 2017-04-20 15:49:43
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -65,7 +65,7 @@ class User extends Model
 	/**
 	 * 删除
 	 * @datetime 2017-04-20 15:49:43
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array $condition
 	 * @return   boolean
 	 */
@@ -77,7 +77,7 @@ class User extends Model
 	/**
 	 * 计算数量
 	 * @datetime 2017-04-20 15:49:43
-	 * @author   韩文博
+	 * @author   CM
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -103,7 +103,7 @@ class User extends Model
 	/**
 	 * 获取单个用户信息
 	 * @datetime 2017-04-20T15:23:09+0800
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array  $condition
 	 * @param    string $field
 	 * @param    array  $extends
@@ -131,7 +131,7 @@ class User extends Model
 	 * 创建访问令牌，用户的salt
 	 * @param int $user_id 用户id
 	 * @return string
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function createSalt( $user_id = 0 )
 	{

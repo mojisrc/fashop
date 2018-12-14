@@ -20,7 +20,7 @@ class UserTemp
 	 * 更新用户的消费情况
 	 * @param int $user_id
 	 * @return mixed
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function updateCostInfo( int $user_id )
 	{

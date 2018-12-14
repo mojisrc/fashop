@@ -61,7 +61,7 @@ class SystemTask
 	/**
 	 * 消息推送
 	 * @datetime 2017-11-03T14:13:24+0800
-	 * @author   韩文博
+	 * @author   CM
 	 */
 	public static function send()
 	{
@@ -110,7 +110,7 @@ class SystemTask
 	 * 获得任务列表
 	 * @method     GET
 	 * @datetime 2017-11-06T14:34:03+0800
-	 * @author   韩文博
+	 * @author   CM
 	 * @return array
 	 */
 	private function getTaskList()
@@ -129,7 +129,7 @@ class SystemTask
 	 * 修改单条数据
 	 * @method     GET
 	 * @datetime 2017-11-06T14:58:15+0800
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array $result
 	 */
 	private function updateRecord(array $result)
@@ -140,7 +140,7 @@ class SystemTask
 	/**
 	 * 批量修改
 	 * @datetime 2017-11-05T23:37:44+0800
-	 * @author   韩文博
+	 * @author   CM
 	 * todo 配置文件完善后 这里使用动态的前缀
 	 */
 	private function updateRecords(array $results)

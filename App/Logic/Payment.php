@@ -24,7 +24,7 @@ class Payment extends Model
 	 * 获得预存款支付的订单和支付信息
 	 * @method     GET
 	 * @datetime 2017-05-29T22:25:00+0800
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    string $pay_sn       充值单号
 	 * @param    string $payment_code 支付方式
 	 * @param    int    $user_id      用户id

@@ -27,7 +27,7 @@ class Pdlog extends Admin {
 	/**
 	 * 预存款日志
 	 * @datetime 2017-04-20T19:48:51+0800
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function index() {
 		$get = $this->get;

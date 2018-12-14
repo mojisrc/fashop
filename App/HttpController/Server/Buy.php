@@ -25,7 +25,7 @@ class Buy extends Server
 	 * @method POST
 	 * @param array $cart_ids   购物车id集合
 	 * @param int   $address_id 地址id
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function calculate()
 	{
@@ -65,7 +65,7 @@ class Buy extends Server
 	 * @param int    $address_id 收货地址id
 	 * @param array  $cart_ids   购物车id集合
 	 * @param string $message    买家留言
-	 * @author 韩文博
+	 * @author CM
 	 *
 	 */
 	public function create()
@@ -101,7 +101,7 @@ class Buy extends Server
 	 * 支付信息
 	 * @method GET
 	 * @param string $pay_sn 订单的sn码
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function info()
 	{
@@ -153,7 +153,7 @@ class Buy extends Server
 	 *                                  支付方式 wechat wechat_app wechat_mini wechat_wap
 	 * @param string $openid            微信的openid 非必需 只有微信支付的情况下可能需要
      * @param string $payment_channel   支付渠道 "wechat"  "wechat_mini" "wechat_app"
-	 * @author   韩文博
+	 * @author   CM
 	 */
 	public function pay()
 	{
@@ -226,7 +226,7 @@ class Buy extends Server
 	/**
 	 * 微信异步通知处理
 	 * @method GET+post
-	 * @author 韩文博
+	 * @author CM
 	 *
 	 */
 	public function wechatNotify()
@@ -279,7 +279,7 @@ class Buy extends Server
     /**
      * 微信app异步通知处理
      * @method GET+post
-     * @author 韩文博
+     * @author CM
      *
      */
     public function wechatAppNotify()
@@ -307,7 +307,7 @@ class Buy extends Server
 	 * @param array $config
      * @param string $payment_channel 支付渠道
 	 * @return array
-	 * @author 韩文博
+	 * @author CM
 	 */
 	private function getPayConfig( array $config, string $payment_channel ) : array
 	{

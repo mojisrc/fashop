@@ -80,7 +80,7 @@ EOT;
 	/**
 	 * 环境信息列表
 	 * @method GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function envStatus()
 	{
@@ -222,7 +222,7 @@ EOT;
 	 * @param string password
 	 * @param string port
 	 * @param string prefix
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function checkDb()
 	{
@@ -244,7 +244,7 @@ EOT;
 	 * @param string $username
 	 * @param string $password
 	 * @param string $repassword
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function checkAdminAccount()
 	{
@@ -273,7 +273,7 @@ EOT;
 	 * @param string admin_username
 	 * @param string admin_password
 	 * @param string admin_repassword
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function run()
 	{
@@ -318,7 +318,7 @@ EOT;
 	 * @param string admin_username
 	 * @param string admin_password
 	 * @param string admin_repassword
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function runtest()
 	{

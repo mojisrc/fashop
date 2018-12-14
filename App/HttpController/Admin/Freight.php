@@ -29,7 +29,7 @@ class Freight extends Admin
 	 * @param string $name     模板名称
 	 * @param string $pay_type 计费方式
 	 * @param array  $areas
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function add()
 	{
@@ -56,7 +56,7 @@ class Freight extends Admin
 	 * @param int id $id
 	 * @param string $name 模板名称
 	 * @param string $areas
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function edit()
 	{
@@ -75,7 +75,7 @@ class Freight extends Admin
 	/**
 	 * 运费列表
 	 * @method GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function list()
 	{
@@ -90,7 +90,7 @@ class Freight extends Admin
 	/**
 	 * 运费模板信息
 	 * @method GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function info()
 	{
@@ -103,7 +103,7 @@ class Freight extends Admin
 	 * 删除运费模板
 	 * @method POST
 	 * @param int id
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function del()
 	{

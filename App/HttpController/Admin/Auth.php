@@ -18,7 +18,7 @@ class Auth extends Admin
 	 * @method POST
 	 * @param array $rule_ids 节点id数组
 	 * @param int   $id       组id
-	 * @author   韩文博
+	 * @author   CM
 	 */
 	public function groupAuthorise()
 	{
@@ -34,7 +34,7 @@ class Auth extends Admin
 	/**
 	 * 角色组列表
 	 * @method GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function groupList()
 	{
@@ -49,7 +49,7 @@ class Auth extends Admin
 	 * 包含了这个组的节点权限id
 	 * @method  GET
 	 * @param int $id
-	 * @author   韩文博
+	 * @author   CM
 	 */
 	public function groupInfo()
 	{
@@ -65,7 +65,7 @@ class Auth extends Admin
 	 * 角色组内成员
 	 * @method     GET
 	 * @param int $id
-	 * @author   韩文博
+	 * @author   CM
 	 */
 	public function groupMemberList()
 	{
@@ -90,7 +90,7 @@ class Auth extends Admin
 	 * @param array $member_ids 所有成员id
 	 * @param int   $id         组ID
 	 * @method POST
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function groupMemberEdit()
 	{
@@ -114,7 +114,7 @@ class Auth extends Admin
 	 * 角色组添加
 	 * @method POST
 	 * @param string $name
-	 * @author   韩文博
+	 * @author   CM
 	 */
 	public function groupAdd()
 	{
@@ -131,7 +131,7 @@ class Auth extends Admin
 	 * @method POST
 	 * @param int    $id
 	 * @param string $title
-	 * @author   韩文博
+	 * @author   CM
 	 */
 	public function groupEdit()
 	{
@@ -147,7 +147,7 @@ class Auth extends Admin
 	 * 角色组删除
 	 * @method POST
 	 * @param int $id
-	 * @author   韩文博
+	 * @author   CM
 	 */
 	public function groupDel()
 	{
@@ -163,7 +163,7 @@ class Auth extends Admin
 	/**
 	 * 节点树形结构
 	 * @method     GET
-	 * @author   韩文博
+	 * @author   CM
 	 */
 	public function ruleTree()
 	{
@@ -176,7 +176,7 @@ class Auth extends Admin
 	 * 节点详情
 	 * @method     GET
 	 * @param int $id
-	 * @author   韩文博
+	 * @author   CM
 	 */
 	public function ruleInfo()
 	{
@@ -195,7 +195,7 @@ class Auth extends Admin
 	 * @param string $title      名称
 	 * @param string $pid        父级id
 	 * @param int    $is_display 0不显示1显示
-	 * @author   韩文博
+	 * @author   CM
 	 */
 	public function ruleAdd()
 	{
@@ -215,7 +215,7 @@ class Auth extends Admin
 	 * @param string $title      名称
 	 * @param string $pid        父级id
 	 * @param int    $is_display 0不显示1显示
-	 * @author   韩文博
+	 * @author   CM
 	 */
 	public function ruleEdit()
 	{
@@ -231,7 +231,7 @@ class Auth extends Admin
 	 * 节点规则删除
 	 * @method POST
 	 * @param array $id
-	 * @author   韩文博
+	 * @author   CM
 	 */
 	public function ruleDel()
 	{
@@ -254,7 +254,7 @@ class Auth extends Admin
 	 * 节点排序
 	 * @method POST
 	 * @param array $sorts [{id:d,index:d}]
-	 * @author   韩文博
+	 * @author   CM
 	 */
 	public function ruleSort()
 	{
@@ -277,7 +277,7 @@ class Auth extends Admin
 
 	/**
 	 * 生成权限
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function genRule()
 	{

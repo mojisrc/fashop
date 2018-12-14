@@ -27,7 +27,7 @@ class Pdrecharge extends Admin {
 	/**
 	 * 充值列表
 	 * @datetime 2017-04-20T19:48:17+0800
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function index() {
 		$get = $this->get;
@@ -59,7 +59,7 @@ class Pdrecharge extends Admin {
 	/**
 	 * 充值编辑(更改成收到款)
 	 * @datetime 2017-04-20T19:48:27+0800
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function edit() {
 		$id = intval($get['id']);
@@ -140,7 +140,7 @@ class Pdrecharge extends Admin {
 	/**
 	 * 充值查看
 	 * @datetime 2017-04-20T19:48:36+0800
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function detail() {
 		$id = intval($get['id']);
@@ -163,7 +163,7 @@ class Pdrecharge extends Admin {
 	/**
 	 * 充值删除
 	 * @datetime 2017-04-20T19:48:44+0800
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function del() {
 		$get = $this->get;

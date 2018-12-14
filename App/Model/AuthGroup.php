@@ -26,7 +26,7 @@ class AuthGroup extends Model
 	/**
 	 * 添加
 	 * @datetime 2017-10-17 15:19:34
-	 * @author   韩文博
+	 * @author   CM
 	 * @param  array $data
 	 * @return int pk
 	 */
@@ -42,7 +42,7 @@ class AuthGroup extends Model
 	/**
 	 * 添加多条
 	 * @datetime 2017-10-17 15:19:34
-	 * @author   韩文博
+	 * @author   CM
 	 * @param array $data
 	 * @return boolean
 	 */
@@ -54,7 +54,7 @@ class AuthGroup extends Model
 	/**
 	 * 修改
 	 * @datetime 2017-10-17 15:19:34
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -67,7 +67,7 @@ class AuthGroup extends Model
 	/**
 	 * 删除
 	 * @datetime 2017-10-17 15:19:34
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array $condition
 	 * @return   boolean
 	 */
@@ -79,7 +79,7 @@ class AuthGroup extends Model
 	/**
 	 * 计算数量
 	 * @datetime 2017-10-17 15:19:34
-	 * @author   韩文博
+	 * @author   CM
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -91,7 +91,7 @@ class AuthGroup extends Model
 	/**
 	 * 获取权限角色单条数据
 	 * @datetime 2017-10-17 15:19:34
-	 * @author   韩文博
+	 * @author   CM
 	 * @param array  $condition 条件
 	 * @param string $field     字段
 	 * @return array | false
@@ -105,7 +105,7 @@ class AuthGroup extends Model
 	/**
 	 * 获得权限角色列表
 	 * @datetime 2017-10-17 15:19:34
-	 * @author   韩文博
+	 * @author   CM
 	 * @param    array  $condition
 	 * @param    string $field
 	 * @param    string $order

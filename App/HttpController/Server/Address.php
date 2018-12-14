@@ -22,7 +22,7 @@ class Address extends Server
 	 * 买家设置默认收货地址
 	 * @method POST
 	 * @param int $id 地址id
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function setDefault()
 	{
@@ -43,7 +43,7 @@ class Address extends Server
 	/**
 	 * 获得默认收货地址
 	 * @method GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function default()
 	{
@@ -60,7 +60,7 @@ class Address extends Server
 	 * 获取地址详情
 	 * @method GET
 	 * @param int $id 地址id
-	 * @Author      韩文博
+	 * @Author      CM
 	 */
 	public function info()
 	{
@@ -80,7 +80,7 @@ class Address extends Server
 	/**
 	 * 买家收货地址列表
 	 * @method GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function list()
 	{
@@ -101,7 +101,7 @@ class Address extends Server
 	 * @param int    $area_id      地区id(县、区) [必填]
 	 * @param string $address      具体地址 [必填]
 	 * @param string $mobile_phone 手机号
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function add()
 	{
@@ -156,7 +156,7 @@ class Address extends Server
 	 * @param int    $area_id      地区id(县、区) [必填]
 	 * @param string $address      具体地址 [必填]
 	 * @param string $mobile_phone 手机号
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function edit()
 	{
@@ -206,7 +206,7 @@ class Address extends Server
 	 * 买家删除收货地址
 	 * @method POST
 	 * @param  int id 地址id
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function del()
 	{

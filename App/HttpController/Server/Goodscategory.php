@@ -14,7 +14,7 @@ class Goodscategory extends Server
 	/**
 	 * 商品分类列表
 	 * @method GET
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function list()
 	{
@@ -31,7 +31,7 @@ class Goodscategory extends Server
 	 * 商品分类详情
 	 * @method GET
 	 * @param  int $id ID
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function info()
 	{

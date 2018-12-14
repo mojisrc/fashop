@@ -81,7 +81,7 @@ class Factory
 	 * @param $name
 	 * @return mixed
 	 * @throws \Exception
-	 * @author 韩文博
+	 * @author CM
 	 */
 	public function __get( $name )
 	{

@@ -450,7 +450,7 @@ class GoodsSearch
 	 * 获得商品列表
 	 * @method     GET
 	 * @datetime 2017-05-28T15:43:37+0800
-	 * @author   韩文博
+	 * @author   CM
 	 * @param array  $search_options 搜索条件
 	 * @param string $field          字段
 	 * @param string $order          排序
@@ -591,7 +591,7 @@ class GoodsSearch
 	 * 生成排序的sql语句
 	 * @method     GET
 	 * @datetime 2017-05-28T17:02:01+0800
-	 * @author   韩文博
+	 * @author   CM
 	 * @return   string
 	 */
 	public function generateGoodsOrderSql( $order_type, $order )
