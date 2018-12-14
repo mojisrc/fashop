@@ -26,7 +26,7 @@ class User extends Server
     /**
      * 刷新token
      * @method POST
-     * @author 韩文博
+     * @author CM
      */
     public function token()
     {
@@ -52,7 +52,7 @@ class User extends Server
      * @param string $password
      * @param string $wechat_openid  微信openid ，登陆方式为wechat_openid 或者 wechat_app必填
      * @param string $wechat_mini_code
-     * @author   韩文博
+     * @author   CM
      */
     public function login()
     {
@@ -108,7 +108,7 @@ class User extends Server
      *
      * @param string $wechat_openid 注册方式为wechat_openid 或者 wechat_app必填
      * @param string $wechat_app 和$register_type为wechat_openid 参数一样
-     * @author 韩文博
+     * @author CM
      */
     public function register()
     {
@@ -143,7 +143,7 @@ class User extends Server
     /**
      * 当前用户信息
      * @method GET
-     * @author 韩文博
+     * @author CM
      */
     public function self()
     {
@@ -159,7 +159,7 @@ class User extends Server
     /**
      * 退出
      * @http   GET
-     * @author 韩文博
+     * @author CM
      */
     public function logout()
     {
@@ -188,7 +188,7 @@ class User extends Server
      * @param string $phone
      * @param string $password
      * @param string $verify_code
-     * @author 韩文博
+     * @author CM
      */
     public function editPasswordByFind()
     {
@@ -214,7 +214,7 @@ class User extends Server
      * @http   post
      * @param string $oldpassword 老密码
      * @param string $password 新密码
-     * @author 韩文博
+     * @author CM
      */
     public function editPassword()
     {
@@ -248,7 +248,7 @@ class User extends Server
      * @param int sex 性别
      * @param int birthday 生日时间戳
      * @method POST
-     * @author   韩文博
+     * @author   CM
      */
     public function editProfile()
     {
@@ -292,7 +292,7 @@ class User extends Server
      * @param string $phone 手机号
      * @param string $password 密码
      * @param string $verify_code 验证码
-     * @author 韩文博
+     * @author CM
      */
     public function bindPhone()
     {
@@ -321,7 +321,7 @@ class User extends Server
      * @method POST
      * @param string $wechat_openid
      * @param string $wechat 包含字段：openid,nickname,sex,city,country,province,privilege(非必填),headimgurl,unionid（非必填）
-     * @author 韩文博
+     * @author CM
      */
     public function bindWechat()
     {
@@ -348,7 +348,7 @@ class User extends Server
      * 手机解绑微信
      * 该账号必须绑定了手机，或者是手机注册的，并绑定了微信
      * @method     POST
-     * @author   韩文博
+     * @author   CM
      */
     public function unbindWechat()
     {
