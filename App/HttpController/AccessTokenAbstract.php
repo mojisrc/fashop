@@ -16,6 +16,7 @@ namespace App\HttpController;
 use EasySwoole\Core\Component\Spl\SplArray;
 use ezswoole\Controller;
 use App\Logic\AccessToken as AccessTokenLogic;
+use EasySwoole\Config as AppConfig;
 
 /**
  * Class AccessTokenAbstract
@@ -31,31 +32,31 @@ abstract class AccessTokenAbstract extends Controller
 	protected $request;
 
 	final protected function getRequestUser()
-    {
-        if( empty( $this->user ) ){
-            $access_token_data = $this->getRequestAccessTokenData();
-            $condition         = [];
-            $condition['id']   = $access_token_data['sub'];
-            $user              = model('User')->getUserExcludeInfo($condition, '', 'password');
-            if( !empty( $user ) ){
-                $user_auxiliary = $this->getUserInfo($user['id']);
+	{
+		if( empty( $this->user ) ){
+			$access_token_data = $this->getRequestAccessTokenData();
+			$condition         = [];
+			$condition['id']   = $access_token_data['sub'];
+			$user              = model( 'User' )->getUserExcludeInfo( $condition, '', 'password' );
+			if( !empty( $user ) ){
+				$user_auxiliary = $this->getUserInfo( $user['id'] );
 
-                return new SplArray( array_merge( $user, $user_auxiliary ) );
-            } else{
-                return false;
-            }
-        } else{
-            return $this->user;
-        }
-    }
+				return new SplArray( array_merge( $user, $user_auxiliary ) );
+			} else{
+				return false;
+			}
+		} else{
+			return $this->user;
+		}
+	}
 
-	final protected function getRequestAccessToken() : ? String
+	final protected function getRequestAccessToken() : ?String
 	{
 		if( $this->accessToken ){
 			return $this->accessToken;
 		} else{
 			$header = $this->request->header();
-			if(  !empty($header) && isset($header['access-token']) ){
+			if( !empty( $header ) && isset( $header['access-token'] ) ){
 				return $header['access-token'];
 			} else{
 				return null;
@@ -63,7 +64,7 @@ abstract class AccessTokenAbstract extends Controller
 		}
 	}
 
-	final protected function getRequestAccessTokenData() : ? SplArray
+	final protected function getRequestAccessTokenData() : ?SplArray
 	{
 		if( $this->accessTokenData instanceOf SplArray ){
 			return $this->accessTokenData;
@@ -95,21 +96,39 @@ abstract class AccessTokenAbstract extends Controller
 		return $this->acceessTokenLogic;
 	}
 
-    /**
-     * 获得用户的相关信息
-     * @throws \App\Utils\Exception
-     * @author 韩文博
-     */
-    final protected function getUserInfo($user_id)
-    {
-        $user_profile_model   = model('UserProfile');
-        $user_assets_model    = model('UserAssets');
-        $data                 = [];
-        $condition            = [];
-        $condition['user_id'] = $user_id;
-        $data['profile']      = $user_profile_model->getUserProfileInfo($condition);
-        $data['assets']       = $user_assets_model->getUserAssetsInfo($condition);
-        return $data;
-    }
+	/**
+	 * 获得用户的相关信息
+	 * @throws \App\Utils\Exception
+	 * @author 韩文博
+	 */
+	final protected function getUserInfo( $user_id )
+	{
+		$user_profile_model   = model( 'UserProfile' );
+		$user_assets_model    = model( 'UserAssets' );
+		$data                 = [];
+		$condition            = [];
+		$condition['user_id'] = $user_id;
+		$data['profile']      = $user_profile_model->getUserProfileInfo( $condition );
+		$data['assets']       = $user_assets_model->getUserAssetsInfo( $condition );
+		return $data;
+	}
+
+
+	protected function send( $code = 0, $data = [], $message = null, $status = 200 )
+	{
+		$this->response()->withAddedHeader( 'Access-Control-Allow-Origin', AppConfig::getInstance()->getConf( 'response.access_control_allow_origin' ) );
+		$this->response()->withAddedHeader( 'Content-Type', 'application/json; charset=utf-8' );
+		$this->response()->withAddedHeader( 'Access-Control-Allow-Headers', AppConfig::getInstance()->getConf( 'response.access_control_allow_headers' ) );
+		$this->response()->withAddedHeader( 'Access-Control-Allow-Methods', AppConfig::getInstance()->getConf( 'response.access_control_allow_methods' ) );
+
+		$this->response()->withStatus( $status );
+		$content = [
+			"code"   => $code,
+			"result" => $data,
+			"msg"    => $message,
+		];
+		$this->response()->write( json_encode( $content, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) );
+		wsdebug()->send( $content, 'debug' );
+	}
 
 }

@@ -27,19 +27,17 @@ abstract class Admin extends AccessTokenAbstract
 	 */
 	protected function onRequest( $actionName ) : ?bool
 	{
-		parent::onRequest($actionName);
+		parent::onRequest( $actionName );
 		$this->request = Request::getInstance();
 		if( $this->request->method() === 'OPTIONS' ){
 			$this->send( Code::success );
 			$this->response()->end();
 			return false;
-		}else{
-			parent::onRequest( $actionName );
+		} else{
 			$this->_initialize();
-
 			// 不需要验证的模块
 			$authLogic = new AuthLogic();
-			$rulePath = strtolower( "{$this->request->controller()}/$actionName" );
+			$rulePath  = strtolower( "{$this->request->controller()}/$actionName" );
 			if( !in_array( $rulePath, $authLogic::$notAuthAction ) ){
 				if( $this->verifyResourceRequest() ){
 					$user = $this->getRequestUser();
@@ -49,7 +47,7 @@ abstract class Admin extends AccessTokenAbstract
 						$this->response()->end();
 						return false;
 					}
-				}else{
+				} else{
 					$this->send( Code::user_access_token_error );
 					$this->response()->end();
 					return false;
@@ -66,13 +64,14 @@ abstract class Admin extends AccessTokenAbstract
 	 * @throws \Throwable
 	 * @author 韩文博
 	 */
-	protected function onException(\Throwable $throwable,$actionName):void
+	protected function onException( \Throwable $throwable, $actionName ) : void
 	{
-		$this->send(Code::server_error,[],$throwable->getFile()." - ".$throwable->getLine(). " - ". $throwable->getMessage());
+		$this->send( Code::server_error, [], $throwable->getFile()." - ".$throwable->getLine()." - ".$throwable->getMessage() );
 		$this->response()->end();
 	}
 
-	protected function _initialize(){
+	protected function _initialize()
+	{
 
 	}
 }

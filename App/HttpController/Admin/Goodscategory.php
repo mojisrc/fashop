@@ -16,6 +16,7 @@ class Goodscategory extends Admin
 	 * 商品分类列表
 	 * @method GET
 	 * @author 孙泉
+	 * @param int $tree 1是否转成树形结构
 	 */
 	public function list()
 	{
@@ -25,12 +26,11 @@ class Goodscategory extends Admin
 		$goods_category_model = model( 'GoodsCategory' );
 
 		$condition = [];
-		$field = "*,(SELECT count(*) FROM $table_goods_common WHERE category_ids LIKE CONCAT('%\"',$table_goods_category.id,'\"%')) as goods_number";
-		$order = 'sort asc';
-		$list  = $goods_category_model->getGoodsCategoryList( $condition, $field, $order, '1,1000' );
-		$list  = \App\Utils\Tree::listToTree( $list, 'id', 'pid', '_child', 0 );
+//		$field     = "*,(SELECT count(*) FROM $table_goods_common WHERE category_ids LIKE CONCAT('%\"',$table_goods_category.id,'\"%')) as goods_number";
+		$order     = 'sort asc';
+		$list      = $goods_category_model->getGoodsCategoryList( $condition, '*', $order, '1,1000' );
 		return $this->send( Code::success, [
-			'list' => $list,
+			'list' => isset( $this->get['tree'] ) ? \App\Utils\Tree::listToTree( $list, 'id', 'pid', '_child', 0 ) : $list,
 		] );
 	}
 
