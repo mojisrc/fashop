@@ -16,6 +16,7 @@ namespace App\Validate;
 use ezswoole\Validate;
 use App\Logic\VerifyCode as VerifyCodeLogic;
 use ezswoole\Db;
+use App\Utils\Ip;
 
 class VerifyCode extends Validate
 {
@@ -127,7 +128,7 @@ class VerifyCode extends Validate
 		// 检查IP发送频率
 		$ip_count = Db::name( 'VerifyCode' )->where( [
 			'create_time' => ['between', [$now_time, $now_time + 5 * 60]], // 5分钟
-			'ip'          => \App\Utils\Ip\getClientIp(),
+			'ip'          => Ip::getClientIp(),
 		] )->count();
 
 		// 100/10 ，粗略估计10人 每人发10个验证码
@@ -139,7 +140,7 @@ class VerifyCode extends Validate
 		// 300/10 ，粗略估计30人 每人发10个验证码
 		$ip_count = Db::name( 'VerifyCode' )->where( [
 			'create_time' => ['between', [$start, $end]], // 5分钟
-			'ip'          => \App\Utils\Ip\getClientIp(),
+			'ip'          => Ip::getClientIp(),
 		] )->count();
 		if( $ip_count > 300 ){
 			return "禁止发送";
