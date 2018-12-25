@@ -11,7 +11,7 @@
  *
  */
 
-namespace App\Logic\Sever;
+namespace App\Logic\Server;
 
 
 class Freight
