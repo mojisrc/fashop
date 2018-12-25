@@ -120,8 +120,14 @@ class OrderGoods extends Model
 	 */
 	public function getOrderGoodsList( $condition = [], $field = '*', $order = '', $page = '1,10' )
 	{
-		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list ? $list->toArray() : false;
+        if ($page == '') {
+            $list = $this->where($condition)->order($order)->field($field)->select();
+
+        } else {
+            $list = $this->where($condition)->order($order)->field($field)->page($page)->select();
+        }
+        return $list ? $list->toArray() : array();
+
 	}
 
 	/**
@@ -195,6 +201,25 @@ class OrderGoods extends Model
     public function getOrderGoodsValue($condition = array(), $condition_str = '', $field = 'id') {
         return $this->where($condition)->where($condition_str)->value($field);
     }
+    /**
+     * 获取某个字段列
+     * @param  [type] $condition        [条件]
+     * @param  [type] $condition_str    [条件]
+     * @return [type]                   [数据]
+     */
+    public function getOrderGoodsColumn($condition = array(), $condition_str = '', $field = 'id')
+    {
+        return $this->where($condition)->where($condition_str)->column($field);
+    }
+    /**
+     * 修改多条数据
+     * @param  [type] $update           [更新数据]
+     */
+    public function updateAllOrderGoods($update = array())
+    {
+        return $this->saveAll($update);
+    }
+
 }
 
 ?>

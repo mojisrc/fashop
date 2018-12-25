@@ -165,7 +165,7 @@ class CalculateResult
         $this->setFreightUnifiedFee($data['freight_unified_fee']);
         $this->setFreightTemplateFee($data['freight_template_fee']);
         $this->setPayFreightFee($data['pay_freight_fee']);
-        if($data['goods_group_amount']){
+        if(isset($data['goods_group_amount'])){
             $this->setGoodsGroupAmount($data['goods_group_amount']);
         }
     }

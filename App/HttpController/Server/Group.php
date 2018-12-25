@@ -318,7 +318,7 @@ class Group extends Server
                 $order_goods_model = model('OrderGoods');
                 $order_goods_id    = $order_goods_model->getOrderGoodsId(['order_id' => $order_id, 'goods_id' => $goods_id]);
                 if (!$order_goods_id) {
-                    $this->send(Code::error, [], '没有该订单');
+                    return $this->send(Code::error, [], '没有该订单');
 
                 } else {
                     $orderLogic = new OrderLogic($condition);
@@ -327,7 +327,7 @@ class Group extends Server
                     $orderLogic->field($field);
                     $info = $orderLogic->info();
                     if (empty($info)) {
-                        $this->send(Code::error, [], '没有该订单');
+                        return $this->send(Code::error, [], '没有该订单');
                     } else {
                         $this->send(Code::success, [
                             'info' => $info,
@@ -368,7 +368,7 @@ class Group extends Server
                 $order_goods_model = model('OrderGoods');
                 $order_goods_id    = $order_goods_model->getOrderGoodsId(['order_id' => $order_id, 'goods_id' => $goods_id]);
                 if (!$order_goods_id) {
-                    $this->send(Code::error, [], '没有该订单');
+                    return $this->send(Code::error, [], '没有该订单');
 
                 } else {
                     $orderLogic = new OrderLogic($condition);
@@ -377,7 +377,7 @@ class Group extends Server
                     $orderLogic->field($field);
                     $info = $orderLogic->info();
                     if (empty($info)) {
-                        $this->send(Code::error, [], '没有该订单');
+                        return $this->send(Code::error, [], '没有该订单');
                     } else {
                         $this->send(Code::success, [
                             'info' => $info,
@@ -470,7 +470,7 @@ class Group extends Server
             $goods_id     = $get['goods_id'];
             $filter_goods = $this->filterGoods($group_id, $goods_id);
             if ($filter_goods['code'] == -1) {
-                $this->send(Code::success, ['info' => ['state'=>0]]);
+                return $this->send(Code::success, ['info' => ['state'=>0]]);
 
             } else {
                 if ($filter_goods['group']['end_time'] < time()) {

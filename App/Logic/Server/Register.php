@@ -459,30 +459,25 @@ class Register
             $user_profile_model = model('UserProfile');
             $user_assets_model  = model('UserAssets');
             $user_open_model    = model('UserOpen');
-            $user_alias_model   = model('UserAlias');
 
             $user_profile_id = $user_profile_model->insertUserProfile($profile_data);
             if ($user_profile_id < 0) {
-                $user_model->rollback();
                 return null;
             }
 
             $user_assets_id = $user_assets_model->insertUserAssets($assets_data);
             if ($user_assets_id < 0) {
-                $user_model->rollback();
                 return null;
             }
 
             if (isset($open_data)) {
                 $user_open_id = $user_open_model->insertUserOpen($open_data);
                 if ($user_open_id < 0) {
-                    $user_model->rollback();
                     return null;
                 }
             }
             return $user_id;
         } catch (\Exception $e) {
-            $user_model->rollback();
             throw new $e;
         }
     }
