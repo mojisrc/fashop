@@ -24,6 +24,7 @@ use App\Logic\OrderRefund as RefundLogic;
 class Orderrefund extends Admin
 {
 	/**
+	 * TODO order_type 换成 sort_type
 	 * 退款售后列表
 	 * @method GET
 	 * @param string $keywords_type 类型 商品名称goods_name 、订单号order_no、收货人姓名 receiver_name、收货人电话 receiver_phone、 退款编号refund_sn

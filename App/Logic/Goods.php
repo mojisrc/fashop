@@ -93,6 +93,10 @@ class Goods
 	 * @var array
 	 */
 	private $skuList;
+	/**
+	 * @var array
+	 */
+	private $specList;
 
 	/**
 	 * @return array
@@ -452,6 +456,10 @@ class Goods
 
 			$this->skuList  = $skuList;
 			$this->specList = array_values( $spec_list );
+			// todo 临时解决空bug
+			if( count( $this->skuList ) === 0 || count( $this->specList ) === 0 ){
+				throw new \Exception( 'skuList | specList error' );
+			}
 		}
 
 		if( isset( $options['body'] ) ){
