@@ -42,40 +42,14 @@ class Group extends Server
             ]);
         } else {
             //查询活动商品ids
-            $goods_ids = $group_goods_model->getGroupGoodsColumn(['group_id' => $group_data['id']], '', 'goods_id');
-            if ($goods_ids) {
-                $online_goods_ids = model('Goods')->getGoodsColumn(['id' => ['in', $goods_ids], 'is_on_sale' => 1], 'id');
-
-                //返回出现在第一个数组中但其他数组中没有的值 [将要删除的商品]
-                $difference_goods_del_ids = array_diff($goods_ids, $online_goods_ids);
-
-                if ($difference_goods_del_ids) {
-                    //删除活动下失效商品
-                    $group_goods_result = $group_goods_model->delGroupGoods(['group_id' => $group_data['id'], 'goods_id' => array('in', $difference_goods_del_ids)]);
-                    if (!$group_goods_result) {
-                        return $this->send(Code::param_error, [], '删除活动下失效商品失败');
-
-                    }
-                }
+            $goods_result = $group_goods_model->checkGoods($group_data['id'], ['group_id' => $group_data['id']]);
+            if ($goods_result !== true) {
+                return $this->send(Code::param_error, [], $goods_result);
             }
-
             //查询活动商品sku ids
-            $goods_sku_ids = $group_goods_model->getGroupGoodsColumn(['group_id' => $group_data['id']], '', 'goods_sku_id');
-
-            if ($goods_sku_ids) {
-                $online_goods_sku_ids = model('GoodsSku')->getGoodsSkuColumn(['id' => ['in', $goods_sku_ids]], 'id');
-
-                //返回出现在第一个数组中但其他数组中没有的值 [将要删除的sku]
-                $difference_goods_sku_del_ids = array_diff($goods_sku_ids, $online_goods_sku_ids);
-
-                if ($difference_goods_sku_del_ids) {
-                    //删除活动下失效商品sku
-                    $group_goods_result = $group_goods_model->delGroupGoods(['group_id' => $group_data['id'], 'goods_sku_id' => array('in', $difference_goods_sku_del_ids)]);
-                    if (!$group_goods_result) {
-                        return $this->send(Code::param_error, [], '删除活动下失效商品sku失败');
-
-                    }
-                }
+            $goods_sku_result = $group_goods_model->checkGoodsSku($group_data['id'], ['group_id' => $group_data['id']]);
+            if ($goods_sku_result !== true) {
+                return $this->send(Code::param_error, [], $goods_sku_result);
             }
 
             $group_goods_ids = $group_goods_model->getGroupGoodsColumn(['group_id' => $group_data['id']], '', 'goods_id');
@@ -86,15 +60,14 @@ class Group extends Server
                     'list'         => [],
                 ]);
             } else {
-                $min_group_price = $group_goods_model->getGroupGoodsValue(['group_id' => $group_data['id'], 'goods_id' => ['in', $group_goods_ids]], '', 'min(group_price)');
-
-                $param['ids']  = $group_goods_ids;
-                $param['page'] = $this->getPageLimit();
-                $goodsLogic    = new \App\Logic\GoodsSearch($param);
-                $goods_count   = $goodsLogic->count();
-                $goods_list    = $goodsLogic->list();
+                $min_group_price = $group_goods_model->where(['group_id' => $group_data['id'], 'goods_id' => ['in', $group_goods_ids]])->group('goods_id')->column('goods_id,min(group_price)');
+                $param['ids']    = $group_goods_ids;
+                $param['page']   = $this->getPageLimit();
+                $goodsLogic      = new \App\Logic\GoodsSearch($param);
+                $goods_count     = $goodsLogic->count();
+                $goods_list      = $goodsLogic->list();
                 foreach ($goods_list as $key => $value) {
-                    $goods_list[$key]['group_price'] = $min_group_price;
+                    $goods_list[$key]['group_price'] = $min_group_price[$value['id']];
                 }
                 $this->send(Code::success, [
                     'info'         => ['group_id' => $group_data['id'], 'limit_buy_num' => $group_data['limit_buy_num']],
@@ -470,13 +443,13 @@ class Group extends Server
             $goods_id     = $get['goods_id'];
             $filter_goods = $this->filterGoods($group_id, $goods_id);
             if ($filter_goods['code'] == -1) {
-                return $this->send(Code::success, ['info' => ['state'=>0]]);
+                return $this->send(Code::success, ['info' => ['state' => 0]]);
 
             } else {
                 if ($filter_goods['group']['end_time'] < time()) {
-                    $this->send(Code::success, ['info' => ['state'=>0]]);
-                }else{
-                    $this->send(Code::success, ['info' => ['state'=>1]]);
+                    $this->send(Code::success, ['info' => ['state' => 0]]);
+                } else {
+                    $this->send(Code::success, ['info' => ['state' => 1]]);
                 }
             }
         }
@@ -501,10 +474,10 @@ class Group extends Server
             $goods_id     = $get['goods_id'];
             $filter_goods = $this->filterGoods($group_id, $goods_id);
             if ($filter_goods['code'] == -1) {
-                $this->send(Code::success, ['info' => ['state'=>0]]);
+                $this->send(Code::success, ['info' => ['state' => 0]]);
 
             } else {
-                $this->send(Code::success, ['info' => ['state'=>1]]);
+                $this->send(Code::success, ['info' => ['state' => 1]]);
             }
         }
     }

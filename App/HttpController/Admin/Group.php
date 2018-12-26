@@ -614,4 +614,55 @@ class Group extends Admin
         }
     }
 
+    /**
+     * 商品列表
+     * @method GET
+     * @author 孙泉
+     */
+    public function pageGoods()
+    {
+        $param                   = $this->get;
+        $group_model             = model('Group');
+        $group_goods_model       = model('GroupGoods');
+        $condition               = [];
+        $condition['is_show']    = 1;
+        $condition['start_time'] = ['elt', time()];
+
+        //查询活动
+        $group_data = $group_model->getGroupInfo($condition);
+        if (!$group_data) {
+            $this->send(Code::success, [
+                'total_number' => 0,
+                'list'         => [],
+            ]);
+        } else {
+
+            $group_goods_ids = $group_goods_model->getGroupGoodsColumn(['group_id' => $group_data['id']], '', 'goods_id');
+
+            if (!$group_goods_ids) {
+                $this->send(Code::success, [
+                    'total_number' => 0,
+                    'list'         => [],
+                ]);
+
+            } else {
+                $min_group_price = $group_goods_model->getGroupGoodsValue(['group_id' => $group_data['id'], 'goods_id' => ['in', $group_goods_ids]], '', 'min(group_price)');
+
+                $param['ids']  = $group_goods_ids;
+                $param['page'] = $this->getPageLimit();
+                $goodsLogic    = new \App\Logic\GoodsSearch($param);
+                $goods_count   = $goodsLogic->count();
+                $goods_list    = $goodsLogic->list();
+                foreach ($goods_list as $key => $value) {
+                    $goods_list[$key]['group_price'] = $min_group_price;
+                }
+                $this->send(Code::success, [
+                    'info'         => ['group_id' => $group_data['id'], 'limit_buy_num' => $group_data['limit_buy_num']],
+                    'total_number' => $goods_count,
+                    'list'         => $goods_list,
+                ]);
+            }
+        }
+    }
+
 }
