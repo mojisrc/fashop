@@ -346,6 +346,13 @@ class Order extends Server
 	}
 
 	/**
+	 * @method GET
+	 * @param int $id 订单id
+	 */
+	public function logistics(){
+
+	}
+	/**
 	 * 拼团订单团信息[适用于订单详情]
 	 * @method GET
 	 * @param int $id 订单id
