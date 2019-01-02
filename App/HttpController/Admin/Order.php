@@ -31,7 +31,7 @@ class Order extends Admin
      * @param int $order_type 1默认 2拼团
      * @param array $create_time [开始时间,结束时间]
      * @param string $feedback_state 维权状态：退款处理中 todo、退款结束 closed
-     * @param array $user_id 用户id
+     * @param array $user_ids 用户id集合
      * @param int $is_print 1打印 0未打印
      * @param string $keywords_type 商品名称goods_name 、订单号order_no、收货人姓名 receiver_name、收货人电话 receiver_phone、 快递单号courier_number
      * @param string $keywords 关键词
