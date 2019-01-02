@@ -71,7 +71,14 @@ class Goods extends Model
 	 */
 	public function getGoodsList( $condition, $field = '*', $order = 'id desc', $page = '1,10' )
 	{
-		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
+        if ($page == '') {
+			$list = $this->where( $condition )->order( $order )->field( $field )->select();
+
+        } else {
+			$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
+
+        }
+
 		return $list ? $list->toArray() : [];
 	}
 

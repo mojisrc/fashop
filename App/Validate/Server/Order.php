@@ -65,8 +65,7 @@ class Order extends Validate
 			],
 
 			'logisticsQuery' => [
-				'express_id',
-				'tracking_no',
+				'id',
 			],
             'groupInfo'           => [
                 'id',

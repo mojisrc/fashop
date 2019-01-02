@@ -13,8 +13,8 @@
 
 namespace App\HttpController\Server;
 
-use App\Utils\Code;
 use App\Logic\Pay\Notice\Facade as PayNoticeFacade;
+use App\Utils\Code;
 use ezswoole\Log;
 use Yansongda\Pay\Pay;
 
@@ -98,53 +98,6 @@ class Buy extends Server
 	}
 
 	/**
-	 * 支付信息
-	 * @method GET
-	 * @param string $pay_sn 订单的sn码
-	 * @author 韩文博
-	 */
-	public function info()
-	{
-		if( $this->verifyResourceRequest() !== true ){
-			$this->send( Code::user_access_token_error );
-		} else{
-			if( $this->validate( $this->get, 'Server/Buy.info' ) !== true ){
-				$this->send( Code::param_error, [], $this->getValidate()->getError() );
-			} else{
-				try{
-					$user        = $this->getRequestUser();
-					$pay_sn      = $this->get['pay_sn'];
-					$order_model = model( 'Order' );
-					$pay_info    = $order_model->getOrderPayInfo( ['pay_sn' => $pay_sn, 'user_id' => $user['id']] );
-					if( empty( $pay_info ) ){
-						return $this->send( Code::error, [], '不存在该订单' );
-					} else{
-						$condition['pay_sn'] = $pay_sn;
-						$condition['state']  = ['in', [\App\Logic\Order::state_new, \App\Logic\Order::state_pay]];
-						$order_info          = $order_model->getOrderInfo( $condition, '', 'id,state,pay_name,amount,sn' );
-						if( empty( $order_info ) ){
-							return $this->send( Code::error, [], '未找到需要支付的订单' );
-						}
-						$pay_amount    = $order_info['amount'];
-						$payment_model = model( 'Payment' );
-						$payment_list  = $payment_model->getPaymentList( ['status' => 1], 'type,name', '', '1,100' );
-						if( empty( $payment_list ) ){
-							return $this->send( Code::error, [], '未找到可匹配的支付方式' );
-						}
-						$this->send( Code::success, [
-							'order_id'     => $order_info['id'],
-							'pay_amount'   => $pay_amount,
-							'payment_list' => $payment_list,
-						] );
-					}
-				} catch( \Exception $e ){
-					$this->send( Code::server_error, [], $e->getMessage() );
-				}
-			}
-		}
-	}
-
-	/**
 	 * 支付
 	 * @method POST
 	 * @param string $order_type        订单支付类型，goods_buy商品购买，predeposit预存款充值
@@ -157,15 +110,16 @@ class Buy extends Server
 	 */
 	public function pay()
 	{
-		if( $this->verifyResourceRequest() !== true ){
+        if( $this->verifyResourceRequest() !== true ){
 			$this->send( Code::user_access_token_error );
-		} else{
-			if( $this->validate( $this->post, 'Server/Buy.pay' ) !== true ){
+		} else
+
+        if( $this->validate( $this->post, 'Server/Buy.pay' ) !== true ){
 				$this->send( Code::param_error, [], $this->getValidate()->getError() );
 			} else{
 				try{
 					$user    = $this->getRequestUser();
-					$payment = model( "Payment" )->getPaymentInfo( ['type' => $this->post['payment_code'], 'status' => 1] );
+					$payment = model( "Setting" )->getSettingInfo( ['key' => $this->post['payment_code'], 'status' => 1] );
 					if( !$payment ){
 						$this->send( Code::error, [], '系统不支持选定的支付方式' );
 					} else{
@@ -221,7 +175,7 @@ class Buy extends Server
 				}
 			}
 		}
-	}
+
 
 	/**
 	 * 微信异步通知处理
@@ -232,7 +186,7 @@ class Buy extends Server
 	public function wechatNotify()
 	{
 		try{
-			$payment = model( "Payment" )->getPaymentInfo( ['type' => 'wechat'] );
+			$payment = model( "Setting" )->getSettingInfo( ['key' => 'wechat'] );
 			$notice  = PayNoticeFacade::wechat( $this->getPayConfig( $payment['config'], 'wechat' ) );
 			if( $notice->check() === true ){
 				$data       = $notice->getData();
@@ -258,7 +212,7 @@ class Buy extends Server
 	public function wechatMiniNotify()
 	{
 		try{
-			$payment = model( "Payment" )->getPaymentInfo( ['type' => 'wechat'] );
+			$payment = model( "Setting" )->getSettingInfo( ['key' => 'wechat'] );
 			$notice  = PayNoticeFacade::wechat( $this->getPayConfig( $payment['config'], 'wechat_mini' ) );
 			if( $notice->check() === true ){
 				$data       = $notice->getData();
@@ -287,7 +241,7 @@ class Buy extends Server
 	public function wechatAppNotify()
 	{
 		try{
-			$payment = model( "Payment" )->getPaymentInfo( ['type' => 'wechat'] );
+			$payment = model( "Setting" )->getSettingInfo( ['key' => 'wechat'] );
 			$notice  = PayNoticeFacade::wechat( $this->getPayConfig( $payment['config'], 'wechat_app' ) );
 			if( $notice->check() === true ){
 				$data       = $notice->getData();
@@ -317,13 +271,13 @@ class Buy extends Server
 		$notify_url = "";
 		switch( $payment_channel ){
 		case 'wechat':
-			$notify_url = $this->request->domain()."/Server/Buy/wechatNotify";
+			$notify_url = isset( $config['callback_domain'] ) ? $config['callback_domain'] : $this->request->domain()."/Server/Buy/wechatNotify";
 		break;
 		case 'wechat_mini':
-			$notify_url = $this->request->domain()."/Server/Buy/wechatMiniNotify";
+			$notify_url = isset( $config['callback_domain'] ) ? $config['callback_domain'] : $this->request->domain()."/Server/Buy/wechatMiniNotify";
 		break;
 		case 'wechat_app':
-			$notify_url = $this->request->domain()."/Server/Buy/wechatAppNotify";
+			$notify_url = isset( $config['callback_domain'] ) ? $config['callback_domain'] : $this->request->domain()."/Server/Buy/wechatAppNotify";
 		break;
 		}
 
@@ -337,7 +291,7 @@ class Buy extends Server
 			'cert_client' => EASYSWOOLE_ROOT."/".isset( $config['apiclient_cert'] ) ? $config['apiclient_cert'] : null,
 			'cert_key'    => EASYSWOOLE_ROOT."/".isset( $config['apiclient_key'] ) ? $config['apiclient_key'] : null,
 			'log'         => [
-				'file'  => EASYSWOOLE_ROOT.'/Log/wechatpay.log',
+                'file' => EASYSWOOLE_ROOT . '/Log/wechatpay.log',
 				'level' => 'debug', // todo
 			],
 		];

@@ -561,7 +561,7 @@ class Buy
 				'order_id'    => $this->getOrderId(),
 				'msg'         => '买家下单',
 				'role'        => 'buyer',
-				'order_state' => \App\Logic\Order::state_pay,
+				'order_state' => \App\Logic\Order::state_new,
 			] );
 			// 更新商品库存
 			$this->updateGoodsStorageNum();

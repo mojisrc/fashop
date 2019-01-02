@@ -88,7 +88,7 @@ class Group extends Admin
             return $this->send(Code::error, [], $error);
         } else {
             $group_model = model('Group');
-            $info       = $group_model->getGroupInfo(['id' => $get['id']]);
+            $info        = $group_model->getGroupInfo(['id' => $get['id']]);
             $this->send(Code::success, ['info' => $info]);
         }
 
@@ -146,12 +146,12 @@ class Group extends Admin
             $group_goods       = [];
             if (isset($post['group_goods']) && is_array($post['group_goods'])) {
                 foreach ($post['group_goods'] as $key => $value) {
-                    if(intval($value['goods_id']) <= 0 || intval($value['goods_sku_id']) <= 0){
-                        return $this->send( Code::param_error, [], '必须选择商品规格' );
+                    if (intval($value['goods_id']) <= 0 || intval($value['goods_sku_id']) <= 0) {
+                        return $this->send(Code::param_error, [], '必须选择商品规格');
                     }
 
-                    if($value['captain_price'] > $value['group_price']){
-                        return $this->send( Code::param_error, [], '团长价不能大于拼团价' );
+                    if ($value['captain_price'] > $value['group_price']) {
+                        return $this->send(Code::param_error, [], '团长价不能大于拼团价');
                     }
                     $group_goods[$key]['group_id']      = $group_id;
                     $group_goods[$key]['goods_id']      = $value['goods_id'];
@@ -214,8 +214,8 @@ class Group extends Admin
             $data['end_time']         = strtotime($post['end_time']);
             $data['update_time']      = time();
 
-            $condition                = [];
-            $condition['id']          = $post['id'];
+            $condition       = [];
+            $condition['id'] = $post['id'];
 
             $group_model = model('Group');
             $group_model->startTrans();
@@ -230,17 +230,17 @@ class Group extends Admin
             $map               = [];
             $map['group_id']   = $post['id'];
             //查询活动商品sku ids
-            $goods_sku_ids     = $group_goods_model->getGroupGoodsIndexesColumn($map, '', 'goods_sku_id','id');
+            $goods_sku_ids = $group_goods_model->getGroupGoodsIndexesColumn($map, '', 'goods_sku_id', 'id');
 
             if (isset($post['group_goods']) && is_array($post['group_goods'])) {
 
                 foreach ($post['group_goods'] as $key => $value) {
-                    if(intval($value['goods_id']) <= 0 || intval($value['goods_sku_id']) <= 0){
-                        return $this->send( Code::param_error, [], '必须选择商品规格' );
+                    if (intval($value['goods_id']) <= 0 || intval($value['goods_sku_id']) <= 0) {
+                        return $this->send(Code::param_error, [], '必须选择商品规格');
                     }
 
-                    if($value['captain_price'] > $value['group_price']){
-                        return $this->send( Code::param_error, [], '团长价不能大于拼团价' );
+                    if ($value['captain_price'] > $value['group_price']) {
+                        return $this->send(Code::param_error, [], '团长价不能大于拼团价');
                     }
 
                     $group_goods[$key]['group_id']      = $post['id'];
@@ -253,26 +253,26 @@ class Group extends Admin
 
                 }
 
-                if($goods_sku_ids){
+                if ($goods_sku_ids) {
 
                     //提交的商品sku ids
-                    $group_goods_ids = array_column($group_goods,'goods_sku_id');
+                    $group_goods_ids = array_column($group_goods, 'goods_sku_id');
 
                     //交集
-                    $intersection_goods_sku_ids   = array_intersect($goods_sku_ids,$group_goods_ids);
+                    $intersection_goods_sku_ids = array_intersect($goods_sku_ids, $group_goods_ids);
 
                     //返回出现在第一个数组中但其他数组中没有的值 [新添加的sku]
-                    $difference_goods_sku_add_ids = array_diff($group_goods_ids,$goods_sku_ids);
+                    $difference_goods_sku_add_ids = array_diff($group_goods_ids, $goods_sku_ids);
 
                     //返回出现在第一个数组中但其他数组中没有的值 [已删除的sku]
-                    $difference_goods_sku_del_ids = array_diff($goods_sku_ids,$group_goods_ids);
+                    $difference_goods_sku_del_ids = array_diff($goods_sku_ids, $group_goods_ids);
 
                     //交集
-                    if($intersection_goods_sku_ids){
+                    if ($intersection_goods_sku_ids) {
                         $group_goods_updata = [];
 
                         foreach ($group_goods as $key => $value) {
-                            if(in_array($value['goods_sku_id'], $intersection_goods_sku_ids)){
+                            if (in_array($value['goods_sku_id'], $intersection_goods_sku_ids)) {
                                 unset($value['create_time']);
                                 $value['id']          = array_search($value['goods_sku_id'], $intersection_goods_sku_ids);
                                 $group_goods_updata[] = $value;
@@ -282,62 +282,62 @@ class Group extends Admin
                         $result = [];
                         $result = $group_goods_model->updateAllGroupGoods($group_goods_updata);
 
-                        if( !$result ){
+                        if (!$result) {
                             $group_model->rollback();// 回滚事务
-                            return $this->send( Code::error );
+                            return $this->send(Code::error);
                         }
 
                     }
 
                     //差集 [新添加的sku]
-                    if($difference_goods_sku_add_ids){
+                    if ($difference_goods_sku_add_ids) {
                         $group_goods_insert_data = [];
 
                         foreach ($group_goods as $key => $value) {
-                            if(in_array($value['goods_sku_id'], $difference_goods_sku_add_ids)){
+                            if (in_array($value['goods_sku_id'], $difference_goods_sku_add_ids)) {
                                 $group_goods_insert_data[] = $value;
                             }
                         }
 
                         $result = [];
                         $result = $group_goods_model->insertAllGroupGoods($group_goods_insert_data);
-                        if( !$result ){
+                        if (!$result) {
                             $group_model->rollback();// 回滚事务
-                            return $this->send( Code::error );
+                            return $this->send(Code::error);
                         }
                     }
 
                     //差集 [已删除的sku]
-                    if($difference_goods_sku_del_ids){
+                    if ($difference_goods_sku_del_ids) {
                         $map['goods_sku_id'] = ['in', $difference_goods_sku_del_ids];
-                        $result = [];
-                        $result = $group_goods_model->delGroupGoods($map);
+                        $result              = [];
+                        $result              = $group_goods_model->delGroupGoods($map);
 
-                        if( !$result ){
+                        if (!$result) {
                             $group_model->rollback();// 回滚事务
-                            return $this->send( Code::error );
+                            return $this->send(Code::error);
                         }
 
                     }
 
-                }else{
+                } else {
                     $result = [];
                     $result = $group_goods_model->insertAllGroupGoods($group_goods);
-                    if( !$result ){
+                    if (!$result) {
                         $group_model->rollback();// 回滚事务
-                        return $this->send( Code::error );
+                        return $this->send(Code::error);
                     }
 
                 }
 
-            }else{//为空代表删除所有goods_sku,前提：该活动这之前存在商品
+            } else {//为空代表删除所有goods_sku,前提：该活动这之前存在商品
 
-                if($goods_sku_ids){
+                if ($goods_sku_ids) {
                     //删除活动下商品
-                    $group_goods_result = $group_goods_model->delGroupGoods( $map );
-                    if( !$group_goods_result ){
+                    $group_goods_result = $group_goods_model->delGroupGoods($map);
+                    if (!$group_goods_result) {
                         $group_model->rollback();// 回滚事务
-                        return $this->send( Code::error );
+                        return $this->send(Code::error);
                     }
                 }
 
@@ -369,7 +369,7 @@ class Group extends Admin
             $group_goods_model = model('GroupGoods');
 
             //查询活动
-            $group_data = $group_model->getGroupInfo(['id' => $get['group_id']], '',  '*');
+            $group_data = $group_model->getGroupInfo(['id' => $get['group_id']], '', '*');
             if (!$group_data) {
                 return $this->send(Code::param_error);
             }
@@ -389,11 +389,11 @@ class Group extends Admin
                 $param['not_in_ids'] = $goods_ids;
             }
 
-            $goodsLogic = new \App\Logic\GoodsSearch( $param );
-            return $this->send( Code::success, [
+            $goodsLogic = new \App\Logic\GoodsSearch($param);
+            return $this->send(Code::success, [
                 'total_number' => $goodsLogic->count(),
                 'list'         => $goodsLogic->list(),
-            ] );
+            ]);
         }
 
     }
@@ -422,17 +422,17 @@ class Group extends Admin
             }
 
             //查询活动商品ids
-            $goods_ids = $group_goods_model->getGroupGoodsColumn(['group_id' => $get['group_id']], '', 'goods_id');
+            $goods_ids              = $group_goods_model->getGroupGoodsColumn(['group_id' => $get['group_id']], '', 'goods_id');
             $intersection_goods_ids = [];
             if ($goods_ids) {
-                $online_goods_ids = model('Goods')->getGoodsColumn(['id'=>['in',$goods_ids], 'is_on_sale' => 1], 'id');
+                $online_goods_ids = model('Goods')->getGoodsColumn(['id' => ['in', $goods_ids], 'is_on_sale' => 1], 'id');
                 //交集 group_goods表和goods表的商品交集
                 $intersection_goods_ids = array_values(array_intersect($goods_ids, $online_goods_ids));
 
                 //返回出现在第一个数组中但其他数组中没有的值 [将要删除的商品]
-                $difference_goods_del_ids = array_diff($goods_ids,$online_goods_ids);
+                $difference_goods_del_ids = array_diff($goods_ids, $online_goods_ids);
 
-                if($difference_goods_del_ids){
+                if ($difference_goods_del_ids) {
                     //删除活动下失效商品
                     $group_goods_result = $group_goods_model->delGroupGoods(['group_id' => $get['group_id'], 'goods_id' => array('in', $difference_goods_del_ids)]);
                     if (!$group_goods_result) {
@@ -478,15 +478,15 @@ class Group extends Admin
             }
 
             //查询活动商品sku ids
-            $goods_sku_ids = $group_goods_model->getGroupGoodsColumn(['group_id' => $get['group_id'],'goods_id'=>$get['goods_id']], '', 'goods_sku_id');
+            $goods_sku_ids = $group_goods_model->getGroupGoodsColumn(['group_id' => $get['group_id'], 'goods_id' => $get['goods_id']], '', 'goods_sku_id');
 
             if ($goods_sku_ids) {
-                $online_goods_sku_ids = model('GoodsSku')->getGoodsSkuColumn(['id'=>['in',$goods_sku_ids]], 'id');
+                $online_goods_sku_ids = model('GoodsSku')->getGoodsSkuColumn(['id' => ['in', $goods_sku_ids]], 'id');
 
                 //返回出现在第一个数组中但其他数组中没有的值 [将要删除的sku]
-                $difference_goods_sku_del_ids = array_diff($goods_sku_ids,$online_goods_sku_ids);
+                $difference_goods_sku_del_ids = array_diff($goods_sku_ids, $online_goods_sku_ids);
 
-                if($difference_goods_sku_del_ids){
+                if ($difference_goods_sku_del_ids) {
                     //删除活动下失效商品sku
                     $group_goods_result = $group_goods_model->delGroupGoods(['group_id' => $get['group_id'], 'goods_sku_id' => array('in', $difference_goods_sku_del_ids)]);
                     if (!$group_goods_result) {
@@ -519,7 +519,7 @@ class Group extends Admin
      */
     public function showSet()
     {
-        $post   = $this->post;
+        $post  = $this->post;
         $error = $this->validate($post, 'Admin/Group.info');
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
@@ -533,13 +533,13 @@ class Group extends Admin
                 return $this->send(Code::param_error);
             } else {
 
-                if($info['is_show'] == 1){
+                if ($info['is_show'] == 1) {
                     $is_show = 0;
-                }else{
-                    if ( time() >= $info['start_time'] && time() <= $info['end_time'] && $info['is_show'] == 0) {
-                        $is_show_data            = $group_model->getGroupInfo(['is_show'=>1]);
-                        if($is_show_data){
-                            return $this->send( Code::param_error, [], '请关闭其他生效的活动再进行操作' );
+                } else {
+                    if (time() >= $info['start_time'] && time() <= $info['end_time'] && $info['is_show'] == 0) {
+                        $is_show_data = $group_model->getGroupInfo(['is_show' => 1]);
+                        if ($is_show_data) {
+                            return $this->send(Code::param_error, [], '请关闭其他生效的活动再进行操作');
 
                         }
 
@@ -547,7 +547,7 @@ class Group extends Admin
                     }
                 }
 
-                if(!isset($is_show)){
+                if (!isset($is_show)) {
                     return $this->send(Code::param_error);
                 }
 
@@ -570,7 +570,7 @@ class Group extends Admin
      */
     public function del()
     {
-        $post   = $this->post;
+        $post  = $this->post;
         $error = $this->validate($post, 'Admin/Group.del');
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
@@ -585,12 +585,12 @@ class Group extends Admin
                 return $this->send(Code::param_error);
             } else {
 
-                if($info['is_show'] == 1){
-                    return $this->send( Code::param_error, [], '请使活动失效再进行操作' );
+                if ($info['is_show'] == 1) {
+                    return $this->send(Code::param_error, [], '请使活动失效再进行操作');
 
-                }else{
-                    if ( time() >= $info['start_time'] && time() <= $info['end_time'] && $info['is_show'] == 0) {
-                        return $this->send( Code::param_error, [], '请使活动过期再进行操作' );
+                } else {
+                    if (time() >= $info['start_time'] && time() <= $info['end_time'] && $info['is_show'] == 0) {
+                        return $this->send(Code::param_error, [], '请使活动过期再进行操作');
                     }
                 }
                 $group_model->startTrans();
@@ -611,6 +611,56 @@ class Group extends Admin
                 return $this->send(Code::success);
             }
 
+        }
+    }
+
+    /**
+     * 商品列表
+     * @method GET
+     * @author 孙泉
+     */
+    public function pageGoods()
+    {
+        $param                   = $this->get;
+        $group_model             = model('Group');
+        $group_goods_model       = model('GroupGoods');
+        $condition               = [];
+        $condition['is_show']    = 1;
+        $condition['start_time'] = ['elt', time()];
+
+        //查询活动
+        $group_data = $group_model->getGroupInfo($condition);
+        if (!$group_data) {
+            $this->send(Code::success, [
+                'total_number' => 0,
+                'list'         => [],
+            ]);
+        } else {
+
+            $group_goods_ids = $group_goods_model->getGroupGoodsColumn(['group_id' => $group_data['id']], '', 'goods_id');
+
+            if (!$group_goods_ids) {
+                $this->send(Code::success, [
+                    'total_number' => 0,
+                    'list'         => [],
+                ]);
+
+            } else {
+                $min_group_price = $group_goods_model->where(['group_id' => $group_data['id'], 'goods_id' => ['in', $group_goods_ids]])->group('goods_id')->column('goods_id,min(group_price)');
+                $param['ids']    = $group_goods_ids;
+                $param['page']   = $this->getPageLimit();
+                $goodsLogic      = new \App\Logic\GoodsSearch($param);
+                $goods_count     = $goodsLogic->count();
+                $goods_list      = $goodsLogic->list();
+                foreach ($goods_list as $key => $value) {
+                    $goods_list[$key]['group_price'] = $min_group_price[$value['id']];
+                }
+                $this->send(Code::success, [
+                    'info'         => ['group_id' => $group_data['id'], 'limit_buy_num' => $group_data['limit_buy_num']],
+                    'total_number' => $goods_count,
+                    'list'         => $goods_list,
+                ]);
+            }
         }
     }
 

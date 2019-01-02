@@ -275,7 +275,40 @@ class Page extends Validate
 						return '文本导航配置项有误';
 					}
 				break;
-				default:
+                case 'goods_group':
+                    if( empty( $body['options'] ) || !is_array( $body['options'] ) || count( $body['options'] ) != 4 ){
+                        return '商品列表配置项有误';
+                    }
+                    if( !in_array(intval($body['options']['source_type']), ['auto','choose']) ){
+                        return '数据来源：必须是自动、选择';
+                    }
+                    //如果是手动 则需要检查商品信息
+                    if($body['options']['source_type'] == 'choose'){
+                        $goods_result = $this->checkGroupGoods( $body['data'] );
+                        if( $goods_result !== true ){
+                            return '商品配置'.$goods_result;
+                        }
+                    }
+                    if( !isset( $body['options']['goods_sort'] ) ){
+                        return '商品列表错误：商品排序必填';
+                    }
+                    if( !$this->in( $body['options']['goods_sort'], [1, 2, 3] ) ){
+                        return '商品列表错误：商品排序必须是最新商品（上架从晚到早）,最热商品（销量从高到低）,商品排序（序号有大到小）';
+                    }
+                    if( !isset( $body['options']['goods_display_num'] ) || intval($body['options']['goods_display_num']) <1  || intval($body['options']['goods_display_num']) >12){
+                        return '商品列表错误：显示数量必填，至少为1，至多为12';
+                    }
+                    if( !isset( $body['options']['layout_style'] ) ){
+                        return '商品配置错误：布局方式必选';
+                    }
+                    if( !in_array(intval($body['options']['layout_style']), [1,2,4,5]) ){
+                        return '商品配置错误：布局方式必须是1、2、4、5';
+                    }
+//                    if( !isset( $body['options']['goods_display_field'] ) || empty( $body['options']['goods_display_field'] ) || !is_array( $body['options']['goods_display_field'] ) || count( $body['options']['goods_display_field'] ) < 1 ){
+//                        return '商品列表错误：显示内容必填';
+//                    }
+                    break;
+                    default:
 					return '模板内容无对应类型';
 				}
 			}
@@ -425,4 +458,30 @@ class Page extends Validate
 		}
 		return true;
 	}
+    /**
+     * checkGroupGoods 检测商品信息
+     * @param array $value 参数
+     */
+    private function checkGroupGoods( array $value )
+    {
+        if( empty( $value ) || count( $value ) < 1 ){
+            return '信息有误';
+        }
+        foreach( $value as $goods ){
+            if( !isset( $goods['id'] ) ){
+                return '错误：商品ID必填';
+            }
+            if( !isset( $goods['img'] ) ){
+                return '错误：商品图片路径必填';
+            }
+            if( !isset( $goods['price'] ) ){
+                return '错误：商品销售价必填';
+            }
+            if( !isset( $goods['group_price'] ) ){
+                return '错误：商品拼团价必填';
+            }
+        }
+        return true;
+    }
+
 }
