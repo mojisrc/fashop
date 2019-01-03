@@ -321,12 +321,12 @@ class UserSearch
 		if( $this->keywordsType && $this->keywords ){
 			switch( $this->keywordsType ){
 			case 'name':
-                $this->condition["(SELECT name FROM ".$table_user_profile." WHERE user_id=".$table_user.".user_id)"] = [
+                $this->condition["(SELECT name FROM ".$table_user_profile." WHERE user_id=".$table_user.".id)"] = [
                     'like',
                     '%'.$this->keywords.'%',
                 ];			break;
 			case 'nickname':
-                $this->condition["(SELECT nickname FROM ".$table_user_profile." WHERE user_id=".$table_user.".user_id)"] = [
+                $this->condition["(SELECT nickname FROM ".$table_user_profile." WHERE user_id=".$table_user.".id)"] = [
                     'like',
                     '%'.$this->keywords.'%',
                 ];
