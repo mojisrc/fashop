@@ -103,11 +103,11 @@ class Goods extends Validate
 
 				}
 			}
-			if( !isset( $sku['price'] ) ){
-				return '规格price必填';
+			if( !isset( $sku['price'] ) || floatval($sku['price']) <=0){
+				return '规格价格必须大于0';
 			}
-			if( !isset( $sku['stock'] ) ){
-				return '规格stock必填';
+			if( !isset( $sku['stock'] )  || floatval($sku['stock']) <=0){
+				return '规格库存必须大于0';
 			}
 		}
 		return true;
