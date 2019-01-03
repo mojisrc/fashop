@@ -18,3 +18,4 @@ src/swoole_log.txt
 /Runtime/Temp/*
 /Upload/*
 /Conf/config/database.php
+/tests/tmp
