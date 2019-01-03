@@ -197,11 +197,7 @@ class Register
             $wechat_openid = $this->options['wechat_openid'];
             $this->setWechatOpenid($wechat_openid);
             $wechat_openid = $this->getWechatOpenid();
-
-            // $user_id = Db::name( 'User' )->where( ['wechat_openid' => $wechat_openid] )->value( 'id' );
-            $user_id = model('UserOpen')->getUserOpenValue(['openid' => $wechat_openid], '', 'user_id');
-
-
+            $user_id       = model('UserOpen')->getUserOpenValue(['openid' => $wechat_openid], '', 'user_id');
             if ($user_id > 0) {
                 throw new \App\Utils\Exception("wechat openid exist", Code::user_wechat_openid_exist);
             }

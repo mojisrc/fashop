@@ -74,7 +74,7 @@ class Factory
 	 */
 	public function __construct()
 	{
-		$info               = model( 'Payment' )->getPaymentInfo( ['type' => 'wechat'] );
+		$info               = model( 'Setting' )->getSettingInfo( ['key' => 'wechat'] );
 		$config             = [
 			'debug'         => \EasySwoole\Config::getInstance()->getConf( 'DEBUG' ),
 			'app_id'        => $info['config']['app_id'], // AppID
