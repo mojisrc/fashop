@@ -8,7 +8,6 @@ composer.lock
 # easySwoole
 /Log/
 /Temp/
-/App/Conf/Config.php
 easyswoole
 easyswoole.install
 src/swoole_log.txt
@@ -18,6 +17,4 @@ src/swoole_log.txt
 /Runtime/Log/*
 /Runtime/Temp/*
 /Upload/*
-/dist/*
-/Conf/*
-/tests/*
+/Conf/config/database.php
