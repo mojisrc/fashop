@@ -150,7 +150,15 @@ class Group extends Admin
                         return $this->send(Code::param_error, [], '必须选择商品规格');
                     }
 
-                    if ($value['captain_price'] > $value['group_price']) {
+                    if (floatval($value['captain_price']) <= 0) {
+                        return $this->send(Code::param_error, [], '团长价必须大于0');
+                    }
+
+                    if (floatval($value['group_price']) <= 0) {
+                        return $this->send(Code::param_error, [], '拼团价必须大于0');
+                    }
+
+                    if (floatval($value['captain_price']) > floatval($value['group_price'])) {
                         return $this->send(Code::param_error, [], '团长价不能大于拼团价');
                     }
                     $group_goods[$key]['group_id']      = $group_id;
@@ -239,10 +247,17 @@ class Group extends Admin
                         return $this->send(Code::param_error, [], '必须选择商品规格');
                     }
 
-                    if ($value['captain_price'] > $value['group_price']) {
-                        return $this->send(Code::param_error, [], '团长价不能大于拼团价');
+                    if (floatval($value['captain_price']) <= 0) {
+                        return $this->send(Code::param_error, [], '团长价必须大于0');
                     }
 
+                    if (floatval($value['group_price']) <= 0) {
+                        return $this->send(Code::param_error, [], '拼团价必须大于0');
+                    }
+
+                    if (floatval($value['captain_price']) > floatval($value['group_price'])) {
+                        return $this->send(Code::param_error, [], '团长价不能大于拼团价');
+                    }
                     $group_goods[$key]['group_id']      = $post['id'];
                     $group_goods[$key]['goods_id']      = $value['goods_id'];
                     $group_goods[$key]['goods_sku_id']  = $value['goods_sku_id'];
