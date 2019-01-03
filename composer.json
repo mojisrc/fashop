@@ -27,7 +27,6 @@
         "yansongda/pay": "dev-master",
         "easyswoole/wsdebug": "^1.0",
         "phpoffice/phpspreadsheet":"dev-master",
-        "guzzlehttp/guzzle": "~6.0"
     },
     "autoload": {
         "psr-4": {
