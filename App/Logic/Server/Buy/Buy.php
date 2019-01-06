@@ -540,7 +540,7 @@ class Buy
 					'goods_title'       => $cartItem->getGoodsTitle(),
                     'goods_spec'        => $cartItem->getGoodsSpec(),
 					'goods_price'       => $cartItem->getGoodsPrice(),
-					'goods_pay_price'   => $cartItem->getGoodsPrice(), //暂时先用商品金额 这需要考虑优惠券 满减等 如果运费是单独goods_freight_fee字段 则不需要考虑运费
+					'goods_pay_price'   => $cartItem->getGoodsPrice()*$cartItem->getGoodsNum(),
 					'goods_num'         => $cartItem->getGoodsNum(),
 					'goods_img'         => $cartItem->getGoodsImg(),
 					'goods_freight_fee' => $cartItem->getGoodsFreightFee(),

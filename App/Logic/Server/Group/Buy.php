@@ -695,7 +695,7 @@ class Buy
                 'goods_title'       => $goods->getGoodsTitle(),
                 'goods_spec'        => $goods->getGoodsSpec(),
                 'goods_price'       => $goods->getGoodsPrice(),
-                'goods_pay_price'   => $this->getGoodsGroupPrice(), //暂时先用商品拼团金额
+                'goods_pay_price'   => $this->getGoodsGroupPrice()*$goods->getGoodsNum(),
                 'goods_num'         => $goods->getGoodsNum(),
                 'goods_img'         => $goods->getGoodsImg(),
                 'goods_freight_fee' => $goods->getGoodsFreightFee(),

@@ -23,7 +23,7 @@ class OrderTest extends BaseTestCase
     private static $loginAccessToken;
     private static $loginAccessTokenExpireIn;
     /**
-     * 后台用户
+     * 订单列表
      * @method GET
      * @param
      */

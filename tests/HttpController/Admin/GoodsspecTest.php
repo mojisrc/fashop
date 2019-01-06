@@ -24,27 +24,137 @@ class GoodsTest extends BaseTestCase
     private static $loginAccessTokenExpireIn;
 
     /**
-     * 添加商品分类
-     * @param int pid 父级id，如果不填为一级
-     * @param string name 分类名称
-     * @param string icon 商品分类图标，图片地址
-     * @param int sort 排序数字，越小越靠前，默认为0
+     * 添加商品规格
+     * @param int name 规格名称
+     * @param string sort 排序数字，越小越靠前，默认为0
      * @method POST
      * @param
      */
     public function testAdd()
     {
-        $response = self::$client->request( 'POST', "admin/goodscategory/add", [
+        $response = self::$client->request( 'POST', "admin/goodsspec/add", [
             'form_params' => [
-                'pid' => 0,
-                'name' => '分类名称',
-                'icon' => 'https://www.fashop.com/images/1.png',
-                'sort' => 999,
+                'name' => '规格名称',
+                'sort' => 0,
             ]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
     }
+
+
+
+    /**
+     * 修改商品规格
+     * @param int id 	规格id
+     * @param int name 规格名称
+     * @param string sort 排序数字，越小越靠前，默认为0
+     * @method POST
+     * @param
+     */
+    public function testEdit()
+    {
+        $response = self::$client->request( 'POST', "admin/goodsspec/edit", [
+            'form_params' => [
+                'id' => 1,
+                'name' => '规格名称',
+                'sort' => 0,
+            ]
+        ]);
+        $return_data = json_decode($response->getBody(), true);
+        $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
+    }
+
+
+    /**
+     * 商品规格列表
+     * @method GET
+     * @param
+     */
+    public function testList()
+    {
+        $response = self::$client->request( 'GET', "admin/goodsspec/list", []);
+        $return_data = json_decode($response->getBody(), true);
+        $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
+    }
+
+
+
+    /**
+     * 删除商品规格
+     * @param int id 	规格id
+     * @method POST
+     * @param
+     */
+    public function testDel()
+    {
+        $response = self::$client->request( 'POST', "admin/goodsspec/del", [
+            'query' => [
+                'id' => 2,
+            ]
+        ]);
+        $return_data = json_decode($response->getBody(), true);
+        $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
+    }
+
+
+
+    /**
+     * 商品规格值列表
+     * @param int id 	规格id
+     * @method GET
+     * @param
+     */
+    public function testList()
+    {
+        $response = self::$client->request( 'GET', "admin/Goodsspecvalue/list", []);
+        $return_data = json_decode($response->getBody(), true);
+        $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
+    }
+
+
+    /**
+     * 添加商品规格值
+     * @param int spec_id 	规格id
+     * @param int name 	规格值名称
+     * @method POST
+     * @param
+     */
+    public function testAdd()
+    {
+        $response = self::$client->request( 'POST', "admin/Goodsspecvalue/add", [
+            'form_params' => [
+                'spec_id' => 2,
+                'name' => '规格值名称',
+            ]
+        ]);
+        $return_data = json_decode($response->getBody(), true);
+        $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
+    }
+
+
+
+    /**
+     * 删除商品规格值
+     * @param int id 规格值id
+     * @method POST
+     * @param
+     */
+    public function testDel()
+    {
+        $response = self::$client->request( 'POST', "admin/Goodsspecvalue/del", [
+            'query' => [
+                'id' => 2,
+            ]
+        ]);
+        $return_data = json_decode($response->getBody(), true);
+        $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
+    }
+
+
+
+
+
 
 
 
