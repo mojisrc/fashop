@@ -40,7 +40,7 @@ docker inspect fashopv1
 假设挂载的目录为/var/www/fashop_temp,进入这个目录，你将看到fashop的源码，将该目录代码移动到你宿主机指定的位置，我移动到了/var/www/fashop_local
 ## 启动容器
 
-在/var/www/fashop_local里，你讲看到Dockerfile和docker-compose.yml
+在/var/www/fashop_local里，你将看到Dockerfile和docker-compose.yml
 
 * Dockerfile（运行下面命令，生成自己的镜像，可用于生产环境）
 
