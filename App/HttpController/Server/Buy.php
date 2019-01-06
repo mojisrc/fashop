@@ -110,11 +110,11 @@ class Buy extends Server
 	 */
 	public function pay()
 	{
-        if( $this->verifyResourceRequest() !== true ){
+		if( $this->verifyResourceRequest() !== true ){
 			$this->send( Code::user_access_token_error );
 		} else
 
-        if( $this->validate( $this->post, 'Server/Buy.pay' ) !== true ){
+			if( $this->validate( $this->post, 'Server/Buy.pay' ) !== true ){
 				$this->send( Code::param_error, [], $this->getValidate()->getError() );
 			} else{
 				try{
@@ -174,8 +174,7 @@ class Buy extends Server
 					$this->send( Code::server_error );
 				}
 			}
-		}
-
+	}
 
 	/**
 	 * 微信异步通知处理
@@ -291,7 +290,7 @@ class Buy extends Server
 			'cert_client' => EASYSWOOLE_ROOT."/".isset( $config['apiclient_cert'] ) ? $config['apiclient_cert'] : null,
 			'cert_key'    => EASYSWOOLE_ROOT."/".isset( $config['apiclient_key'] ) ? $config['apiclient_key'] : null,
 			'log'         => [
-                'file' => EASYSWOOLE_ROOT . '/Log/wechatpay.log',
+				'file'  => EASYSWOOLE_ROOT.'/Log/wechatpay.log',
 				'level' => 'debug', // todo
 			],
 		];

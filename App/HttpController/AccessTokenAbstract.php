@@ -16,7 +16,6 @@ namespace App\HttpController;
 use EasySwoole\Core\Component\Spl\SplArray;
 use ezswoole\Controller;
 use App\Logic\AccessToken as AccessTokenLogic;
-use EasySwoole\Config as AppConfig;
 
 /**
  * Class AccessTokenAbstract
@@ -112,23 +111,4 @@ abstract class AccessTokenAbstract extends Controller
 		$data['assets']       = $user_assets_model->getUserAssetsInfo( $condition );
 		return $data;
 	}
-
-
-	protected function send( $code = 0, $data = [], $message = null, $status = 200 )
-	{
-		$this->response()->withAddedHeader( 'Access-Control-Allow-Origin', AppConfig::getInstance()->getConf( 'response.access_control_allow_origin' ) );
-		$this->response()->withAddedHeader( 'Content-Type', 'application/json; charset=utf-8' );
-		$this->response()->withAddedHeader( 'Access-Control-Allow-Headers', AppConfig::getInstance()->getConf( 'response.access_control_allow_headers' ) );
-		$this->response()->withAddedHeader( 'Access-Control-Allow-Methods', AppConfig::getInstance()->getConf( 'response.access_control_allow_methods' ) );
-
-		$this->response()->withStatus( $status );
-		$content = [
-			"code"   => $code,
-			"result" => $data,
-			"msg"    => $message,
-		];
-		$this->response()->write( json_encode( $content, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) );
-		wsdebug()->send( $content, 'debug' );
-	}
-
 }

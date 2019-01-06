@@ -9,6 +9,7 @@ use EasySwoole\Core\Http\Response;
 use EasySwoole\Core\Swoole\EventRegister;
 use EasySwoole\Core\Swoole\ServerManager;
 use EasySwoole\Core\AbstractInterface\EventInterface;
+use EasySwoole\Core\Swoole\EventHelper;
 use \ezswoole\App;
 
 class EasySwooleEvent implements EventInterface
@@ -27,11 +28,15 @@ class EasySwooleEvent implements EventInterface
 	{
 		\ezswoole\Init::register();
 
+		EventHelper::registerDefaultOnMessage($register,\App\WebSocket\DispatchParser::class);
+
 		$register->add( 'workerStart', function( \swoole_websocket_server $server, $worker_id ){
 			if( PHP_OS === 'Linux' ){
 				swoole_set_process_name( 'fashop' );
 			}
 			if( $worker_id === 0 ){
+				// 清理客户端用户记录
+				\App\Logic\Fd::clearAll();
 				\ezswoole\Cron::getInstance()->run();
 			}
 		} );
