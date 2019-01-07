@@ -13,6 +13,8 @@
 
 namespace App\Logic;
 
+use Yansongda\Pay\Pay;
+
 class OrderRefund
 {
     const order_no_need_lock = 1;
@@ -91,11 +93,11 @@ class OrderRefund
      * @param array $data
      * @throws \Exception
      */
-    public function handleRefund(array $refund, array $data)
+    public function handle(array $refund, array $data)
     {
-        $refund_model          = model('OrderRefund');
-        $order_goods_model     = model('OrderGoods');
-        $order_model           = model('Order');
+        $refund_model      = model('OrderRefund');
+        $order_goods_model = model('OrderGoods');
+        $order_model       = model('Order');
         $refund_model->startTrans();
 
         $condition                 = [];
@@ -232,4 +234,61 @@ class OrderRefund
 
     }
 
+
+    /**
+     * 进行退款操作 原路返回
+     * @param array $refund
+     * @throws \Exception
+     */
+    public function refund(array $refund)
+    {
+        $refund_model          = model('OrderRefund');
+        $order_model           = model('Order');
+        $condition             = [];
+        $condition['order_id'] = $refund['order_id'];
+        $payment_code          = $order_model->getOrderValue(['id' => $refund['order_id']], 'payment_code');
+        if (!$payment_code) {
+            throw new \Exception('获取订单支付方式名称失败');
+        }
+
+        switch ($payment_code) {
+            case 'wechat':
+                # code...
+                break;
+            case 'wechat_mini':
+                $order = [
+                    'transaction_id' => $refund['trade_no'], //transaction_id
+                    'out_refund_no'  => time(),
+                    'total_fee'      => $refund['order_amount'] * 100,
+                    'refund_fee'     => $refund['refund_amount'] * 100,
+                    'refund_desc'    => '订单' . $refund['order_sn'] . '退款',
+                    'type'           => 'miniapp',
+                ];
+
+                $result = Pay::wechat($this->getPayConfig())->refund($order);
+
+                if ($result) {
+                    if ($result->result_code == 'SUCCESS' && $result->return_code == 'SUCCESS') {
+                        $updata['refund_no']    = $result->transaction_id;
+                        $updata['handle_state'] = 30;
+                        $updata['success_time'] = time();//退款回调完成时间
+                        $result                 = $refund_model->updateOrderRefund(['id' => $refund['id']], $updata);
+                        if (!$result) {
+                            throw new \Exception('退款失败');
+                        }
+                    } else {
+                        throw new \Exception('退款失败');
+                    }
+
+                } else {
+                    throw new \Exception('退款失败');
+                }
+
+                break;
+            case 'wechat_app':
+                # code...
+                break;
+        }
+        return true;
+    }
 }

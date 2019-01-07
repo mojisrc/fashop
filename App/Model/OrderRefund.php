@@ -160,7 +160,17 @@ class OrderRefund extends Model
 	{
 		return !!$this->update( $data, $condition, true )->saveResult;
 	}
-
+    /**
+     * 修改信息
+     * @param  [type] $update           [更新数据]
+     * @param  [type] $condition        [条件]
+     * @param  [type] $condition_str    [条件]
+     * @return [type]                   [数据]
+     */
+    public function updateOrderRefund($condition = array(), $update = array())
+    {
+        return $this->save($update, $condition);
+    }
 	/**
 	 * 取退款记录
 	 *
