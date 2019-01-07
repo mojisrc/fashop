@@ -23,15 +23,6 @@ use ezswoole\Db;
  */
 class Area extends Server
 {
-	public function test(){
-		// call方法接受string
-		\App\Broadcast\Dispatch::call( json_encode( [
-			'action'  => 'admin.order.pay',
-			'payload' => [],
-			'confirm'=>true,
-		] ) );
-		$this->send(Code::success);
-	}
 	/**
 	 * 地区列表
 	 * @method GET

@@ -42,7 +42,6 @@ class Setting extends Validate
 
             'add' => [
                 'key',
-                'name',
                 'config',
                 'status',
             ],
@@ -50,7 +49,6 @@ class Setting extends Validate
             'edit' => [
                 'id',
                 'key',
-                'name',
                 'config',
                 'status',
             ],
