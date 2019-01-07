@@ -8734,7 +8734,7 @@ insert  into `fa_setting`(`key`,`name`,`config`,`status`,`remark`,`delete_time`)
 
 ('alipay','支付宝',NULL,0,'支付宝支付的配置',NULL),
 
-('wechat','微信','{\"key\": \"gLrHJx1z5gBAcvYjsLBzGksmsQKiN6uQ\", \"appid\": \"wx1a76ca32a2015cda\", \"app_id\": \"wx8467ff6099efc725\", \"mch_id\": \"1517962471\", \"mini_app_id\": \"wx78cd8e64245fbb32\", \"apiclient_key\": \"Upload/cert/1543762360835-3.txt\", \"apiclient_cert\": \"Upload/cert/1543763919693-3.txt\", \"mini_app_secret\": \"8a8964880bd43afc35d11076a538f952\"}',1,'微信的所有配置',NULL);
+('wechat','微信',NULL,0,'微信支付的配置',NULL);
 
 /*Table structure for table `fa_shipper` */
 
