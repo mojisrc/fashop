@@ -49,7 +49,9 @@ class OrderRefund extends Validate
 			'receive' => [
 				'id',
 			],
-
+            'refund' => [
+                'id',
+            ],
 		];
 
 }
