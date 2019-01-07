@@ -31,7 +31,7 @@ class Orderrefund extends Admin
 	 * @param string $keywords      关键词
 	 * @param array  $create_time   时间区间[开始时间戳,结束时间戳]
 	 * @param int    $refund_type   申请类型:1为仅退款,2为退货退款
-	 * @param int    $handle_state  退款状态 1申请退款，等待商家确认 2同意申请，等待买家退货 3买家已发货，等待收货  4已收货，确认退款 5退款成功 6退款关闭
+	 * @param int    $refund_state 退款状态 1 申请退款，等待商家确认 2同意申请，等待买家退货 3买家已发货，等待收货  4已收货，确认退款 5退款成功 6退款关闭 7同意退款，仅退款 8拒绝(驳回)
 	 * @param int    $order_type    排序 1申请时间早到晚  2申请时间晚到早
 	 * @author   孙泉
 	 */
@@ -64,8 +64,6 @@ class Orderrefund extends Admin
 	}
 
 	/**
-	 * todo 封装logic
-	 * todo 增加原路返回，要注意退款金额是设置的
 	 * 退款审核
 	 * @method POST
 	 * @param int    $id
@@ -85,123 +83,22 @@ class Orderrefund extends Admin
 				$refund_model = model( 'OrderRefund' );
 				// 判断是否已经处理
 				$refund = $refund_model->getOrderRefundInfo( ['id' => $this->post['id']] );
-				if( $refund['handle_state'] == $this->post['handle_state'] ){
-					$this->send( Code::param_error, [], "不可重复设置状态" );
-				} else{
-					$refund_model->startTrans();
-					$order_goods_model = model( 'OrderGoods' );
-					$order_model       = model( 'Order' );
-					switch( $this->post['handle_state'] ){
-					case  RefundLogic::refuse :
-						// 更改退款状态
-						$result = $refund_model->editOrderRefund( ['id' => $this->post['id']], [
-							'handle_state'   => RefundLogic::refuse,
-							'handle_time'    => time(),
-							'handle_message' => isset( $this->post['handle_message'] ) ? $this->post['handle_message'] : null,
-							'is_close'       => RefundLogic::close,
-						] );
-						if( !$result ){
-							$refund_model->rollback();
-							return $this->send( Code::error );
-						}
-						// 拒绝 ：恢复 商品的锁定状态，判断是否还需要锁定订单
-						$order_goods_res = $order_goods_model->editOrderGoods( [
-							'id'         => $refund['order_goods_id'],
-							'lock_state' => 1,
-						], [
-							'lock_state'          => 0,
-							'refund_handle_state' => RefundLogic::refuse,
-							'refund_id'           => 0,
-						] );
-						// 子订单解锁
-						if( !$order_goods_res ){
-							$refund_model->rollback();
-							return $this->send( Code::error, [], "退款订单商品的状态错误" );
-						}
-						// 该总订单下已锁定未关闭的退款记录，用处：判断是否解锁主订单状态
-						$exist_lock = $refund_model->where( [
-							'order_id' => $refund['order_id'],
-							'is_close' => RefundLogic::unclose,
-						] )->find();
-						if( !$exist_lock ){
-							// 解锁总订单
-							$order_res = $order_model->editOrder( [
-								'id'         => $refund['order_id'],
-								'lock_state' => ['neq', 0],
-							], [
-								'lock_state'   => 0,
-								'delay_time'   => time(),
-								'refund_state' => 0 // 退款状态:0是无退款,1是部分退款,2是全部退款(2的状态v1没用到)
-							] );
-							if( !$order_res ){
-								$refund_model->rollback();
-								return $this->send( Code::error, [], "退款的主订单退款状态错误" );
-							}
-						}
-						$refund_model->commit();
-						$this->send( Code::success );
-					break;
-					case RefundLogic::agree :
-
-						if($refund['refund_type'] == 2){
-						    $refund_update_state = RefundLogic::agree;
-                        }else{
-                            $refund_update_state = RefundLogic::complete;
+				if(!$refund){
+                    return $this->send( Code::param_error, [], "查询退款信息失败" );
+                }else{
+                    if( $refund['handle_state'] == $this->post['handle_state'] ){
+                        return $this->send( Code::param_error, [], "不可重复设置状态" );
+                    } else{
+                        try {
+                            $refund_logic       = new RefundLogic();
+                            $refund_logic->handleRefund($refund, (array)$this->post);
+                            return $this->send(Code::success);
+                        } catch (\Exception $e) {
+                            return $this->send(Code::error, [], $e->getMessage());
                         }
-
-						// 判断金额是否大于 总商品价格 + 运费（统一运费或者运费模板））
-						if( $refund['refund_amount'] > ($refund['goods_pay_price'] + $refund['goods_freight_fee']) ){
-							return $this->send( Code::error, [], '退款金额不得大于可退金额' );
-						}
-
-						// 更改退款状态
-						$result = $refund_model->editOrderRefund( ['id' => $this->post['id']], [
-							'refund_amount'  => $refund['refund_amount'],
-							'handle_state'   => $refund_update_state,
-							'handle_time'    => time(),
-							'handle_message' => isset( $this->post['handle_message'] ) ? $this->post['handle_message'] : null,
-						] );
-
-						if( !$result ){
-							$refund_model->rollback();
-							return $this->send( Code::error );
-						}
-						// 同意 ： 设置 refund_handle_state = 30 是因为我们v1版本采用用户自行去支付平台退款的方式，这儿的退款同意，仅为标记作用
-						$order_goods_res = $order_goods_model->editOrderGoods( [
-							'lock_state' => 1,
-							'id'         => $refund['order_goods_id'],
-						], [
-							'refund_handle_state' => $refund_update_state,
-						] );
-						if( !$order_goods_res ){
-							$refund_model->rollback();
-							return $this->send( Code::error, [], "退款订单商品的状态错误" );
-						}
-						// 查询所有的子订单都是退款同意的，设置订单为all_agree_refound
-						$order_goods_ids    = $order_goods_model->where( ['order_id' => $refund['order_id']] )->column( 'id' );
-						$refund_goods_count = $order_goods_model->where( [
-							'id'                  => ['in', $order_goods_ids],
-							'order_id'            => $refund['order_id'],
-							'refund_handle_state' => RefundLogic::complete,
-							'lock_state'          => 1,
-						] )->count( "DISTINCT id" );
-						if( count( $order_goods_ids ) === $refund_goods_count ){
-							$order_res = $order_model->editOrder( ['id' => $refund['order_id']], ['all_agree_refound' => 1] );
-							if( !$order_res ){
-								$refund_model->rollback();
-								return $this->send( Code::error, [], "修改订单全退状态失败" );
-							}
-						}
-						$refund_model->commit();
-						$this->send( Code::success );
-					break;
-					default :
-						$this->send( Code::param_error, [], '未知handle_state' );
-					break;
-					}
-				}
+                    }
+                }
 			}
-
 		}
 	}
 
@@ -229,7 +126,7 @@ class Orderrefund extends Admin
                 $order_goods_model   = model('OrderGoods');
                 $order_model         = model('Order');
 
-                $refund_update_state = RefundLogic::complete;
+                $refund_update_state = RefundLogic::agree;
 
                 // 更改退款状态
                 $result = $refund_model->editOrderRefund( ['id' => $refund['id']], [

@@ -498,4 +498,15 @@ class OrderRefund extends Model
 	{
 		return $this->where( $condition )->find()->delete();
 	}
+
+    /**
+     * 获取某个字段的和
+     * @param  [type] $condition        [条件]
+     * @param  [type] $condition_str    [条件]
+     * @return [type]                   [数据]
+     */
+    public function getOrderRefundSum($condition = array(), $condition_str = '', $field = 'id')
+    {
+        return $this->where($condition)->where($condition_str)->sum($field);
+    }
 }
