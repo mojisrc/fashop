@@ -101,6 +101,9 @@ class Page extends Validate
 					if( !$this->between( $body['options']['layout_style'], [1, 4] ) ){
 						return '商品配置错误：布局方式必须是1-4';
 					}
+					if( !in_array(intval($body['options']['goods_title_rows']), [1,2]) ){
+						return '商品配置错误：标题行数1、2';
+					}
 				break;
 				case 'goods_list':
 //					$goods_result = $this->checkGoodsList( $body['data'] );
@@ -130,6 +133,9 @@ class Page extends Validate
 					}
 					if( !$this->in( $body['options']['layout_style'], [1, 2, 3, 4] ) ){
 						return '商品列表错误：展示形式必须是大图 ,小图 ,一大两小 ,列表';
+					}
+					if( !in_array(intval($body['options']['goods_title_rows']), [1,2]) ){
+						return '商品列表错误：标题行数1、2';
 					}
 				break;
 				case 'goods_search':
@@ -277,33 +283,36 @@ class Page extends Validate
 				break;
                 case 'goods_group':
                     if( empty( $body['options'] ) || !is_array( $body['options'] ) || count( $body['options'] ) != 4 ){
-                        return '商品列表配置项有误';
+                        return '拼团商品配置项有误';
                     }
                     if( !in_array(intval($body['options']['source_type']), ['auto','choose']) ){
-                        return '数据来源：必须是自动、选择';
+                        return '拼团数据来源：必须是自动、选择';
                     }
                     //如果是手动 则需要检查商品信息
                     if($body['options']['source_type'] == 'choose'){
                         $goods_result = $this->checkGroupGoods( $body['data'] );
                         if( $goods_result !== true ){
-                            return '商品配置'.$goods_result;
+                            return '拼团商品'.$goods_result;
                         }
                     }
                     if( !isset( $body['options']['goods_sort'] ) ){
-                        return '商品列表错误：商品排序必填';
+                        return '拼团商品错误：商品排序必填';
                     }
                     if( !$this->in( $body['options']['goods_sort'], [1, 2, 3] ) ){
-                        return '商品列表错误：商品排序必须是最新商品（上架从晚到早）,最热商品（销量从高到低）,商品排序（序号有大到小）';
+                        return '拼团商品错误：商品排序必须是最新商品（上架从晚到早）,最热商品（销量从高到低）,商品排序（序号有大到小）';
                     }
                     if( !isset( $body['options']['goods_display_num'] ) || intval($body['options']['goods_display_num']) <1  || intval($body['options']['goods_display_num']) >12){
-                        return '商品列表错误：显示数量必填，至少为1，至多为12';
+                        return '拼团商品错误：显示数量必填，至少为1，至多为12';
                     }
                     if( !isset( $body['options']['layout_style'] ) ){
-                        return '商品配置错误：布局方式必选';
+                        return '拼团商品错误：布局方式必选';
                     }
                     if( !in_array(intval($body['options']['layout_style']), [1,2,4,5]) ){
-                        return '商品配置错误：布局方式必须是1、2、4、5';
+                        return '拼团商品错误：布局方式必须是1、2、4、5';
                     }
+	                if( !in_array(intval($body['options']['goods_title_rows']), [1,2]) ){
+		                return '拼团商品错误：标题行数1、2';
+	                }
 //                    if( !isset( $body['options']['goods_display_field'] ) || empty( $body['options']['goods_display_field'] ) || !is_array( $body['options']['goods_display_field'] ) || count( $body['options']['goods_display_field'] ) < 1 ){
 //                        return '商品列表错误：显示内容必填';
 //                    }
