@@ -40,13 +40,7 @@ class EasySwooleEvent implements EventInterface
 				\ezswoole\Cron::getInstance()->run();
 			}
 		} );
-
-		$register->add( "message", function( \swoole_websocket_server $server, \swoole_websocket_frame $frame ){
-			if( $frame->data == 'pong' ){
-				$server->push( $frame->fd, json_encode( ['type' => 'pong', 'code' => 0, 'msg' => '服务器端保持心跳'] ) );
-			}
-		} );
-
+		// todo 跳转wsdebug 废弃这块
 		$register->add( 'open', function( \swoole_websocket_server $server, \swoole_http_request $request ){
 			$server->push( $request->fd, json_encode( ['type' => 'open', 'code' => 0, 'msg' => '服务器请求连接'] ) );
 		} );

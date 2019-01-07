@@ -20,25 +20,33 @@ class DispatchParser implements ParserInterface
 {
 	public static function decode( $raw, $client )
 	{
-		try{
-			$info    = self::rawFormat( $raw );
+		// 保持心跳
+		if( $raw == 'pong' ){
 			$command = new CommandBean();
-			$command->setControllerClass( $info['controller'] );
-			$command->setAction( $info['controller_action'] );
-
-			$command->setArg( 'action', $info['action'] );
-			$command->setArg( 'sign', $info['sign'] );
-			$command->setArg( 'param', $info['param'] );
+			$command->setControllerClass( \App\WebSocket\Heartbeat::class );
+			$command->setAction( 'keep' );
 			return $command;
-		} catch( \Exception $e ){
-			$command->setControllerClass( \App\WebSocket\Error::class );
-			$command->setAction( 'handel' );
+		} else{
+			try{
+				$info    = self::rawFormat( $raw );
+				$command = new CommandBean();
+				$command->setControllerClass( $info['controller'] );
+				$command->setAction( $info['controller_action'] );
 
-			$command->setArg( 'raw', $raw );
-			$command->setArg( 'exception', $e );
-			return $command;
+				$command->setArg( 'action', $info['action'] );
+				$command->setArg( 'sign', $info['sign'] );
+				$command->setArg( 'param', $info['param'] );
+				return $command;
+			} catch( \Exception $e ){
+				$command = new CommandBean();
+				$command->setControllerClass( \App\WebSocket\Error::class );
+				$command->setAction( 'handel' );
+
+				$command->setArg( 'raw', $raw );
+				$command->setArg( 'exception', $e );
+				return $command;
+			}
 		}
-
 	}
 
 	public static function encode( string $raw, $client ) : ?string
