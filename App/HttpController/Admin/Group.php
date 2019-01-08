@@ -366,43 +366,38 @@ class Group extends Admin
     {
 
         $get   = $this->get;
-        $error = $this->validate($get, 'Admin/Group.selectableGoods');
-        if ($error !== true) {
-            return $this->send(Code::error, [], $error);
-        } else {
+        $group_model       = model('Group');
+        $group_goods_model = model('GroupGoods');
 
-            $group_model       = model('Group');
-            $group_goods_model = model('GroupGoods');
+        //查询活动
+        $condition             = [];
+        $condition['end_time'] = ['lt', time()];
+        $condition['is_show']  = 0;
+        $group_ids             = $group_model->getGroupColumn($condition);
 
-            //查询活动
-            $condition             = [];
-            $condition['end_time'] = ['lt', time()];
-            $condition['is_show']  = 0;
-            $group_ids             = $group_model->getGroupColumn($condition);
-
-            $param = [];
-            if (isset($get['title'])) {
-                $param['title'] = $get['title'];
-            }
-
-            if (isset($get['category_ids'])) {
-                $param['category_ids'] = $get['category_ids'];
-            }
-
-            //查询活动商品ids
-            if ($group_ids) {
-                $goods_ids = $group_goods_model->getGroupGoodsColumn(['group_id' => ['in', $group_ids]], '', 'goods_id');
-                if ($goods_ids) {
-                    $param['not_in_ids'] = $goods_ids;
-                }
-            }
-
-            $goodsLogic = new \App\Logic\GoodsSearch($param);
-            return $this->send(Code::success, [
-                'total_number' => $goodsLogic->count(),
-                'list'         => $goodsLogic->list(),
-            ]);
+        $param = [];
+        if (isset($get['title'])) {
+            $param['title'] = $get['title'];
         }
+
+        if (isset($get['category_ids'])) {
+            $param['category_ids'] = $get['category_ids'];
+        }
+
+        //查询活动商品ids
+        if ($group_ids) {
+            $goods_ids = $group_goods_model->getGroupGoodsColumn(['group_id' => ['in', $group_ids]], '', 'goods_id');
+            if ($goods_ids) {
+                $param['not_in_ids'] = $goods_ids;
+            }
+        }
+
+        $goodsLogic = new \App\Logic\GoodsSearch($param);
+        return $this->send(Code::success, [
+            'total_number' => $goodsLogic->count(),
+            'list'         => $goodsLogic->list(),
+        ]);
+
 
     }
 
