@@ -359,7 +359,6 @@ class Group extends Admin
     /**
      * 拼团活动可选择商品列表
      * @method GET
-     * @param int    group_id       拼团活动id
      * @param string title          商品名称
      * @param array  category_ids   分类id 数组格式
      */
@@ -376,10 +375,10 @@ class Group extends Admin
             $group_goods_model = model('GroupGoods');
 
             //查询活动
-            $group_data = $group_model->getGroupInfo(['id' => $get['group_id']], '', '*');
-            if (!$group_data) {
-                return $this->send(Code::param_error);
-            }
+            $condition             = [];
+            $condition['end_time'] = ['lt', time()];
+            $condition['is_show']  = 0;
+            $group_ids             = $group_model->getGroupColumn($condition);
 
             $param = [];
             if (isset($get['title'])) {
@@ -391,9 +390,11 @@ class Group extends Admin
             }
 
             //查询活动商品ids
-            $goods_ids = $group_goods_model->getGroupGoodsColumn(['group_id' => $get['group_id']], '', 'goods_id');
-            if ($goods_ids) {
-                $param['not_in_ids'] = $goods_ids;
+            if ($group_ids) {
+                $goods_ids = $group_goods_model->getGroupGoodsColumn(['group_id' => ['in', $group_ids]], '', 'goods_id');
+                if ($goods_ids) {
+                    $param['not_in_ids'] = $goods_ids;
+                }
             }
 
             $goodsLogic = new \App\Logic\GoodsSearch($param);
@@ -405,66 +406,65 @@ class Group extends Admin
 
     }
 
-    /**
-     * 拼团活动已选择商品列表
-     * @method GET
-     * @param int     group_id 拼团活动id
-     */
-    public function selectedGoods()
-    {
-
-        $get   = $this->get;
-        $error = $this->validate($get, 'Admin/Group.selectedGoods');
-        if ($error !== true) {
-            return $this->send(Code::error, [], $error);
-        } else {
-
-            $group_model       = model('Group');
-            $group_goods_model = model('GroupGoods');
-
-            //查询活动
-            $group_data = $group_model->getGroupInfo(['id' => $get['group_id']], '', '*');
-            if (!$group_data) {
-                return $this->send(Code::param_error);
-            }
-
-            //查询活动商品ids
-            $goods_ids              = $group_goods_model->getGroupGoodsColumn(['group_id' => $get['group_id']], '', 'goods_id');
-            $intersection_goods_ids = [];
-            if ($goods_ids) {
-                $online_goods_ids = model('Goods')->getGoodsColumn(['id' => ['in', $goods_ids], 'is_on_sale' => 1], 'id');
-                //交集 group_goods表和goods表的商品交集
-                $intersection_goods_ids = array_values(array_intersect($goods_ids, $online_goods_ids));
-
-                //返回出现在第一个数组中但其他数组中没有的值 [将要删除的商品]
-                $difference_goods_del_ids = array_diff($goods_ids, $online_goods_ids);
-
-                if ($difference_goods_del_ids) {
-                    //删除活动下失效商品
-                    $group_goods_result = $group_goods_model->delGroupGoods(['group_id' => $get['group_id'], 'goods_id' => array('in', $difference_goods_del_ids)]);
-                    if (!$group_goods_result) {
-                        return $this->send(Code::error);
-                    }
-                }
-
-            }
-            $param        = [];
-            $param['ids'] = $intersection_goods_ids ? $intersection_goods_ids : [];
-            $goodsLogic   = new \App\Logic\GoodsSearch($param);
-            return $this->send(Code::success, [
-                'total_number' => $intersection_goods_ids ? $goodsLogic->count() : 0,
-                'list'         => $intersection_goods_ids ? $goodsLogic->list() : [],
-            ]);
-
-        }
-
-    }
+//    /**
+//     * 拼团活动已选择商品列表
+//     * @method GET
+//     * @param int     group_id 拼团活动id
+//     */
+//    public function selectedGoods()
+//    {
+//
+//        $get   = $this->get;
+//        $error = $this->validate($get, 'Admin/Group.selectedGoods');
+//        if ($error !== true) {
+//            return $this->send(Code::error, [], $error);
+//        } else {
+//
+//            $group_model       = model('Group');
+//            $group_goods_model = model('GroupGoods');
+//
+//            //查询活动
+//            $group_data = $group_model->getGroupInfo(['id' => $get['group_id']], '', '*');
+//            if (!$group_data) {
+//                return $this->send(Code::param_error);
+//            }
+//
+//            //查询活动商品ids
+//            $goods_ids              = $group_goods_model->getGroupGoodsColumn(['group_id' => $get['group_id']], '', 'goods_id');
+//            $intersection_goods_ids = [];
+//            if ($goods_ids) {
+//                $online_goods_ids = model('Goods')->getGoodsColumn(['id' => ['in', $goods_ids], 'is_on_sale' => 1], 'id');
+//                //交集 group_goods表和goods表的商品交集
+//                $intersection_goods_ids = array_values(array_intersect($goods_ids, $online_goods_ids));
+//
+//                //返回出现在第一个数组中但其他数组中没有的值 [将要删除的商品]
+//                $difference_goods_del_ids = array_diff($goods_ids, $online_goods_ids);
+//
+//                if ($difference_goods_del_ids) {
+//                    //删除活动下失效商品
+//                    $group_goods_result = $group_goods_model->delGroupGoods(['group_id' => $get['group_id'], 'goods_id' => array('in', $difference_goods_del_ids)]);
+//                    if (!$group_goods_result) {
+//                        return $this->send(Code::error);
+//                    }
+//                }
+//
+//            }
+//            $param        = [];
+//            $param['ids'] = $intersection_goods_ids ? $intersection_goods_ids : [];
+//            $goodsLogic   = new \App\Logic\GoodsSearch($param);
+//            return $this->send(Code::success, [
+//                'total_number' => $intersection_goods_ids ? $goodsLogic->count() : 0,
+//                'list'         => $intersection_goods_ids ? $goodsLogic->list() : [],
+//            ]);
+//
+//        }
+//
+//    }
 
     /**
      * 拼团活动已选择商品sku列表
      * @method GET
      * @param int    group_id 拼团活动id
-     * @param int    goods_id 拼团活动商品id
      */
     public function goodsSkuList()
     {
@@ -485,30 +485,18 @@ class Group extends Admin
             }
 
             //查询活动商品sku ids
-            $goods_sku_ids = $group_goods_model->getGroupGoodsColumn(['group_id' => $get['group_id'], 'goods_id' => $get['goods_id']], '', 'goods_sku_id');
+            $goods_sku_ids = $group_goods_model->getGroupGoodsColumn(['group_id' => $get['group_id']], '', 'goods_sku_id');
 
-            if ($goods_sku_ids) {
-                $online_goods_sku_ids = model('GoodsSku')->getGoodsSkuColumn(['id' => ['in', $goods_sku_ids]], 'id');
-
-                //返回出现在第一个数组中但其他数组中没有的值 [将要删除的sku]
-                $difference_goods_sku_del_ids = array_diff($goods_sku_ids, $online_goods_sku_ids);
-
-                if ($difference_goods_sku_del_ids) {
-                    //删除活动下失效商品sku
-                    $group_goods_result = $group_goods_model->delGroupGoods(['group_id' => $get['group_id'], 'goods_sku_id' => array('in', $difference_goods_sku_del_ids)]);
-                    if (!$group_goods_result) {
-                        return $this->send(Code::error);
-                    }
-                }
-
+            if (!$goods_sku_ids) {
+                return $this->send(Code::error);
             }
 
-            $condition                       = [];
-            $condition['goods_sku.goods_id'] = $get['goods_id'];
+            $condition                 = [];
+            $condition['goods_sku.id'] = ['in', $goods_sku_ids];
 
             //查询该商品下所有sku和已设置拼团活动的数据
             $goods_sku_count = $group_goods_model->getGoodsSkuMoreCount($condition);
-            $goods_sku_list  = $group_goods_model->getGoodsSkuMoreList($condition, '', 'group_goods.goods_id,goods_sku_id,group_id,group_price,captain_price', 'goods_sku.id asc', '');
+            $goods_sku_list  = $group_goods_model->getGoodsSkuMoreList($condition, '', 'goods_sku.*,group_goods.group_id,group_price,captain_price', 'goods_sku.id asc', '');
 
             return $this->send(Code::success, [
                 'total_number' => $goods_sku_count,

@@ -87,16 +87,14 @@ class Group extends Validate
 			],
 
             'selectableGoods' => [
-                'group_id',
             ],
 
-            'selectedGoods' => [
-                'group_id',
-            ],
+            // 'selectedGoods' => [
+            //     'group_id',
+            // ],
 
             'goodsSkuList' => [
                 'group_id',
-                'goods_id',
             ],
 		];
 
