@@ -108,7 +108,7 @@ class Group extends Admin
      * @param string limit_goods_num    用户每次参团时可购买件数
      * @param array  group_goods        数组 格式 [ ['goods_id'=>1,'goods_sku_id'=>1,'group_price'=>1,'captain_price'=>1],['goods_id'=>2,'goods_sku_id'=>2,'group_price'=>2,'captain_price'=>2...] ] 商品选择数组 可为空数组
      * 注释：
-     * goods_id         商品主表id
+     * goods_id         商品主表id 只能选择一个商品 group_goods里goods_id必须为一样
      * goods_sku_id     商品id
      * group_price      拼团价格
      * captain_price    团长价格
@@ -144,7 +144,11 @@ class Group extends Admin
 
             $group_goods_model = model('GroupGoods');
             $group_goods       = [];
-            if (isset($post['group_goods']) && is_array($post['group_goods'])) {
+            if (isset($post['group_goods']) && is_array($post['group_goods']) && $post['group_goods']) {
+                $goods_id_arr = array_column($post['group_goods'], 'goods_id');
+                if (count(array_unique($goods_id_arr)) != 1) {
+                    return $this->send(Code::param_error, [], '只能选择一个商品');
+                }
                 foreach ($post['group_goods'] as $key => $value) {
                     if (intval($value['goods_id']) <= 0 || intval($value['goods_sku_id']) <= 0) {
                         return $this->send(Code::param_error, [], '必须选择商品规格');
@@ -188,7 +192,7 @@ class Group extends Admin
      * @param string limit_goods_num    用户每次参团时可购买件数
      * @param array  group_goods        数组 格式 [ ['goods_id'=>1,'goods_sku_id'=>1,'group_price'=>1,'captain_price'=>1],['goods_id'=>2,'goods_sku_id'=>2,'group_price'=>2,'captain_price'=>2...] ] 商品选择数组 可为空数组
      * 注释：
-     * goods_id         商品主表id
+     * goods_id         商品主表id 只能选择一个商品 group_goods里goods_id必须为一样
      * goods_sku_id     商品id
      * group_price      拼团价格
      * captain_price    团长价格
@@ -232,8 +236,11 @@ class Group extends Admin
             //查询活动商品sku ids
             $goods_sku_ids = $group_goods_model->getGroupGoodsIndexesColumn($map, '', 'goods_sku_id', 'id');
 
-            if (isset($post['group_goods']) && is_array($post['group_goods'])) {
-
+            if (isset($post['group_goods']) && is_array($post['group_goods']) && $post['group_goods']) {
+                $goods_id_arr = array_column($post['group_goods'], 'goods_id');
+                if (count(array_unique($goods_id_arr)) != 1) {
+                    return $this->send(Code::param_error, [], '只能选择一个商品');
+                }
                 foreach ($post['group_goods'] as $key => $value) {
                     if (intval($value['goods_id']) <= 0 || intval($value['goods_sku_id']) <= 0) {
                         return $this->send(Code::param_error, [], '必须选择商品规格');
