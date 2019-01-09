@@ -29,7 +29,9 @@ class OrderTest extends BaseTestCase
      */
     public function testlist()
     {
-        $response = self::$client->request( 'GET', "admin/order/list", []);
+        $response = self::$client->request( 'GET', "admin/order/list", [
+            'headers' => ['access-token' => self::$accessToken]
+        ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
     }
@@ -48,6 +50,7 @@ class OrderTest extends BaseTestCase
             'query' => [
                 'id' => 1,
             ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -66,6 +69,7 @@ class OrderTest extends BaseTestCase
             'query' => [
                 'id' => 1,
             ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -96,6 +100,7 @@ class OrderTest extends BaseTestCase
                 'shipping_code' => '',
                 'remark' => '',
             ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -114,6 +119,7 @@ class OrderTest extends BaseTestCase
                 'express_id' => 1,
                 'tracking_no' => '123456789',
             ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -143,6 +149,7 @@ class OrderTest extends BaseTestCase
                 ],
                 'revise_freight_fee' => 0,
             ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());

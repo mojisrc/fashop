@@ -14,7 +14,8 @@
 namespace FaShopTest\HttpController\Admin;
 
 use FaShopTest\BaseTestCase;
-
+use FaShopTest\framework\Config;
+use GuzzleHttp\Client;
 class ClientgoodsTest extends BaseTestCase
 {
     private static $addMemberData;
@@ -22,6 +23,7 @@ class ClientgoodsTest extends BaseTestCase
     private static $newPassword = '1234567';
     private static $loginAccessToken;
     private static $loginAccessTokenExpireIn;
+
 
     /**
      * 商品列表
@@ -44,8 +46,11 @@ class ClientgoodsTest extends BaseTestCase
                 'price' => '100-1000',
                 'page' => 1,
                 'page' => 10,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
+
+
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
     }
@@ -62,8 +67,12 @@ class ClientgoodsTest extends BaseTestCase
         $response = self::$client->request( 'GET', "admin/goods/info", [
             'query' => [
                 'id' => 1,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
+
+
+
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
     }
@@ -82,7 +91,8 @@ class ClientgoodsTest extends BaseTestCase
         $response = self::$client->request( 'GET', "admin/goods/evaluateList", [
             'query' => [
                 'goods_ids' => 1,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -97,7 +107,9 @@ class ClientgoodsTest extends BaseTestCase
      */
     public function testVisitedRecord()
     {
-        $response = self::$client->request( 'GET', "admin/goods/visitedRecord", []);
+        $response = self::$client->request( 'GET', "admin/goods/visitedRecord", [
+            'headers' => ['access-token' => self::$accessToken]
+        ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
     }

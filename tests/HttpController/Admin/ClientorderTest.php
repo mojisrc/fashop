@@ -53,7 +53,8 @@ class ClientorderTest extends BaseTestCase
                 'keywords_type' => 'goods_name',
                 'keywords' => '关键词',
                 'state_types' => 1,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -85,7 +86,8 @@ class ClientorderTest extends BaseTestCase
                 'keywords_type' => 'goods_name',
                 'keywords' => '关键词',
                 'state_types' => 'state_new',
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -103,7 +105,8 @@ class ClientorderTest extends BaseTestCase
         $response = self::$client->request( 'GET', "admin/order/info", [
             'query' => [
                 'id' => 1
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -124,7 +127,8 @@ class ClientorderTest extends BaseTestCase
             'query' => [
                 'id' => 1,
                 'state_remark' => '状态备注，如：取消原因（改买其他商品、改配送方式、其他原因等等）',
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -143,30 +147,14 @@ class ClientorderTest extends BaseTestCase
         $response = self::$client->request( 'POST', "admin/order/confirmReceipt", [
             'query' => [
                 'id' => 1,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
     }
 
 
-
-    /**
-     * 确认收货
-     * @param int id 订单id
-     * @method POST
-     * @param
-     */
-    public function testConfirmReceipt()
-    {
-        $response = self::$client->request( 'POST', "admin/order/confirmReceipt", [
-            'query' => [
-                'id' => 1,
-            ]
-        ]);
-        $return_data = json_decode($response->getBody(), true);
-        $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
-    }
 
 
 
@@ -182,7 +170,8 @@ class ClientorderTest extends BaseTestCase
         $response = self::$client->request( 'GET', "admin/order/goodsInfo", [
             'query' => [
                 'id' => 1,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -201,7 +190,8 @@ class ClientorderTest extends BaseTestCase
         $response = self::$client->request( 'GET', "admin/order/goodsList", [
             'query' => [
                 'id' => 1,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -220,7 +210,8 @@ class ClientorderTest extends BaseTestCase
         $response = self::$client->request( 'GET', "admin/order/logistics", [
             'query' => [
                 'id' => 1,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -240,7 +231,8 @@ class ClientorderTest extends BaseTestCase
         $response = self::$client->request( 'GET', "admin/order/groupInfo", [
             'query' => [
                 'id' => 1,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());

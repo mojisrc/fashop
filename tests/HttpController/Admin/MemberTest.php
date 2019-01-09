@@ -30,7 +30,9 @@ class MemberTest extends BaseTestCase
      */
     public function testList()
     {
-        $response = self::$client->request( 'GET', "admin/member/list", []);
+        $response = self::$client->request( 'GET', "admin/member/list", [
+            'headers' => ['access-token' => self::$accessToken]
+        ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
     }
@@ -50,7 +52,8 @@ class MemberTest extends BaseTestCase
                 'username' => 'dengkai',
                 'password' => '123456',
                 'nickname' => 'dengkai',
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -68,7 +71,8 @@ class MemberTest extends BaseTestCase
         $response = self::$client->request( 'GET', "admin/member/info", [
             'query' => [
                 'id' => 1,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -93,7 +97,8 @@ class MemberTest extends BaseTestCase
                 'avatar' => 'https://www.xxx.com/1.png',
                 'nickname' => 'dengkai',
                 'password' => '123456',
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -111,7 +116,8 @@ class MemberTest extends BaseTestCase
         $response = self::$client->request( 'POST', "admin/member/del", [
             'form_params' => [
                 'id' => 11,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -133,7 +139,8 @@ class MemberTest extends BaseTestCase
                 'oldpassword' => '123456',
                 'password' => '654321',
 
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -155,7 +162,8 @@ class MemberTest extends BaseTestCase
                 'avatar' => 'https://www.xxx.com/1.png',
                 'nickname' => 'dengkai',
 
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -179,7 +187,8 @@ class MemberTest extends BaseTestCase
                 'password' => '123456',
                 'verify_code' => '1234',
 
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -194,7 +203,9 @@ class MemberTest extends BaseTestCase
      */
     public function testVerifyCode()
     {
-        $response = self::$client->request( 'GET', "admin/member/verifyCode", []);
+        $response = self::$client->request( 'GET', "admin/member/verifyCode", [
+            'headers' => ['access-token' => self::$accessToken]
+        ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
     }
@@ -208,7 +219,9 @@ class MemberTest extends BaseTestCase
      */
     public function testToken()
     {
-        $response = self::$client->request( 'POST', "admin/member/token", []);
+        $response = self::$client->request( 'POST', "admin/member/token", [
+            'headers' => ['access-token' => self::$accessToken]
+        ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
     }
@@ -223,7 +236,9 @@ class MemberTest extends BaseTestCase
      */
     public function testSelf()
     {
-        $response = self::$client->request( 'GET', "admin/member/self", []);
+        $response = self::$client->request( 'GET', "admin/member/self", [
+            'headers' => ['access-token' => self::$accessToken]
+        ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
     }
@@ -237,7 +252,9 @@ class MemberTest extends BaseTestCase
      */
     public function testLogout()
     {
-        $response = self::$client->request( 'POST', "admin/member/logout", []);
+        $response = self::$client->request( 'POST', "admin/member/logout", [
+            'headers' => ['access-token' => self::$accessToken]
+        ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
     }
@@ -251,7 +268,9 @@ class MemberTest extends BaseTestCase
      */
     public function testLoginInfo()
     {
-        $response = self::$client->request( 'GET', "admin/member/loginInfo", []);
+        $response = self::$client->request( 'GET', "admin/member/loginInfo", [
+            'headers' => ['access-token' => self::$accessToken]
+        ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
     }

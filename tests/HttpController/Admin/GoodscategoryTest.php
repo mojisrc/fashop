@@ -40,7 +40,9 @@ class GoodscategoryTest extends BaseTestCase
                 'name' => '分类名称',
                 'icon' => 'https://www.fashop.com/images/1.png',
                 'sort' => 999,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
+
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -67,7 +69,8 @@ class GoodscategoryTest extends BaseTestCase
                 'name' => '分类名称',
                 'icon' => 'https://www.fashop.com/images/1.png',
                 'sort' => 999,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -81,7 +84,9 @@ class GoodscategoryTest extends BaseTestCase
      */
     public function testList()
     {
-        $response = self::$client->request( 'GET', "admin/goodscategory/list", []);
+        $response = self::$client->request( 'GET', "admin/goodscategory/list", [
+            'headers' => ['access-token' => self::$accessToken]
+        ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
     }
@@ -98,7 +103,8 @@ class GoodscategoryTest extends BaseTestCase
         $response = self::$client->request( 'POST', "admin/goodscategory/del", [
             'query' => [
                 'id' => 1,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -116,7 +122,8 @@ class GoodscategoryTest extends BaseTestCase
         $response = self::$client->request( 'POST', "admin/goodscategory/info", [
             'query' => [
                 'id' => 1,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -138,7 +145,8 @@ class GoodscategoryTest extends BaseTestCase
                     'id' => 1,
                     'index' => 999,
                 ],
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());

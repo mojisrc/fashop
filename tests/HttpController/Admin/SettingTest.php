@@ -43,7 +43,8 @@ class SettingTest extends BaseTestCase
                 'config' => '配置详情',
                 'status' => 1,
                 'remark' => '备注',
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -69,7 +70,8 @@ class SettingTest extends BaseTestCase
                 'config' => '配置详情',
                 'status' => 1,
                 'remark' => '备注',
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());

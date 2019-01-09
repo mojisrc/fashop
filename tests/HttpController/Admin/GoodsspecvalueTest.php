@@ -32,7 +32,9 @@ class GoodsspecvalueTest extends BaseTestCase
      */
     public function testList()
     {
-        $response = self::$client->request( 'GET', "admin/Goodsspecvalue/list", []);
+        $response = self::$client->request( 'GET', "admin/Goodsspecvalue/list", [
+            'headers' => ['access-token' => self::$accessToken]
+        ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
     }
@@ -51,7 +53,8 @@ class GoodsspecvalueTest extends BaseTestCase
             'form_params' => [
                 'spec_id' => 2,
                 'name' => '规格值名称',
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -70,7 +73,8 @@ class GoodsspecvalueTest extends BaseTestCase
         $response = self::$client->request( 'POST', "admin/Goodsspecvalue/del", [
             'query' => [
                 'id' => 2,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());

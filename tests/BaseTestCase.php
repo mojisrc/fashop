@@ -62,6 +62,7 @@ abstract class BaseTestCase extends TestCase
         parent::__construct();
         $client_conf = Config::get();
         self::$base_arr = $client_conf['client'];
+        self::$base_arr['headers'] = ['access_token' => self::$accessToken];
         self::$client = new Client(self::$base_arr);
     }
 
@@ -75,7 +76,11 @@ abstract class BaseTestCase extends TestCase
                 ],
             ]);
             $return_data = json_decode($response->getBody(), true);
+
             self::$accessToken = $return_data['result']['access_token'];
+
+            self::$base_arr['headers'] = ['access_token' => self::$accessToken];
+            self::$client = new Client(self::$base_arr);
         }
         return self::$accessToken;
 	}

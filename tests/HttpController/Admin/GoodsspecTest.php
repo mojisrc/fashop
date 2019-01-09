@@ -36,7 +36,8 @@ class GoodsspecTest extends BaseTestCase
             'form_params' => [
                 'name' => '规格名称',
                 'sort' => 0,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -59,7 +60,8 @@ class GoodsspecTest extends BaseTestCase
                 'id' => 1,
                 'name' => '规格名称',
                 'sort' => 0,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -73,7 +75,9 @@ class GoodsspecTest extends BaseTestCase
      */
     public function testSpecList()
     {
-        $response = self::$client->request( 'GET', "admin/goodsspec/list", []);
+        $response = self::$client->request( 'GET', "admin/goodsspec/list", [
+            'headers' => ['access-token' => self::$accessToken]
+        ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
     }
@@ -91,7 +95,8 @@ class GoodsspecTest extends BaseTestCase
         $response = self::$client->request( 'POST', "admin/goodsspec/del", [
             'query' => [
                 'id' => 2,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -107,7 +112,9 @@ class GoodsspecTest extends BaseTestCase
      */
     public function testList()
     {
-        $response = self::$client->request( 'GET', "admin/Goodsspecvalue/list", []);
+        $response = self::$client->request( 'GET', "admin/Goodsspecvalue/list", [
+            'headers' => ['access-token' => self::$accessToken]
+        ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
     }
@@ -126,7 +133,8 @@ class GoodsspecTest extends BaseTestCase
             'form_params' => [
                 'spec_id' => 2,
                 'name' => '规格值名称',
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -145,7 +153,8 @@ class GoodsspecTest extends BaseTestCase
         $response = self::$client->request( 'POST', "admin/Goodsspecvalue/del", [
             'query' => [
                 'id' => 2,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());

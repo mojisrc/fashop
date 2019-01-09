@@ -44,7 +44,8 @@ class GoodsevaluateTest extends BaseTestCase
                     1546358400,
                 ],
                 'type' => 'negative',
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -64,7 +65,8 @@ class GoodsevaluateTest extends BaseTestCase
             'form_params' => [
                 'id' => 2,
                 'reply_content' => '回复内容',
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -83,7 +85,8 @@ class GoodsevaluateTest extends BaseTestCase
         $response = self::$client->request( 'POST', "admin/Goodsspecvalue/display", [
             'query' => [
                 'id' => 2,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());

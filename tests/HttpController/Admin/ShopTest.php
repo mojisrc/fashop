@@ -94,7 +94,8 @@ class ShopTest extends BaseTestCase
         $response = self::$client->request( 'POST', "admin/shop/setGoodsCategoryStyle", [
             'form_params' => [
                 'goods_category_style' => 1,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -116,7 +117,8 @@ class ShopTest extends BaseTestCase
                 'order_auto_close_expires' => 1,
                 'order_auto_confirm_expires' => 1,
                 'order_auto_close_refound_expires' => 1,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());

@@ -40,7 +40,8 @@ class ClientuserTest extends BaseTestCase
                 'login_type' => 'password',
                 'username' => 'admin',
                 'password' => '123456',
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
 //            'form_params' => [
 //                'login_type' => 'wechat_openid',
 //                'wechat_openid' => '123456789',
@@ -74,7 +75,8 @@ class ClientuserTest extends BaseTestCase
                 'password' => '123456',
                 'verify_code' => '1234',
                 'channel_type' => 'email',
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
 
 //            'form_params' => [
 //                'login_type' => 'wechat_openid',
@@ -96,7 +98,9 @@ class ClientuserTest extends BaseTestCase
      */
     public function testLoginout()
     {
-        $response = self::$client->request( 'GET', "admin/user/logout", []);
+        $response = self::$client->request( 'GET', "admin/user/logout", [
+            'headers' => ['access-token' => self::$accessToken]
+        ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
     }
@@ -116,7 +120,8 @@ class ClientuserTest extends BaseTestCase
             'form_params' => [
                 'oldpassword' => '654321',
                 'password' => '123456',
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -138,7 +143,8 @@ class ClientuserTest extends BaseTestCase
                 'phone' => '18526459531',
                 'password' => '123456',
                 'verify_code' => '1234',
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -161,7 +167,8 @@ class ClientuserTest extends BaseTestCase
                 'behavior' => 'register',
                 'channel_type' => 'sms',
                 'phone' => '18526459531',
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -176,7 +183,9 @@ class ClientuserTest extends BaseTestCase
      */
     public function testSelf()
     {
-        $response = self::$client->request( 'GET', "admin/user/self", []);
+        $response = self::$client->request( 'GET', "admin/user/self", [
+            'headers' => ['access-token' => self::$accessToken]
+        ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
     }
@@ -207,7 +216,8 @@ class ClientuserTest extends BaseTestCase
                 'avatar' => 'https://www.xxx.com/images/1.png',
                 'birthday' => '1234567890',
 
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -222,7 +232,9 @@ class ClientuserTest extends BaseTestCase
      */
     public function testToken()
     {
-        $response = self::$client->request( 'POST', "admin/user/token", []);
+        $response = self::$client->request( 'POST', "admin/user/token", [
+            'headers' => ['access-token' => self::$accessToken]
+        ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
     }
@@ -244,7 +256,8 @@ class ClientuserTest extends BaseTestCase
                 'phone' => '18526459531',
                 'password' => '123456',
                 'verify_code' => '1234',
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -274,7 +287,8 @@ class ClientuserTest extends BaseTestCase
                     'country' => 'country',
                     'headimgurl' => 'http://thirdwx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/46',
                 ],
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -289,7 +303,9 @@ class ClientuserTest extends BaseTestCase
      */
     public function testUnbindWechat()
     {
-        $response = self::$client->request( 'POST', "admin/user/unbindWechat", []);
+        $response = self::$client->request( 'POST', "admin/user/unbindWechat", [
+            'headers' => ['access-token' => self::$accessToken]
+        ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
     }
@@ -302,7 +318,9 @@ class ClientuserTest extends BaseTestCase
      */
     public function testUnbindPhone()
     {
-        $response = self::$client->request( 'POST', "admin/user/unbindPhone", []);
+        $response = self::$client->request( 'POST', "admin/user/unbindPhone", [
+            'headers' => ['access-token' => self::$accessToken]
+        ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
     }
