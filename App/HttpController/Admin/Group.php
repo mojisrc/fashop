@@ -133,6 +133,7 @@ class Group extends Admin
             $data['end_time']         = strtotime($post['end_time']);
             $data['create_time']      = time();
             $data['update_time']      = time();
+            $data['is_show']          = 1;
 
             $group_model = model('Group');
             $group_model->startTrans();
@@ -365,15 +366,15 @@ class Group extends Admin
     public function selectableGoods()
     {
 
-        $get   = $this->get;
+        $get               = $this->get;
         $group_model       = model('Group');
         $group_goods_model = model('GroupGoods');
 
-        //查询活动
-        $condition             = [];
-        $condition['end_time'] = ['lt', time()];
-        $condition['is_show']  = 0;
-        $group_ids             = $group_model->getGroupColumn($condition);
+        //查询有效活动
+        $condition               = [];
+        $condition['is_show']    = 1;
+        $condition['start_time'] = ['elt', time()];
+        $group_ids               = $group_model->getGroupColumn($condition);
 
         $param = [];
         if (isset($get['title'])) {
@@ -400,61 +401,6 @@ class Group extends Admin
 
 
     }
-
-//    /**
-//     * 拼团活动已选择商品列表
-//     * @method GET
-//     * @param int     group_id 拼团活动id
-//     */
-//    public function selectedGoods()
-//    {
-//
-//        $get   = $this->get;
-//        $error = $this->validate($get, 'Admin/Group.selectedGoods');
-//        if ($error !== true) {
-//            return $this->send(Code::error, [], $error);
-//        } else {
-//
-//            $group_model       = model('Group');
-//            $group_goods_model = model('GroupGoods');
-//
-//            //查询活动
-//            $group_data = $group_model->getGroupInfo(['id' => $get['group_id']], '', '*');
-//            if (!$group_data) {
-//                return $this->send(Code::param_error);
-//            }
-//
-//            //查询活动商品ids
-//            $goods_ids              = $group_goods_model->getGroupGoodsColumn(['group_id' => $get['group_id']], '', 'goods_id');
-//            $intersection_goods_ids = [];
-//            if ($goods_ids) {
-//                $online_goods_ids = model('Goods')->getGoodsColumn(['id' => ['in', $goods_ids], 'is_on_sale' => 1], 'id');
-//                //交集 group_goods表和goods表的商品交集
-//                $intersection_goods_ids = array_values(array_intersect($goods_ids, $online_goods_ids));
-//
-//                //返回出现在第一个数组中但其他数组中没有的值 [将要删除的商品]
-//                $difference_goods_del_ids = array_diff($goods_ids, $online_goods_ids);
-//
-//                if ($difference_goods_del_ids) {
-//                    //删除活动下失效商品
-//                    $group_goods_result = $group_goods_model->delGroupGoods(['group_id' => $get['group_id'], 'goods_id' => array('in', $difference_goods_del_ids)]);
-//                    if (!$group_goods_result) {
-//                        return $this->send(Code::error);
-//                    }
-//                }
-//
-//            }
-//            $param        = [];
-//            $param['ids'] = $intersection_goods_ids ? $intersection_goods_ids : [];
-//            $goodsLogic   = new \App\Logic\GoodsSearch($param);
-//            return $this->send(Code::success, [
-//                'total_number' => $intersection_goods_ids ? $goodsLogic->count() : 0,
-//                'list'         => $intersection_goods_ids ? $goodsLogic->list() : [],
-//            ]);
-//
-//        }
-//
-//    }
 
     /**
      * 拼团活动已选择商品sku列表
@@ -653,5 +599,6 @@ class Group extends Admin
             }
         }
     }
+
 
 }
