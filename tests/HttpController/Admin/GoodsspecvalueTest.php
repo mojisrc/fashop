@@ -15,7 +15,7 @@ namespace FaShopTest\HttpController\Admin;
 
 use FaShopTest\BaseTestCase;
 
-class GoodsTest extends BaseTestCase
+class GoodsspecvalueTest extends BaseTestCase
 {
     private static $addMemberData;
     private static $addUserId;
@@ -75,18 +75,6 @@ class GoodsTest extends BaseTestCase
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

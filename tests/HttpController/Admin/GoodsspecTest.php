@@ -15,7 +15,7 @@ namespace FaShopTest\HttpController\Admin;
 
 use FaShopTest\BaseTestCase;
 
-class GoodsTest extends BaseTestCase
+class GoodsspecTest extends BaseTestCase
 {
     private static $addMemberData;
     private static $addUserId;
@@ -30,7 +30,7 @@ class GoodsTest extends BaseTestCase
      * @method POST
      * @param
      */
-    public function testAdd()
+    public function testSpecAdd()
     {
         $response = self::$client->request( 'POST', "admin/goodsspec/add", [
             'form_params' => [
@@ -71,7 +71,7 @@ class GoodsTest extends BaseTestCase
      * @method GET
      * @param
      */
-    public function testList()
+    public function testSpecList()
     {
         $response = self::$client->request( 'GET', "admin/goodsspec/list", []);
         $return_data = json_decode($response->getBody(), true);
@@ -86,7 +86,7 @@ class GoodsTest extends BaseTestCase
      * @method POST
      * @param
      */
-    public function testDel()
+    public function testSpecDel()
     {
         $response = self::$client->request( 'POST', "admin/goodsspec/del", [
             'query' => [
@@ -150,18 +150,5 @@ class GoodsTest extends BaseTestCase
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

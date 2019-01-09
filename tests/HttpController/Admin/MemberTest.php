@@ -15,7 +15,7 @@ namespace FaShopTest\HttpController\Admin;
 
 use FaShopTest\BaseTestCase;
 
-class ClientgoodsTest extends BaseTestCase
+class MemberTest extends BaseTestCase
 {
     private static $addMemberData;
     private static $addUserId;

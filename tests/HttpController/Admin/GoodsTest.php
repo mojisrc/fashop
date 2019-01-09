@@ -112,7 +112,7 @@ class GoodsTest extends BaseTestCase
                         'name' => '尺码',
                         'value_id' => 28313,
                         'value_name' => 'XS',
-                    ]
+                    ],
                     'price' => 23,
                     'stock' => 23,
                     'code' => "商品编号",
@@ -175,7 +175,7 @@ class GoodsTest extends BaseTestCase
                         'name' => '尺码',
                         'value_id' => 28313,
                         'value_name' => 'XS',
-                    ]
+                    ],
                     'price' => 23,
                     'stock' => 23,
                     'code' => "商品编号",
