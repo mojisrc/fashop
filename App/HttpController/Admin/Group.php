@@ -537,7 +537,7 @@ class Group extends Admin
                     return $this->send(Code::error);
                 }
                 //删除拼团活动商品
-                $group_goods_result = $group_goods_model->delGroupGoods($condition);
+                $group_goods_result = $group_goods_model->delGroupGoods(['group_id'=>$post['id']]);
                 if (!$group_goods_result) {
                     $group_model->rollback();
                     return $this->send(Code::error);
