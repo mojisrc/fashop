@@ -27,7 +27,7 @@ class Goods extends Validate
 			'body'         => 'require|array|checkBody',
 			'skus'         => 'require|array|checkSkus',
 			'ids'          => 'require|array',
-
+            'goods_id'     => 'require'
 		];
 	protected $message
 		= [
@@ -38,7 +38,9 @@ class Goods extends Validate
 			'freight_id.require'   => "运费必须",
 			'images.require'       => "spec_sign商品图必须",
 			'body.require'         => "商品详情必须",
-		];
+            'goods_id.require'     => "商品id必须",
+
+        ];
 	protected $scene
 		= [
 			'add'        => [
@@ -71,6 +73,9 @@ class Goods extends Validate
 			'del'        => [
 				'ids',
 			],
+            'skuList'    => [
+                'goods_id',
+            ],
 		];
 
 	//	public function sceneAdd()

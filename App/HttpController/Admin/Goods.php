@@ -172,6 +172,35 @@ class Goods extends Admin
 		}
 	}
 
+
+    /**
+     * 根据商品id获得商品sku列表
+     * @method GET
+     * @param int    goods_id 商品id
+     */
+    public function skuList()
+    {
+
+        $get   = $this->get;
+        $error = $this->validate($get, 'Admin/Goods.skuList');
+        if ($error !== true) {
+            return $this->send(Code::error, [], $error);
+        } else {
+
+            $goods_sku_model       = model('GoodsSku');
+            $condition             = [];
+            $condition['goods_id'] = $get['goods_id'];
+            $goods_sku_count       = $goods_sku_model->getGoodsSkuCount($condition);
+            $goods_sku_list        = $goods_sku_model->getGoodsSkuList($condition, '*', 'id desc', '1,100');
+
+            return $this->send(Code::success, [
+                'total_number' => $goods_sku_count,
+                'list'         => $goods_sku_list,
+            ]);
+
+        }
+    }
+
 }
 
 ?>
