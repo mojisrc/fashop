@@ -27,7 +27,7 @@ class Group extends Admin
      * 拼团活动列表
      * @method GET
      * @param string $keywords 关键词 活动名称
-     * @param int $state 状态 0未开始 10已开始未生效 20已开始生效中 30已过期未生效 40已过期生效中
+     * @param int $state 状态 0未开始 10进行中 20已结束 30已失效
      */
     public function list()
     {
@@ -43,24 +43,19 @@ class Group extends Admin
             switch ($get['state']) {
                 case 0:
                     $condition['start_time'] = ['gt', $time];
+                    $condition['is_show']    = 1;
                     break;
                 case 10:
                     $condition['start_time'] = ['elt', $time];
                     $condition['end_time']   = ['egt', $time];
-                    $condition['is_show']    = 0;
+                    $condition['is_show']    = 1;
                     break;
                 case 20:
-                    $condition['start_time'] = ['elt', $time];
-                    $condition['end_time']   = ['egt', $time];
+                    $condition['end_time']   = ['elt', $time];
                     $condition['is_show']    = 1;
                     break;
                 case 30:
-                    $condition['end_time'] = ['lt', $time];
                     $condition['is_show']  = 0;
-                    break;
-                case 40:
-                    $condition['end_time'] = ['lt', $time];
-                    $condition['is_show']  = 1;
                     break;
             }
         }
@@ -426,7 +421,7 @@ class Group extends Admin
             }
 
             //查询活动商品sku ids
-            $goods_sku_ids = $group_goods_model->getGroupGoodsColumn(['group_id' => $get['group_id']], '', 'goods_sku_id');
+            $goods_sku_ids = $group_goods_model->getGroupGoodsColumn(['group_id' => $group_data['id']], '', 'goods_sku_id');
 
             if (!$goods_sku_ids) {
                 return $this->send(Code::error);
@@ -434,6 +429,7 @@ class Group extends Admin
 
             $condition                 = [];
             $condition['goods_sku.id'] = ['in', $goods_sku_ids];
+            $condition['group_goods.group_id'] = $group_data['id'];
 
             //查询该商品下所有sku和已设置拼团活动的数据
             $goods_sku_count = $group_goods_model->getGoodsSkuMoreCount($condition);
