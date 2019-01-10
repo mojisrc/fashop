@@ -85,8 +85,11 @@ class PageGoods
             $group_goods_model             = model('GroupGoods');
             $condition                     = [];
             $map                           = [];
+            $time                          = time();
+            $condition['group.start_time'] = ['elt', $time];
+            $condition['group.end_time']   = ['egt', $time];
             $condition['group.is_show']    = 1;
-            $condition['group.start_time'] = ['elt', time()];
+
 
             foreach ($goods_group_key as $key => $value) {
                 switch ($bodys[$value]['options']['goods_sort']) {

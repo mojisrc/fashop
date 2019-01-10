@@ -38,7 +38,6 @@ class Group extends Validate
     protected $scene
         = [
             'info' => [
-                'group_id',
                 'goods_id',
             ],
             'skuInfo' => [
@@ -46,25 +45,20 @@ class Group extends Validate
                 'goods_id',
             ],
             'groupingSearch' => [
-                'group_id',
                 'goods_id',
             ],
             'groupingInfo' => [
                 'order_id',
-                'group_id',
                 'goods_id',
             ],
             'allowOpenGroup' => [
-                'group_id',
                 'goods_id',
             ],
             'allowJoinGroup' => [
-                'group_id',
                 'goods_id',
             ],
             'shareGroupingInfo' => [
                 'order_id',
-                'group_id',
                 'goods_id',
             ],
         ];

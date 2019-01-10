@@ -501,32 +501,18 @@ class Group extends Model {
      */
     public function stateDesc($data) {
 
-        //0 不显示执行开始按钮 1显示
-        $is_show_open = 0;
-
         if ( time() >= $data['start_time'] && time() <= $data['end_time'] ) {
-
-            //是否正在执行 0未执行 1执行
-            if($data['is_show'] == 0){
-                $state_desc   = '已开始未生效';
-                $is_show_open = 1;
-            }else{
-                $state_desc = '已开始生效中';
-            }
-
+            $state_desc   = '进行中';
         } elseif ( time() < $data['start_time'] ) {
             $state_desc = '未开始';
 
         } elseif ( time() > $data['end_time'] ) {
-            //是否正在执行 0未执行 1执行
-            if($data['is_show'] == 0){
-                $state_desc   = '已过期未生效';
-            }else{
-                $state_desc = '已过期生效中';
-            }
-
+            $state_desc = '已结束';
         }
-        $data['is_show_open'] = $is_show_open;
+
+        if($data['is_show']==0){
+            $state_desc = '已失效';
+        }
         $data['state_desc']   = $state_desc;
         return $data;
     }
