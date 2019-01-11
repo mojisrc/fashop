@@ -264,74 +264,80 @@ class OrderRefund
         }
 
         $config = $setting_info['config'];
-        switch ($setting_info['key']) {
-            case 'wechat':
-                $pay_config = [
-                    'appid'         => $config['appid'], // APP APPID
-                    'app_id'        => $config['app_id'], // 公众号 APPID
-                    'miniapp_id'    => $config['mini_app_id'], // 小程序 APPID
-                    'mch_id'        => $config['mch_id'],
-                    'key'           => $config['key'],
-                    'notify_url'    => $config['notify_url'],
-                    'cert_client'   => EASYSWOOLE_ROOT . "/" . $config['apiclient_cert'], // optional，退款等情况时用到
-                    'cert_key'      => EASYSWOOLE_ROOT . "/" . $config['apiclient_key'],// optional，退款等情况时用到
-                    'log'           => [ // optional
-                        'file'     => EASYSWOOLE_ROOT . '/Runtime/Log/wechat.log',
-                        'level'    => 'debug', // 建议生产环境等级调整为 info，开发环境为 debug
-                        'type'     => 'single', // optional, 可选 daily.
-                        'max_file' => 30, // optional, 当 type 为 daily 时有效，默认 30 天
-                    ],
-                    'http'          => [ // optional
-                        'timeout'         => 5.0,
-                        'connect_timeout' => 5.0,
-                        // 更多配置项请参考 [Guzzle](https://guzzle-cn.readthedocs.io/zh_CN/latest/request-options.html)
-                    ],
-                    'response_type' => 'array',
-                    //            'mode'          => 'dev', // optional, dev/hk;当为 `hk` 时，为香港 gateway。
-                ];
+        if ($setting_info['key'] == 'wechat') {
+            $pay_config = [
+                'appid'         => $config['appid'], // APP APPID
+                'app_id'        => $config['app_id'], // 公众号 APPID
+                'miniapp_id'    => $config['mini_app_id'], // 小程序 APPID
+                'mch_id'        => $config['mch_id'],
+                'key'           => $config['key'],
+                'notify_url'    => $config['notify_url'],
+                'cert_client'   => EASYSWOOLE_ROOT . "/" . $config['apiclient_cert'], // optional，退款等情况时用到
+                'cert_key'      => EASYSWOOLE_ROOT . "/" . $config['apiclient_key'],// optional，退款等情况时用到
+                'log'           => [ // optional
+                    'file'     => EASYSWOOLE_ROOT . '/Runtime/Log/wechat.log',
+                    'level'    => 'debug', // 建议生产环境等级调整为 info，开发环境为 debug
+                    'type'     => 'single', // optional, 可选 daily.
+                    'max_file' => 30, // optional, 当 type 为 daily 时有效，默认 30 天
+                ],
+                'http'          => [ // optional
+                    'timeout'         => 5.0,
+                    'connect_timeout' => 5.0,
+                    // 更多配置项请参考 [Guzzle](https://guzzle-cn.readthedocs.io/zh_CN/latest/request-options.html)
+                ],
+                'response_type' => 'array',
+                //            'mode'          => 'dev', // optional, dev/hk;当为 `hk` 时，为香港 gateway。
+            ];
 
-                break;
+            //退款参数准备
+            $order = [
+                'transaction_id' => $refund['trade_no'], //transaction_id
+                'out_refund_no'  => time(),
+                'total_fee'      => $refund['order_amount'] * 100,
+                'refund_fee'     => $refund['refund_amount'] * 100,
+                'refund_desc'    => '订单' . $refund['order_sn'] . '退款',
+            ];
 
-        }
+            //如果您需要退 APP/小程序 的订单，请传入参数：['type' => 'app']/['type' => 'miniapp']
+            switch ($payment_code) {
+                case 'wechat':
+                    # code...
+                    break;
+                case 'wechat_mini':
+                    $order['type'] = 'miniapp';
+                    break;
+                case 'wechat_app':
+                    $order['type'] = 'app';
+                    break;
+            }
 
-        switch ($payment_code) {
-            case 'wechat':
-                # code...
-                break;
-            case 'wechat_mini':
-                $order = [
-                    'transaction_id' => $refund['trade_no'], //transaction_id
-                    'out_refund_no'  => time(),
-                    'total_fee'      => $refund['order_amount'] * 100,
-                    'refund_fee'     => $refund['refund_amount'] * 100,
-                    'refund_desc'    => '订单' . $refund['order_sn'] . '退款',
-                    'type'           => 'miniapp',
-                ];
+            $result = Pay::wechat($pay_config)->refund($order);
 
-                $result = Pay::wechat($pay_config)->refund($order);
-
-                if ($result) {
-                    if ($result->result_code == 'SUCCESS' && $result->return_code == 'SUCCESS') {
-                        $updata['refund_no']    = $result->transaction_id;
-                        $updata['handle_state'] = 30;
-                        $updata['success_time'] = time();//退款回调完成时间
-                        $result                 = $refund_model->updateOrderRefund(['id' => $refund['id']], $updata);
-                        if (!$result) {
-                            throw new \Exception('退款失败');
-                        }
-                    } else {
+            if ($result) {
+                if ($result->result_code == 'SUCCESS' && $result->return_code == 'SUCCESS') {
+                    $updata['refund_no']    = $result->transaction_id;
+                    $updata['handle_state'] = 30;
+                    $updata['success_time'] = time();//退款回调完成时间
+                    $result                 = $refund_model->updateOrderRefund(['id' => $refund['id']], $updata);
+                    if (!$result) {
                         throw new \Exception('退款失败');
                     }
-
                 } else {
                     throw new \Exception('退款失败');
                 }
 
-                break;
-            case 'wechat_app':
-                # code...
-                break;
+            } else {
+                throw new \Exception('退款失败');
+            }
+
+        } elseif ($setting_info['key'] == 'alipay') {
+            throw new \Exception('暂未开放支付宝退款');
+
+        } else {
+            throw new \Exception('不支持的支付方式');
+
         }
+
         return true;
     }
 }
