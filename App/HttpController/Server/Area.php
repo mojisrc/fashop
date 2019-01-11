@@ -28,6 +28,7 @@ class Area extends Server
 	 * @method GET
 	 * @param int pid 父级id
 	 * @param int level 层级 规则：设置显示下级行政区级数（行政区级别包括：省/直辖市、市、区/县3个级别）可选值：0、1、2  0：返回省/直辖市；1：返回省/直辖市、市；2：返回省/直辖市、市、区/县
+	 * @param int $tree 默认 0
 	 */
 	public function list()
 	{
@@ -52,10 +53,9 @@ class Area extends Server
 		} else{
 			$condition['level'] = 1;
 		}
-
-		$list = model( 'Area' )->getAreaList( $condition, 'id,name,pid,longitude,latitude,level', 'id asc', '1,1000000' );
+		$list = model( 'Area' )->getAreaList($condition, 'id,name,pid,longitude,latitude', 'id asc', '1,1000000' );
 		$this->send( Code::success, [
-			'list' => isset( $get['level'] ) ? \App\Utils\Tree::listToTree( $list ) : $list,
+			'list' => isset($get['tree'])  ? \App\Utils\Tree::listToTree( $list ) : $list,
 		] );
 	}
 
