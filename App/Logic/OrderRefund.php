@@ -263,7 +263,7 @@ class OrderRefund
                 $pay_config = [
                     'appid'         => $config['appid'], // APP APPID
                     'app_id'        => $config['app_id'], // 公众号 APPID
-                    'miniapp_id'    => $config['miniapp_id'], // 小程序 APPID
+                    'miniapp_id'    => $config['mini_app_id'], // 小程序 APPID
                     'mch_id'        => $config['mch_id'],
                     'key'           => $config['key'],
                     'notify_url'    => $config['notify_url'],
