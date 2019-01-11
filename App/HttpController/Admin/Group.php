@@ -170,6 +170,7 @@ class Group extends Admin
             $data['create_time']      = time();
             $data['update_time']      = time();
             $data['is_show']          = 1;
+            $data['goods_id']         = $goods_id;
 
             $group_model->startTrans();
             $group_id = $group_model->insertGroup($data);
