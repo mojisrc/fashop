@@ -268,17 +268,17 @@ class Buy extends Server
 	private function getPayConfig( array $config, string $payment_channel ) : array
 	{
 		$notify_url = "";
-		switch( $payment_channel ){
-		case 'wechat':
-			$notify_url = isset( $config['callback_domain'] ) ? $config['callback_domain'] : $this->request->domain()."/Server/Buy/wechatNotify";
-		break;
-		case 'wechat_mini':
-			$notify_url = isset( $config['callback_domain'] ) ? $config['callback_domain'] : $this->request->domain()."/Server/Buy/wechatMiniNotify";
-		break;
-		case 'wechat_app':
-			$notify_url = isset( $config['callback_domain'] ) ? $config['callback_domain'] : $this->request->domain()."/Server/Buy/wechatAppNotify";
-		break;
-		}
+        switch ($payment_channel) {
+            case 'wechat':
+                $notify_url = (isset($config['callback_domain']) ? $config['callback_domain'] : $this->request->domain()) . "/Server/Buy/wechatNotify";
+                break;
+            case 'wechat_mini':
+                $notify_url = (isset($config['callback_domain']) ? $config['callback_domain'] : $this->request->domain()) . "/Server/Buy/wechatMiniNotify";
+                break;
+            case 'wechat_app':
+                $notify_url = (isset($config['callback_domain']) ? $config['callback_domain'] : $this->request->domain()) . "/Server/Buy/wechatAppNotify";
+                break;
+        }
 
 		return [
 			'appid'       => isset( $config['appid'] ) ? $config['appid'] : null,// APP APPID
@@ -287,8 +287,8 @@ class Buy extends Server
 			'mch_id'      => isset( $config['mch_id'] ) ? $config['mch_id'] : null,
 			'key'         => isset( $config['key'] ) ? $config['key'] : null,
 			'notify_url'  => $notify_url,
-			'cert_client' => EASYSWOOLE_ROOT."/".isset( $config['apiclient_cert'] ) ? $config['apiclient_cert'] : null,
-			'cert_key'    => EASYSWOOLE_ROOT."/".isset( $config['apiclient_key'] ) ? $config['apiclient_key'] : null,
+			'cert_client' => null,
+			'cert_key'    => null,
 			'log'         => [
 				'file'  => EASYSWOOLE_ROOT.'/Log/wechatpay.log',
 				'level' => 'debug', // todo
