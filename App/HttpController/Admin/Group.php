@@ -490,33 +490,17 @@ class Group extends Admin
             return $this->send(Code::error, [], $error);
         } else {
             $group_model     = model('Group');
-            $condition       = [];
-            $condition['id'] = $post['id'];
-            $info            = $group_model->getGroupInfo($condition);
+            //查询未开始和正在进行活动
+            $condition            = [];
+            $condition['id']      = $post['id'];
+            $condition['is_show'] = 1;
+            $condition_str        = "(start_time>$time) OR (start_time<=$time AND end_time>=$time)";
+            $group_info           = $group_model->getGroupInfo($condition, $condition_str);
 
-            if (!$info) {
+            if (!$group_info) {
                 return $this->send(Code::param_error);
             } else {
-
-                if ($info['is_show'] == 1) {
-                    $is_show = 0;
-                } else {
-                    if (time() >= $info['start_time'] && time() <= $info['end_time'] && $info['is_show'] == 0) {
-                        $is_show_data = $group_model->getGroupInfo(['is_show' => 1]);
-                        if ($is_show_data) {
-                            return $this->send(Code::param_error, [], '请关闭其他生效的活动再进行操作');
-
-                        }
-
-                        $is_show = 1;
-                    }
-                }
-
-                if (!isset($is_show)) {
-                    return $this->send(Code::param_error);
-                }
-
-                $result = $group_model->updateGroup($condition, ['is_show' => $is_show]);
+                $result = $group_model->updateGroup(['id'=>$post['id']], ['is_show' => 0]);
                 if ($result) {
                     return $this->send(Code::success);
                 } else {
@@ -540,27 +524,22 @@ class Group extends Admin
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {
-            $group_model       = model('Group');
-            $group_goods_model = model('GroupGoods');
-            $condition         = [];
-            $condition['id']   = $post['id'];
-            $info              = $group_model->getGroupInfo($condition);
+            $group_model          = model('Group');
+            $group_goods_model    = model('GroupGoods');
+            //查询未开始和正在进行活动
+            $condition            = [];
+            $condition['id']      = $post['id'];
+            $condition['is_show'] = 1;
+            $condition_str        = "(start_time>$time) OR (start_time<=$time AND end_time>=$time)";
+            $group_info           = $group_model->getGroupInfo($condition, $condition_str);
 
-            if (!$info) {
-                return $this->send(Code::param_error);
+            if ($group_info) {
+                return $this->send(Code::param_error, [], '不可删除');
             } else {
 
-                if ($info['is_show'] == 1) {
-                    return $this->send(Code::param_error, [], '请使活动失效再进行操作');
-
-                } else {
-                    if (time() >= $info['start_time'] && time() <= $info['end_time'] && $info['is_show'] == 0) {
-                        return $this->send(Code::param_error, [], '请使活动过期再进行操作');
-                    }
-                }
                 $group_model->startTrans();
                 //删除拼团活动
-                $group_result = $group_model->delGroup($condition);
+                $group_result = $group_model->delGroup(['id'=>$post['id']]);
                 if (!$group_result) {
                     $group_model->rollback();
                     return $this->send(Code::error);
