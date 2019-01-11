@@ -26,13 +26,15 @@ class Group extends Validate
             'time_over_day'    => 'require|integer',
             'time_over_hour'   => 'require|integer',
             'time_over_minute' => 'require|integer',
-            'start_time'       => 'require|checkTime',
-            'end_time'         => 'require|checkTime',
+            'start_time'       => 'require|checkStartTime',
+            'end_time'         => 'require|checkEndTime',
             'limit_buy_num'    => 'require|integer',
             'limit_group_num'  => 'require|integer',
             'limit_goods_num'  => 'require|integer',
             'group_id'         => 'require',
             'goods_id'         => 'require',
+            'group_goods'      => 'require',
+
         ];
 	protected $message
 		= [
@@ -48,6 +50,8 @@ class Group extends Validate
             'limit_goods_num.require'  => "用户每次参团时可购买件数必修",
             'group_id.require'         => '拼团活动id必须',
             'goods_id.require'         => '商品id必填',
+            'group_goods.require'      => '商品规格必填',
+
         ];
 
 
@@ -63,9 +67,14 @@ class Group extends Validate
                 'limit_buy_num',
                 'limit_group_num',
                 'limit_goods_num',
+                'group_goods',
             ],
-
-			'edit' => [
+            'edit' => [
+                'id',
+                'title',
+                'group_goods',
+            ],
+			'editUnstart' => [
 				'id',
                 'title',
                 'time_over_day',
@@ -76,7 +85,15 @@ class Group extends Validate
                 'limit_buy_num',
                 'limit_group_num',
                 'limit_goods_num',
-			],
+                'group_goods',
+            ],
+
+            'editStart' => [
+                'id',
+                'title',
+                'end_time',
+                'group_goods',
+            ],
 
 			'info' => [
 				'id',
@@ -112,7 +129,7 @@ class Group extends Validate
         }
 
         if( ($data['time_over_day']*86400 + $data['time_over_hour']*3600 + $data['time_over_minute']*60) > (strtotime($data['end_time'])-strtotime($data['start_time'])) ){
-            return '活动时限不能大于活动时间差';
+            return '拼团时限不能大于活动时间差';
         }else{
             $result = true;
         }
@@ -136,6 +153,49 @@ class Group extends Validate
 		}
 		return $result;
 	}
+
+    /**
+     * @access protected
+     * @param mixed $value 字段值
+     * @param mixed $rule  验证规则
+     * @return bool
+     */
+    protected function checkStartTime( $value, $rule, $data )
+    {
+        if(!check_date($data['start_time'], ["Y-m-d H:i:s"])){
+            return '开始时间格式不正确';
+        }
+        if(!check_date($data['end_time'], ["Y-m-d H:i:s"])){
+            return '结束时间格式不正确';
+        }
+        if( strtotime($data['start_time']) >= strtotime($data['end_time']) ){
+            return '结束时间必须大于开始时间';
+
+        }
+
+        if( ($data['time_over_day']*86400 + $data['time_over_hour']*3600 + $data['time_over_minute']*60) > (strtotime($data['end_time'])-strtotime($data['start_time'])) ){
+            return '拼团时限不能大于活动时间差';
+        }else{
+            $result = true;
+        }
+        return $result;
+
+    }
+
+    /**
+     * @access protected
+     * @param mixed $value 字段值
+     * @param mixed $rule  验证规则
+     * @return bool
+     */
+    protected function checkEndTime( $value, $rule, $data )
+    {
+        if(!check_date($data['end_time'], ["Y-m-d H:i:s"])){
+            return '结束时间格式不正确';
+        }
+
+        return true;
+    }
 
 
 }

@@ -269,44 +269,44 @@ class Group extends Admin
                 return $this->send(Code::param_error, [], '规格错误');
             }
 
-            $goods_id                 = $post['group_goods'][0]['goods_id'];
-            $data                     = [];
-            $data['title']            = $post['title'];
-            $data['time_over_day']    = $post['time_over_day'];
-            $data['time_over_hour']   = $post['time_over_hour'];
-            $data['time_over_minute'] = $post['time_over_minute'];
-            $data['limit_buy_num']    = $post['limit_buy_num'];
-            $data['limit_group_num']  = $post['limit_group_num'];
-            $data['limit_goods_num']  = $post['limit_goods_num'];
-            $data['time_over']        = ($post['time_over_day'] * 24 + $post['time_over_hour']) . ':' . $post['time_over_minute'];
-            $data['start_time']       = strtotime($post['start_time']);
-            $data['end_time']         = strtotime($post['end_time']);
-            $data['update_time']      = time();
-            $data['goods_id']         = $goods_id;
-
-            if ($data['goods_id'] != $group_data['goods_id']) {
+            $goods_id = $post['group_goods'][0]['goods_id'];
+            if ($goods_id != $group_data['goods_id']) {
                 return $this->send(Code::error, [], '参数错误');
             }
 
+            $data               = [];
             $group_goods_updata = [];
 
             if (time() >= $group_data['start_time'] && time() <= $group_data['end_time']) {
                 //进行中
-                unset($data['time_over_day']);
-                unset($data['time_over_hour']);
-                unset($data['time_over_minute']);
-                unset($data['time_over']);
-                unset($data['limit_buy_num']);
-                unset($data['limit_group_num']);
-                unset($data['limit_goods_num']);
-                unset($data['start_time']);
-                unset($data['goods_id']);
+                $error = $this->validate($post, 'Admin/Group.editStart');
+                if ($error !== true) {
+                    return $this->send(Code::error, [], $error);
+                }
+                $data['title']       = $post['title'];
+                $data['end_time']    = strtotime($post['end_time']);
+                $data['update_time'] = time();
+
                 if ($data['end_time'] < $group_data['end_time']) {
                     return $this->send(Code::error, [], '活动结束时间不能小于之前设置');
                 }
             } elseif (time() < $group_data['start_time']) {
                 //未开始
-                unset($data['goods_id']);
+                $error = $this->validate($post, 'Admin/Group.editUnstart');
+                if ($error !== true) {
+                    return $this->send(Code::error, [], $error);
+                }
+                $data['title']            = $post['title'];
+                $data['time_over_day']    = $post['time_over_day'];
+                $data['time_over_hour']   = $post['time_over_hour'];
+                $data['time_over_minute'] = $post['time_over_minute'];
+                $data['limit_buy_num']    = $post['limit_buy_num'];
+                $data['limit_group_num']  = $post['limit_group_num'];
+                $data['limit_goods_num']  = $post['limit_goods_num'];
+                $data['time_over']        = ($post['time_over_day'] * 24 + $post['time_over_hour']) . ':' . $post['time_over_minute'];
+                $data['start_time']       = strtotime($post['start_time']);
+                $data['end_time']         = strtotime($post['end_time']);
+                $data['update_time']      = time();
 
                 $goods_sku = model('GoodsSku')->getGoodsSkuList(['goods_id' => $goods_id], '*', 'id desc', '1,100');
                 if (!$goods_sku) {
