@@ -489,7 +489,8 @@ class Group extends Admin
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {
-            $group_model     = model('Group');
+            $group_model = model('Group');
+            $time        = time();
             //查询未开始和正在进行活动
             $condition            = [];
             $condition['id']      = $post['id'];
@@ -500,7 +501,7 @@ class Group extends Admin
             if (!$group_info) {
                 return $this->send(Code::param_error);
             } else {
-                $result = $group_model->updateGroup(['id'=>$post['id']], ['is_show' => 0]);
+                $result = $group_model->updateGroup(['id' => $post['id']], ['is_show' => 0]);
                 if ($result) {
                     return $this->send(Code::success);
                 } else {
@@ -524,8 +525,10 @@ class Group extends Admin
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {
-            $group_model          = model('Group');
-            $group_goods_model    = model('GroupGoods');
+            $group_model       = model('Group');
+            $group_goods_model = model('GroupGoods');
+            $time              = time();
+
             //查询未开始和正在进行活动
             $condition            = [];
             $condition['id']      = $post['id'];
@@ -539,7 +542,7 @@ class Group extends Admin
 
                 $group_model->startTrans();
                 //删除拼团活动
-                $group_result = $group_model->delGroup(['id'=>$post['id']]);
+                $group_result = $group_model->delGroup(['id' => $post['id']]);
                 if (!$group_result) {
                     $group_model->rollback();
                     return $this->send(Code::error);
