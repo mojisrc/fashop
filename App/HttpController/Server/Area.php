@@ -53,7 +53,7 @@ class Area extends Server
 		} else{
 			$condition['level'] = 1;
 		}
-		$list = model( 'Area' )->getAreaList($condition, 'id,name,pid,longitude,latitude', 'id asc', '1,1000000' );
+		$list = model( 'Area' )->getAreaList($condition, 'id,name,pid', 'id asc', '1,1000000' );
 		$this->send( Code::success, [
 			'list' => isset($get['tree'])  ? \App\Utils\Tree::listToTree( $list ) : $list,
 		] );
