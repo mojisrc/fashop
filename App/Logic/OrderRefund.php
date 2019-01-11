@@ -254,10 +254,16 @@ class OrderRefund
         if (in_array($payment_code, ['wechat', 'wechat_mini', 'wechat_app'])) {
             $setting_key = 'wechat';
 
+        } else {
+            throw new \Exception('不支持的支付方式');//TODO 微信以外的支付方式
         }
 
         $setting_info = model('Setting')->getSettingInfo(['key' => $setting_key]);
-        $config       = $setting_info['config'];
+        if (!$setting_info) {
+            throw new \Exception('获取支付配置失败');
+        }
+
+        $config = $setting_info['config'];
         switch ($setting_info['key']) {
             case 'wechat':
                 $pay_config = [
