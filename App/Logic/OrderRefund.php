@@ -267,8 +267,8 @@ class OrderRefund
                     'mch_id'        => $config['mch_id'],
                     'key'           => $config['key'],
                     'notify_url'    => $config['notify_url'],
-                    'cert_client'   => EASYSWOOLE_ROOT . "/" . isset($config['apiclient_cert']), // optional，退款等情况时用到
-                    'cert_key'      => EASYSWOOLE_ROOT . "/" . isset($config['apiclient_key']),// optional，退款等情况时用到
+                    'cert_client'   => EASYSWOOLE_ROOT . "/" . $config['apiclient_cert'], // optional，退款等情况时用到
+                    'cert_key'      => EASYSWOOLE_ROOT . "/" . $config['apiclient_key'],// optional，退款等情况时用到
                     'log'           => [ // optional
                         'file'     => EASYSWOOLE_ROOT . '/Runtime/Log/wechat.log',
                         'level'    => 'debug', // 建议生产环境等级调整为 info，开发环境为 debug
