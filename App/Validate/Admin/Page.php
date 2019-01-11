@@ -282,7 +282,7 @@ class Page extends Validate
 					}
 				break;
                 case 'goods_group':
-                    if( empty( $body['options'] ) || !is_array( $body['options'] ) || count( $body['options'] ) != 4 ){
+                    if( empty( $body['options'] ) || !is_array( $body['options'] ) || count( $body['options'] ) != 5 ){
                         return '拼团商品配置项有误';
                     }
                     if( !in_array(intval($body['options']['source_type']), ['auto','choose']) ){
