@@ -187,6 +187,7 @@ class OrderRefund
                     'handle_state'   => $refund_update_state,
                     'handle_time'    => time(),
                     'handle_message' => isset($data['handle_message']) ? $data['handle_message'] : null,
+                    'refund_amount'  => floatval($data['refund_amount']) ,
                 ]);
 
                 if (!$result) {
