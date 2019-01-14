@@ -183,11 +183,10 @@ class OrderRefund
 
                 // 更改退款状态
                 $result = $refund_model->editOrderRefund(['id' => $data['id']], [
-                    'refund_amount'  => $refund['refund_amount'],
+                    'refund_amount'  => floatval($data['refund_amount']),
                     'handle_state'   => $refund_update_state,
                     'handle_time'    => time(),
                     'handle_message' => isset($data['handle_message']) ? $data['handle_message'] : null,
-                    'refund_amount'  => floatval($data['refund_amount']) ,
                 ]);
 
                 if (!$result) {
