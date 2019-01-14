@@ -126,13 +126,17 @@ class Goodscategory extends Admin
 			$goods_category_model = model( 'GoodsCategory' );
 			$row                  = $goods_category_model->getGoodsCategoryInfo( $condition, '*' );
 			if( !$row ){
-				$this->send( Code::param_error, [] );
+                return $this->send( Code::param_error, [] );
 			} else{
+                $sub_info = $goods_category_model->getGoodsCategoryInfo( ['pid'=>$row['id']], '*' );
+                if($sub_info){
+                    return $this->send(Code::param_error, [], '存在子级分类，不可删除');
+                }
 				$result = $goods_category_model->softDelGoodsCategory( $condition );
 				if( !$result ){
-					$this->send( Code::error );
+                    return $this->send( Code::error );
 				} else{
-					$this->send( Code::success );
+                    return $this->send( Code::success );
 
 				}
 			}
