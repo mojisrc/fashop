@@ -415,11 +415,12 @@ class Order extends Logic
 			}
 			// 修改订单
 			$order_update = [
-				'state'        => self::state_pay,
-				'payment_time' => time(),
-				'payment_code' => $payment_code,
-				'trade_no'     => $trade_no,    //支付宝交易号
-			];
+				'state'          => self::state_pay,
+				'payment_time'   => time(),
+				'payment_code'   => $payment_code,
+				'trade_no'       => $trade_no,    //支付宝交易号
+                'out_request_no' => 'HZ01RF00'.$order_info['id'], //支付宝：标识一次退款请求，同一笔交易多次退款需要保证唯一，如需部分退款，则此参数必传。
+            ];
 
 			//判断是否为拼团订单
 			if( $order_info['goods_type'] == 2 ){
