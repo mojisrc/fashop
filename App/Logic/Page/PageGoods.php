@@ -103,11 +103,12 @@ class PageGoods
                         $goods_group_order = 'create_time desc';
                         break;
                 }
+
+                $goods_ids             = $bodys[$value]['data'] ? array_column($bodys[$value]['data'], 'id') : [];
                 $bodys[$value]['data'] = [];
 
                 //手动
                 if ($bodys[$value]['options']['source_type'] == 'choose') {
-                    $goods_ids = $bodys[$value]['data'] ? array_column($bodys[$value]['data'], 'id') : [];
                     if ($goods_ids) {
                         $condition['group_goods.goods_id'] = ['in', $goods_ids];
                         $group_goods                       = $group_goods_model->getGroupGoodsSkuMoreList($condition, '', 'group_goods.*', 'group_goods.id desc', '', '');
