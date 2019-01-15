@@ -276,7 +276,7 @@ class OrderRefund
                 'miniapp_id'    => $config['mini_app_id'], // 小程序 APPID
                 'mch_id'        => $config['mch_id'],
                 'key'           => $config['key'],
-                'notify_url'    => $config['notify_url'],
+                'notify_url'    => '',
                 'cert_client'   => EASYSWOOLE_ROOT . "/" . $config['apiclient_cert'], // optional，退款等情况时用到
                 'cert_key'      => EASYSWOOLE_ROOT . "/" . $config['apiclient_key'],// optional，退款等情况时用到
                 'log'           => [ // optional
@@ -336,13 +336,14 @@ class OrderRefund
             }
 
         } elseif ($setting_info['key'] == 'alipay') {
+            $notify_url = (isset($config['callback_domain']) ? $config['callback_domain'] : $this->request->domain()) . "/Server/Buy/alipayAppNotify";
 
             $pay_config = [
                 'app_id'         => $config['app_id'],// APP APPID,
-                'notify_url'     => $notify_url,
+                'notify_url'     => '',
                 'return_url'     => '',
-                'ali_public_key' => EASYSWOOLE_ROOT . "/" . $config['alipay_public_key'], //加密方式： **RSA2**
-                'private_key'    => EASYSWOOLE_ROOT . "/" . $config['merchant_private_key'],
+                'ali_public_key' => $config['alipay_public_key'], //加密方式： **RSA2**
+                'private_key'    => $config['merchant_private_key'],
                 'log'            => [ // optional
                     'file'     => EASYSWOOLE_ROOT . '/Runtime/Log/alipay.log',
                     'level'    => 'debug', // 建议生产环境等级调整为 info，开发环境为 debug

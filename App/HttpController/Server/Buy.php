@@ -355,8 +355,8 @@ class Buy extends Server
             'app_id'         => isset($config['app_id']) ? $config['app_id'] : null,// APP APPID,
             'notify_url'     => $notify_url,
             'return_url'     => '',
-            'ali_public_key' => EASYSWOOLE_ROOT . "/" . $config['alipay_public_key'], //加密方式： **RSA2**
-            'private_key'    => EASYSWOOLE_ROOT . "/" . $config['merchant_private_key'],
+            'ali_public_key' => $config['alipay_public_key'], //加密方式： **RSA2**
+            'private_key'    => $config['merchant_private_key'],
             'log'            => [ // optional
                 'file'     => EASYSWOOLE_ROOT . '/Runtime/Log/alipay.log',
                 'level'    => 'debug', // 建议生产环境等级调整为 info，开发环境为 debug
