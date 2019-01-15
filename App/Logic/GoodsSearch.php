@@ -269,11 +269,12 @@ class GoodsSearch
 
 		// 分类
 		if( !empty( $this->categoryIds ) && is_array( $this->categoryIds ) ){
-			foreach( $this->categoryIds as $category_id ){
-				$category_id_keywords[] = "%{$category_id}%";
-			}
-			$this->condition['category_ids'] = ['like', $category_id_keywords, 'or'];
+			$goods_ids = model('GoodsCategoryIds')->getGoodsCategoryIdsColumn(['category_id'=>['in',$this->categoryIds]], '', 'goods_id');
+			if($goods_ids){
+                $this->condition['id'] = ['in',array_unique($goods_ids)];
+            }
 		}
+
 		//1商品价格低到高 2商品价格高到低 3销量多到少 4销量少到多 5库存多到少 6库存少到多 7创建时间早到晚 8创建时间晚到早 9排序高到低 10排序低到高
 		if( !empty( $this->orderType ) ){
 			switch( $this->orderType ){

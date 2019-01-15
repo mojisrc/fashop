@@ -179,8 +179,8 @@ class Goods extends Server
 				$condition['evaluate.images'] = ['neq', 'null'];
 			}
 
-			if( isset( $get['ids'] ) && is_array( $get['ids'] ) ){
-				$condition['evaluate.id'] = ['in', $get['ids']];
+			if( isset( $this->get['ids'] ) && is_array( $this->get['ids'] ) ){
+				$condition['evaluate.id'] = ['in', $this->get['ids']];
 			}
 
 			$count = $goods_evaluate_model->alias( 'evaluate' )->join( 'order order', 'evaluate.order_id = order.id', 'LEFT' )->group( 'evaluate.id' )->where( $condition )->count();

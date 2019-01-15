@@ -534,6 +534,14 @@ class Goods
                                'skus'        => $this->getSkus(),
                            ])->add();
             GoodsImage::make(['goods_id' => $this->id, 'images' => $this->getImages()])->add();
+
+            $addCategoryIds = [];
+            foreach ($this->categoryIds as $key => $value) {
+                $addCategoryIds[$key]['goods_id']    = $this->id;
+                $addCategoryIds[$key]['category_id'] = $value;
+            }
+            model('GoodsCategoryIds')->insertAllGoodsCategoryIds($addCategoryIds);
+
             $goodsModel->commit();
             return true;
         } catch (\Exception $e) {
@@ -589,6 +597,15 @@ class Goods
             $GoodsImage->getModel()->softDelGoodsImage();
             $GoodsImage->add();
 
+            $goods_category_ids_model = model('GoodsCategoryIds');
+            $goods_category_ids_model->delGoodsCategoryIds(['goods_id' => $this->id], '');
+            $addCategoryIds = [];
+            foreach ($this->categoryIds as $key => $value) {
+                $addCategoryIds[$key]['goods_id']    = $this->id;
+                $addCategoryIds[$key]['category_id'] = $value;
+            }
+            $goods_category_ids_model->insertAllGoodsCategoryIds($addCategoryIds);
+
             $goodsModel->commit();
             return true;
         } catch (\Exception $e) {
@@ -613,13 +630,12 @@ class Goods
      */
     public function del($ids): bool
     {
-        $condition['lock'] = 0;
-        $condition['id']   = ['in', $ids];
         $goods_model       = model('Goods');
         $goods_model->startTrans();
         try {
-            $goods_model->softDelGoods(['id' => ['in', $ids]]);
-            model('GoodsSku')->softDelGoodsSku(['id' => ['in', $ids]]);
+            model('Goods')->softDelGoods(['id' => ['in', $ids]]);
+            model('GoodsSku')->softDelGoodsSku(['goods_id' => ['in', $ids]]);
+            model('GoodsCategoryIds')->softDelGoodsCategoryIds(['goods_id' => ['in', $ids]]);
             $goods_model->commit();
             return true;
         } catch (\Exception $e) {
