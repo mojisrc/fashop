@@ -4161,6 +4161,21 @@ CREATE TABLE `fa_goods_category` (
 
 /*Data for the table `fa_goods_category` */
 
+/*Table structure for table `fa_goods_category_ids` */
+
+DROP TABLE IF EXISTS `fa_goods_category_ids`;
+
+CREATE TABLE `fa_goods_category_ids` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `goods_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品id',
+  `category_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品分类id',
+  `delete_time` int(10) unsigned DEFAULT NULL COMMENT '软删除时间',
+  PRIMARY KEY (`id`),
+  KEY `couponid` (`category_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='商品所选分类';
+
+/*Data for the table `fa_goods_category_ids` */
+
 /*Table structure for table `fa_goods_collect` */
 
 DROP TABLE IF EXISTS `fa_goods_collect`;
