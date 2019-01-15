@@ -167,7 +167,7 @@ class Buy extends Server
                                                                                                                                                 'out_trade_no' => $order_info['pay_sn'],
                                                                                                                                                 'total_amount' => "{$amount}",
                                                                                                                                                 'subject'      => '商品购买_' . $pay_info['pay_sn'],
-                                                                                                                                            ]);
+                                                                                                                                            ])->getContent();
                                     break;
                                 default:
                                     # code...
