@@ -4017,6 +4017,20 @@ CREATE TABLE `fa_extend` (
 insert  into `fa_extend`(`id`,`express`,`create_time`,`delete_time`) values 
 (1,NULL,0,NULL);
 
+/*Table structure for table `fa_fd` */
+
+DROP TABLE IF EXISTS `fa_fd`;
+
+CREATE TABLE `fa_fd` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `fd` int(10) unsigned DEFAULT NULL,
+  `uid` int(10) unsigned DEFAULT NULL,
+  `create_time` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `fa_fd` */
+
 /*Table structure for table `fa_freight` */
 
 DROP TABLE IF EXISTS `fa_freight`;
@@ -4913,6 +4927,20 @@ CREATE TABLE `fa_plugin` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 /*Data for the table `fa_plugin` */
+
+/*Table structure for table `fa_queue` */
+
+DROP TABLE IF EXISTS `fa_queue`;
+
+CREATE TABLE `fa_queue` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL COMMENT '队列名字(备注名)',
+  `raw` text COMMENT '生数据',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `fa_queue` */
 
 /*Table structure for table `fa_sale_num` */
 
