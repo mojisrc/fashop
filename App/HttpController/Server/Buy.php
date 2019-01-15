@@ -163,7 +163,7 @@ class Buy extends Server
 
                                     break;
                                 case 'alipay_app':
-                                    $options = Pay::alipay($this->getAliPayConfig($payment['config'], $this->post['payment_channel']))->app([
+                                    $options['content'] = Pay::alipay($this->getAliPayConfig($payment['config'], $this->post['payment_channel']))->app([
                                                                                                                                                 'out_trade_no' => $order_info['pay_sn'],
                                                                                                                                                 'total_amount' => "{$amount}",
                                                                                                                                                 'subject'      => '商品购买_' . $pay_info['pay_sn'],
