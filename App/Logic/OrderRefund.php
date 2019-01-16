@@ -183,7 +183,7 @@ class OrderRefund
 
                 // 更改退款状态
                 $result = $refund_model->editOrderRefund(['id' => $data['id']], [
-                    'refund_amount'  => $refund['refund_amount'],
+                    'refund_amount'  => floatval($data['refund_amount']),
                     'handle_state'   => $refund_update_state,
                     'handle_time'    => time(),
                     'handle_message' => isset($data['handle_message']) ? $data['handle_message'] : null,
@@ -253,9 +253,14 @@ class OrderRefund
 
         if (in_array($payment_code, ['wechat', 'wechat_mini', 'wechat_app'])) {
             $setting_key = 'wechat';
+        }
 
-        } else {
-            throw new \Exception('不支持的支付方式');//TODO 微信以外的支付方式
+        if (in_array($payment_code, ['alipay_web', 'alipay_wap', 'alipay_app'])) {
+            $setting_key = 'alipay';
+        }
+
+        if (!$setting_key) {
+            throw new \Exception('不支持的支付方式');
         }
 
         $setting_info = model('Setting')->getSettingInfo(['key' => $setting_key]);
@@ -271,7 +276,7 @@ class OrderRefund
                 'miniapp_id'    => $config['mini_app_id'], // 小程序 APPID
                 'mch_id'        => $config['mch_id'],
                 'key'           => $config['key'],
-                'notify_url'    => $config['notify_url'],
+                'notify_url'    => '',
                 'cert_client'   => EASYSWOOLE_ROOT . "/" . $config['apiclient_cert'], // optional，退款等情况时用到
                 'cert_key'      => EASYSWOOLE_ROOT . "/" . $config['apiclient_key'],// optional，退款等情况时用到
                 'log'           => [ // optional
@@ -331,7 +336,51 @@ class OrderRefund
             }
 
         } elseif ($setting_info['key'] == 'alipay') {
-            throw new \Exception('暂未开放支付宝退款');
+            $notify_url = (isset($config['callback_domain']) ? $config['callback_domain'] : $this->request->domain()) . "/Server/Buy/alipayAppNotify";
+
+            $pay_config = [
+                'app_id'         => $config['app_id'],// APP APPID,
+                'notify_url'     => '',
+                'return_url'     => '',
+                'ali_public_key' => $config['alipay_public_key'], //加密方式： **RSA2**
+                'private_key'    => $config['merchant_private_key'],
+                'log'            => [ // optional
+                    'file'     => EASYSWOOLE_ROOT . '/Runtime/Log/alipay.log',
+                    'level'    => 'debug', // 建议生产环境等级调整为 info，开发环境为 debug
+                    'type'     => 'single', // optional, 可选 daily.
+                    'max_file' => 30, // optional, 当 type 为 daily 时有效，默认 30 天
+                ],
+                'http'           => [ // optional
+                    'timeout'         => 5.0,
+                    'connect_timeout' => 5.0,
+                    // 更多配置项请参考 [Guzzle](https://guzzle-cn.readthedocs.io/zh_CN/latest/request-options.html)
+                ],
+                // 'mode' => 'dev', // optional,设置此参数，将进入沙箱模式
+            ];
+            //退款参数准备
+            $order = [
+                'trade_no'       => $refund['trade_no'],
+                'refund_amount'  => $refund['refund_amount'],
+                'out_request_no' => $refund['out_request_no'],
+                'refund_reason'  => '订单' . $refund['order_sn'] . '退款',
+            ];
+            $result = Pay::alipay($pay_config)->refund($order);
+            if ($result) {
+                if ($result->code == 10000) {
+                    $updata['refund_no']    = $result->trade_no;
+                    $updata['handle_state'] = 30;
+                    $updata['success_time'] = time();//退款回调完成时间
+                    $result                 = $refund_model->updateOrderRefund(['id' => $refund['id']], $updata);
+                    if (!$result) {
+                        throw new \Exception('退款失败');
+                    }
+                } else {
+                    throw new \Exception('退款失败');
+                }
+
+            } else {
+                throw new \Exception('退款失败');
+            }
 
         } else {
             throw new \Exception('不支持的支付方式');

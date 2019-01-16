@@ -19,9 +19,9 @@ class Setting extends Validate
 {
     protected $rule
         = [
-            'key'    => 'require',
+            'key'    => 'require|checkKey',
             'name'   => 'require',
-            'config' => 'require', //TODO 验证每个键值对应的config
+            'config' => 'require|checkConfig', //TODO 验证每个键值对应的config
             'status' => 'require|checkStatus',
 
         ];
@@ -60,6 +60,22 @@ class Setting extends Validate
      * @param mixed $rule 验证规则
      * @return bool
      */
+    protected function checkKey($value, $rule, $data)
+    {
+        if (in_array($value, ['alidayu', 'alipay', 'poster_goods', 'poster_group_goods', 'wechat', 'wechat_mini_template'])) {
+            $result = true;
+        } else {
+            $result = '键值错误';
+        }
+        return $result;
+    }
+
+    /**
+     * @access protected
+     * @param mixed $value 字段值
+     * @param mixed $rule 验证规则
+     * @return bool
+     */
     protected function checkStatus($value, $rule, $data)
     {
         if (in_array($value, [0, 1])) {
@@ -70,5 +86,67 @@ class Setting extends Validate
         return $result;
     }
 
+    /**
+     * @access protected
+     * @param mixed $value 字段值
+     * @param mixed $rule 验证规则
+     * @return bool
+     */
+    protected function checkConfig($value, $rule, $data)
+    {
+        $result = true;
+        if ($data['key'] == 'alidayu') {
+            if (!$value['access_key_id']) {
+                $result = 'Access KeyID必须';
+            }
+            if (!$value['access_key_secret']) {
+                $result = 'Access KeySecret必须';
+            }
+            if (!$value['signature']) {
+                $result = '短信签名必须';
+            }
+
+        }
+        if ($data['key'] == 'alipay') {
+            if (!$value['app_id']) {
+                $result = '支付宝AppId必须';
+            }
+            if (!$value['alipay_public_key']) {
+                $result = '支付宝公钥必须';
+            }
+            if (!$value['merchant_private_key']) {
+                $result = '商户私钥必须';
+            }
+            if (!$value['callback_domain']) {
+                $result = '回调域名必须';
+            }
+        }
+        if ($data['key'] == 'poster_goods') {
+
+        }
+        if ($data['key'] == 'poster_group_goods') {
+
+        }
+        if ($data['key'] == 'wechat') {
+
+            if (!$value['mch_id']) {
+                $result = '微信商户ID必须';
+            }
+            if (!$value['key']) {
+                $result = '微信商户API密钥名必须';
+            }
+            if (!$value['appid'] && !$value['app_id'] && !$value['mini_app_id']) {
+                $result = '至少需要填写一种appid';
+            }
+            if (!$value['callback_domain']) {
+                $result = '回调域名必须';
+            }
+        }
+        if ($data['key'] == 'wechat_mini_template') {
+
+        }
+
+        return $result;
+    }
 
 }

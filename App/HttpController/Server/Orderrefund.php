@@ -102,8 +102,8 @@ class Orderrefund extends Server
 			if( isset( $this->get['create_time'] ) ){
 				$condition['create_time'] = ['between', $this->get['create_time'],];
 			}
-            if(isset($get['ids']) && is_array($get['ids'])){
-                $condition['id'] = ['in', $get['ids']];
+            if(isset($this->get['ids']) && is_array($this->get['ids'])){
+                $condition['id'] = ['in', $this->get['ids']];
             }
 
 			$count       = $refund_model->where( $condition )->count();
