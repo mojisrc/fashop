@@ -162,7 +162,7 @@ class Install
 		$config['hostport'] = $this->dbPort;
 		$config['prefix']   = $this->dbPrefix;
 		$content            = "<?php\n";
-		$content            .= "return ".var_export( $config,true ).";";
+		$content            .= "return ".var_export( $config, true ).";";
 		file_put_contents( $target, $content );
 	}
 
@@ -176,16 +176,6 @@ class Install
 		} catch( \Exception $e ){
 			Log::write( $e->getMessage() );
 		}
-	}
-
-	private function initJwt()
-	{
-		$target        = ROOT_PATH."Conf/config/jwt.php";
-		$config        = require $target;
-		$config['key'] = RandomKey::string( 13 );
-		$content       = "<?php \n";
-		$content       .= "return ".var_export( $config, true ).";";
-		file_put_contents( $target, $content );
 	}
 
 	/**
@@ -210,6 +200,7 @@ class Install
 		$extensions = get_loaded_extensions();
 		return [
 			'php_version'     => version_compare( $env->getPhpVersion(), '7.2.0', '>=' ) ? true : false,
+			'mysql_version'   => version_compare( $env->getMysqlVersion(), '5.7.18', '>=' ) ? true : false,
 			'pdo'             => extension_loaded( 'pdo' ) ? true : false,
 			'allow_url_fopen' => function_exists( 'fsockopen' ) ? true : false,
 			'curl'            => function_exists( 'curl_init' ) ? true : false,
