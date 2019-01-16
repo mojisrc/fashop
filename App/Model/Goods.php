@@ -311,13 +311,7 @@ class Goods extends Model
 	 */
 	public function softDelGoods( $condition )
 	{
-		$find = $this->where( $condition )->find();
-		if( $find ){
-			return $find->delete();
-		} else{
-			return false;
-		}
-
+        return $this->save(['delete_time'=>time()],$condition);
 	}
 
     /**

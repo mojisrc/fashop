@@ -133,13 +133,13 @@ class Buy extends Server
                                                                       'pay_sn' => $this->post['pay_sn'],
                                                                       'state'  => \App\Logic\Order::state_new,
                                                                   ], '', 'id,pay_sn,amount');
-                        $amount      = $order_info['amount'] * 100;
                         if (empty($pay_info) || empty($order_info)) {
                             return $this->send(Code::error, [], '该订单不存在');
                         } else {
                             $options = [];
                             switch ($this->post['payment_channel']) {
                                 case 'wechat_mini':
+                                    $amount  = $order_info['amount'] * 100;
                                     $options = Pay::wechat($this->getWechatPayConfig($payment['config'], $this->post['payment_channel']))->miniapp([
                                                                                                                                                        'attach'       => 'goods_buy',
                                                                                                                                                        'out_trade_no' => $order_info['pay_sn'],
@@ -149,6 +149,7 @@ class Buy extends Server
                                                                                                                                                    ]);
                                     break;
                                 case 'wechat_app':
+                                    $amount  = $order_info['amount'] * 100;
                                     $options = Pay::wechat($this->getWechatPayConfig($payment['config'], $this->post['payment_channel']))->app([
                                                                                                                                                    'attach'       => 'goods_buy',
                                                                                                                                                    'out_trade_no' => $order_info['pay_sn'],
@@ -163,11 +164,12 @@ class Buy extends Server
 
                                     break;
                                 case 'alipay_app':
-                                    $options = Pay::alipay($this->getAliPayConfig($payment['config'], $this->post['payment_channel']))->app([
+                                    $amount             = $order_info['amount'];
+                                    $options['content'] = Pay::alipay($this->getAliPayConfig($payment['config'], $this->post['payment_channel']))->app([
                                                                                                                                                 'out_trade_no' => $order_info['pay_sn'],
                                                                                                                                                 'total_amount' => "{$amount}",
                                                                                                                                                 'subject'      => '商品购买_' . $pay_info['pay_sn'],
-                                                                                                                                            ]);
+                                                                                                                                            ])->getContent();
                                     break;
                                 default:
                                     # code...
@@ -355,8 +357,8 @@ class Buy extends Server
             'app_id'         => isset($config['app_id']) ? $config['app_id'] : null,// APP APPID,
             'notify_url'     => $notify_url,
             'return_url'     => '',
-            'ali_public_key' => EASYSWOOLE_ROOT . "/" . $config['alipay_public_key'], //加密方式： **RSA2**
-            'private_key'    => EASYSWOOLE_ROOT . "/" . $config['merchant_private_key'],
+            'ali_public_key' => $config['alipay_public_key'], //加密方式： **RSA2**
+            'private_key'    => $config['merchant_private_key'],
             'log'            => [ // optional
                 'file'     => EASYSWOOLE_ROOT . '/Runtime/Log/alipay.log',
                 'level'    => 'debug', // 建议生产环境等级调整为 info，开发环境为 debug

@@ -1,6 +1,6 @@
 /*
 SQLyog Ultimate v12.4.0 (64 bit)
-MySQL - 5.7.22 : Database - fashop
+MySQL - 5.7.19 : Database - fashop
 *********************************************************************
 */
 
@@ -7691,6 +7691,20 @@ insert  into `fa_extend`(`id`,`express`,`create_time`,`delete_time`) values
 
 (1,NULL,0,NULL);
 
+/*Table structure for table `fa_fd` */
+
+DROP TABLE IF EXISTS `fa_fd`;
+
+CREATE TABLE `fa_fd` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `fd` int(10) unsigned DEFAULT NULL,
+  `uid` int(10) unsigned DEFAULT NULL,
+  `create_time` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `fa_fd` */
+
 /*Table structure for table `fa_freight` */
 
 DROP TABLE IF EXISTS `fa_freight`;
@@ -7782,46 +7796,6 @@ CREATE TABLE `fa_goods` (
 
 /*Data for the table `fa_goods` */
 
-/*Table structure for table `fa_goods_attribute_index` */
-
-DROP TABLE IF EXISTS `fa_goods_attribute_index`;
-
-CREATE TABLE `fa_goods_attribute_index` (
-  `goods_id` int(10) unsigned NOT NULL COMMENT '商品id',
-  `goods_common_id` int(10) unsigned NOT NULL COMMENT '商品公共表id',
-  `category_id` int(10) unsigned NOT NULL COMMENT '商品分类id',
-  `type_id` int(10) unsigned NOT NULL COMMENT '类型id',
-  `attribute_id` int(10) unsigned NOT NULL COMMENT '属性id',
-  `attribute_value_id` int(10) unsigned NOT NULL COMMENT '属性值id',
-  `delete_time` int(10) unsigned DEFAULT NULL COMMENT '软删除时间',
-  PRIMARY KEY (`goods_id`,`category_id`,`attribute_value_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='商品与属性对应表';
-
-/*Data for the table `fa_goods_attribute_index` */
-
-/*Table structure for table `fa_goods_attributes` */
-
-DROP TABLE IF EXISTS `fa_goods_attributes`;
-
-CREATE TABLE `fa_goods_attributes` (
-  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
-  `goods_id` int(10) NOT NULL COMMENT '商品ID  可能作废',
-  `attribute_id` int(10) NOT NULL COMMENT '属性ID',
-  `attribute_value` varchar(255) CHARACTER SET utf8 NOT NULL COMMENT '属性值',
-  `attribute_price` decimal(11,2) DEFAULT '0.00' COMMENT '价格',
-  `attribute_stock` int(11) DEFAULT '0' COMMENT '库存',
-  `is_recomm` tinyint(4) DEFAULT '0' COMMENT '是否推荐价格 0:否 1:是',
-  `sku_id` int(10) unsigned DEFAULT NULL COMMENT '商品id',
-  `type` tinyint(1) unsigned DEFAULT '1' COMMENT '商品属性种类：1为规格，2为属性',
-  `status` tinyint(1) unsigned DEFAULT '1' COMMENT '状态(是否显示，显示:1,隐藏:0)',
-  `sort` smallint(6) unsigned DEFAULT '999' COMMENT '排序',
-  `delete_time` int(10) unsigned DEFAULT NULL COMMENT '软删除时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `goodsId` (`goods_id`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='商品属性表';
-
-/*Data for the table `fa_goods_attributes` */
-
 /*Table structure for table `fa_goods_cart` */
 
 DROP TABLE IF EXISTS `fa_goods_cart`;
@@ -7861,6 +7835,21 @@ CREATE TABLE `fa_goods_category` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='商品分类';
 
 /*Data for the table `fa_goods_category` */
+
+/*Table structure for table `fa_goods_category_ids` */
+
+DROP TABLE IF EXISTS `fa_goods_category_ids`;
+
+CREATE TABLE `fa_goods_category_ids` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `goods_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品id',
+  `category_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品分类id',
+  `delete_time` int(10) unsigned DEFAULT NULL COMMENT '软删除时间',
+  PRIMARY KEY (`id`),
+  KEY `couponid` (`category_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='商品所选分类';
+
+/*Data for the table `fa_goods_category_ids` */
 
 /*Table structure for table `fa_goods_collect` */
 
@@ -7968,13 +7957,9 @@ CREATE TABLE `fa_goods_spec` (
   `sort` int(8) unsigned NOT NULL DEFAULT '999' COMMENT '规格排序',
   `delete_time` int(10) unsigned DEFAULT NULL COMMENT '软删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='商品规格';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='商品规格';
 
 /*Data for the table `fa_goods_spec` */
-
-insert  into `fa_goods_spec`(`id`,`name`,`sort`,`delete_time`) values
-
-(1,'颜色',999,NULL);
 
 /*Table structure for table `fa_goods_spec_value` */
 
@@ -7989,15 +7974,9 @@ CREATE TABLE `fa_goods_spec_value` (
   `img` text CHARACTER SET utf8 COMMENT '图片',
   `delete_time` int(10) unsigned DEFAULT NULL COMMENT '软删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='商品规格值表';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='商品规格值表';
 
 /*Data for the table `fa_goods_spec_value` */
-
-insert  into `fa_goods_spec_value`(`id`,`spec_id`,`name`,`sort`,`color`,`img`,`delete_time`) values
-
-(1,1,'白色',100,NULL,NULL,NULL),
-
-(2,1,'蓝色',100,NULL,NULL,NULL);
 
 /*Table structure for table `fa_group` */
 
@@ -8016,7 +7995,8 @@ CREATE TABLE `fa_group` (
   `limit_buy_num` int(2) unsigned DEFAULT NULL COMMENT '拼团人数',
   `limit_group_num` int(2) unsigned DEFAULT NULL COMMENT '每位用户可进行的团数',
   `limit_goods_num` int(2) unsigned DEFAULT NULL COMMENT '用户每次参团时可购买件数',
-  `is_show` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否正在执行 0未执行 1执行',
+  `goods_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品id',
+  `is_show` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '是否正在执行 0未执行 1执行',
   `over_type` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '结束时间格式  0长期 1定期(一年) 预留',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `update_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
@@ -8266,6 +8246,7 @@ CREATE TABLE `fa_order` (
   `evaluate_state` tinyint(1) NOT NULL DEFAULT '0' COMMENT '评价状态 0未评价，1已评价',
   `is_print` tinyint(1) DEFAULT '0' COMMENT '是否打印 1打印 0未打印',
   `trade_no` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT '支付宝交易号OR微信交易号',
+  `out_request_no` varchar(100) DEFAULT NULL COMMENT '支付宝标识一次退款请求，同一笔交易多次退款需要保证唯一，如需部分退款，则此参数必传。',
   `wechat_openid` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT '用户微信openid',
   `from` enum('1','2') CHARACTER SET utf8 NOT NULL DEFAULT '1' COMMENT '1WEB2mobile',
   `delete_time` int(10) unsigned DEFAULT NULL COMMENT '软删除时间',
@@ -8336,8 +8317,8 @@ CREATE TABLE `fa_order_goods` (
   `goods_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品主表id',
   `goods_sku_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品id',
   `goods_title` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '0' COMMENT '商品名称',
-  `goods_price` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '商品价格',
-  `goods_pay_price` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '商品实际支付费用',
+  `goods_price` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '商品价格 just价格',
+  `goods_pay_price` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '商品实际支付费用(拼团商品适用)',
   `goods_num` smallint(5) unsigned NOT NULL DEFAULT '1' COMMENT '商品数量',
   `goods_img` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '商品图片',
   `goods_spec` json DEFAULT NULL COMMENT '商品规格',
@@ -8353,43 +8334,14 @@ CREATE TABLE `fa_order_goods` (
   `refund_handle_state` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '退款平台处理状态 默认0处理中(未处理) 10拒绝(驳回) 20同意 30成功(已完成) 50取消(用户主动撤销) 51取消(用户主动收货)',
   `refund_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '退款ID',
   `delete_time` int(10) unsigned DEFAULT NULL COMMENT '软删除时间',
-  `group_price` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '拼团价格',
-  `captain_price` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '团长价格',
+  `group_price` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '拼团价格 just价格',
+  `captain_price` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '团长价格 just价格',
   `goods_revise_price` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '修改过的商品实际支付费用 大于0起作用',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `order_id` (`order_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='订单商品表';
 
 /*Data for the table `fa_order_goods` */
-
-/*Table structure for table `fa_order_group` */
-
-DROP TABLE IF EXISTS `fa_order_group`;
-
-CREATE TABLE `fa_order_group` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `group_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '拼团活动id',
-  `order_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单id',
-  `title` varchar(100) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '拼团活动名称',
-  `sn` varchar(20) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '活动编号  预留',
-  `time_over` varchar(10) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '拼团时限 格式: 小时:分钟',
-  `time_over_day` smallint(10) unsigned NOT NULL DEFAULT '0' COMMENT '拼团时限-天',
-  `time_over_hour` smallint(10) unsigned NOT NULL DEFAULT '0' COMMENT '拼团时限-小时',
-  `time_over_minute` smallint(10) unsigned NOT NULL DEFAULT '0' COMMENT '拼团时限-分钟',
-  `start_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '活动开始时间',
-  `end_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '活动结束时间',
-  `limit_buy_num` int(2) unsigned DEFAULT NULL COMMENT '拼团人数',
-  `limit_group_num` int(2) unsigned DEFAULT NULL COMMENT '每位用户可进行的团数',
-  `limit_goods_num` int(2) unsigned DEFAULT NULL COMMENT '用户每次参团时可购买件数',
-  `is_show` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否正在执行 0未执行 1执行',
-  `over_type` tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '结束时间格式  0长期 1定期(一年) 预留',
-  `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `update_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
-  `delete_time` int(10) unsigned DEFAULT NULL COMMENT '软删除时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='拼团活动';
-
-/*Data for the table `fa_order_group` */
 
 /*Table structure for table `fa_order_log` */
 
@@ -8430,18 +8382,19 @@ DROP TABLE IF EXISTS `fa_order_refund`;
 
 CREATE TABLE `fa_order_refund` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '记录ID',
-  `order_id` int(10) unsigned NOT NULL COMMENT '订单ID',
-  `order_sn` varchar(50) CHARACTER SET utf8 NOT NULL COMMENT '订单编号',
+  `order_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单ID',
+  `order_sn` varchar(50) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '订单编号',
   `order_state` int(5) unsigned DEFAULT '20' COMMENT '订单状态:20:已付款;30:已发货;40:已收货;',
   `order_goods_id` int(10) unsigned DEFAULT '0' COMMENT '子订单ID',
-  `refund_sn` varchar(50) CHARACTER SET utf8 NOT NULL COMMENT '申请编号',
-  `user_id` int(10) unsigned NOT NULL COMMENT '买家ID',
+  `refund_sn` varchar(50) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '申请编号',
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '买家ID',
   `user_name` varchar(50) CHARACTER SET utf8 NOT NULL COMMENT '买家会员名',
   `goods_id` int(11) DEFAULT NULL COMMENT '商品id',
   `goods_sku_id` int(10) unsigned NOT NULL COMMENT '商品ID,全部退款是0',
   `goods_title` varchar(50) CHARACTER SET utf8 NOT NULL COMMENT '商品名称',
   `goods_spec` json DEFAULT NULL COMMENT '商品规格',
   `goods_img` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '商品图片',
+  `goods_price` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '商品价格 just价格',
   `goods_pay_price` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '商品实际成交价',
   `goods_num` smallint(5) unsigned DEFAULT '1' COMMENT '商品数量',
   `goods_freight_fee` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '运费金额',
@@ -8462,11 +8415,12 @@ CREATE TABLE `fa_order_refund` (
   `receive_time` int(10) unsigned DEFAULT '0' COMMENT '卖家收货时间,默认为0',
   `receive_message` varchar(300) CHARACTER SET utf8 DEFAULT NULL COMMENT '卖家收货备注',
   `payment_code` varchar(20) CHARACTER SET utf8 DEFAULT NULL COMMENT '支付方式',
-  `trade_no` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT '支付宝交易号OR微信交易号',
+  `trade_no` varchar(100) CHARACTER SET utf8 DEFAULT NULL COMMENT '支付宝交易号OR微信交易号',
+  `out_request_no` varchar(100) DEFAULT NULL COMMENT '支付宝标识一次退款请求，同一笔交易多次退款需要保证唯一，如需部分退款，则此参数必传。',
   `handle_state` tinyint(2) DEFAULT '0' COMMENT '卖家处理状态 默认0处理中(未处理) 10拒绝(驳回) 20同意 30成功(已完成) 50取消(用户主动撤销) 51取消(用户主动收货)',
   `handle_message` varchar(300) CHARACTER SET utf8 DEFAULT NULL COMMENT '卖家处理信息',
   `handle_time` int(11) DEFAULT '0' COMMENT '卖家处理时间',
-  `batch_no` varchar(50) CHARACTER SET utf8 DEFAULT NULL COMMENT '支付宝退款批次号 退款回调使用',
+  `batch_no` varchar(100) CHARACTER SET utf8 DEFAULT NULL COMMENT '支付宝退款批次号 退款回调使用',
   `success_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '退款回调完成时间',
   `user_receive` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '用户选择是否收到货物 默认0未发货(Order state=20) 1未收到货 2已收到货 卖家未发货(已付款)时无需传此参数',
   `user_images` json DEFAULT NULL COMMENT '照片凭证 json',
@@ -8474,6 +8428,7 @@ CREATE TABLE `fa_order_refund` (
   `delete_time` int(10) unsigned DEFAULT NULL COMMENT '软删除时间',
   `handle_expiry_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '过期时间之管理员处理',
   `send_expiry_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '过期时间之用户发货',
+  `refund_no` varchar(100) DEFAULT NULL COMMENT '退款交易号',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='退款\\退款退货表';
 
@@ -8684,6 +8639,20 @@ CREATE TABLE `fa_plugin` (
 
 /*Data for the table `fa_plugin` */
 
+/*Table structure for table `fa_queue` */
+
+DROP TABLE IF EXISTS `fa_queue`;
+
+CREATE TABLE `fa_queue` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL COMMENT '队列名字(备注名)',
+  `raw` text COMMENT '生数据',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `fa_queue` */
+
 /*Table structure for table `fa_sale_num` */
 
 DROP TABLE IF EXISTS `fa_sale_num`;
@@ -8732,9 +8701,17 @@ CREATE TABLE `fa_setting` (
 
 insert  into `fa_setting`(`key`,`name`,`config`,`status`,`remark`,`delete_time`) values
 
-('alipay','支付宝',NULL,0,'支付宝支付的配置',NULL),
+('alidayu','阿里云短信（阿里大鱼）','{\"signature\": \"1\", \"access_key_id\": \"1\", \"template_list\": {\"register\": {\"template_id\": \"SMS_xxxxx12122323\", \"template_name\": \"注册\", \"template_status\": 1, \"template_variable\": \"code\"}, \"find_password\": {\"template_id\": \"SMS_xxxxx2222222222\", \"template_name\": \"找回密码\", \"template_status\": 1, \"template_variable\": \"code\"}}, \"access_key_secret\": \"1\"}',1,'阿里云短信（阿里大鱼）配置',NULL),
 
-('wechat','微信',NULL,0,'微信支付的配置',NULL);
+('alipay','支付宝支付','{\"app_id\": \"\", \"callback_domain\": \"\", \"alipay_public_key\": \"\", \"merchant_private_key\": \"\"}',1,'支付宝支付',NULL),
+
+('poster_goods','商品海报','{\"body\": [{\"type\": \"background\", \"options\": {\"size\": {\"width\": 324, \"height\": 464}, \"position\": {\"x\": 0, \"y\": 0}, \"backgroundColor\": \"#ffffff\", \"backgroundImage\": \"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1547118722752&di=2e6b80b4d9d2bdd4c5593e86c54c98c0&imgtype=0&src=http%3A%2F%2Fpic35.photophoto.cn%2F20150521%2F0008020222046830_b.jpg\"}}, {\"type\": \"goods_img\", \"options\": {\"size\": {\"width\": 284, \"height\": 284}, \"position\": {\"x\": 20, \"y\": 20}}}, {\"type\": \"goods_title\", \"options\": {\"size\": {\"width\": 285, \"height\": 42}, \"fontSize\": 14, \"position\": {\"x\": 20, \"y\": 314}, \"fontColor\": \"#333\"}}, {\"type\": \"goods_price\", \"options\": {\"size\": {\"width\": 100, \"height\": 20}, \"fontSize\": 20, \"position\": {\"x\": 20, \"y\": 424}, \"fontColor\": \"#FF5127\"}}, {\"type\": \"mini_qr\", \"options\": {\"size\": {\"width\": 82, \"height\": 82}, \"position\": {\"x\": 228, \"y\": 368}}}]}',1,'商品海报',NULL),
+
+('poster_group_goods','拼团海报','{\"body\": [{\"type\": \"background\", \"options\": {\"size\": {\"width\": 324, \"height\": 464}, \"position\": {\"x\": 0, \"y\": 0}, \"backgroundColor\": \"#ffffff\", \"backgroundImage\": \"\"}}, {\"type\": \"goods_img\", \"options\": {\"size\": {\"width\": 284, \"height\": 284}, \"position\": {\"x\": 20, \"y\": 70}}}, {\"type\": \"avatar\", \"options\": {\"size\": {\"width\": 30, \"height\": 30}, \"position\": {\"x\": 20, \"y\": 20}, \"borderRadius\": 60}}, {\"type\": \"nickname\", \"options\": {\"size\": {\"width\": 56, \"height\": 20}, \"fontSize\": 14, \"position\": {\"x\": 60, \"y\": 23}, \"fontColor\": \"#1890FF\"}}, {\"type\": \"slogan\", \"options\": {\"size\": {\"width\": 116, \"height\": 20}, \"fontSize\": 14, \"position\": {\"x\": 126, \"y\": 23}, \"fontColor\": \"#999999\", \"fontContent\": \"正在拼团 赶快加入\"}}, {\"type\": \"group_number\", \"options\": {\"size\": {\"width\": 48, \"height\": 20}, \"fontSize\": 12, \"position\": {\"x\": 25, \"y\": 75}, \"fontColor\": \"#ffffff\", \"fontBackgroundColor\": \"#FF5127\"}}, {\"type\": \"goods_title\", \"options\": {\"size\": {\"width\": 196, \"height\": 42}, \"fontSize\": 14, \"position\": {\"x\": 20, \"y\": 368}, \"fontColor\": \"#333\"}}, {\"type\": \"goods_group_price\", \"options\": {\"size\": {\"width\": 80, \"height\": 20}, \"fontSize\": 20, \"position\": {\"x\": 20, \"y\": 424}, \"fontColor\": \"#FF5127\"}}, {\"type\": \"goods_price\", \"options\": {\"size\": {\"width\": 80, \"height\": 20}, \"fontSize\": 14, \"position\": {\"x\": 105, \"y\": 424}, \"fontColor\": \"#999999\"}}, {\"type\": \"mini_qr\", \"options\": {\"size\": {\"width\": 76, \"height\": 76}, \"position\": {\"x\": 228, \"y\": 368}}}]}',1,'拼团海报',NULL),
+
+('wechat','微信','{\"key\": \"\", \"appid\": \"\", \"app_id\": \"\", \"mch_id\": \"\", \"mini_app_id\": \"\", \"apiclient_key\": \"\", \"apiclient_cert\": \"\", \"callback_domain\": \"\", \"mini_app_secret\": \"\"}',1,'微信的所有配置',NULL),
+
+('wechat_mini_template','小程序模板消息','{\"template_list\": {\"order_cancel\": {\"template_id\": \"2323\", \"template_name\": \"订单取消\", \"template_status\": 1}, \"order_pay_fail\": {\"template_id\": \"Y1blRZEdiqSX2323\", \"template_name\": \"订单支付失败\", \"template_status\": 1}, \"order_pay_success\": {\"template_id\": \"2222222\", \"template_name\": \"订单支付成功\", \"template_status\": 1}, \"order_refund_apply\": {\"template_id\": \"2323\", \"template_name\": \"订单退款申请\", \"template_status\": 1}}}',1,'小程序模板消息配置',NULL);
 
 /*Table structure for table `fa_shipper` */
 
@@ -8942,13 +8919,9 @@ CREATE TABLE `fa_user` (
   `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `delete_time` int(10) unsigned DEFAULT NULL COMMENT '软删除时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='用户表';
 
 /*Data for the table `fa_user` */
-
-insert  into `fa_user`(`id`,`username`,`password`,`phone`,`email`,`state`,`salt`,`is_discard`,`create_time`,`delete_time`) values
-
-(1,'admin','MDAwMDAwMDAwMLCIqq5+fY1p',NULL,NULL,1,'25736d8ed47fb7715907fda188949ae1',0,1537437245,NULL);
 
 /*Table structure for table `fa_user_alias` */
 

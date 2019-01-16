@@ -28,10 +28,10 @@ class Router extends \EasySwoole\Core\Http\AbstractInterface\Router
 
 
 		$routeCollector->get( '/a/{name:.+}', function( Request $request, Response $response ){
-			$this->renderAdminView($response);
+			$this->renderAdminView( $response );
 		} );
 		$routeCollector->get( '/a', function( Request $request, Response $response ){
-			$this->renderAdminView($response);
+			$this->renderAdminView( $response );
 		} );
 
 		$routeCollector->get( '/wsdebug', function( Request $request, Response $response ){
@@ -53,7 +53,9 @@ class Router extends \EasySwoole\Core\Http\AbstractInterface\Router
 			$response->end();
 		} );
 	}
-	private function renderAdminView(Response $response){
+
+	private function renderAdminView( Response $response )
+	{
 		$isSsl = request()->isSsl();
 		$host  = request()->host();
 		$port  = \Easyswoole\Config::getInstance()->getConf( "MAIN_SERVER.PORT" );

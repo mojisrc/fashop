@@ -1,6 +1,6 @@
 FROM php:7.2
 
-LABEL maintainer="fashop@fashop.com"
+LABEL maintainer="job@fashop.cn"
 
 # Version
 ENV PHPREDIS_VERSION 4.0.1
@@ -32,7 +32,7 @@ RUN curl -sS https://getcomposer.org/installer | php \
     && composer self-update --clean-backups
 
 # imagick gd extension
-RUN pecl install imagick \
+RUN pecl install imagick-3.4.3 \
     && docker-php-ext-enable imagick \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd

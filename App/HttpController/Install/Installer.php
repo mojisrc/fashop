@@ -62,15 +62,15 @@ class Installer extends Controller
     <title>FaShop 商城系统 - Power By FaShop ( www.fashop.cn )</title>
     <meta name="keywords" content="FaShop,开源商城系统,开源商城小程序,开源商城APP">
     <meta name="description" content="FaShop是魔际（天津）科技有限公司(www.fashop.cn)开发。">
-    <link rel="manifest" href="https://statics.fashop.cn/fashop-install/manifest.json?t={$time}">
-    <link rel="shortcut icon" href="https://statics.fashop.cn/fashop-install/favicon.ico?t={$time}">
-    <link href="https://statics.fashop.cn/fashop-install/static/css/vendor.css?t={$time}" rel="stylesheet">
+    <link rel="manifest" href="https://statics.fashop.cn/fashop-install/v2/manifest.json?t={$time}">
+    <link rel="shortcut icon" href="https://statics.fashop.cn/fashop-install/v2/favicon.ico?t={$time}">
+    <link href="https://statics.fashop.cn/fashop-install/v2/static/css/vendor.css?t={$time}" rel="stylesheet">
 </head>
 <body>
 <script>window.fashop = {apiHost: '{$apiHost}' ,historyPrefix:'/a'}</script>
 <div id="root"></div>
-<script type="text/javascript" src="https://statics.fashop.cn/fashop-install/static/js/vendor.js?t={$time}"></script>
-<script type="text/javascript" src="https://statics.fashop.cn/fashop-install/static/js/main.js?t={$time}"></script>
+<script type="text/javascript" src="https://statics.fashop.cn/fashop-install/v2/static/js/vendor.js?t={$time}"></script>
+<script type="text/javascript" src="https://statics.fashop.cn/fashop-install/v2/static/js/main.js?t={$time}"></script>
 </body>
 </html>
 EOT;
@@ -95,12 +95,12 @@ EOT;
 					'status'  => $status['php_version'],
 					'url'     => "https://www.fashop.cn/guide/",
 				],
-				//				[
-				//					'name'    => "MySQL版本",
-				//					'require' => ">=5.7.18",
-				//					'status'  => $status['mysql_version'],
-				//					'url'     => "https://www.fashop.cn/guide/",
-				//				],
+				[
+					'name'    => "MySQL版本",
+					'require' => ">=5.7.18",
+					'status'  => $status['mysql_version'],
+					'url'     => "https://www.fashop.cn/guide/",
+				],
 				[
 					'name'    => "PDO",
 					'require' => "开启",
@@ -226,17 +226,18 @@ EOT;
 	 */
 	public function checkDb()
 	{
-		if( !isset( $this->post['host'] ) || !isset( $this->post['dbname'] ) || !isset( $this->post['username'] ) || !isset( $this->post['password'] ) || !isset( $this->post['port'] ) || !isset( $this->post['prefix'] ) ){
-			$this->send( - 1, [], "配置信息不完整" );
-		} else{
-			$install = new Install();
-			$result  = $install->checkDatabase( $this->post['username'], $this->post['password'], $this->post['host'], $this->post['port'], $this->post['prefix'], $this->post['dbname'] );
-			if( $result !== true ){
-				$this->send( - 1, [], $result );
-			} else{
-				$this->send( 0 );
-			}
-		}
+        try {
+            $env = new \App\Utils\Environment();
+            if (!version_compare($env->getMysqlVersion(), '5.7.18', '>=')) {
+                return $this->send(-1, [], "数据库版本错误");
+            }
+            if (!extension_loaded('pdo')) {
+                return $this->send(-1, [], "数据库连接失败");
+            }
+            return $this->send(0);
+        } catch (\Exception $e) {
+            return $this->send(-1, [], $e->getMessage());
+        }
 	}
 
 	/**

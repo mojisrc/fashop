@@ -162,7 +162,7 @@ class Install
 		$config['hostport'] = $this->dbPort;
 		$config['prefix']   = $this->dbPrefix;
 		$content            = "<?php\n";
-		$content            .= "return ".var_export( $config,true ).";";
+		$content            .= "return ".var_export( $config, true ).";";
 		file_put_contents( $target, $content );
 	}
 
@@ -176,16 +176,6 @@ class Install
 		} catch( \Exception $e ){
 			Log::write( $e->getMessage() );
 		}
-	}
-
-	private function initJwt()
-	{
-		$target        = ROOT_PATH."Conf/config/jwt.php";
-		$config        = require $target;
-		$config['key'] = RandomKey::string( 13 );
-		$content       = "<?php \n";
-		$content       .= "return ".var_export( $config, true ).";";
-		file_put_contents( $target, $content );
 	}
 
 	/**
@@ -210,6 +200,7 @@ class Install
 		$extensions = get_loaded_extensions();
 		return [
 			'php_version'     => version_compare( $env->getPhpVersion(), '7.2.0', '>=' ) ? true : false,
+			'mysql_version'   => version_compare( $env->getMysqlVersion(), '5.7.18', '>=' ) ? true : false,
 			'pdo'             => extension_loaded( 'pdo' ) ? true : false,
 			'allow_url_fopen' => function_exists( 'fsockopen' ) ? true : false,
 			'curl'            => function_exists( 'curl_init' ) ? true : false,
@@ -275,27 +266,28 @@ class Install
 	 * @return bool
 	 * @author 韩文博
 	 */
-	public function checkAdminAccount( string $username, string $password, string $repassword ) : bool
-	{
-		$validate = new Validate();
-		if( $validate->is( $username, 'alphaDash' ) !== true ){
-			return '账号只能是字母、数字和下划线_及破折号-';
-		}
-		if( $validate->is( $username, 'min', 5 ) !== true ){
-			return '账号最少5位';
-		}
-		if( $validate->is( $username, 'max', 16 ) !== true ){
-			return '账号最多16位';
-		}
-		if( $validate->is( $password, 'min', 6 ) !== true ){
-			return '密码最少6位';
-		}
-		if( $validate->is( $password, 'max', 32 ) !== true ){
-			return '账号最多32位';
-		}
-		if( $password !== $repassword ){
-			return '确认密码不正确';
-		}
-		return true;
-	}
+    public function checkAdminAccount( string $username, string $password, string $repassword )
+    {
+        $validate = new Validate();
+        if( $validate->is( $username, 'alphaDash' ) !== true ){
+            return '账号只能是字母、数字和下划线_及破折号-';
+        }
+        if( $validate->min( $username, 5 ) !== true ){
+            return '账号最少5位';
+        }
+        if( $validate->max( $username, 16 ) !== true ){
+            return '账号最多16位';
+        }
+        if( $validate->min( $password, 6 ) !== true ){
+            return '密码最少6位';
+        }
+        if( $validate->max( $password, 32 ) !== true ){
+            return '密码最多32位';
+        }
+        if( $password !== $repassword ){
+            return '确认密码不正确';
+        }
+
+        return true;
+    }
 }

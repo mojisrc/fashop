@@ -301,16 +301,10 @@ class GoodsSku extends Model
 	/**
 	 * 软删除
 	 * @param    array $condition
-	 *                           TODO 批量软删除
 	 */
 	public function softDelGoodsSku( $condition )
 	{
-		$find = $this->where( $condition )->find();
-		if( $find ){
-			return $find->delete();
-		} else{
-			return false;
-		}
+        return $this->save(['delete_time'=>time()],$condition);
 	}
 
 }
