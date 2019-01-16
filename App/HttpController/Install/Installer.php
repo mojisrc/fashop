@@ -226,18 +226,18 @@ EOT;
 	 */
 	public function checkDb()
 	{
-		// todo 检查本地的
-		if( !isset( $this->post['host'] ) || !isset( $this->post['dbname'] ) || !isset( $this->post['username'] ) || !isset( $this->post['password'] ) || !isset( $this->post['port'] ) || !isset( $this->post['prefix'] ) ){
-			$this->send( - 1, [], "配置信息不完整" );
-		} else{
-			$install = new Install();
-			$result  = $install->checkDatabase( $this->post['username'], $this->post['password'], $this->post['host'], $this->post['port'], $this->post['prefix'], $this->post['dbname'] );
-			if( $result !== true ){
-				$this->send( - 1, [], $result );
-			} else{
-				$this->send( 0 );
-			}
-		}
+        try {
+            $env = new \App\Utils\Environment();
+            if (!version_compare($env->getMysqlVersion(), '5.7.18', '>=')) {
+                return $this->send(-1, [], "数据库版本错误");
+            }
+            if (!extension_loaded('pdo')) {
+                return $this->send(-1, [], "数据库连接失败");
+            }
+            return $this->send(0);
+        } catch (\Exception $e) {
+            return $this->send(-1, [], $e->getMessage());
+        }
 	}
 
 	/**

@@ -266,27 +266,28 @@ class Install
 	 * @return bool
 	 * @author 韩文博
 	 */
-	public function checkAdminAccount( string $username, string $password, string $repassword ) : bool
-	{
-		$validate = new Validate();
-		if( $validate->is( $username, 'alphaDash' ) !== true ){
-			return '账号只能是字母、数字和下划线_及破折号-';
-		}
-		if( $validate->is( $username, 'min', 5 ) !== true ){
-			return '账号最少5位';
-		}
-		if( $validate->is( $username, 'max', 16 ) !== true ){
-			return '账号最多16位';
-		}
-		if( $validate->is( $password, 'min', 6 ) !== true ){
-			return '密码最少6位';
-		}
-		if( $validate->is( $password, 'max', 32 ) !== true ){
-			return '账号最多32位';
-		}
-		if( $password !== $repassword ){
-			return '确认密码不正确';
-		}
-		return true;
-	}
+    public function checkAdminAccount( string $username, string $password, string $repassword )
+    {
+        $validate = new Validate();
+        if( $validate->is( $username, 'alphaDash' ) !== true ){
+            return '账号只能是字母、数字和下划线_及破折号-';
+        }
+        if( $validate->min( $username, 5 ) !== true ){
+            return '账号最少5位';
+        }
+        if( $validate->max( $username, 16 ) !== true ){
+            return '账号最多16位';
+        }
+        if( $validate->min( $password, 6 ) !== true ){
+            return '密码最少6位';
+        }
+        if( $validate->max( $password, 32 ) !== true ){
+            return '密码最多32位';
+        }
+        if( $password !== $repassword ){
+            return '确认密码不正确';
+        }
+
+        return true;
+    }
 }
