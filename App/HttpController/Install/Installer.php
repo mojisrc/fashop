@@ -265,47 +265,67 @@ EOT;
 	/**
 	 * 安装
 	 * @method POST
-	 * @param string db_host
-	 * @param string db_name
-	 * @param string db_username
-	 * @param string db_password
-	 * @param string db_port
-	 * @param string db_prefix
-	 * @param string admin_username
-	 * @param string admin_password
-	 * @param string admin_repassword
+     * @param int    agree
+	 * @param string username
+	 * @param string password
+	 * @param string repassword
 	 * @author 韩文博
 	 */
 	public function run()
 	{
-		if( !isset( $this->post['db_host'] ) || !isset( $this->post['db_name'] ) || !isset( $this->post['db_port'] ) || !isset( $this->post['db_prefix'] ) || !isset( $this->post['db_username'] ) || !isset( $this->post['db_password'] ) ){
-			$this->send( Code::param_error, [], "数据库配置信息不完整" );
-		} elseif( !isset( $this->post['admin_username'] ) || !isset( $this->post['admin_password'] ) || !isset( $this->post['admin_repassword'] ) ){
-			$this->send( Code::param_error, [], "管理员信息不完整" );
-		} else{
+        try {
+            //验证协议
+            if(intval($this->post['agree'] ) !=1){
+                return $this->send(-1, [], "请同意并阅读协议");
+            }
+            //验证数据库
+            $env = new \App\Utils\Environment();
+            if (!version_compare($env->getMysqlVersion(), '5.7.18', '>=')) {
+                return $this->send(-1, [], "数据库版本错误");
+            }
+            if (!extension_loaded('pdo')) {
+                return $this->send(-1, [], "数据库连接失败");
+            }
+
+            //验证账号密码
+            if( !isset( $this->post['username'] ) || !isset( $this->post['password'] ) || !isset( $this->post['repassword'] ) ){
+                return $this->send( - 1, [], "管理员信息不完整" );
+            } else{
+                $install = new Install();
+                $result  = $install->checkAdminAccount( $this->post['username'], $this->post['password'], $this->post['repassword'] );
+                if( $result !== true ){
+                    return $this->send( - 1, [], $result );
+                }
+            }
+
+            $database             = ROOT_PATH."Conf/config/database.php";
+            $database             = require $database;
+
+            //执行安装
 			$install = new Install( [
-				'admin_username'   => $this->post['admin_username'],
-				'admin_password'   => $this->post['admin_password'],
-				'admin_repassword' => $this->post['admin_repassword'],
-				'db_host'          => $this->post['db_host'],
-				'db_name'          => $this->post['db_name'],
-				'db_username'      => $this->post['db_username'],
-				'db_password'      => $this->post['db_password'],
-				'db_port'          => $this->post['db_port'],
-				'db_prefix'        => $this->post['db_prefix'],
+				'admin_username'   => $this->post['username'],
+				'admin_password'   => $this->post['password'],
+				'admin_repassword' => $this->post['repassword'],
+				'db_host'          => $database['hostname'],
+				'db_name'          => $database['database'],
+				'db_username'      => $database['username'],
+				'db_password'      => $database['password'],
+				'db_port'          => $database['hostport'],
+				'db_prefix'        => $database['prefix'],
 			] );
-			try{
-				$result = $install->run();
-				if( $result === true ){
-					$this->send( 0, [], '安装成功' );
-				} else{
-					$this->send( - 1, [], $result );
-				}
-			} catch( \Exception $e ){
-				$this->send( Code::server_error, [], $e->getMessage() );
-			}
-		}
-	}
+
+            $result = $install->run();
+            if( $result === true ){
+                $this->send( 0, [], '安装成功' );
+            } else{
+                $this->send( - 1, [], $result );
+            }
+
+        } catch (\Exception $e) {
+            return $this->send(-1, [], $e->getMessage());
+        }
+
+    }
 
 	/**
 	 * 安装

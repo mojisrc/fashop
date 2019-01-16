@@ -122,7 +122,6 @@ class Install
 
 		try{
 			$this->initDirectory();
-			$this->initDb();
 			$this->insertInitDatabase();
 			$this->initAdmin();
 			return true;
@@ -149,21 +148,6 @@ class Install
 		$file::createDir( RUNTIME_PATH."Log" );
 		$file::createDir( ROOT_PATH."Upload" );
 		$file::createDir( ROOT_PATH."Backup" );
-	}
-
-	private function initDb()
-	{
-		$target             = ROOT_PATH."Conf/config/database.php";
-		$config             = require $target;
-		$config['hostname'] = $this->dbHost;
-		$config['database'] = $this->dbName;
-		$config['username'] = $this->dbUsername;
-		$config['password'] = $this->dbPassword;
-		$config['hostport'] = $this->dbPort;
-		$config['prefix']   = $this->dbPrefix;
-		$content            = "<?php\n";
-		$content            .= "return ".var_export( $config, true ).";";
-		file_put_contents( $target, $content );
 	}
 
 	private function insertInitDatabase()
