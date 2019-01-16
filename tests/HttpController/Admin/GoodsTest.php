@@ -40,7 +40,8 @@ class GoodsTest extends BaseTestCase
                 'title' => '',
                 'category_ids' => [1,2,3,4],
                 'order_type' => 1,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -58,7 +59,8 @@ class GoodsTest extends BaseTestCase
         $response = self::$client->request( 'GET', "admin/goods/info", [
             'query' => [
                 'id' => 1,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -119,7 +121,8 @@ class GoodsTest extends BaseTestCase
                     'weight' => 0,
                 ],
 
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());

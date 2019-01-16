@@ -46,6 +46,7 @@ class SettingTest extends BaseTestCase
             ],
             'headers' => ['access-token' => self::$accessToken]
         ]);
+
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
     }

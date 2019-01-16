@@ -137,7 +137,7 @@ class MemberTest extends BaseTestCase
         $response = self::$client->request( 'POST', "admin/member/selfPassword", [
             'form_params' => [
                 'oldpassword' => '123456',
-                'password' => '654321',
+                'password' => '123456',
 
             ],
             'headers' => ['access-token' => self::$accessToken]

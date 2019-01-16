@@ -43,7 +43,8 @@ class ShopTest extends BaseTestCase
                 'contact_number' => '18526459531',
                 'description' => 'negative',
                 'host' => '',
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -61,7 +62,8 @@ class ShopTest extends BaseTestCase
         $response = self::$client->request( 'POST', "admin/shop/setColorScheme", [
             'form_params' => [
                 'color_scheme' => 1,
-            ]
+            ],
+            'headers' => ['access-token' => self::$accessToken]
         ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
@@ -76,7 +78,9 @@ class ShopTest extends BaseTestCase
      */
     public function testInfo()
     {
-        $response = self::$client->request( 'GET', "admin/shop/info", []);
+        $response = self::$client->request( 'GET', "admin/shop/info", [
+            'headers' => ['access-token' => self::$accessToken]
+        ]);
         $return_data = json_decode($response->getBody(), true);
         $this->assertEquals( self::$code::success, $return_data['code'], $response->getBody());
     }
