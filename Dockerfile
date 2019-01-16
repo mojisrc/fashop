@@ -40,6 +40,9 @@ RUN pecl install imagick-3.4.3 \
 # PDO extension
 RUN docker-php-ext-install pdo_mysql
 
+# zip extension
+RUN docker-php-ext-install zip
+
 # Bcmath extension
 RUN docker-php-ext-install bcmath
 
