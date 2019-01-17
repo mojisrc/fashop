@@ -163,5 +163,5 @@ class Image extends Admin
             'list'         => $list
         ]);
     }
-}
+
 }
