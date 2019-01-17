@@ -23,7 +23,7 @@
         "overtrue/easy-sms": "^0.0.9",
         "vlucas/phpdotenv": "^2.4",
         "hashids/hashids": "^2.0",
-        "yansongda/pay": "dev-master",
+        "yansongda/pay": "v2.6.1",
         "easyswoole/wsdebug": "^1.0",
         "guzzlehttp/guzzle": "~6.0",
         "phpoffice/phpspreadsheet":"^1.6.0"
