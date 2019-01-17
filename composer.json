@@ -39,7 +39,7 @@
         "files": ["vendor/hanwenbo/ezswoole/src/helper/helper.php"]
     },
     "require-dev": {
-        "easyswoole/swoole-ide-helper": "dev-master"
+        "easyswoole/swoole-ide-helper": "1.2.1"
     },
     "repositories": {
         "packagist": {
