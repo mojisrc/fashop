@@ -14,10 +14,13 @@
 namespace App\Model;
 
 use ezswoole\Model;
+use traits\model\SoftDelete;
 
 class GoodsImage extends Model
 {
-	protected $resultSetType = 'collection';
+    use SoftDelete;
+    protected $deleteTime    = 'delete_time';
+    protected $resultSetType = 'collection';
 
 	/**
 	 * 添加
@@ -117,6 +120,42 @@ class GoodsImage extends Model
 		return $list ? $list->toArray() : false;
 	}
 
+    /**
+     * 列表更多
+     * @param  [type] $condition        [条件]
+     * @param  [type] $condition_str    [条件]
+     * @param  [type] $field            [字段]
+     * @param  [type] $order            [排序]
+     * @param  [type] $page             [分页]
+     * @param  [type] $group            [分组]
+     * @return [type]                   [数据]
+     */
+    public function getGoodsImageMoreList($condition = array(), $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group='') {
+        if($page == ''){
+            $data = $this->alias('goods_image')->join('__GOODS__ goods','goods_image.goods_id = goods.id','LEFT')->where($condition)->where($condition_str)->order($order)->field($field)->group($group)->select();
+
+        }else{
+            $data = $this->alias('goods_image')->join('__GOODS__ goods','goods_image.goods_id = goods.id','LEFT')->where($condition)->where($condition_str)->order($order)->field($field)->page($page)->group($group)->select();
+
+        }
+        return $data ? $data->toArray() : array();
+    }
+
+    /**
+     * 获得数量
+     * @param  [type] $condition        [条件]
+     * @param  [type] $condition_str    [条件]
+     * @param  [type] $distinct         [去重]
+     * @return [type]                   [数据]
+     */
+    public function getGoodsImageMoreCount($condition = array(), $condition_str = '', $distinct = '') {
+        if($distinct == ''){
+            return $this->alias('goods_image')->join('__GOODS__ goods','goods_image.goods_id = goods.id','LEFT')->where($condition)->where($condition_str)->count();
+
+        }else{
+            return $this->alias('goods_image')->join('__GOODS__ goods','goods_image.goods_id = goods.id','LEFT')->where($condition)->where($condition_str)->count("DISTINCT ".$distinct);
+        }
+    }
 	/**
 	 * 软删除
 	 * @datetime 2017-04-19 10:46:57
@@ -126,7 +165,7 @@ class GoodsImage extends Model
 	 */
 	public function softDelGoodsImage( $condition = [] )
 	{
-		return $this->where( $condition )->find()->delete();
+        return $this->save(['delete_time'=>time()],$condition);
 	}
 
 }

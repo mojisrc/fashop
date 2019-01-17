@@ -594,7 +594,7 @@ class Goods
             GoodsSku::make(['goods_id' => $this->id, 'skus' => $this->skus])->edit();
 
             $GoodsImage = GoodsImage::make(['goods_id' => $this->id, 'images' => $this->images]);
-            $GoodsImage->getModel()->softDelGoodsImage();
+            model('GoodsImage')->softDelGoodsImage(['goods_id' => $this->id]);
             $GoodsImage->add();
 
             $goods_category_ids_model = model('GoodsCategoryIds');
