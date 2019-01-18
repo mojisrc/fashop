@@ -123,13 +123,7 @@ class Orderrefund extends Admin
                 return $this->send(Code::error, [], "未查询到可收货的退款记录");
             } else {
                 $refund_model->startTrans();
-
-                $refund_update_state = RefundLogic::agree;
-
-                // 更改退款状态
                 $result = $refund_model->editOrderRefund(['id' => $refund['id']], [
-                    'handle_state' => $refund_update_state,
-                    'handle_time'  => time(),
                     'receive'      => 2,
                     'receive_time' => time(),
                 ]);
