@@ -484,13 +484,13 @@ class OrderRefund extends Model
         if ($data['handle_state'] = 0) {//平台处理状态 默认0处理中(未处理) 10拒绝(驳回) 20同意 30成功(已完成)
             $state_desc = '申请退款，等待商家确认';
 
-        } elseif ($data['handle_state'] == 20 && $data['refund_type'] == 2 && $data['shipping_code'] == null && $data['shipping_time'] == 0) {
+        } elseif ($data['handle_state'] == 20 && $data['refund_type'] == 2 && $data['tracking_no'] == null && $data['shipping_time'] == 0) {
             $state_desc = '同意申请，等待买家退货';
 
-        } elseif ($data['handle_state'] == 20 && $data['refund_type'] == 2 && $data['shipping_code'] != null && $data['shipping_time'] > 0 && $data['receive'] == 1) {
+        } elseif ($data['handle_state'] == 20 && $data['refund_type'] == 2 && $data['tracking_no'] != null && $data['shipping_time'] > 0 && $data['receive'] == 1) {
             $state_desc = '买家已发货，等待收货';
 
-        } elseif ($data['handle_state'] == 20 && $data['refund_type'] == 2 && $data['shipping_code'] != null && $data['shipping_time'] > 0 && $data['receive'] == 2) {
+        } elseif ($data['handle_state'] == 20 && $data['refund_type'] == 2 && $data['tracking_no'] != null && $data['shipping_time'] > 0 && $data['receive'] == 2) {
             $state_desc = '已收货，确认退款';
 
         } elseif ($data['handle_state'] == 30) {

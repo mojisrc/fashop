@@ -122,7 +122,6 @@ class Install
 
 		try{
 			$this->initDirectory();
-			$this->insertInitDatabase();
 			$this->initAdmin();
 			return true;
 		} catch( \Exception $e ){
@@ -148,18 +147,6 @@ class Install
 		$file::createDir( RUNTIME_PATH."Log" );
 		$file::createDir( ROOT_PATH."Upload" );
 		$file::createDir( ROOT_PATH."Backup" );
-	}
-
-	private function insertInitDatabase()
-	{
-		$sql = file_get_contents( ROOT_PATH."Install/fashop.sql" );
-		$sql = str_replace( "fa_", $this->dbPrefix, $sql );
-		$db  = new \PDO( "mysql:host={$this->dbHost};port={$this->dbPort};dbname={$this->dbName};", $this->dbUsername, $this->dbPassword );
-		try{
-			$db->query( $sql );
-		} catch( \Exception $e ){
-			Log::write( $e->getMessage() );
-		}
 	}
 
 	/**
