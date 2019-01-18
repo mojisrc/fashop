@@ -271,7 +271,12 @@ class GoodsSearch
 		if( !empty( $this->categoryIds ) && is_array( $this->categoryIds ) ){
 			$goods_ids = model('GoodsCategoryIds')->getGoodsCategoryIdsColumn(['category_id'=>['in',$this->categoryIds]], '', 'goods_id');
 			if($goods_ids){
-                $this->condition['id'] = ['in',array_unique($goods_ids)];
+			    if($this->ids){
+                    $this->condition['id'] = ['in',array_values(array_unique(array_merge($this->ids,array_unique($goods_ids))))];
+
+                }else{
+                    $this->condition['id'] = ['in',array_unique($goods_ids)];
+                }
             }
 		}
 
