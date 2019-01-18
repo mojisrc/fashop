@@ -20,3 +20,7 @@ src/swoole_log.txt
 /Upload/*
 /Conf/config/database.php
 /tests/tmp
+
+#fashop docker volumes
+/volumes/mysql
+/volumes/log

@@ -8,11 +8,11 @@ return [
 	// 数据库名
 	'database'        => 'fashop',
 	// 用户名
-	'username'        => 'fashop',
+	'username'        => 'root',
 	// 密码
-	'password'        => '',
+	'password'        => '123456',
 	// 数据库连接端口
-	'hostport'        => '',
+	'hostport'        => '3336',
 	// 数据库连接参数
 	'params'          => [],
 	// 数据库编码默认采用utf8

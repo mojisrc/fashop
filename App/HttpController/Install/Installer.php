@@ -17,6 +17,7 @@ use ezswoole\Controller;
 use Install\Install;
 use ezswoole\Request;
 use App\Utils\Code;
+use EasySwoole\Core\Utility\File;
 
 class Installer extends Controller
 {
@@ -226,18 +227,18 @@ EOT;
 	 */
 	public function checkDb()
 	{
-        try {
-            $env = new \App\Utils\Environment();
-            if (!version_compare($env->getMysqlVersion(), '5.7.18', '>=')) {
-                return $this->send(-1, [], "数据库版本错误");
-            }
-            if (!extension_loaded('pdo')) {
-                return $this->send(-1, [], "数据库连接失败");
-            }
-            return $this->send(0);
-        } catch (\Exception $e) {
-            return $this->send(-1, [], $e->getMessage());
-        }
+		try{
+			$env = new \App\Utils\Environment();
+			if( !version_compare( $env->getMysqlVersion(), '5.7.18', '>=' ) ){
+				return $this->send( - 1, [], "数据库版本错误" );
+			}
+			if( !extension_loaded( 'pdo' ) ){
+				return $this->send( - 1, [], "数据库连接失败" );
+			}
+			return $this->send( 0 );
+		} catch( \Exception $e ){
+			return $this->send( - 1, [], $e->getMessage() );
+		}
 	}
 
 	/**
@@ -265,7 +266,7 @@ EOT;
 	/**
 	 * 安装
 	 * @method POST
-     * @param int    agree
+	 * @param int    agree
 	 * @param string username
 	 * @param string password
 	 * @param string repassword
@@ -273,35 +274,34 @@ EOT;
 	 */
 	public function run()
 	{
-        try {
-            //验证协议
-            if(intval($this->post['agree'] ) !=1){
-                return $this->send(-1, [], "请同意并阅读协议");
-            }
-            //验证数据库
-            $env = new \App\Utils\Environment();
-            if (!version_compare($env->getMysqlVersion(), '5.7.18', '>=')) {
-                return $this->send(-1, [], "数据库版本错误");
-            }
-            if (!extension_loaded('pdo')) {
-                return $this->send(-1, [], "数据库连接失败");
-            }
+		try{
+			//验证协议
+			if( intval( $this->post['agree'] ) != 1 ){
+				return $this->send( - 1, [], "请同意并阅读协议" );
+			}
+			//验证数据库
+			$env = new \App\Utils\Environment();
+			if( !version_compare( $env->getMysqlVersion(), '5.7.18', '>=' ) ){
+				return $this->send( - 1, [], "数据库版本错误" );
+			}
+			if( !extension_loaded( 'pdo' ) ){
+				return $this->send( - 1, [], "数据库连接失败" );
+			}
 
-            //验证账号密码
-            if( !isset( $this->post['username'] ) || !isset( $this->post['password'] ) || !isset( $this->post['repassword'] ) ){
-                return $this->send( - 1, [], "管理员信息不完整" );
-            } else{
-                $install = new Install();
-                $result  = $install->checkAdminAccount( $this->post['username'], $this->post['password'], $this->post['repassword'] );
-                if( $result !== true ){
-                    return $this->send( - 1, [], $result );
-                }
-            }
+			//验证账号密码
+			if( !isset( $this->post['username'] ) || !isset( $this->post['password'] ) || !isset( $this->post['repassword'] ) ){
+				return $this->send( - 1, [], "管理员信息不完整" );
+			} else{
+				$install = new Install();
+				$result  = $install->checkAdminAccount( $this->post['username'], $this->post['password'], $this->post['repassword'] );
+				if( $result !== true ){
+					return $this->send( - 1, [], $result );
+				}
+			}
 
-            $database             = ROOT_PATH."Conf/config/database.php";
-            $database             = require $database;
+			$database = require ROOT_PATH."Conf/config/database.php";
 
-            //执行安装
+			//执行安装
 			$install = new Install( [
 				'admin_username'   => $this->post['username'],
 				'admin_password'   => $this->post['password'],
@@ -314,18 +314,18 @@ EOT;
 				'db_prefix'        => $database['prefix'],
 			] );
 
-            $result = $install->run();
-            if( $result === true ){
-                $this->send( 0, [], '安装成功' );
-            } else{
-                $this->send( - 1, [], $result );
-            }
+			$result = $install->run();
+			if( $result === true ){
+				$this->send( 0, [], '安装成功' );
+			} else{
+				$this->send( - 1, [], $result );
+			}
 
-        } catch (\Exception $e) {
-            return $this->send(-1, [], $e->getMessage());
-        }
+		} catch( \Exception $e ){
+			return $this->send( - 1, [], $e->getMessage() );
+		}
 
-    }
+	}
 
 	/**
 	 * 安装
