@@ -26,14 +26,12 @@ services:
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
 
-  fashop-damin:
+  fashop-admin:
     image: ezkuangren/fashop-admin-v2:latest
-      ports:
-        - "${FASHOP_ADMIN_PORT}:5000"
-      restart: always
-      networks:
-        - default
-      links:
-        - fashop
-      environment:
-        FASHOP_ADMIN_VERSION: "${FASHOP_ADMIN_VERSION}"
+    ports:
+      - "${FASHOP_ADMIN_PORT}:5000"
+    restart: always
+    networks:
+      - default
+    environment:
+      FASHOP_ADMIN_VERSION: "${FASHOP_ADMIN_VERSION}"
