@@ -26,12 +26,12 @@ services:
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
 
-  fashop-admin:
-    image: ezkuangren/fashop-admin-v2:latest
-    ports:
-      - "${FASHOP_ADMIN_PORT}:5000"
-    restart: always
-    networks:
-      - default
+  fashop-admin-build:
+    image: ezkuangren/fashop-admin:latest
     environment:
       FASHOP_ADMIN_VERSION: "${FASHOP_ADMIN_VERSION}"
+    volumes:
+      - ${FASHOP_ADMIN_BUILD_DIR}:/fashop-admin-code
+    tty: true
+    privileged: true
+    entrypoint: ["cp", "-r", "/fashop-admin/dist/","/fashop-admin-code"]

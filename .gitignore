@@ -24,3 +24,4 @@ src/swoole_log.txt
 #fashop docker volumes
 /volumes/mysql
 /volumes/log
+/volumes/admin
