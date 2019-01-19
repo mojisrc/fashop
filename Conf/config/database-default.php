@@ -1,5 +1,4 @@
 <?php
-// todo
 return [
 	// 数据库类型
 	'type'            => 'mysql',
@@ -8,11 +7,11 @@ return [
 	// 数据库名
 	'database'        => 'fashop',
 	// 用户名
-	'username'        => 'root',
+	'username'        => 'fashop',
 	// 密码
 	'password'        => '123456',
-	// 数据库连接端口
-	'hostport'        => '3336',
+	// 数据库连接端口 3336 为了初次使用docker安装不和用户本机的3306冲突
+	'hostport'        => 3336,
 	// 数据库连接参数
 	'params'          => [],
 	// 数据库编码默认采用utf8
@@ -27,7 +26,7 @@ return [
 	'rw_separate'     => false,
 	// 读写分离后 主服务器数量
 	'master_num'      => 1,
-	// 指定从服务器序号
+	// 指定从服务器序号10007
 	'slave_no'        => '',
 	// 是否严格检查字段是否存在
 	'fields_strict'   => true,

@@ -1,5 +1,4 @@
 version: '3'
-
 services:
   fashop:
     image: fashop/fashop:v2.0.0
@@ -35,3 +34,14 @@ services:
     tty: true
     privileged: true
     entrypoint: ["cp", "-r", "/fashop-admin/dist/","/fashop-admin-code"]
+
+  fashop-dev:
+    image: ezkuangren/swoole1
+    container_name: fashop-dev
+    ports:
+      - "9511:9510"
+    volumes:
+      - ./:/var/www/project
+    stdin_open: true
+    tty: true
+    privileged: true
