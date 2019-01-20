@@ -37,7 +37,7 @@ class EasySwooleEvent implements EventInterface
 			}
 			if( $worker_id === 0 ){
 				// todo 临时写
-				$file_path   = ROOT_PATH."Conf/config/database-default.php";
+				$file_path   = ROOT_PATH."Conf/config/database.default.php";
 				$target_path = ROOT_PATH."Conf/config/database.php";
 				if( !file_exists( $target_path ) ){
 					File::copyFile( $file_path, $target_path, false );

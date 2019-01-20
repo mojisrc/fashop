@@ -122,6 +122,7 @@ class Install
 
 		try{
 			$this->initDirectory();
+			$this->insertInitDatabase();
 			$this->initAdmin();
 			return true;
 		} catch( \Exception $e ){
@@ -229,6 +230,18 @@ class Install
 		}
 	}
 
+	private function insertInitDatabase()
+	{
+		$sql = file_get_contents( ROOT_PATH."Install/fashop.sql" );
+		$sql = str_replace( "fa_", $this->dbPrefix, $sql );
+		$db  = new \PDO( "mysql:host={$this->dbHost};port={$this->dbPort};dbname={$this->dbName};", $this->dbUsername, $this->dbPassword );
+		try{
+			$db->query( $sql );
+		} catch( \Exception $e ){
+			Log::write( $e->getMessage() );
+		}
+	}
+
 	/**
 	 * 检查管理员账号配置
 	 * @param string $username
@@ -237,28 +250,28 @@ class Install
 	 * @return bool
 	 * @author 韩文博
 	 */
-    public function checkAdminAccount( string $username, string $password, string $repassword )
-    {
-        $validate = new Validate();
-        if( $validate->is( $username, 'alphaDash' ) !== true ){
-            return '账号只能是字母、数字和下划线_及破折号-';
-        }
-        if( $validate->min( $username, 5 ) !== true ){
-            return '账号最少5位';
-        }
-        if( $validate->max( $username, 16 ) !== true ){
-            return '账号最多16位';
-        }
-        if( $validate->min( $password, 6 ) !== true ){
-            return '密码最少6位';
-        }
-        if( $validate->max( $password, 32 ) !== true ){
-            return '密码最多32位';
-        }
-        if( $password !== $repassword ){
-            return '确认密码不正确';
-        }
+	public function checkAdminAccount( string $username, string $password, string $repassword )
+	{
+		$validate = new Validate();
+		if( $validate->is( $username, 'alphaDash' ) !== true ){
+			return '账号只能是字母、数字和下划线_及破折号-';
+		}
+		if( $validate->min( $username, 5 ) !== true ){
+			return '账号最少5位';
+		}
+		if( $validate->max( $username, 16 ) !== true ){
+			return '账号最多16位';
+		}
+		if( $validate->min( $password, 6 ) !== true ){
+			return '密码最少6位';
+		}
+		if( $validate->max( $password, 32 ) !== true ){
+			return '密码最多32位';
+		}
+		if( $password !== $repassword ){
+			return '确认密码不正确';
+		}
 
-        return true;
-    }
+		return true;
+	}
 }

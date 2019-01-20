@@ -7,11 +7,11 @@ return [
 	// 数据库名
 	'database'        => 'fashop',
 	// 用户名
-	'username'        => 'fashop',
+	'username'        => 'root',
 	// 密码
 	'password'        => '123456',
-	// 数据库连接端口 3336 为了初次使用docker安装不和用户本机的3306冲突
-	'hostport'        => 3336,
+	// 数据库连接端口
+	'hostport'        => 3306,
 	// 数据库连接参数
 	'params'          => [],
 	// 数据库编码默认采用utf8

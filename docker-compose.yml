@@ -1,9 +1,15 @@
 version: '3'
 services:
+  ## todo 脚本判断是否存在lock 或者 是否有vendoer 如果没有 composer install
+  ## 没有fashop 拉取fashop
   fashop:
-    image: fashop/fashop:v2.0.0
+    depends_on:
+      - mysql
+    links:
+      - mysql
+    image: fashop/fashop:${FASHOP_VERSION}
     ports:
-      - "9510:9510"
+      - ${FASHOP_PORT}:9510
     volumes:
       - ./:/var/www/fashop
     stdin_open: true
@@ -25,6 +31,20 @@ services:
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
 
+  nginx:
+    image: nginx:${NGINX_VERSION}
+    ports:
+      - "${NGINX_HTTP_HOST_PORT}:80"
+      - "${NGINX_HTTPS_HOST_PORT}:443"
+    volumes:
+      - ${SOURCE_DIR}:/var/www/html/:rw
+      - ${NGINX_CONFD_DIR}:/etc/nginx/conf.d/:rw
+      - ${NGINX_CONF_FILE}:/etc/nginx/nginx.conf:ro
+      - ${NGINX_LOG_DIR}:/var/log/nginx/:rw
+    restart: always
+    networks:
+      - default
+
   fashop-admin-build:
     image: ezkuangren/fashop-admin:latest
     environment:
@@ -37,7 +57,6 @@ services:
 
   fashop-dev:
     image: ezkuangren/swoole1
-    container_name: fashop-dev
     ports:
       - "9511:9510"
     volumes:
