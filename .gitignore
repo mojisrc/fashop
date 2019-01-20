@@ -2,13 +2,14 @@
 /.idea/
 /.DS_Store
 /.svn/
+
 # composer
-/vendor/
+/vendor
 composer.lock
 
 # easySwoole
-/Log/
-/Temp/
+/Log
+/Temp
 easyswoole
 easyswoole.install
 src/swoole_log.txt
