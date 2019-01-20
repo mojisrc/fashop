@@ -22,8 +22,3 @@ src/swoole_log.txt
 /Conf/config/database.php
 /tests/tmp
 
-#fashop docker volumes
-/volumes/mysql
-/volumes/log
-/volumes/admin
-
