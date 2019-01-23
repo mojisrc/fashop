@@ -24,16 +24,6 @@ class Router extends \EasySwoole\Core\Http\AbstractInterface\Router
 
 	function register( RouteCollector $routeCollector )
 	{
-		$routeCollector->get( '/install', '/Install/Installer/index' );
-
-
-		$routeCollector->get( '/a/{name:.+}', function( Request $request, Response $response ){
-			$this->renderAdminView( $response );
-		} );
-		$routeCollector->get( '/a', function( Request $request, Response $response ){
-			$this->renderAdminView( $response );
-		} );
-
 		$routeCollector->get( '/wsdebug', function( Request $request, Response $response ){
 			$isSsl = request()->isSsl();
 			$host  = request()->host();
@@ -52,25 +42,5 @@ class Router extends \EasySwoole\Core\Http\AbstractInterface\Router
 			$response->write( $wsdebug->getHtml() );
 			$response->end();
 		} );
-	}
-
-	private function renderAdminView( Response $response )
-	{
-		$isSsl = request()->isSsl();
-		$host  = request()->host();
-		$port  = \Easyswoole\Config::getInstance()->getConf( "MAIN_SERVER.PORT" );
-		if( $host === 'localhost' ){
-			$host = '127.0.0.1';
-		}
-		if( filter_var( $host, FILTER_VALIDATE_IP ) ){
-			$url = "{$host}:{$port}";
-		} else{
-			$url = $host;
-		}
-		$originHost = 'http://127.0.0.1:9510';
-		$localHost  = ($isSsl ? 'https://' : 'http://').$url;
-		$content    = file_get_contents( ROOT_PATH.'a/index.html' );
-		$response->write( str_replace( $originHost, $localHost, $content ) );
-		$response->end();
 	}
 }

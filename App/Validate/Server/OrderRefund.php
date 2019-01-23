@@ -53,14 +53,14 @@ class OrderRefund extends Validate
 		];
 
 
-	protected function checkPhone( $value, $rule, $data )
-	{
-		if( !phone( $value) ){
-			return Code::user_phone_format_error;
-		}
-		return true;
-	}
+    protected function checkPhone( $value, $rule, $data )
+    {
+        if( !$this->is( $value, 'phone', $data ) ){
+            return Code::user_phone_format_error;
+        }
 
+        return true;
+    }
 
 
 }

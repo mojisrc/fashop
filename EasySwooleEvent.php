@@ -11,6 +11,7 @@ use EasySwoole\Core\Swoole\ServerManager;
 use EasySwoole\Core\AbstractInterface\EventInterface;
 use EasySwoole\Core\Swoole\EventHelper;
 use \ezswoole\App;
+use EasySwoole\Core\Utility\File;
 
 class EasySwooleEvent implements EventInterface
 {
@@ -35,7 +36,13 @@ class EasySwooleEvent implements EventInterface
 				swoole_set_process_name( 'fashop' );
 			}
 			if( $worker_id === 0 ){
-				// 清理客户端用户记录
+				// todo 临时写
+				$file_path   = ROOT_PATH."Conf/config/database.default.php";
+				$target_path = ROOT_PATH."Conf/config/database.php";
+				if( !file_exists( $target_path ) ){
+					File::copyFile( $file_path, $target_path, false );
+				}
+				// 清理客户端用户记录 todo 如果未安装不执行
 				\App\Logic\Fd::clearAll();
 				\ezswoole\Cron::getInstance()->run();
 			}

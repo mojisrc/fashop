@@ -73,3 +73,12 @@ services:
 **到此为止，宿主机和docker容器内部代码就可以同步了！尽情的体验fahsop吧！**
 
 
+## 开发环境
+- 拉取环境
+```sh
+docker-compose up -d fashop-dev
+```
+- 进入容器内部方便调试
+```sh
+docker-compose exec fashop-dev bash
+```

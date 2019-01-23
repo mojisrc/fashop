@@ -37,46 +37,6 @@ class Installer extends Controller
 		}
 	}
 
-
-	public function index()
-	{
-		$isSsl = request()->isSsl();
-		$host  = request()->host();
-		$port  = \Easyswoole\Config::getInstance()->getConf( "MAIN_SERVER.PORT" );
-		if( filter_var( $host, FILTER_VALIDATE_IP ) ){
-			$url = "{$host}:{$port}";
-		} else{
-			$url = $host;
-		}
-		$apiHost = $isSsl ? 'https://'.$url : 'http://'.$url;
-		$time    = time();
-		$html
-		         = <<<EOT
-<!doctype html>
-<html lang="zh-CN">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <meta name="renderer" content="webkit"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
-    <title>FaShop 商城系统 - Power By FaShop ( www.fashop.cn )</title>
-    <meta name="keywords" content="FaShop,开源商城系统,开源商城小程序,开源商城APP">
-    <meta name="description" content="FaShop是魔际（天津）科技有限公司(www.fashop.cn)开发。">
-    <link rel="manifest" href="https://statics.fashop.cn/fashop-install/v2/manifest.json?t={$time}">
-    <link rel="shortcut icon" href="https://statics.fashop.cn/fashop-install/v2/favicon.ico?t={$time}">
-    <link href="https://statics.fashop.cn/fashop-install/v2/static/css/vendor.css?t={$time}" rel="stylesheet">
-</head>
-<body>
-<script>window.fashop = {apiHost: '{$apiHost}' ,historyPrefix:'/a'}</script>
-<div id="root"></div>
-<script type="text/javascript" src="https://statics.fashop.cn/fashop-install/v2/static/js/vendor.js?t={$time}"></script>
-<script type="text/javascript" src="https://statics.fashop.cn/fashop-install/v2/static/js/main.js?t={$time}"></script>
-</body>
-</html>
-EOT;
-		$this->response()->write( $html );
-	}
-
 	/**
 	 * 环境信息列表
 	 * @method GET
@@ -226,18 +186,18 @@ EOT;
 	 */
 	public function checkDb()
 	{
-        try {
-            $env = new \App\Utils\Environment();
-            if (!version_compare($env->getMysqlVersion(), '5.7.18', '>=')) {
-                return $this->send(-1, [], "数据库版本错误");
-            }
-            if (!extension_loaded('pdo')) {
-                return $this->send(-1, [], "数据库连接失败");
-            }
-            return $this->send(0);
-        } catch (\Exception $e) {
-            return $this->send(-1, [], $e->getMessage());
-        }
+		try{
+			$env = new \App\Utils\Environment();
+			if( !version_compare( $env->getMysqlVersion(), '5.7.18', '>=' ) ){
+				return $this->send( - 1, [], "数据库版本错误" );
+			}
+			if( !extension_loaded( 'pdo' ) ){
+				return $this->send( - 1, [], "数据库连接失败" );
+			}
+			return $this->send( 0 );
+		} catch( \Exception $e ){
+			return $this->send( - 1, [], $e->getMessage() );
+		}
 	}
 
 	/**
@@ -265,90 +225,63 @@ EOT;
 	/**
 	 * 安装
 	 * @method POST
-	 * @param string db_host
-	 * @param string db_name
-	 * @param string db_username
-	 * @param string db_password
-	 * @param string db_port
-	 * @param string db_prefix
-	 * @param string admin_username
-	 * @param string admin_password
-	 * @param string admin_repassword
+	 * @param int    agree
+	 * @param string username
+	 * @param string password
+	 * @param string repassword
 	 * @author 韩文博
 	 */
 	public function run()
 	{
-		if( !isset( $this->post['db_host'] ) || !isset( $this->post['db_name'] ) || !isset( $this->post['db_port'] ) || !isset( $this->post['db_prefix'] ) || !isset( $this->post['db_username'] ) || !isset( $this->post['db_password'] ) ){
-			$this->send( Code::param_error, [], "数据库配置信息不完整" );
-		} elseif( !isset( $this->post['admin_username'] ) || !isset( $this->post['admin_password'] ) || !isset( $this->post['admin_repassword'] ) ){
-			$this->send( Code::param_error, [], "管理员信息不完整" );
-		} else{
-			$install = new Install( [
-				'admin_username'   => $this->post['admin_username'],
-				'admin_password'   => $this->post['admin_password'],
-				'admin_repassword' => $this->post['admin_repassword'],
-				'db_host'          => $this->post['db_host'],
-				'db_name'          => $this->post['db_name'],
-				'db_username'      => $this->post['db_username'],
-				'db_password'      => $this->post['db_password'],
-				'db_port'          => $this->post['db_port'],
-				'db_prefix'        => $this->post['db_prefix'],
-			] );
-			try{
-				$result = $install->run();
-				if( $result === true ){
-					$this->send( 0, [], '安装成功' );
-				} else{
-					$this->send( - 1, [], $result );
-				}
-			} catch( \Exception $e ){
-				$this->send( Code::server_error, [], $e->getMessage() );
+		try{
+			//验证协议
+			if( intval( $this->post['agree'] ) != 1 ){
+				return $this->send( - 1, [], "请同意并阅读协议" );
 			}
-		}
-	}
+			//验证数据库
+			$env = new \App\Utils\Environment();
+			if( !version_compare( $env->getMysqlVersion(), '5.7.18', '>=' ) ){
+				return $this->send( - 1, [], "数据库版本错误" );
+			}
+			if( !extension_loaded( 'pdo' ) ){
+				return $this->send( - 1, [], "数据库连接失败" );
+			}
 
-	/**
-	 * 安装
-	 * @method POST
-	 * @param string db_host
-	 * @param string db_name
-	 * @param string db_username
-	 * @param string db_password
-	 * @param string db_port
-	 * @param string db_prefix
-	 * @param string admin_username
-	 * @param string admin_password
-	 * @param string admin_repassword
-	 * @author 韩文博
-	 */
-	public function runtest()
-	{
-		if( !isset( $this->post['db_host'] ) || !isset( $this->post['db_name'] ) || !isset( $this->post['db_username'] ) || !isset( $this->post['db_password'] ) || !isset( $this->post['db_port'] ) || !isset( $this->post['db_prefix'] ) ){
-			$this->send( - 1, [], "配置信息不完整" );
-		} elseif( !isset( $this->post['admin_username'] ) || !isset( $this->post['admin_password'] ) || !isset( $this->post['admin_repassword'] ) ){
-			$this->send( - 1, [], "管理员信息不完整" );
-		} else{
-			$install = new Install( [
-				'admin_username'   => $this->post['admin_username'],
-				'admin_password'   => $this->post['admin_password'],
-				'admin_repassword' => $this->post['admin_repassword'],
-				'db_host'          => $this->post['db_host'],
-				'db_name'          => $this->post['db_name'],
-				'db_username'      => $this->post['db_username'],
-				'db_password'      => $this->post['db_password'],
-				'db_port'          => $this->post['db_port'],
-				'db_prefix'        => $this->post['db_prefix'],
-			] );
-			try{
-				$result = $install->run();
-				if( $result === true ){
-					$this->send( 0, [], '安装成功' );
-				} else{
-					$this->send( - 1, [], $result );
+			//验证账号密码
+			if( !isset( $this->post['username'] ) || !isset( $this->post['password'] ) || !isset( $this->post['repassword'] ) ){
+				return $this->send( - 1, [], "管理员信息不完整" );
+			} else{
+				$install = new Install();
+				$result  = $install->checkAdminAccount( $this->post['username'], $this->post['password'], $this->post['repassword'] );
+				if( $result !== true ){
+					return $this->send( - 1, [], $result );
 				}
-			} catch( \Exception $e ){
-				$this->send( - 1, [], $e->getMessage() );
 			}
+
+			$database = require ROOT_PATH."Conf/config/database.php";
+
+			//执行安装
+			$install = new Install( [
+				'admin_username'   => $this->post['username'],
+				'admin_password'   => $this->post['password'],
+				'admin_repassword' => $this->post['repassword'],
+				'db_host'          => $database['hostname'],
+				'db_name'          => $database['database'],
+				'db_username'      => $database['username'],
+				'db_password'      => $database['password'],
+				'db_port'          => $database['hostport'],
+				'db_prefix'        => $database['prefix'],
+			] );
+
+			$result = $install->run();
+			if( $result === true ){
+				$this->send( 0, [], '安装成功' );
+			} else{
+				$this->send( - 1, [], $result );
+			}
+
+		} catch( \Exception $e ){
+			return $this->send( - 1, [], $e->getMessage() );
 		}
 	}
 }

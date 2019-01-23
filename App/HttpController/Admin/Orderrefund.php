@@ -103,7 +103,7 @@ class Orderrefund extends Admin
     }
 
     /**
-     * 退款退货的订单 卖家确认收货(收到买家退回来的订单以后才能退款) 收到货退款完成 这版没有退款
+     * 退款退货的订单 卖家确认收货
      * @method POST
      * @param int id 退款id
      */
@@ -116,22 +116,14 @@ class Orderrefund extends Admin
             $condition                  = [];
             $condition['id']            = $this->post['id'];
             $condition['refund_type']   = 2;
-            $condition['shipping_code'] = ['neq', null];
+            $condition['tracking_no']   = ['neq', null];
             $condition['receive']       = 1;
             $refund                     = $refund_model->getOrderRefundInfo(['id' => $this->post['id']]);
             if (!$refund) {
                 return $this->send(Code::error, [], "未查询到可收货的退款记录");
             } else {
                 $refund_model->startTrans();
-                $order_goods_model = model('OrderGoods');
-                $order_model       = model('Order');
-
-                $refund_update_state = RefundLogic::agree;
-
-                // 更改退款状态
                 $result = $refund_model->editOrderRefund(['id' => $refund['id']], [
-                    'handle_state' => $refund_update_state,
-                    'handle_time'  => time(),
                     'receive'      => 2,
                     'receive_time' => time(),
                 ]);
@@ -140,32 +132,7 @@ class Orderrefund extends Admin
                     $refund_model->rollback();
                     return $this->send(Code::error);
                 }
-                // 同意 ： 设置 refund_handle_state = 30 是因为我们v1版本采用用户自行去支付平台退款的方式，这儿的退款同意，仅为标记作用
-                $order_goods_res = $order_goods_model->editOrderGoods([
-                                                                          'lock_state' => 1,
-                                                                          'id'         => $refund['order_goods_id'],
-                                                                      ], [
-                                                                          'refund_handle_state' => $refund_update_state,
-                                                                      ]);
-                if (!$order_goods_res) {
-                    $refund_model->rollback();
-                    return $this->send(Code::error, [], "退款订单商品的状态错误");
-                }
-                // 查询所有的子订单都是退款同意的，设置订单为all_agree_refound
-                $order_goods_ids    = $order_goods_model->where(['order_id' => $refund['order_id']])->column('id');
-                $refund_goods_count = $order_goods_model->where([
-                                                                    'id'                  => ['in', $order_goods_ids],
-                                                                    'order_id'            => $refund['order_id'],
-                                                                    'refund_handle_state' => $refund_update_state,
-                                                                    'lock_state'          => 1,
-                                                                ])->count("DISTINCT id");
-                if (count($order_goods_ids) === $refund_goods_count) {
-                    $order_res = $order_model->editOrder(['id' => $refund['order_id']], ['all_agree_refound' => 1]);
-                    if (!$order_res) {
-                        $refund_model->rollback();
-                        return $this->send(Code::error, [], "修改订单全退状态失败");
-                    }
-                }
+
                 $refund_model->commit();
                 $this->send(Code::success);
             }

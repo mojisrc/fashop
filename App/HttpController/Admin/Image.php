@@ -139,29 +139,29 @@ class Image extends Admin
 		// todo v1 版本不需要
 	}
 
-	/**
-	 * 商品图列表
-	 * @method GET
-	 * @param string $keywords
-	 * @author 韩文博
-	 */
-	public function goodsImageList()
-	{
-		$condition                           = [];
-		$condition['goods_image.is_default'] = 1;
-		if( isset( $this->get['keywords'] ) ){
-			$condition['goods.title'] = ['like', '%'.$this->get['keywords'].'%'];
-		}
+    /**
+     * 商品图列表
+     * @method GET
+     * @param string $keywords
+     * @author 韩文博
+     */
+    public function goodsImageList()
+    {
+        $condition                           = [];
+        $condition['goods_image.is_default'] = 1;
+        if (isset($this->get['keywords'])) {
+            $condition['goods.title'] = ['like', '%' . $this->get['keywords'] . '%'];
+        }
 
-		$field = 'goods_image.id,goods_image.goods_id,goods_image.img,goods.title';
+        $goods_image_model = model('GoodsImage');
+        $field             = 'goods_image.id,goods_image.goods_id,goods_image.img,goods.title';
+        $count             = $goods_image_model->getGoodsImageMoreCount($condition, '', 'goods_image.id');
+        $list              = $goods_image_model->getGoodsImageMoreList($condition, '', $field, 'goods_image.goods_id', $this->getPageLimit(), 'goods_image.id');;
 
-		$model = model( 'GoodsImage' );
-		$list  = $model->alias( 'goods_image' )->join( '__GOODS__ goods', 'goods_image.goods_id = goods_id', 'LEFT' )->where( $condition )->field( $field )->order( 'goods_image.goods_id' )->group( 'goods_image.id' )->page( $this->getPageLimit() )->select();
-		$count = $model->alias( 'goods_image' )->join( '__GOODS__ goods', 'goods_image.goods_id = goods_id', 'LEFT' )->where( $condition )->field( $field )->count( "distinct goods_image.id" );
+        return $this->send(Code::success, [
+            'total_number' => $count,
+            'list'         => $list
+        ]);
+    }
 
-		return $this->send( Code::success, [
-			'totol_number' => $count,
-			'list'         => $list ? $list->toArray() : [],
-		] );
-	}
 }
