@@ -74,8 +74,8 @@ class DistributorLevel extends Admin
      * 分销员等级添加
      * @method POST
      * @param int   title               名称
-     * @param int   ratio               佣金比例（第一级）
-     * @param int   invite_ratio        邀请奖励佣金比例（第二级）
+     * @param int   ratio               佣金比例
+     * @param int   invite_ratio        邀请奖励佣金比例
      * @param float promotion_amount    推广金
      * @param float total_amount        总金额（推广金+消费金）
      * @param float customer_num        累计客户数
@@ -116,8 +116,8 @@ class DistributorLevel extends Admin
      * @method POST
      * @param int   id                  数据id
      * @param int   title               名称
-     * @param int   ratio               佣金比例（第一级）
-     * @param int   invite_ratio        邀请奖励佣金比例（第二级）
+     * @param int   ratio               佣金比例
+     * @param int   invite_ratio        邀请奖励佣金比例
      * @param float promotion_amount    推广金
      * @param float total_amount        总金额（推广金+消费金）
      * @param float customer_num        累计客户数

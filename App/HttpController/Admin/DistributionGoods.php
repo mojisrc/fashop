@@ -107,8 +107,8 @@ class DistributionGoods extends Admin
      * 分销商品编辑
      * @method POST
      * @param int goods_id          商品id
-     * @param int ratio             佣金比例（第一级）
-     * @param int invite_ratio      邀请奖励佣金比例（第二级）
+     * @param int ratio             佣金比例
+     * @param int invite_ratio      邀请奖励佣金比例
      * @param int is_show           是否正在执行 0未执行 1执行
      * @param int type              0默认结算方式 1商品自定义
      * 如果没有设置分销 则会创建一条数据
