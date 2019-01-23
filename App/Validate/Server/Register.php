@@ -69,7 +69,7 @@ class Register extends Validate
 	protected function checkUsername( $value, $rule, $data )
 	{
 		if( !$this->is( $value, 'phone', $data ) ){
-			return Code::user_username_or_email_error;
+			return Code::user_phone_format_error;
 		}
 		$condition['username|email|phone'] = $value;
 		$find                              = \ezswoole\Db::name( 'User' )->where( $condition )->count();
