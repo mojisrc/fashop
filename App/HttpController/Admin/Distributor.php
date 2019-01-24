@@ -62,11 +62,10 @@ class Distributor extends Admin
         $field             = 'distributor.*,user.phone,invite_user.phone AS invite_phone';
         $field             = $field . ",
         (SELECT COUNT(id) FROM $table_order WHERE (distribution_user_id=distributor.user_id AND state>=20) OR (user_id=distributor.user_id AND state>=20)) AS total_deal_num,
-        (SELECT CASE WHEN refund_state=0 THEN CASE WHEN revise_amount>0 THEN SUM(revise_amount-revise_freight_fee) ELSE SUM(amount-freight_fee) END WHEN refund_state =1 THEN CASE WHEN revise_amount>0 THEN SUM(revise_amount-revise_freight_fee-refund_amount) ELSE SUM(amount-freight_fee-refund_amount) END ELSE 0 END FROM $table_order WHERE (distribution_user_id=distributor.user_id AND state>=20) OR (user_id=distributor.user_id AND state>=20))";
+        (SELECT CASE WHEN refund_state=0 THEN CASE WHEN revise_amount>0 THEN SUM(revise_amount-revise_freight_fee) ELSE SUM(amount-freight_fee) END WHEN refund_state =1 THEN CASE WHEN revise_amount>0 THEN SUM(revise_amount-revise_freight_fee-refund_amount) ELSE SUM(amount-freight_fee-refund_amount) END ELSE 0 END FROM $table_order WHERE (distribution_user_id=distributor.user_id AND state>=20) OR (user_id=distributor.user_id AND state>=20)) AS total_deal_amount";
 
         $order             = 'distributor.id desc';
         $list              = $distributor_model->getDistributorMoreList($condition, '', $field, $order, $this->getPageLimit(), '');
-        echo $distributor_model->getlastsql();
         return $this->send(Code::success, [
             'total_number' => $count,
             'list'         => $list,
