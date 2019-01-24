@@ -30,11 +30,13 @@ class DistributorLevel extends Admin
      */
     public function list()
     {
-        $condition_str = '';
-        $condition     = [];
+        $condition_str           = '';
+        $condition               = [];
         $distributor_level_model = model('DistributorLevel');
         $count                   = $distributor_level_model->getDistributorLevelCount($condition, $condition_str);
-        $list                    = $distributor_level_model->getDistributorLevelList($condition, $condition_str, '*', 'id desc', $this->getPageLimit(), '');
+        $field                   = '*';
+        $order                   = 'id asc';
+        $list                    = $distributor_level_model->getDistributorLevelList($condition, $condition_str, $field, $order, $this->getPageLimit(), '');
         return $this->send(Code::success, [
             'total_number' => $count,
             'list'         => $list,
@@ -93,6 +95,7 @@ class DistributorLevel extends Admin
             $insert_data['customer_num']     = intval($post['customer_num']);
             $insert_data['distributor_num']  = intval($post['distributor_num']);
             $insert_data['upgrade_rules']    = $post['upgrade_rules'];
+            $insert_data['level']            = $distributor_level_model->max('level') + 1;
             $insert_data['create_time']      = time();
             $insert_data['update_time']      = time();
             $result                          = $distributor_level_model->insertDistributorLevel($insert_data);
@@ -172,6 +175,7 @@ class DistributorLevel extends Admin
                 return $this->send(Code::param_error, [], '第一级不可以删除');
             }
 
+            $distributor_model       = model('Distributor');
             $distributor_level_model = model('DistributorLevel');
             $condition               = [];
             $condition['id']         = $post['id'];
@@ -179,18 +183,28 @@ class DistributorLevel extends Admin
             if (!$distributor_level_info) {
                 return $this->send(Code::param_error, [], '参数错误');
             }
-            $max_id = $distributor_level_model->max('id');
-            if ($post['id'] != $max_id) {
+            $max_level = $distributor_level_model->max('level');
+            if ($distributor_level_info['level'] != $max_level) {
                 return $this->send(Code::param_error, [], '只能从最高级依次删除');
             }
             $distributor_level_model->startTrans();
+
+            //删除分销等级
             $distributor_level_result = $distributor_level_model->delDistributorLevel(['id' => $post['id']]);
             if (!$distributor_level_result) {
                 $distributor_level_model->rollback();
                 return $this->send(Code::error);
             }
 
-            //TODO 对应的分销员 降级
+            //对应的分销员 降级
+            $distributor_ids = $distributor_model->getDistributorColumn(['level' => $distributor_level_info['level']], '', 'id');
+            if ($distributor_ids) {
+                $distributor_result = $distributor_model->setDecDistributor(['id' => ['in', $distributor_ids]], '', 'level', 1);
+                if (!$distributor_result) {
+                    $distributor_level_model->rollback();
+                    return $this->send(Code::error);
+                }
+            }
 
             $distributor_level_model->commit();
             return $this->send(Code::success);

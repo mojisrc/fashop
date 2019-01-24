@@ -219,7 +219,7 @@ class DistributionConfig extends Model {
      * 软删除
      * @param    array  $condition
      */
-    public function softDelDistributionConfig($condition = array(), $condition_str = '') {
+    public function softDelDistributionConfig($condition = array()) {
         return $this->save(['delete_time'=>time()],$condition);
     }
 
