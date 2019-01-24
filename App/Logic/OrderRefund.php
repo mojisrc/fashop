@@ -221,6 +221,16 @@ class OrderRefund
 
                     }
                 }
+
+                $order_refund_amount  = $order_model->getOrderValue(['id' => $refund['order_id']], 'refund_amount');
+                $update_refund_amount = $order_refund_amount + floatval($data['refund_amount']);
+                $order_result         = $order_model->editOrder(['id' => $refund['order_id']], ['refund_amount' => $update_refund_amount]);
+                if (!$order_result) {
+                    $refund_model->rollback();
+                    throw new \Exception('修改订单退款金额失败');
+
+                }
+
                 $refund_model->commit();
                 break;
             default :
@@ -358,7 +368,7 @@ class OrderRefund
                 // 'mode' => 'dev', // optional,设置此参数，将进入沙箱模式
             ];
             //退款参数准备
-            $order = [
+            $order  = [
                 'trade_no'       => $refund['trade_no'],
                 'refund_amount'  => $refund['refund_amount'],
                 'out_request_no' => $refund['out_request_no'],
