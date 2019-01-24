@@ -27,17 +27,11 @@ class DistributorLevel extends Admin
     /**
      * 分销员等级
      * @method GET
-     * @param string title 名称
      */
     public function list()
     {
-        $get           = $this->get;
         $condition_str = '';
         $condition     = [];
-        if (isset($get['keywords'])) {
-            $condition['title'] = ['like', '%' . $get['keywords'] . '%'];
-        }
-
         $distributor_level_model = model('DistributorLevel');
         $count                   = $distributor_level_model->getDistributorLevelCount($condition, $condition_str);
         $list                    = $distributor_level_model->getDistributorLevelList($condition, $condition_str, '*', 'id desc', $this->getPageLimit(), '');

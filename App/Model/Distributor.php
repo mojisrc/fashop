@@ -74,10 +74,10 @@ class Distributor extends Model {
      */
     public function getDistributorMoreList($condition = array(), $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group='') {
         if($page == ''){
-        $data = $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->where($condition)->where($condition_str)->order($order)->field($field)->group($group)->select();
+        $data = $this->alias('distributor')->join('__USER__ user','distributor.user_id = user.id','LEFT')->join('__USER__ invite_user','distributor.inviter_id = invite_user.id','LEFT')->where($condition)->where($condition_str)->order($order)->field($field)->group($group)->select();
 
         }else{
-            $data = $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->where($condition)->where($condition_str)->order($order)->field($field)->page($page)->group($group)->select();
+            $data = $this->alias('distributor')->join('__USER__ user','distributor.user_id = user.id','LEFT')->join('__USER__ invite_user','distributor.inviter_id = invite_user.id','LEFT')->where($condition)->where($condition_str)->order($order)->field($field)->page($page)->group($group)->select();
 
         }
         return $data ? $data->toArray() : array();
@@ -92,10 +92,10 @@ class Distributor extends Model {
      */
     public function getDistributorMoreCount($condition = array(), $condition_str = '', $distinct = '') {
         if($distinct == ''){
-            return $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->where($condition)->where($condition_str)->count();
+            return $this->alias('distributor')->join('__USER__ user','distributor.user_id = user.id','LEFT')->join('__USER__ invite_user','distributor.inviter_id = invite_user.id','LEFT')->where($condition)->where($condition_str)->count();
 
         }else{
-            return $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->where($condition)->where($condition_str)->count("DISTINCT ".$distinct);
+            return $this->alias('distributor')->join('__USER__ user','distributor.user_id = user.id','LEFT')->join('__USER__ invite_user','distributor.inviter_id = invite_user.id','LEFT')->where($condition)->where($condition_str)->count("DISTINCT ".$distinct);
         }
     }
 
@@ -119,7 +119,7 @@ class Distributor extends Model {
      * @return [type]                   [数据]
      */
     public function getDistributorMoreInfo($condition = array(), $condition_str = '', $field = '*') {
-        $data = $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->where($condition)->where($condition_str)->field($field)->find();
+        $data = $this->alias('distributor')->join('__USER__ user','distributor.user_id = user.id','LEFT')->join('__USER__ invite_user','distributor.inviter_id = invite_user.id','LEFT')->where($condition)->where($condition_str)->field($field)->find();
         return $data ? $data->toArray() : array();
     }
 
