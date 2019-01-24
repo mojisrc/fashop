@@ -15,7 +15,7 @@
     "require": {
         "php": "^7.2",
         "easyswoole/easyswoole": "v2.1.1",
-        "hanwenbo/ezswoole": "^2.0",
+        "hanwenbo/ezswoole": "2.2.1",
         "phpFastCache/phpFastCache": "^6.0",
         "overtrue/wechat": "4.1.1",
         "firebase/php-jwt": "^5.0",
@@ -39,7 +39,7 @@
         "files": ["vendor/hanwenbo/ezswoole/src/helper/helper.php"]
     },
     "require-dev": {
-        "easyswoole/swoole-ide-helper": "1.2.1"
+        "easyswoole/swoole-ide-helper": "^1.2"
     },
     "repositories": {
         "packagist": {
