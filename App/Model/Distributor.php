@@ -74,13 +74,24 @@ class Distributor extends Model {
      */
     public function getDistributorMoreList($condition = array(), $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group='') {
         if($page == ''){
-        $data = $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->where($condition)->where($condition_str)->order($order)->field($field)->group($group)->select();
+        $data = $this->alias('distributor')->join('__USER__ user','distributor.user_id = user.id','LEFT')->join('__USER__ invite_user','distributor.inviter_id = invite_user.id','LEFT')->where($condition)->where($condition_str)->order($order)->field($field)->group($group)->select();
 
         }else{
-            $data = $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->where($condition)->where($condition_str)->order($order)->field($field)->page($page)->group($group)->select();
+            $data = $this->alias('distributor')->join('__USER__ user','distributor.user_id = user.id','LEFT')->join('__USER__ invite_user','distributor.inviter_id = invite_user.id','LEFT')->where($condition)->where($condition_str)->order($order)->field($field)->page($page)->group($group)->select();
 
         }
-        return $data ? $data->toArray() : array();
+
+        if(!$data ){
+            return [];
+        }else{
+            $data = $data->toArray();
+
+            foreach ($data as $key => $value) {
+                $data[$key] = $this->stateDesc($value);
+            }
+
+        }
+        return $data;
     }
 
     /**
@@ -92,10 +103,10 @@ class Distributor extends Model {
      */
     public function getDistributorMoreCount($condition = array(), $condition_str = '', $distinct = '') {
         if($distinct == ''){
-            return $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->where($condition)->where($condition_str)->count();
+            return $this->alias('distributor')->join('__USER__ user','distributor.user_id = user.id','LEFT')->join('__USER__ invite_user','distributor.inviter_id = invite_user.id','LEFT')->where($condition)->where($condition_str)->count();
 
         }else{
-            return $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->where($condition)->where($condition_str)->count("DISTINCT ".$distinct);
+            return $this->alias('distributor')->join('__USER__ user','distributor.user_id = user.id','LEFT')->join('__USER__ invite_user','distributor.inviter_id = invite_user.id','LEFT')->where($condition)->where($condition_str)->count("DISTINCT ".$distinct);
         }
     }
 
@@ -119,7 +130,7 @@ class Distributor extends Model {
      * @return [type]                   [数据]
      */
     public function getDistributorMoreInfo($condition = array(), $condition_str = '', $field = '*') {
-        $data = $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->where($condition)->where($condition_str)->field($field)->find();
+        $data = $this->alias('distributor')->join('__USER__ user','distributor.user_id = user.id','LEFT')->join('__USER__ invite_user','distributor.inviter_id = invite_user.id','LEFT')->where($condition)->where($condition_str)->field($field)->find();
         return $data ? $data->toArray() : array();
     }
 
@@ -218,10 +229,29 @@ class Distributor extends Model {
 
     /**
      * 软删除
-     * @param    array  $condition
+     * @param  [type] $condition        [条件]
      */
-    public function softDelDistributor($condition = array(), $condition_str = '') {
+    public function softDelDistributor($condition = array()) {
         return $this->save(['delete_time'=>time()],$condition);
     }
 
+    /**
+     * 状态描述
+     * @param  [type] $update           [更新数据]
+     */
+    public function stateDesc($data) {
+        switch (intval($data['state'])) {
+            case 0:
+                $state_desc   = '待审核';
+                break;
+            case 1:
+                $state_desc   = '审核通过';
+                break;
+            case 2:
+                $state_desc   = '审核拒绝';
+                break;
+        }
+        $data['state_desc']   = $state_desc;
+        return $data;
+    }
 }

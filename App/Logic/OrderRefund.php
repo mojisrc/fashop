@@ -110,9 +110,14 @@ class OrderRefund
         $total_refund_amount = $refund_model->getOrderRefundSum($condition, '', 'refund_amount');
 
         // 订单总金额
-        $order_amount = $order_model->getOrderValue(['id' => $refund['order_id'], 'lock_state' => ['neq', 0]], 'amount');
-        if (floatval($order_amount) <= 0) {
-            throw new \Exception('参数错误');
+        $order_revise_amount = $order_model->getOrderValue(['id' => $refund['order_id'], 'lock_state' => ['neq', 0]], 'revise_amount');
+        if (floatval($order_revise_amount) <= 0) {
+            $order_amount = $order_model->getOrderValue(['id' => $refund['order_id'], 'lock_state' => ['neq', 0]], 'amount');
+            if (floatval($order_amount) <= 0) {
+                throw new \Exception('参数错误');
+            }
+        } else {
+            $order_amount = $order_revise_amount;
         }
 
         //同一个总订单中：当前子订单退款金额加上其他有效的历史子订单退款金额不能大于总订单金额

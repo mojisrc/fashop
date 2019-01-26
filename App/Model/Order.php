@@ -1090,6 +1090,61 @@ class Order extends Model
         return $data ? $data->toArray() : array();
     }
 
+    /**
+     * 分佣 推广效果状态描述
+     * @param  [type] $update           [更新数据]
+     */
+    public function distributionPromotionDesc($data) {
+
+        foreach ($data as $key => $value) {
+            $amount      = ($value['revise_amount'] > 0) ? $value['revise_amount'] : $value['amount'];
+            $freight_fee = ($value['revise_freight_fee'] > 0) ? $value['revise_freight_fee'] : $value['freight_fee'];
+
+            if ($value['pay_name'] != 'online') {
+                $data[$key]['distribution_state'] = 1;  //货到付款不参与结算
+                continue;
+            }
+
+            if ($value['state'] == 0) {
+                $data[$key]['distribution_state'] = 2;  //订单关闭  [不显示佣金比例和佣金]
+                continue;
+            }
+            if ($value['state'] == 10) {
+                $data[$key]['distribution_state'] = 3;  //待付款   [不显示佣金比例和佣金]
+                continue;
+            }
+
+            if (floatval(array_sum(array_column($value['extend_order_goods'], 'distribution_ratio'))) == 0) {
+                $data[$key]['distribution_state'] = 4;  //无佣金 [原因是 商品不参与推广] [不显示佣金比例和佣金]
+                continue;
+            }
+
+            if ($value['state'] >= 20) {
+                if ($value['refund_amount'] > 0) {
+                    if (($amount - $freight_fee - $value['refund_amount']) > 0) {
+                        if (distribution_settlement == 0) {
+                            $data[$key]['distribution_state'] = 5;  //待结算,部分退款
+
+                        } else {
+                            $data[$key]['distribution_state'] = 6;  //已结算,部分退款
+                        }
+                    } else {
+                        $data[$key]['distribution_state'] = 7;  //不结算,全额退款
+                    }
+
+                } else {
+                    if (distribution_settlement == 0) {
+                        $data[$key]['distribution_state'] = 8;  //待结算
+
+                    } else {
+                        $data[$key]['distribution_state'] = 9;  //已结算
+                    }
+                }
+            }
+        }
+        return $data;
+    }
+
 }
 
 ?>

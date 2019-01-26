@@ -257,7 +257,7 @@ class DistributionGoods extends Model
      * @param    array $condition
      */
     public
-    function softDelDistributionGoods($condition = array(), $condition_str = '')
+    function softDelDistributionGoods($condition = array())
     {
         return $this->save(['delete_time' => time()], $condition);
     }
