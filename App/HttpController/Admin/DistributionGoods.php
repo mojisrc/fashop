@@ -146,6 +146,7 @@ class DistributionGoods extends Admin
                 $result                      = $distribution_goods_model->insertDistributionGoods($insert_data);
 
             } else {
+                $update_data[]               = [];
                 $update_data['ratio']        = floatval($post['ratio']);
                 $update_data['invite_ratio'] = floatval($post['invite_ratio']);
                 $update_data['is_show']      = intval($post['is_show']);

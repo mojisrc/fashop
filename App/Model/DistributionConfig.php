@@ -45,60 +45,6 @@ class DistributionConfig extends Model {
     }
 
     /**
-     * 获得数量
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $distinct         [去重]
-     * @return [type]                   [数据]
-     */
-    public function getDistributionConfigCount($condition = array(), $condition_str = '', $distinct = '') {
-        if($distinct == ''){
-            return $this->where($condition)->where($condition_str)->count();
-
-        }else{
-            return $this->where($condition)->where($condition_str)->count("DISTINCT ".$distinct);
-
-        }
-    }
-
-    /**
-     * 列表更多
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $field            [字段]
-     * @param  [type] $order            [排序]
-     * @param  [type] $page             [分页]
-     * @param  [type] $group            [分组]
-     * @return [type]                   [数据]
-     */
-    public function getDistributionConfigMoreList($condition = array(), $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group='') {
-        if($page == ''){
-        $data = $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->where($condition)->where($condition_str)->order($order)->field($field)->group($group)->select();
-
-        }else{
-            $data = $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->where($condition)->where($condition_str)->order($order)->field($field)->page($page)->group($group)->select();
-
-        }
-        return $data ? $data->toArray() : array();
-    }
-
-    /**
-     * 获得数量
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $distinct         [去重]
-     * @return [type]                   [数据]
-     */
-    public function getDistributionConfigMoreCount($condition = array(), $condition_str = '', $distinct = '') {
-        if($distinct == ''){
-            return $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->where($condition)->where($condition_str)->count();
-
-        }else{
-            return $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->where($condition)->where($condition_str)->count("DISTINCT ".$distinct);
-        }
-    }
-
-    /**
      * 获得信息
      * @param  [type] $condition        [条件]
      * @param  [type] $condition_str    [条件]
@@ -108,28 +54,6 @@ class DistributionConfig extends Model {
     public function getDistributionConfigInfo($condition = array(), $condition_str = '', $field = '*') {
         $data = $this->where($condition)->where($condition_str)->field($field)->find();
         return $data ? $data->toArray() : array();
-    }
-
-    /**
-     * 获得信息更多
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $field            [字段]
-     * @return [type]                   [数据]
-     */
-    public function getDistributionConfigMoreInfo($condition = array(), $condition_str = '', $field = '*') {
-        $data = $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->where($condition)->where($condition_str)->field($field)->find();
-        return $data ? $data->toArray() : array();
-    }
-
-    /**
-     * 获取的id
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @return [type]                   [数据]
-     */
-    public function getDistributionConfigId($condition = array(), $condition_str = '') {
-        return $this->where($condition)->where($condition_str)->value('id');
     }
 
     /**
@@ -152,25 +76,6 @@ class DistributionConfig extends Model {
         return $this->where($condition)->where($condition_str)->column($field);
     }
 
-    /**
-     * 某个字段+1
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @return [type]                   [数据]
-     */
-    public function setIncDistributionConfig($condition = array(), $condition_str = '', $field, $num = 1) {
-        return $this->where($condition)->where($condition_str)->setInc($field, $num);
-    }
-
-    /**
-     * 某个字段-1
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @return [type]                   [数据]
-     */
-    public function setDecDistributionConfig($condition = array(), $condition_str = '', $field, $num = 1) {
-        return $this->where($condition)->where($condition_str)->setDec($field, $num);
-    }
 
     /**
      * 添加单条数据
@@ -204,15 +109,6 @@ class DistributionConfig extends Model {
      */
     public function updateAllDistributionConfig($update = array()) {
         return $this->saveAll($update);
-    }
-
-    /**
-     * 删除
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     */
-    public function delDistributionConfig($condition = array(), $condition_str = '') {
-        return $this->where($condition)->where($condition_str)->delete();
     }
 
     /**
