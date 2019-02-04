@@ -14,37 +14,45 @@
     }],
     "require": {
         "php": "^7.2",
-        "easyswoole/easyswoole": "v2.1.1",
-        "hanwenbo/ezswoole": "^2.0",
-        "phpFastCache/phpFastCache": "^6.0",
-        "overtrue/wechat": "4.1.1",
+        "easyswoole/easyswoole": "^3",
+        "hanwenbo/ezswoole": "v3.x-dev",
+        "easyswoole/wechat": "dev-master",
+        "easyswoole/mysqli": "dev-master",
         "firebase/php-jwt": "^5.0",
         "intervention/image": "^2.4",
         "overtrue/easy-sms": "^0.0.9",
-        "vlucas/phpdotenv": "^2.4",
         "hashids/hashids": "^2.0",
         "yansongda/pay": "v2.6.1",
-        "easyswoole/wsdebug": "^1.0",
         "guzzlehttp/guzzle": "~6.0",
         "phpoffice/phpspreadsheet":"^1.6.0"
     },
     "autoload": {
         "psr-4": {
-            "EasySwoole\\Core\\": "src/Core/",
-            "EasySwoole\\" : "Conf/",
             "App\\": "App/",
+            "Model\\": "App/Model/",
             "FaShopTest\\":"tests/",
             "Install\\": "Install/"
-        },
-        "files": ["vendor/hanwenbo/ezswoole/src/helper/helper.php"]
+        }
     },
     "require-dev": {
-        "easyswoole/swoole-ide-helper": "1.2.1"
+        "easyswoole/swoole-ide-helper": "^1.2"
     },
     "repositories": {
         "packagist": {
             "type": "composer",
             "url": "https://packagist.laravel-china.org"
+        },
+        "hanwenbo/ezswoole":{
+            "type": "vcs",
+            "url": "https://github.com/hanwenbo/ezswoole"
+        },
+        "easyswoole/wechat":{
+            "type": "vcs",
+            "url": "https://github.com/hanwenbo/wechat"
+        },
+        "easyswoole/mysqli":{
+            "type": "vcs",
+            "url": "https://github.com/hanwenbo/mysqli"
         }
     }
 }
