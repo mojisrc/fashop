@@ -34,7 +34,7 @@ class Goods extends Server
 			$param = $this->get;
 		}
 		$param['page']       = $this->getPageLimit();
-		$param['sale_time']  = ['lt', time()];
+		$param['sale_time']  = ['<', time()];
 		$param['is_on_sale'] = 1;
 
 		$goodsLogic = new \App\Logic\GoodsSearch( $param );

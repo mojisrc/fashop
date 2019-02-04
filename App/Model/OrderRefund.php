@@ -46,7 +46,7 @@ class OrderRefund extends Model
             $refund_array['user_id']        = $order['user_id'];
             $refund_array['user_name']      = $order['user_name'];
             $refund_array['order_state']    = $order['state'];        //此时订单的状态
-            $refund_array['order_amount']   = $order['amount'];        //总订单支付金额
+            $refund_array['order_amount']   = ($order['revise_amount']>0) ? $order['revise_amount'] : $order['amount'];        //总订单支付金额
         }
         if (!empty($goods) && is_array($goods)) {
             $refund_array['goods_id']          = $goods['goods_id'];
@@ -56,8 +56,8 @@ class OrderRefund extends Model
             $refund_array['goods_img']         = $goods['goods_img'];
             $refund_array['goods_spec']        = $goods['goods_spec'];
             $refund_array['goods_num']         = $goods['goods_num'];
-            $refund_array['goods_pay_price']   = $goods['goods_pay_price'];
-            $refund_array['goods_freight_fee'] = $goods['goods_freight_fee'];
+            $refund_array['goods_pay_price']   = ($goods['goods_revise_price']>0) ? $goods['goods_revise_price'] : $goods['goods_pay_price'];
+            $refund_array['goods_freight_fee'] = $goods['goods_freight_fee'];//订单子表没有修改的运费的字段
         }
         return $this->save($refund_array) ? $this->id : false;
     }
@@ -338,7 +338,7 @@ class OrderRefund extends Model
 
     /**
      * 根据订单判断投诉订单商品是否可退款
-     *
+     * 这个没用上！！！
      * @param
      * @return array
      */

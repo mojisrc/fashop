@@ -13,7 +13,7 @@
 
 namespace App\HttpController;
 
-use EasySwoole\Core\Component\Spl\SplArray;
+use EasySwoole\Spl\SplArray;
 use ezswoole\Controller;
 use App\Logic\AccessToken as AccessTokenLogic;
 

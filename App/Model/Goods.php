@@ -14,14 +14,22 @@
 namespace App\Model;
 
 use ezswoole\Model;
-use traits\model\SoftDelete;
+//use traits\model\SoftDelete;
 
 class Goods extends Model
 {
-	use SoftDelete;
+//	use SoftDelete;
 	protected $deleteTime = 'delete_time';
 	protected $resultSetType = 'collection';
 
+	protected $jsonFields = [
+		'category_ids',
+		'sku_list',
+		'images',
+		'body',
+		'spec_list',
+		'image_spec_images',
+	];
 	protected $type
 		= [
 			'category_ids'      => 'json',
@@ -69,17 +77,21 @@ class Goods extends Model
 	 * @param string $order     排序
 	 * @return array
 	 */
-	public function getGoodsList( $condition, $field = '*', $order = 'id desc', $page = '1,10' )
+	public function getGoodsList( $condition, $field = '*', $order = 'id desc', $page = [1,10] )
 	{
-        if ($page == '') {
-			$list = $this->where( $condition )->order( $order )->field( $field )->select();
+
+		if ($page == '') {
+//	        ->order( $order )
+			$list = $this->where( $condition )->field( $field )->select();
 
         } else {
-			$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
+
+			//	        ->order( $order )
+			$list = $this->where( $condition )->field( $field )->page( $page )->select();
 
         }
 
-		return $list ? $list->toArray() : [];
+		return $list?? [];
 	}
 
 	/**

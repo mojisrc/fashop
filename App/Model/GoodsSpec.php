@@ -13,10 +13,10 @@
 namespace App\Model;
 
 use ezswoole\Model;
-use traits\model\SoftDelete;
+//use traits\model\SoftDelete;
 
 class GoodsSpec extends Model {
-	use SoftDelete;
+//	use SoftDelete;
     protected $deleteTime = 'delete_time';
     protected $resultSetType = 'collection';
 	/**

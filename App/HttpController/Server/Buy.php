@@ -132,14 +132,15 @@ class Buy extends Server
                         $order_info  = $order_model->getOrderInfo([
                                                                       'pay_sn' => $this->post['pay_sn'],
                                                                       'state'  => \App\Logic\Order::state_new,
-                                                                  ], '', 'id,pay_sn,amount');
+                                                                  ], '', 'id,pay_sn,amount,revise_amount');
                         if (empty($pay_info) || empty($order_info)) {
                             return $this->send(Code::error, [], '该订单不存在');
                         } else {
+                            $pay_amount = ($order_info['revise_amount']>0) ? $order_info['revise_amount'] : $order_info['amount'];
                             $options = [];
                             switch ($this->post['payment_channel']) {
                                 case 'wechat_mini':
-                                    $amount  = $order_info['amount'] * 100;
+                                    $amount  = $pay_amount * 100;
                                     $options = Pay::wechat($this->getWechatPayConfig($payment['config'], $this->post['payment_channel']))->miniapp([
                                                                                                                                                        'attach'       => 'goods_buy',
                                                                                                                                                        'out_trade_no' => $order_info['pay_sn'],
@@ -149,7 +150,7 @@ class Buy extends Server
                                                                                                                                                    ]);
                                     break;
                                 case 'wechat_app':
-                                    $amount  = $order_info['amount'] * 100;
+                                    $amount  = $pay_amount * 100;
                                     $options = Pay::wechat($this->getWechatPayConfig($payment['config'], $this->post['payment_channel']))->app([
                                                                                                                                                    'attach'       => 'goods_buy',
                                                                                                                                                    'out_trade_no' => $order_info['pay_sn'],
@@ -164,7 +165,7 @@ class Buy extends Server
 
                                     break;
                                 case 'alipay_app':
-                                    $amount             = $order_info['amount'];
+                                    $amount             = $pay_amount;
                                     $options['content'] = Pay::alipay($this->getAliPayConfig($payment['config'], $this->post['payment_channel']))->app([
                                                                                                                                                 'out_trade_no' => $order_info['pay_sn'],
                                                                                                                                                 'total_amount' => "{$amount}",

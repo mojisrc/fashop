@@ -220,7 +220,7 @@ class DistributorLevel extends Model {
      * 软删除
      * @param    array  $condition
      */
-    public function softDelDistributorLevel($condition = array(), $condition_str = '') {
+    public function softDelDistributorLevel($condition = array()) {
         return $this->save(['delete_time'=>time()],$condition);
     }
 

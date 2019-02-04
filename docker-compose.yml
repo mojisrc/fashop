@@ -1,6 +1,6 @@
 version: '3'
 services:
-  fashop:
+  fashop1:
     image: fashop/fashop:v2.0.0
     ports:
       - 9510:9510
@@ -11,8 +11,8 @@ services:
     privileged: true
     entrypoint: ["php", "/var/www/fashop/fashop", "start"]
 
-  fashop-dev:
-    image: ezkuangren/swoole1
+  swoole:
+    image: ezkuangren/swoole4
     ports:
       - "9511:9510"
     volumes:

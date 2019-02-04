@@ -270,9 +270,16 @@ class OrderRefund
             throw new \Exception("已存在订单退款信息");
         }
 
-        if ($this->getRefundAmount() > $order_goods['goods_pay_price']) {
-            throw new \Exception("退款金额不得大于可退金额");
+        if ($order_goods['goods_revise_price'] > 0) {
+            if ($this->getRefundAmount() > $order_goods['goods_revise_price']) {
+                throw new \Exception("退款金额不得大于可退金额");
+            }
+        } else {
+            if ($this->getRefundAmount() > $order_goods['goods_pay_price']) {
+                throw new \Exception("退款金额不得大于可退金额");
+            }
         }
+
         $order = $order_model->getOrderInfo([
                                                 'id' => $order_goods['order_id'],
 //                                                 'user_id' => $this->getUserId(),

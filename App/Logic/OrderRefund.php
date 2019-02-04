@@ -110,9 +110,14 @@ class OrderRefund
         $total_refund_amount = $refund_model->getOrderRefundSum($condition, '', 'refund_amount');
 
         // 订单总金额
-        $order_amount = $order_model->getOrderValue(['id' => $refund['order_id'], 'lock_state' => ['neq', 0]], 'amount');
-        if (floatval($order_amount) <= 0) {
-            throw new \Exception('参数错误');
+        $order_revise_amount = $order_model->getOrderValue(['id' => $refund['order_id'], 'lock_state' => ['neq', 0]], 'revise_amount');
+        if (floatval($order_revise_amount) <= 0) {
+            $order_amount = $order_model->getOrderValue(['id' => $refund['order_id'], 'lock_state' => ['neq', 0]], 'amount');
+            if (floatval($order_amount) <= 0) {
+                throw new \Exception('参数错误');
+            }
+        } else {
+            $order_amount = $order_revise_amount;
         }
 
         //同一个总订单中：当前子订单退款金额加上其他有效的历史子订单退款金额不能大于总订单金额
@@ -175,7 +180,7 @@ class OrderRefund
                 $refund_update_state = self::agree;
 
                 // 判断金额是否大于 总商品价格 + 运费（统一运费或者运费模板））
-                if ($refund['refund_amount'] > ($refund['goods_pay_price'] + $refund['goods_freight_fee'])) {
+                if ($data['refund_amount'] > ($refund['goods_pay_price'] + $refund['goods_freight_fee'])) {
                     $refund_model->rollback();
                     throw new \Exception('退款金额不得大于可退金额');
 
@@ -199,8 +204,9 @@ class OrderRefund
                                                                           'lock_state' => 1,
                                                                           'id'         => $refund['order_goods_id'],
                                                                       ], [
+                                                                          'refund_amount' => floatval($data['refund_amount']),
                                                                           'refund_handle_state' => $refund_update_state,
-                                                                      ]);
+                                                                    ]);
                 if (!$order_goods_res) {
                     $refund_model->rollback();
                     throw new \Exception('退款订单商品的状态错误');

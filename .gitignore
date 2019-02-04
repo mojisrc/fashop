@@ -22,3 +22,4 @@ src/swoole_log.txt
 /Conf/config/database.php
 /tests/tmp
 
+dev.php

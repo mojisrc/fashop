@@ -16,7 +16,7 @@ namespace App\HttpController\Server;
 use App\HttpController\AccessTokenAbstract;
 use ezswoole\Request;
 use App\Utils\Code;
-use EasySwoole\Config as AppConfig;
+use EasySwoole\EasySwoole\Config as AppConfig;
 
 abstract class Server extends AccessTokenAbstract
 {
@@ -52,6 +52,5 @@ abstract class Server extends AccessTokenAbstract
 			"msg"    => $message,
 		];
 		$this->response()->write( json_encode( $content, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) );
-		wsdebug()->send( $content, 'debug' );
 	}
 }

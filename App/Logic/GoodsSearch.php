@@ -13,6 +13,7 @@
 
 namespace App\Logic;
 
+
 class GoodsSearch
 {
     /**
@@ -104,9 +105,9 @@ class GoodsSearch
     }
 
     /**
-     * @param string $page
+     * @param array $page
      */
-    public function setPage(string $page): void
+    public function setPage(array $page): void
     {
         $this->page = $page;
     }
@@ -255,9 +256,9 @@ class GoodsSearch
             $this->stock = $options['stock'];
         }
 
-        $this->goodsModel      = model('Goods');
-        $this->goodsSkuModel   = model('GoodsSku');
-        $this->goodsImageModel = model('GoodsImage');
+        $this->goodsModel      = new \App\Model\Goods();
+        $this->goodsSkuModel   = new \App\Model\GoodsSku();
+        $this->goodsImageModel = new \App\Model\GoodsImage();
     }
 
 
@@ -285,7 +286,7 @@ class GoodsSearch
 
         // 分类
         if (!empty($this->categoryIds) && is_array($this->categoryIds)) {
-            $goods_ids = model('GoodsCategoryIds')->getGoodsCategoryIdsColumn(['category_id' => ['in', $this->categoryIds]], '', 'goods_id');
+            $goods_ids = \App\Model\GoodsCategoryIds::getGoodsCategoryIdsColumn(['category_id' => ['in', $this->categoryIds]], '', 'goods_id');
             if ($goods_ids) {
                 if ($this->ids) {
                     $this->condition['id'] = ['in', array_values(array_unique(array_merge($this->ids, array_unique($goods_ids))))];
@@ -389,20 +390,21 @@ class GoodsSearch
     public function make(): void
     {
         if (empty($this->make)) {
-            $this->buildCondition();
+	        $this->buildCondition();
             $this->make = true;
         }
     }
 
     public function count(): int
     {
-        $this->make();
+	    $this->make();
         return $this->goodsModel->where($this->condition)->count();
     }
 
     public function list(): ?array
     {
-        $this->make();
+
+	    $this->make();
         return $this->goodsModel->getGoodsList($this->condition, $this->field, $this->order, $this->page);
     }
 
@@ -426,7 +428,7 @@ class GoodsSearch
     {
         // 分类
         if (isset($search_options['category_id'])) {
-            $category_ids                   = model('GoodsCategory', 'Logic')->getSelfAndChildId($search_options['category_id']);
+            $category_ids                   = \App\Logic\GoodsCategory::getSelfAndChildId($search_options['category_id']);
             $this->condition['category_id'] = ['in', $category_ids];
         }
         return $this->goodsModel->getGoodsList($this->condition, $field, $order, $page);
