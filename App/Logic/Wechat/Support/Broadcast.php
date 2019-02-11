@@ -30,7 +30,6 @@ class Broadcast extends BaseAbstract
 	 * @param array  $openids
 	 * @param string $group_id
 	 * @return mixed
-	 * @author 韩文博
 	 */
 	public function sendText( string $text, array $openids, string $group_id = null )
 	{
@@ -41,7 +40,6 @@ class Broadcast extends BaseAbstract
 	/**
 	 * 图文消息
 	 * @param $mediaId
-	 * @author 韩文博
 	 */
 	public function sendNews( $mediaId, array $openids, string $group_id = null ) : array
 	{
@@ -51,7 +49,6 @@ class Broadcast extends BaseAbstract
 
 	/**
 	 * 图片消息
-	 * @author 韩文博
 	 */
 	public function sendImage( $mediaId, array $openids, string $group_id = null )
 	{
@@ -60,7 +57,6 @@ class Broadcast extends BaseAbstract
 
 	/**
 	 * 语音消息
-	 * @author 韩文博
 	 */
 	public function sendVoice( $mediaId, array $openids, string $group_id = null )
 	{
@@ -71,7 +67,6 @@ class Broadcast extends BaseAbstract
 	/**
 	 * 视频消息
 	 * 用于群发的视频消息，需要先创建消息对象，
-	 * @author 韩文博
 	 */
 	public function sendVideo( $mediaId, array $openids, string $group_id = null )
 	{
@@ -82,7 +77,6 @@ class Broadcast extends BaseAbstract
 	/**
 	 * 卡券消息
 	 * @param string $cardId
-	 * @author 韩文博
 	 */
 	public function sendCard()
 	{
@@ -94,7 +88,6 @@ class Broadcast extends BaseAbstract
 	 * 发送预览群发消息给指定的 openId 用户
 	 * @param $text
 	 * @param $openId
-	 * @author 韩文博
 	 */
 	public function previewText( $text, $openId )
 	{
@@ -162,7 +155,6 @@ class Broadcast extends BaseAbstract
 
 	/**
 	 * 删除群发消息
-	 * @author 韩文博
 	 */
 	public function delete( $msgId )
 	{
@@ -171,7 +163,6 @@ class Broadcast extends BaseAbstract
 
 	/**
 	 * 查询群发消息发送状态
-	 * @author 韩文博
 	 */
 	public function status( $msgId )
 	{
@@ -182,7 +173,6 @@ class Broadcast extends BaseAbstract
 	 * 发送消息
 	 * @param      $message
 	 * @param null $to ，当 $to 为整型时为标签 id ，当 $to 为数组时为用户的 openid 列表（至少两个用户的 openid），当 $to 为 null 时表示全部用户
-	 * @author 韩文博
 	 */
 	public function sendMessage( $message, $to = null )
 	{

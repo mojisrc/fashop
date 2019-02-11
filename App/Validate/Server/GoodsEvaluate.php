@@ -24,7 +24,6 @@ class GoodsEvaluate extends Validate
 	 * @param array images 评价图片 数组
 	 * @param int is_anonymous 是否匿名 1是0否
 	 * @param string content 评价内容
-	 * @author 韩文博
 	 */
 	protected $rule
 		= [

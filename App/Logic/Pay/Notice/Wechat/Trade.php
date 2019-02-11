@@ -49,7 +49,6 @@ class Trade extends Notice
 	/**
 	 * @method GET
 	 * @return array|null
-	 * @author 韩文博
 	 */
 	final public function handle() : bool
 	{

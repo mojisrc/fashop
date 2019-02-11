@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -21,7 +21,6 @@ class Invoice extends Server {
 	 * 买家设置默认发票
 	 * @method GET
 	 * @param int $id 发票id
-	 * @author 韩文博
 	 * @datetime 2017-05-19T10:48:06+0800
 	 */
 	public function setDefault() {
@@ -50,7 +49,6 @@ class Invoice extends Server {
 	/**
 	 * 获得默认发票
 	 * @method GET
-	 * @author 韩文博
 	 * @datetime 2017-05-19T10:48:06+0800
 	 */
 	public function getDefault() {
@@ -64,7 +62,6 @@ class Invoice extends Server {
 	 * @method GET
 	 * @param int $id 发票id
 	 * @datetime 2017-05-19T10:48:06+0800
-	 * @author 韩文博
 	 */
 	public function detail() {
 		$this->checkLogin();
@@ -76,7 +73,6 @@ class Invoice extends Server {
 	/**
 	 * 买家发票列表
 	 * @method GET
-	 * @author 韩文博
 	 * @datetime 2017-05-19T10:48:06+0800
 	 */
 	public function lists() {
@@ -106,7 +102,6 @@ class Invoice extends Server {
 	 * @param string $receive_province 收票人省份 [非必填]
 	 * @param string $receive_address 送票地址 [非必填]
 	 * @param string $consumption_type 发票消费分类 [非必填] 该类型列表由 Invoice/invoiceConsumptionTypeList 接口获得
-	 * @author 韩文博
 	 * @datetime 2017-05-19T10:48:06+0800
 	 */
 	public function add() {
@@ -152,7 +147,6 @@ class Invoice extends Server {
 	 * @param string $receive_province 收票人省份 [非必填]
 	 * @param string $receive_address 送票地址 [非必填]
 	 * @param string $consumption_type 普通发票内容 [非必填] 该类型列表由 Invoice/invoiceConsumptionTypeList 接口获得
-	 * @author 韩文博
 	 * @datetime 2017-05-19T10:48:06+0800
 	 */
 	public function edit() {
@@ -186,7 +180,6 @@ class Invoice extends Server {
 	 * 买家删除发票
 	 * @method POST
 	 * @param  int $id 发票id
-	 * @author 韩文博
 	 * @datetime 2017-05-19T10:48:06+0800
 	 */
 	public function del() {
@@ -202,7 +195,6 @@ class Invoice extends Server {
 	 * 发票消费类型列表
 	 * @method     GET
 	 * @datetime 2017-05-18T23:14:34+0800
-	 * @author 韩文博
 	 */
 	public function invoiceConsumptionTypeList() {
 		$invoice_content_list = config('db_setting.invoice_consumption_type_list');

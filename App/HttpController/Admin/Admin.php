@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @author     $this->author
@@ -62,7 +62,6 @@ abstract class Admin extends AccessTokenAbstract
 	 * @param \Throwable $throwable
 	 * @param            $actionName
 	 * @throws \Throwable
-	 * @author 韩文博
 	 */
 	protected function onException( \Throwable $throwable, $actionName ) : void
 	{

@@ -192,7 +192,6 @@ class GoodsEvaluate
 	 * @param int is_anonymous 是否匿名 1是0否
 	 * @param string content 评价内容
 	 * @throws \Exception
-	 * @author 韩文博
 	 */
 	public function create()
 	{
@@ -301,7 +300,6 @@ class GoodsEvaluate
 	 * @param array additional_images 评价图片 数组
 	 * @param string additional_content 评价内容
 	 * @throws \Exception
-	 * @author 韩文博
 	 */
 	public function append()
 	{

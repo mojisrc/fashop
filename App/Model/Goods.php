@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -14,22 +14,24 @@
 namespace App\Model;
 
 use ezswoole\Model;
-//use traits\model\SoftDelete;
+
+//
 
 class Goods extends Model
 {
-//	use SoftDelete;
-	protected $deleteTime = 'delete_time';
-	protected $resultSetType = 'collection';
+	//	protected $softDelete = true;
+	protected $createTime = true;
 
-	protected $jsonFields = [
-		'category_ids',
-		'sku_list',
-		'images',
-		'body',
-		'spec_list',
-		'image_spec_images',
-	];
+
+	protected $jsonFields
+		= [
+			'category_ids',
+			'sku_list',
+			'images',
+			'body',
+			'spec_list',
+			'image_spec_images',
+		];
 	protected $type
 		= [
 			'category_ids'      => 'json',
@@ -40,22 +42,18 @@ class Goods extends Model
 			'image_spec_images' => 'json',
 		];
 
-	const STATE1   = 1; // 出售中
-	const STATE0   = 0; // 下架
+	const STATE1 = 1; // 出售中
+	const STATE0 = 0; // 下架
+
 	/**
 	 * 新增商品数据
-	 * @author 韩文博
 	 * @param array $insert 数据
 	 * @return integer pk
 	 */
 	public function addGoods( $data )
 	{
 		$data['create_time'] = time();
-		$result              = $this->allowField( true )->save( $data );
-		if( $result ){
-			return $this->getLastInsID();
-		}
-		return $result;
+		return $this->add( $data );
 	}
 
 	/**
@@ -70,33 +68,25 @@ class Goods extends Model
 
 	/**
 	 * 商品列表
-	 * @author 韩文博
 	 * @param array  $condition 条件
 	 * @param array  $field     字段
 	 * @param string $page      分页
 	 * @param string $order     排序
 	 * @return array
 	 */
-	public function getGoodsList( $condition, $field = '*', $order = 'id desc', $page = [1,10] )
+	public function getGoodsList( $condition, $field = '*', $order = 'id desc', $page = [1, 10] )
 	{
+		if( $page ){
+			$list = $this->where( $condition )->order( $order )->field( $field )->select();
+		} else{
+			$list = $this->where( $condition )->field( $field )->order( $order )->page( $page )->select();
+		}
 
-		if ($page == '') {
-//	        ->order( $order )
-			$list = $this->where( $condition )->field( $field )->select();
-
-        } else {
-
-			//	        ->order( $order )
-			$list = $this->where( $condition )->field( $field )->page( $page )->select();
-
-        }
-
-		return $list?? [];
+		return $list ?? [];
 	}
 
 	/**
 	 * 出售中的商品列表
-	 * @author 韩文博
 	 * @param array  $condition 条件
 	 * @param array  $field     字段
 	 * @param string $page      分页
@@ -112,7 +102,6 @@ class Goods extends Model
 
 	/**
 	 * 仓库中的商品列表
-	 * @author 韩文博
 	 * @param array  $condition 条件
 	 * @param array  $field     字段
 	 * @param string $page      分页
@@ -127,7 +116,6 @@ class Goods extends Model
 
 	/**
 	 * 计算商品库存
-	 * @author 韩文博
 	 * @param array $goods_list
 	 * @return array|boolean
 	 */
@@ -172,7 +160,6 @@ class Goods extends Model
 
 	/**
 	 * 更新商品数据
-	 * @author 韩文博
 	 * @param array $update    更新数据
 	 * @param array $condition 条件
 	 * @return boolean
@@ -184,7 +171,6 @@ class Goods extends Model
 
 	/**
 	 * 更新商品数据
-	 * @author 韩文博
 	 * @param array $update    更新数据
 	 * @param array $condition 条件
 	 * @return boolean
@@ -197,7 +183,6 @@ class Goods extends Model
 
 	/**
 	 * 锁定商品
-	 * @author 韩文博
 	 * @param array $condition
 	 * @return boolean
 	 */
@@ -209,7 +194,6 @@ class Goods extends Model
 
 	/**
 	 * 解锁商品
-	 * @author 韩文博
 	 * @param array $condition
 	 * @return boolean
 	 */
@@ -221,7 +205,6 @@ class Goods extends Model
 
 	/**
 	 * 获取单条商品信息
-	 * @author 韩文博
 	 * @param array  $condition
 	 * @param string $field
 	 * @return array
@@ -229,12 +212,11 @@ class Goods extends Model
 	public function getGoodsInfo( $condition, $field = '*' ) : array
 	{
 		$info = $this->where( $condition )->field( $field )->find();
-		return $info ? $info->toArray() : [];
+		return $info;
 	}
 
 	/**
 	 * 获得商品数量
-	 * @author 韩文博
 	 * @param array  $condition
 	 * @param string $field
 	 * @return int
@@ -246,7 +228,6 @@ class Goods extends Model
 
 	/**
 	 * 出售中的商品数量
-	 * @author 韩文博
 	 * @param array $condition
 	 * @return int
 	 */
@@ -258,7 +239,6 @@ class Goods extends Model
 
 	/**
 	 * 仓库中的商品数量
-	 * @author 韩文博
 	 * @param array $condition
 	 * @return int
 	 */
@@ -274,65 +254,64 @@ class Goods extends Model
 		return $this->hasMany( 'GoodsSku', 'goods_id' )->field( 'goods_id,id,price,stock' );
 	}
 
-    /**
-     * 获取的id
-     * @param  [type] $condition [description]
-     * @return [type]            [description]
-     */
-    public function getGoodsId($condition) {
-        return $this->where($condition)->value('id');
-    }
-
-    /**
-     * 获取的某个字段
-     * @param  [type] $condition [description]
-     * @return [type]            [description]
-     */
-    public function getGoodsValue($condition, $field) {
-        return $this->where($condition)->value($field);
-    }
-    /**
-     * 获取的某个字段列
-     * @param  [type] $condition [description]
-     * @return [type]            [description]
-     */
-    public function getGoodsColumn($condition, $field) {
-        return $this->where($condition)->column($field);
-    }
-
-    /**
-     * 获取的某个字段+1
-     * @param  [type] $condition [description]
-     * @return [type]            [description]
-     */
-    public function setIncGoods($condition, $field, $num) {
-        return $this->where($condition)->setInc($field, $num);
-    }
-    /**
-     * 获取的某个字段+1
-     * @param  [type] $condition [description]
-     * @return [type]            [description]
-     */
-    public function setDecGoods($condition, $field, $num) {
-        return $this->where($condition)->setDec($field, $num);
-    }
-
 	/**
-	 * 软删除
-	 * @param    array $condition
+	 * 获取的id
+	 * @param   $condition
+	 * @return
 	 */
-	public function softDelGoods( $condition )
+	public function getGoodsId( $condition )
 	{
-        return $this->save(['delete_time'=>time()],$condition);
+		return $this->where( $condition )->value( 'id' );
 	}
 
-    /**
-     * 修改多条数据
-     * @param  [type] $update           [更新数据]
-     */
-    public function updateAllGoods($update = array()) {
-        return $this->saveAll($update);
-    }
+	/**
+	 * 获取的某个字段
+	 * @param   $condition
+	 * @return
+	 */
+	public function getGoodsValue( $condition, $field )
+	{
+		return $this->where( $condition )->value( $field );
+	}
+
+	/**
+	 * 获取的某个字段列
+	 * @param   $condition
+	 * @return
+	 */
+	public function getGoodsColumn( $condition, $field )
+	{
+		return $this->where( $condition )->column( $field );
+	}
+
+	/**
+	 * 获取的某个字段+1
+	 * @param   $condition
+	 * @return
+	 */
+	public function setIncGoods( $condition, $field, $num )
+	{
+		return $this->where( $condition )->setInc( $field, $num );
+	}
+
+	/**
+	 * 获取的某个字段+1
+	 * @param   $condition
+	 * @return
+	 */
+	public function setDecGoods( $condition, $field, $num )
+	{
+		return $this->where( $condition )->setDec( $field, $num );
+	}
+
+	/**
+	 * 修改多条数据
+	 * @param   $update
+	 */
+	public function updateAllGoods( $update = [] )
+	{
+		return $this->saveAll( $update );
+	}
 
 }
 

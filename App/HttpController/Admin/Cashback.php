@@ -95,7 +95,7 @@ class Cashback extends Admin {
 
 	/**
 	 * 详情
-	 * @return [type] [description]
+	 * @return
 	 */
 	public function info(){
 		$get = $this->get;

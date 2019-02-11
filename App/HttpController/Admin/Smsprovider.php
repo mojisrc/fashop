@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -25,7 +25,6 @@ class Smsprovider extends Admin
 
 	/**
 	 * 短信服务商列表
-	 * @author 韩文博
 	 */
 	public function list()
 	{
@@ -41,7 +40,6 @@ class Smsprovider extends Admin
 	 * @param string $type aliyun 阿里云
 	 * @param array  $config
 	 * @param int    $status
-	 * @author 韩文博
 	 */
 	public function edit()
 	{
@@ -69,7 +67,6 @@ class Smsprovider extends Admin
 	/**
 	 * 详情
 	 * @param string $type aliyun 阿里云
-	 * @author 韩文博
 	 */
 	public function info()
 	{

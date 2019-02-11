@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -52,7 +52,6 @@ class Goods extends Server
 	 * @method GET
 	 * @param int $id           商品id 必填。二选一
 	 * @param int $goods_sku_id 商品sku id 必填。二选一
-	 * @author 韩文博
 	 */
 	public function info()
 	{
@@ -90,7 +89,6 @@ class Goods extends Server
 	 * @method GET
 	 * @param int page 页数
 	 * @param int rows 条数
-	 * @author 韩文博
 	 * */
 	public function visitedRecord()
 	{
@@ -141,7 +139,6 @@ class Goods extends Server
 	 * @param array $ids       id数组
 	 * @param int page 页数
 	 * @param int rows 条数
-	 * @author 韩文博
 	 */
 	public function evaluateList()
 	{

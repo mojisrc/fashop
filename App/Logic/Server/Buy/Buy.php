@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -406,7 +406,6 @@ class Buy
 	 * 计算
 	 * @throws \Exception
 	 * @return \App\Logic\Server\Buy\CalculateResult
-	 * @author 韩文博
 	 */
 	public function calculate() : \App\Logic\Server\Buy\CalculateResult
 	{
@@ -448,7 +447,6 @@ class Buy
 
 	/**
 	 * 创建订单
-	 * @author   韩文博
 	 * @throws \Exception
 	 */
 	public function createOrder() : CreateOrderResult

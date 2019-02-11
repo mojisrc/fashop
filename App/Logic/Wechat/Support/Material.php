@@ -29,7 +29,6 @@ class Material extends BaseAbstract
 	/**
 	 * 上传图片
 	 * @param string $path
-	 * @author 韩文博
 	 */
 	public function uploadImage( string $path )
 	{
@@ -39,7 +38,6 @@ class Material extends BaseAbstract
 	/**
 	 * 上传声音
 	 * @param string $path
-	 * @author 韩文博
 	 */
 	public function uploadVoice( string $path )
 	{
@@ -51,7 +49,6 @@ class Material extends BaseAbstract
 	 * @param string $path
 	 * @param string $title
 	 * @param string $description
-	 * @author 韩文博
 	 */
 	public function uploadVideo( string $path, string $title, string $description )
 	{
@@ -62,7 +59,6 @@ class Material extends BaseAbstract
 	 * 上传缩略图
 	 * 用于视频封面或者音乐封面
 	 * @param string $path
-	 * @author 韩文博
 	 */
 	public function uploadThumb( string $path )
 	{
@@ -72,7 +68,6 @@ class Material extends BaseAbstract
 	/**
 	 * 上传图文消息
 	 * @param array $articles
-	 * @author 韩文博
 	 */
 	public function uploadArticle( array $articles )
 	{
@@ -84,7 +79,6 @@ class Material extends BaseAbstract
 	 * @param string $media_id 要更新的文章的 mediaId
 	 * @param array  $article  文章内容
 	 * @param int    $index    要更新的文章在图文消息中的位置（多图文消息时，此字段才有意义，单图片忽略此参数），第一篇为 0；
-	 * @author 韩文博
 	 */
 	public function updateArticle( string $media_id, array $article, int $index = 0 )
 	{
@@ -95,7 +89,6 @@ class Material extends BaseAbstract
 	 * 上传图文消息图片
 	 * 返回值中 url 就是上传图片的 URL，可用于后续群发中，放置到图文消息中。
 	 * @param string $image
-	 * @author 韩文博
 	 */
 	public function uploadArticleImage( string $path )
 	{
@@ -105,7 +98,6 @@ class Material extends BaseAbstract
 	/**
 	 * 获取永久素材
 	 * @param string $media_id
-	 * @author 韩文博
 	 */
 	public function get( string $media_id )
 	{
@@ -114,7 +106,6 @@ class Material extends BaseAbstract
 
 	/**
 	 * 获取永久素材列表
-	 * @author 韩文博
 	 * @param string $type 素材的类型，图片（image）、视频（video）、语音 （voice）、图文（news)
 	 * @param int    $offset
 	 * @param int    $count
@@ -126,7 +117,6 @@ class Material extends BaseAbstract
 
 	/**
 	 * 获取素材计数
-	 * @author 韩文博
 	 */
 	public function stats()
 	{
@@ -137,7 +127,6 @@ class Material extends BaseAbstract
 	 * 删除永久素材；
 	 * @method POST
 	 * @param string $media_id
-	 * @author 韩文博
 	 */
 	public function delete( string $media_id )
 	{

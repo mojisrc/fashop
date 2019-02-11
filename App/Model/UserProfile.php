@@ -6,14 +6,12 @@
 namespace App\Model;
 
 use ezswoole\Model;
-use traits\model\SoftDelete;
-use EasySwoole\Core\Component\Di;
+
 
 class UserProfile extends Model
 {
-	use SoftDelete;
-	protected $deleteTime = 'delete_time';
-	protected $resultSetType = 'collection';
+	protected $softDelete = true;
+
 
 	protected $type
 		= [// ''      =>  'json',
@@ -21,13 +19,13 @@ class UserProfile extends Model
 
 	/**
 	 * 列表
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @param  [type] $field            [字段]
-	 * @param  [type] $order            [排序]
-	 * @param  [type] $page             [分页]
-	 * @param  [type] $group            [分组]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $field
+	 * @param   $order
+	 * @param   $page
+	 * @param   $group
+	 * @return
 	 */
 	public function getUserProfileList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
 	{
@@ -37,15 +35,15 @@ class UserProfile extends Model
 		} else{
 			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 		}
-		return $data ? $data->toArray() : [];
+		return $data;
 	}
 
 	/**
 	 * 获得数量
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @param  [type] $distinct         [去重]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $distinct [去重]
+	 * @return
 	 */
 	public function getUserProfileCount( $condition = [], $condition_str = '', $distinct = '' )
 	{
@@ -60,13 +58,13 @@ class UserProfile extends Model
 
 	/**
 	 * 列表更多
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @param  [type] $field            [字段]
-	 * @param  [type] $order            [排序]
-	 * @param  [type] $page             [分页]
-	 * @param  [type] $group            [分组]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $field
+	 * @param   $order
+	 * @param   $page
+	 * @param   $group
+	 * @return
 	 */
 	public function getUserProfileMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
 	{
@@ -77,15 +75,15 @@ class UserProfile extends Model
 			$data = $this->alias( 'user_profile' )->join( '__USER__ user', 'user_profile.user_id = user.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 
 		}
-		return $data ? $data->toArray() : [];
+		return $data;
 	}
 
 	/**
 	 * 获得数量
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @param  [type] $distinct         [去重]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $distinct [去重]
+	 * @return
 	 */
 	public function getUserProfileMoreCount( $condition = [], $condition_str = '', $distinct = '' )
 	{
@@ -99,26 +97,26 @@ class UserProfile extends Model
 
 	/**
 	 * 查询普通的数据和软删除的数据
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @param  [type] $field            [字段]
-	 * @param  [type] $order            [排序]
-	 * @param  [type] $page             [分页]
-	 * @param  [type] $group            [分组]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $field
+	 * @param   $order
+	 * @param   $page
+	 * @param   $group
+	 * @return
 	 */
 	public function getWithTrashedUserProfileList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
 	{
 		$data = $this->withTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
-		return $data ? $data->toArray() : [];
+		return $data;
 	}
 
 	/**
 	 * 查询普通的数据和软删除的数据的数量
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @param  [type] $distinct         [去重]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $distinct [去重]
+	 * @return
 	 */
 	public function getWithTrashedUserProfileCount( $condition = [], $condition_str = '', $distinct = '' )
 	{
@@ -133,13 +131,13 @@ class UserProfile extends Model
 
 	/**
 	 * 查询普通的数据和软删除的数据更多
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @param  [type] $field            [字段]
-	 * @param  [type] $order            [排序]
-	 * @param  [type] $page             [分页]
-	 * @param  [type] $group            [分组]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $field
+	 * @param   $order
+	 * @param   $page
+	 * @param   $group
+	 * @return
 	 */
 	public function getWithTrashedUserProfileMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
 	{
@@ -150,15 +148,15 @@ class UserProfile extends Model
 			$data = $this->alias( 'user_profile' )->join( '__USER__ user', 'user_profile.user_id = user.id', 'LEFT' )->withTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 
 		}
-		return $data ? $data->toArray() : [];
+		return $data;
 	}
 
 	/**
 	 * 查询普通的数据和软删除的数据的数量
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @param  [type] $distinct         [去重]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $distinct [去重]
+	 * @return
 	 */
 	public function getWithTrashedUserProfileMoreCount( $condition = [], $condition_str = '', $distinct = '' )
 	{
@@ -172,26 +170,26 @@ class UserProfile extends Model
 
 	/**
 	 * 只查询软删除的数据
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @param  [type] $field            [字段]
-	 * @param  [type] $order            [排序]
-	 * @param  [type] $page             [分页]
-	 * @param  [type] $group            [分组]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $field
+	 * @param   $order
+	 * @param   $page
+	 * @param   $group
+	 * @return
 	 */
 	public function getOnlyTrashedUserProfileList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
 	{
 		$data = $this->onlyTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
-		return $data ? $data->toArray() : [];
+		return $data;
 	}
 
 	/**
 	 * 只查询软删除的数据的数量
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @param  [type] $distinct         [去重]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $distinct [去重]
+	 * @return
 	 */
 	public function getOnlyTrashedUserProfileCount( $condition = [], $condition_str = '', $distinct = '' )
 	{
@@ -206,13 +204,13 @@ class UserProfile extends Model
 
 	/**
 	 * 只查询软删除的数据更多
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @param  [type] $field            [字段]
-	 * @param  [type] $order            [排序]
-	 * @param  [type] $page             [分页]
-	 * @param  [type] $group            [分组]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $field
+	 * @param   $order
+	 * @param   $page
+	 * @param   $group
+	 * @return
 	 */
 	public function getOnlyTrashedUserProfileMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
 	{
@@ -223,15 +221,15 @@ class UserProfile extends Model
 			$data = $this->alias( 'user_profile' )->join( '__USER__ user', 'user_profile.user_id = user.id', 'LEFT' )->onlyTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 
 		}
-		return $data ? $data->toArray() : [];
+		return $data;
 	}
 
 	/**
 	 * 只查询软删除的数据的数量
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @param  [type] $distinct         [去重]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $distinct [去重]
+	 * @return
 	 */
 	public function getOnlyTrashedUserProfileMoreCount( $condition = [], $condition_str = '', $distinct = '' )
 	{
@@ -245,167 +243,167 @@ class UserProfile extends Model
 
 	/**
 	 * 获得信息
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @param  [type] $field            [字段]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $field
+	 * @return
 	 */
 	public function getUserProfileInfo( $condition = [], $condition_str = '', $field = '*' )
 	{
 		$data = $this->where( $condition )->where( $condition_str )->field( $field )->find();
-		return $data ? $data->toArray() : [];
+		return $data;
 	}
 
 	/**
 	 * 获得排除字段的信息
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @param  [type] $exclude          [排除]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $exclude [排除]
+	 * @return
 	 */
 	public function getUserProfileExcludeInfo( $condition = [], $condition_str = '', $exclude = '' )
 	{
 		$data = $this->where( $condition )->where( $condition_str )->field( $exclude, true )->find();
-		return $data ? $data->toArray() : [];
+		return $data;
 	}
 
 	/**
 	 * 获得信息更多
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @param  [type] $field            [字段]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $field
+	 * @return
 	 */
 	public function getUserProfileMoreInfo( $condition = [], $condition_str = '', $field = '*' )
 	{
 		$data = $this->alias( 'user_profile' )->join( '__USER__ user', 'user_profile.user_id = user.id', 'LEFT' )->where( $condition )->where( $condition_str )->field( $field )->find();
-		return $data ? $data->toArray() : [];
+		return $data;
 	}
 
 	/**
 	 * 获得排除字段的信息更多
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @param  [type] $exclude          [排除]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $exclude [排除]
+	 * @return
 	 */
 	public function getUserProfileExcludeMoreInfo( $condition = [], $condition_str = '', $exclude = '*' )
 	{
 		$data = $this->alias( 'user_profile' )->join( '__USER__ user', 'user_profile.user_id = user.id', 'LEFT' )->where( $condition )->where( $condition_str )->field( $exclude, true )->find();
-		return $data ? $data->toArray() : [];
+		return $data;
 	}
 
 	/**
 	 * 查询普通的数据和软删除的数据信息
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @param  [type] $field            [字段]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $field
+	 * @return
 	 */
 	public function getWithTrashedUserProfileInfo( $condition = [], $condition_str = '', $field = '*' )
 	{
 		$data = $this->withTrashed()->where( $condition )->where( $condition_str )->field( $field )->find();
-		return $data ? $data->toArray() : [];
+		return $data;
 	}
 
 	/**
 	 * 查询普通的数据和软删除的数据信息更多
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @param  [type] $field            [字段]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $field
+	 * @return
 	 */
 	public function getWithTrashedUserProfileMoreInfo( $condition = [], $condition_str = '', $field = '*' )
 	{
 		$data = $this->alias( 'user_profile' )->join( '__USER__ user', 'user_profile.user_id = user.id', 'LEFT' )->withTrashed()->where( $condition )->where( $condition_str )->field( $field )->find();
-		return $data ? $data->toArray() : [];
+		return $data;
 	}
 
 	/**
 	 * 查询普通的数据和软删除的排除字段数据信息
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @param  [type] $exclude          [排除]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $exclude [排除]
+	 * @return
 	 */
 	public function getWithTrashedUserProfileExcludeInfo( $condition = [], $condition_str = '', $exclude = '*' )
 	{
 		$data = $this->withTrashed()->where( $condition )->where( $condition_str )->field( $exclude, true )->find();
-		return $data ? $data->toArray() : [];
+		return $data;
 	}
 
 
 	/**
 	 * 查询普通的数据和软删除的排除字段数据信息更多
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @param  [type] $exclude          [排除]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $exclude [排除]
+	 * @return
 	 */
 	public function getWithTrashedUserProfileExcludeMoreInfo( $condition = [], $condition_str = '', $exclude = '*' )
 	{
 		$data = $this->alias( 'user_profile' )->join( '__USER__ user', 'user_profile.user_id = user.id', 'LEFT' )->withTrashed()->where( $condition )->where( $condition_str )->field( $exclude, true )->find();
-		return $data ? $data->toArray() : [];
+		return $data;
 	}
 
 	/**
 	 * 只查询软删除的数据信息
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @param  [type] $field            [字段]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $field
+	 * @return
 	 */
 	public function getOnlyTrashedUserProfileInfo( $condition = [], $condition_str = '', $field = '*' )
 	{
 		$data = $this->onlyTrashed()->where( $condition )->where( $condition_str )->field( $field )->find();
-		return $data ? $data->toArray() : [];
+		return $data;
 	}
 
 	/**
 	 * 只查询软删除的数据信息更多
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @param  [type] $field            [字段]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $field
+	 * @return
 	 */
 	public function getOnlyTrashedUserProfileMoreInfo( $condition = [], $condition_str = '', $field = '*' )
 	{
 		$data = $this->alias( 'user_profile' )->join( '__USER__ user', 'user_profile.user_id = user.id', 'LEFT' )->onlyTrashed()->where( $condition )->where( $condition_str )->field( $field )->find();
-		return $data ? $data->toArray() : [];
+		return $data;
 	}
 
 	/**
 	 * 只查询软删除的排除字段数据信息
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @param  [type] $exclude          [排除]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $exclude [排除]
+	 * @return
 	 */
 	public function getOnlyTrashedUserProfileExcludeInfo( $condition = [], $condition_str = '', $exclude = '*' )
 	{
 		$data = $this->onlyTrashed()->where( $condition )->where( $condition_str )->field( $exclude, true )->find();
-		return $data ? $data->toArray() : [];
+		return $data;
 	}
 
 
 	/**
 	 * 只查询软删除的排除字段数据信息更多
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @param  [type] $exclude          [排除]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $exclude [排除]
+	 * @return
 	 */
 	public function getOnlyTrashedUserProfileExcludeMoreInfo( $condition = [], $condition_str = '', $exclude = '*' )
 	{
 		$data = $this->alias( 'user_profile' )->join( '__USER__ user', 'user_profile.user_id = user.id', 'LEFT' )->onlyTrashed()->where( $condition )->where( $condition_str )->field( $exclude, true )->find();
-		return $data ? $data->toArray() : [];
+		return $data;
 	}
 
 	/**
 	 * 获取的id
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @return
 	 */
 	public function getUserProfileId( $condition = [], $condition_str = '' )
 	{
@@ -414,9 +412,9 @@ class UserProfile extends Model
 
 	/**
 	 * 获取某个字段
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @return
 	 */
 	public function getUserProfileValue( $condition = [], $condition_str = '', $field = 'id' )
 	{
@@ -425,9 +423,9 @@ class UserProfile extends Model
 
 	/**
 	 * 获取某个字段列
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @return
 	 */
 	public function getUserProfileColumn( $condition = [], $condition_str = '', $field = 'id' )
 	{
@@ -436,9 +434,9 @@ class UserProfile extends Model
 
 	/**
 	 * 某个字段+1
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @return
 	 */
 	public function setIncUserProfile( $condition = [], $condition_str = '', $field, $num = 1 )
 	{
@@ -447,9 +445,9 @@ class UserProfile extends Model
 
 	/**
 	 * 某个字段-1
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @return [type]                   [数据]
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @return
 	 */
 	public function setDecUserProfile( $condition = [], $condition_str = '', $field, $num = 1 )
 	{
@@ -458,7 +456,7 @@ class UserProfile extends Model
 
 	/**
 	 * 添加单条数据
-	 * @param  [type] $insert           [添加数据]
+	 * @param   $insert
 	 */
 	public function insertUserProfile( $insert = [] )
 	{
@@ -467,7 +465,7 @@ class UserProfile extends Model
 
 	/**
 	 * 添加多条数据
-	 * @param  [type] $insert           [添加数据]
+	 * @param   $insert
 	 */
 	public function insertAllUserProfile( $insert = [] )
 	{
@@ -476,10 +474,10 @@ class UserProfile extends Model
 
 	/**
 	 * 修改信息
-	 * @param  [type] $update           [更新数据]
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
-	 * @return [type]                   [数据]
+	 * @param   $update
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @return
 	 */
 	public function updateUserProfile( $condition = [], $update = [] )
 	{
@@ -488,7 +486,7 @@ class UserProfile extends Model
 
 	/**
 	 * 修改多条数据
-	 * @param  [type] $update           [更新数据]
+	 * @param   $update
 	 */
 	public function updateAllUserProfile( $update = [] )
 	{
@@ -497,21 +495,12 @@ class UserProfile extends Model
 
 	/**
 	 * 删除
-	 * @param  [type] $condition        [条件]
-	 * @param  [type] $condition_str    [条件]
+	 * @param   $condition
+	 * @param   $condition_str
 	 */
 	public function delUserProfile( $condition = [], $condition_str = '' )
 	{
 		return $this->where( $condition )->where( $condition_str )->delete();
-	}
-
-	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelUserProfile( $condition = [], $condition_str = '' )
-	{
-		return $this->where( $condition )->where( $condition_str )->find()->delete();
 	}
 
 }

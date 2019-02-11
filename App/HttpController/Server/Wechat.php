@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -34,7 +34,6 @@ class Wechat extends Server
 	 * 获得JSSDK的配置
 	 * @http     get
 	 * @param string $url
-	 * @author   韩文博
 	 */
 	public function jssdk()
 	{
@@ -86,7 +85,6 @@ class Wechat extends Server
 	/**
 	 * 获得微信code
 	 * @http     GET
-	 * @author   韩文博
 	 * @param string $request_url 拿到code要返回的地址   授权后重定向的回调链接地址，请使用urlEncode对链接进行处理
 	 * @param int    $scope       snsapi_userinfo 正常授权  snsapi_base 静默授权 不传默认为snsapi_base
 	 *                            说明：会跳转到request_url地址，并且带上code
@@ -113,7 +111,6 @@ class Wechat extends Server
 	 * 获得微信openid
 	 * @http     get
 	 * @param string $code
-	 * @author   韩文博
 	 */
 	public function openid()
 	{
@@ -124,7 +121,6 @@ class Wechat extends Server
 	}
 
 	/**
-	 * @author 韩文博
 	 */
 	public function message()
 	{

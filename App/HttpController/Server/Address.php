@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -22,7 +22,6 @@ class Address extends Server
 	 * 买家设置默认收货地址
 	 * @method POST
 	 * @param int $id 地址id
-	 * @author 韩文博
 	 */
 	public function setDefault()
 	{
@@ -43,7 +42,6 @@ class Address extends Server
 	/**
 	 * 获得默认收货地址
 	 * @method GET
-	 * @author 韩文博
 	 */
 	public function default()
 	{
@@ -80,7 +78,6 @@ class Address extends Server
 	/**
 	 * 买家收货地址列表
 	 * @method GET
-	 * @author 韩文博
 	 */
 	public function list()
 	{
@@ -101,7 +98,6 @@ class Address extends Server
 	 * @param int    $area_id      地区id(县、区) [必填]
 	 * @param string $address      具体地址 [必填]
 	 * @param string $mobile_phone 手机号
-	 * @author 韩文博
 	 */
 	public function add()
 	{
@@ -156,7 +152,6 @@ class Address extends Server
 	 * @param int    $area_id      地区id(县、区) [必填]
 	 * @param string $address      具体地址 [必填]
 	 * @param string $mobile_phone 手机号
-	 * @author 韩文博
 	 */
 	public function edit()
 	{
@@ -206,7 +201,6 @@ class Address extends Server
 	 * 买家删除收货地址
 	 * @method POST
 	 * @param  int id 地址id
-	 * @author 韩文博
 	 */
 	public function del()
 	{

@@ -24,7 +24,8 @@
         "hashids/hashids": "^2.0",
         "yansongda/pay": "v2.6.1",
         "guzzlehttp/guzzle": "~6.0",
-        "phpoffice/phpspreadsheet":"^1.6.0"
+        "phpoffice/phpspreadsheet":"^1.6.0",
+        "easyswoole/curl": "^1.0"
     },
     "autoload": {
         "psr-4": {

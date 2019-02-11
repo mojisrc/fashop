@@ -35,7 +35,7 @@ class Useradvice extends Admin {
 
 	/**
 	 * 这个是自己关联查询用户的
-	 * @return [type] [description]
+	 * @return
 	 */
 	public function index() {
 		$user_advice_model = model('UserAdvice');

@@ -40,7 +40,6 @@ class Installer extends Controller
 	/**
 	 * 环境信息列表
 	 * @method GET
-	 * @author 韩文博
 	 */
 	public function envStatus()
 	{
@@ -182,7 +181,6 @@ class Installer extends Controller
 	 * @param string password
 	 * @param string port
 	 * @param string prefix
-	 * @author 韩文博
 	 */
 	public function checkDb()
 	{
@@ -205,7 +203,6 @@ class Installer extends Controller
 	 * @param string $username
 	 * @param string $password
 	 * @param string $repassword
-	 * @author 韩文博
 	 */
 	public function checkAdminAccount()
 	{
@@ -229,7 +226,6 @@ class Installer extends Controller
 	 * @param string username
 	 * @param string password
 	 * @param string repassword
-	 * @author 韩文博
 	 */
 	public function run()
 	{

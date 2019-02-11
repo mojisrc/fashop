@@ -33,7 +33,6 @@ class Media extends BaseAbstract
 
 	/**
 	 * @param $path
-	 * @author 韩文博
 	 */
 	public function uploadImage( string $path )
 	{
@@ -43,7 +42,6 @@ class Media extends BaseAbstract
 	/**
 	 * 上传声音
 	 * @param $path
-	 * @author 韩文博
 	 */
 	public function uploadVoice( string $path )
 	{
@@ -55,7 +53,6 @@ class Media extends BaseAbstract
 	 * @param string $path
 	 * @param string $title
 	 * @param string $description
-	 * @author 韩文博
 	 */
 	public function uploadVideo( string $path, string $title, string $description )
 	{
@@ -67,7 +64,6 @@ class Media extends BaseAbstract
 	 * 上传缩略图
 	 * 用于视频封面或者音乐封面
 	 * @param string $path
-	 * @author 韩文博
 	 */
 	public function uploadThumb( string $path )
 	{
@@ -81,7 +77,6 @@ class Media extends BaseAbstract
 	 * @param string $path
 	 * @param string $title
 	 * @param string $description
-	 * @author 韩文博
 	 */
 	public function uploadVideoForBroadcasting( string $path, string $title, string $description )
 	{
@@ -94,7 +89,6 @@ class Media extends BaseAbstract
 	 * @param string $mediaId
 	 * @param string $title
 	 * @param string $description
-	 * @author 韩文博
 	 */
 	public function createVideoForBroadcasting( string $mediaId, string $title,string $description )
 	{
@@ -104,7 +98,6 @@ class Media extends BaseAbstract
 	/**
 	 * 获取临时素材内容
 	 * 比如图片、语音等二进制流内容，响应为 EasyWechat\Kernel\Http\StreamResponse 实例。
-	 * @author 韩文博
 	 */
 	public function get( string $mediaId )
 	{
@@ -115,7 +108,6 @@ class Media extends BaseAbstract
 	/**
 	 * 获取 JSSDK 上传的高清语音
 	 * @param $mediaId
-	 * @author 韩文博
 	 */
 	public function getJssdkMedia(string $mediaId )
 	{

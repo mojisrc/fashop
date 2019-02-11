@@ -6,7 +6,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -29,7 +29,6 @@ class Freight extends Admin
 	 * @param string $name     模板名称
 	 * @param string $pay_type 计费方式
 	 * @param array  $areas
-	 * @author 韩文博
 	 */
 	public function add()
 	{
@@ -56,7 +55,6 @@ class Freight extends Admin
 	 * @param int id $id
 	 * @param string $name 模板名称
 	 * @param string $areas
-	 * @author 韩文博
 	 */
 	public function edit()
 	{
@@ -75,7 +73,6 @@ class Freight extends Admin
 	/**
 	 * 运费列表
 	 * @method GET
-	 * @author 韩文博
 	 */
 	public function list()
 	{
@@ -90,7 +87,6 @@ class Freight extends Admin
 	/**
 	 * 运费模板信息
 	 * @method GET
-	 * @author 韩文博
 	 */
 	public function info()
 	{
@@ -103,7 +99,6 @@ class Freight extends Admin
 	 * 删除运费模板
 	 * @method POST
 	 * @param int id
-	 * @author 韩文博
 	 */
 	public function del()
 	{

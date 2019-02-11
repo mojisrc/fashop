@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -28,7 +28,6 @@ class Pdcash extends Admin {
 	/**
 	 * 提现列表
 	 * @datetime 2017-04-20T19:49:00+0800
-	 * @author 韩文博
 	 */
 	public function index() {
 		$get = $this->get;
@@ -65,7 +64,6 @@ class Pdcash extends Admin {
 	/**
 	 * 删除提现记录
 	 * @datetime 2017-04-20T19:49:07+0800
-	 * @author 韩文博
 	 */
 	public function del() {
 		$id = intval($get["id"]);
@@ -108,7 +106,6 @@ class Pdcash extends Admin {
 	/**
 	 * 更改提现为支付状态
 	 * @datetime 2017-04-20T19:49:18+0800
-	 * @author 韩文博
 	 */
 	public function pay() {
 		$id = intval($get['id']);
@@ -161,7 +158,6 @@ class Pdcash extends Admin {
 	/**
 	 * 查看提现信息
 	 * @datetime 2017-04-20T19:49:28+0800
-	 * @author 韩文博
 	 */
 	public function detail() {
 		$id = intval(input('get.id'));
@@ -182,7 +178,7 @@ class Pdcash extends Admin {
 
 	/**
 	 * 更改支付状态 提现
-	 * @return [type] [description]
+	 * @return
 	 */
 	public function pdcashpay() {
 

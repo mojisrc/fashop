@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -27,7 +27,6 @@ class Pdrecharge extends Admin {
 	/**
 	 * 充值列表
 	 * @datetime 2017-04-20T19:48:17+0800
-	 * @author 韩文博
 	 */
 	public function index() {
 		$get = $this->get;
@@ -59,7 +58,6 @@ class Pdrecharge extends Admin {
 	/**
 	 * 充值编辑(更改成收到款)
 	 * @datetime 2017-04-20T19:48:27+0800
-	 * @author 韩文博
 	 */
 	public function edit() {
 		$id = intval($get['id']);
@@ -140,7 +138,6 @@ class Pdrecharge extends Admin {
 	/**
 	 * 充值查看
 	 * @datetime 2017-04-20T19:48:36+0800
-	 * @author 韩文博
 	 */
 	public function detail() {
 		$id = intval($get['id']);
@@ -163,7 +160,6 @@ class Pdrecharge extends Admin {
 	/**
 	 * 充值删除
 	 * @datetime 2017-04-20T19:48:44+0800
-	 * @author 韩文博
 	 */
 	public function del() {
 		$get = $this->get;

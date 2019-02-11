@@ -36,7 +36,6 @@ class Image extends Admin
 	 * 应用图片列表
 	 * @method GET
 	 * @param array $create_time
-	 * @author 韩文博
 	 */
 	public function list()
 	{
@@ -60,7 +59,6 @@ class Image extends Admin
 	 * @method GET
 	 * @param int $offset
 	 * @param int $count
-	 * @author 韩文博
 	 */
 	public function wechat()
 	{
@@ -78,7 +76,6 @@ class Image extends Admin
 	 * @param string $name
 	 * @param string $image
 	 * @param string $is_save
-	 * @author 韩文博
 	 */
 	public function add()
 	{
@@ -116,7 +113,6 @@ class Image extends Admin
 	/**
 	 * 删除图片
 	 * @method POST
-	 * @author 韩文博
 	 */
 	public function del()
 	{
@@ -132,7 +128,6 @@ class Image extends Admin
 	 * 提取网络图片
 	 * @method POST
 	 * @param string $url
-	 * @author 韩文博
 	 */
 	public function remoteGrab()
 	{

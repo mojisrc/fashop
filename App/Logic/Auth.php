@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 WenShuaiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 WenShuaiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -154,7 +154,6 @@ class Auth
 	 * 创建token
 	 * @method     GET
 	 * @datetime 2017-10-16T22:46:22+0800
-	 * @author   韩文博
 	 * @param    int    $user_id
 	 * @param    string $access_token
 	 * @return   string
@@ -182,7 +181,6 @@ class Auth
 	/**
 	 * 获得tokenInfo
 	 * @datetime 2017-10-16T21:26:38+0800
-	 * @author   韩文博
 	 * @param    string $token_string
 	 * @return array
 	 * todo 让整个操作更简便一些，如果错了就返回错误类似validate->check()

@@ -19,7 +19,6 @@ class Smsscene extends Admin
 {
 	/**
 	 * 短信场景列表
-	 * @author 韩文博
 	 */
 	public function list()
 	{
@@ -38,7 +37,6 @@ class Smsscene extends Admin
 	 * @param string $provider_template_id 短信提供商的模板id
 	 * @param string $provider_type        短信提供商
 	 * @param string $body                 短信内容
-	 * @author 韩文博
 	 */
 	public function edit()
 	{
@@ -63,7 +61,6 @@ class Smsscene extends Admin
 	/**
 	 * 短信场景详情
 	 * @param string $sign 唯一标识
-	 * @author 韩文博
 	 */
 	public function info()
 	{

@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 WenShuaiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 WenShuaiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -166,7 +166,6 @@ class Login
 	/**
 	 * @return array|null
 	 * @throws \Exception
-	 * @author 韩文博
 	 */
 	public function login() : ? array
 	{
@@ -188,7 +187,6 @@ class Login
 	/**
 	 * @return array|null
 	 * @throws \Exception
-	 * @author 韩文博
 	 */
 	private function byPassword() : ? array
 	{

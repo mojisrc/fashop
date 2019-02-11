@@ -20,7 +20,7 @@ namespace App\Model;
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -32,23 +32,19 @@ use ezswoole\Model;
 
 class UserTemp extends Model
 {
-	protected $resultSetType = 'collection';
+
 
 	/**
 	 * 添加
-	 * @datetime 2018-02-05 17:17:20
-	 * @author   韩文博
 	 * @param  array $data
 	 */
-	public function addUserTemp( $data = [] )
+	public function addUserTemp( array $data )
 	{
-		return $this->allowField(true)->save($data);
+		return $this->add($data);
 	}
 
 	/**
 	 * 添加多条
-	 * @datetime 2018-02-05 17:17:20
-	 * @author   韩文博
 	 * @param array $data
 	 * @return boolean
 	 */
@@ -59,8 +55,6 @@ class UserTemp extends Model
 
 	/**
 	 * 修改
-	 * @datetime 2018-02-05 17:17:20
-	 * @author   韩文博
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -72,8 +66,6 @@ class UserTemp extends Model
 
 	/**
 	 * 删除
-	 * @datetime 2018-02-05 17:17:20
-	 * @author   韩文博
 	 * @param    array $condition
 	 * @return   boolean
 	 */
@@ -84,8 +76,6 @@ class UserTemp extends Model
 
 	/**
 	 * 计算数量
-	 * @datetime 2018-02-05 17:17:20
-	 * @author   韩文博
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -96,8 +86,6 @@ class UserTemp extends Model
 
 	/**
 	 * 获取用户临时表单条数据
-	 * @datetime 2018-02-05 17:17:20
-	 * @author   韩文博
 	 * @param array  $condition 条件
 	 * @param string $field     字段
 	 * @return array | false
@@ -105,13 +93,11 @@ class UserTemp extends Model
 	public function getUserTempInfo( $condition = [], $field = '*' )
 	{
 		$info = $this->where( $condition )->field( $field )->find();
-		return $info ? $info->toArray() : false;
+		return $info;
 	}
 
 	/**
 	 * 获得用户临时表列表
-	 * @datetime 2018-02-05 17:17:20
-	 * @author   韩文博
 	 * @param    array  $condition
 	 * @param    string $field
 	 * @param    string $order
@@ -121,7 +107,7 @@ class UserTemp extends Model
 	public function getUserTempList( $condition = [], $field = '*', $order = '', $page = '1,10' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list ? $list->toArray() : false;
+		return $list ;
 	}
 }
 

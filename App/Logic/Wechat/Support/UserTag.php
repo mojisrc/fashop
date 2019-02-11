@@ -22,7 +22,6 @@ class UserTag extends BaseAbstract
 	/**
 	 * 获取所有标签
 	 * @method GET
-	 * @author 韩文博
 	 */
 	public function list()
 	{
@@ -33,7 +32,6 @@ class UserTag extends BaseAbstract
 	 * 创建标签
 	 * @param string $name
 	 * @return mixed
-	 * @author 韩文博
 	 */
 	public function create( string $name )
 	{
@@ -44,7 +42,6 @@ class UserTag extends BaseAbstract
 	 * 修改标签信息
 	 * @param int    $id
 	 * @param string $name
-	 * @author 韩文博
 	 */
 	public function update( int $id, string $name )
 	{
@@ -55,7 +52,6 @@ class UserTag extends BaseAbstract
 	 * 删除标签
 	 * @param int $id
 	 * @return mixed
-	 * @author 韩文博
 	 */
 	public function delete( int $id )
 	{
@@ -65,7 +61,6 @@ class UserTag extends BaseAbstract
 	/**
 	 * 获取指定 openid 用户所属的标签
 	 * @param string $openid
-	 * @author 韩文博
 	 */
 	public function userTags( string $openid )
 	{
@@ -77,7 +72,6 @@ class UserTag extends BaseAbstract
 	 * @param int    $id
 	 * @param string $next_openid 第一个拉取的OPENID，不填默认从头开始拉取
 	 * @return mixed
-	 * @author 韩文博
 	 */
 	public function usersOfTag( int $id, string $next_openid = '' )
 	{
@@ -88,7 +82,6 @@ class UserTag extends BaseAbstract
 	 * 批量为用户添加标签
 	 * @param array $openids
 	 * @param int   $id
-	 * @author 韩文博
 	 */
 	public function tagUsers( array $openids, int $id )
 	{
@@ -100,7 +93,6 @@ class UserTag extends BaseAbstract
 	 * @method POST
 	 * @param array $openids
 	 * @param int   $id
-	 * @author 韩文博
 	 */
 	public function untagUsers( array $openids, int $id )
 	{

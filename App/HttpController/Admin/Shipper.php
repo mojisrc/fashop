@@ -6,7 +6,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -44,7 +44,6 @@ class Shipper extends Admin
 	/**
 	 * 物流地址信息
 	 * @method GET
-	 * @author 韩文博
 	 */
 	public function info()
 	{

@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -14,47 +14,36 @@
 namespace App\Model;
 
 use ezswoole\Model;
-use traits\model\SoftDelete;
+
 
 class GoodsCategory extends Model
 {
-	use SoftDelete;
-	protected $deleteTime = 'delete_time';
-	protected $resultSetType = 'collection';
+	protected $softDelete = true;
+	protected $createTime = true;
+
 
 	/**
 	 * 添加
-	 * @datetime 2017-05-16 20:36:17
-	 * @author   韩文博
 	 * @param  array $data
 	 * @return int pk
 	 */
-	public function addGoodsCategory( $data = [] )
+	public function addGoodsCategory( array $data )
 	{
-		$data['create_time'] = time();
-		$result = $this->allowField( true )->save( $data );
-		if( $result ){
-			return $this->getLastInsID();
-		}
-		return $result;
+		return $this->add($data);
 	}
 
 	/**
 	 * 添加多条
-	 * @datetime 2017-05-16 20:36:17
-	 * @author   韩文博
 	 * @param array $data
 	 * @return boolean
 	 */
-	public function addGoodsCategoryAll( $data )
+	public function addGoodsCategoryAll( array $data )
 	{
 		return $this->insertAll( $data );
 	}
 
 	/**
 	 * 修改
-	 * @datetime 2017-05-16 20:36:17
-	 * @author   韩文博
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -66,8 +55,6 @@ class GoodsCategory extends Model
 
 	/**
 	 * 删除
-	 * @datetime 2017-05-16 20:36:17
-	 * @author   韩文博
 	 * @param    array $condition
 	 * @return   boolean
 	 */
@@ -85,7 +72,7 @@ class GoodsCategory extends Model
 	public function getGoodsCategoryList( $condition, $field = '*', $order = 'pid asc,sort asc,id asc', $page = '0,10' )
 	{
 		$list                = $this->field( $field )->where( $condition )->order( $order )->page( $page )->select();
-		return $list ? $list->toArray() : false;
+		return $list ;
 	}
 
 	/**
@@ -110,7 +97,7 @@ class GoodsCategory extends Model
 	public function getGoodsCategoryInfo( $condition, $field = '*' )
 	{
 		$info = $this->where( $condition )->field( $field )->find();
-		return $info ? $info->toArray() : false;
+		return $info;
 	}
 
 	/**

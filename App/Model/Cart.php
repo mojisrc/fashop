@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -17,31 +17,22 @@ use ezswoole\Model;
 
 class Cart extends Model
 {
-	protected $resultSetType = 'collection';
+	protected $createTime = true;
 	protected $type = [
 		'goods_spec'=>'json'
 	];
 	/**
 	 * 添加
-	 * @datetime 2018-01-30 20:26:18
-	 * @author   韩文博
 	 * @param  array $data
 	 * @return int pk
 	 */
-	public function addCart( $data = [] )
+	public function addCart( array $data )
 	{
-		$data['create_time'] = time();
-		$result              = $this->allowField( true )->save( $data );
-		if( $result ){
-			return $this->getLastInsID();
-		}
-		return $result;
+		return $this->add( $data );
 	}
 
 	/**
 	 * 添加多条
-	 * @datetime 2018-01-30 20:26:18
-	 * @author   韩文博
 	 * @param array $data
 	 * @return boolean
 	 */
@@ -52,8 +43,6 @@ class Cart extends Model
 
 	/**
 	 * 修改
-	 * @datetime 2018-01-30 20:26:18
-	 * @author   韩文博
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -65,8 +54,6 @@ class Cart extends Model
 
 	/**
 	 * 删除
-	 * @datetime 2018-01-30 20:26:18
-	 * @author   韩文博
 	 * @param    array $condition
 	 * @return   boolean
 	 */
@@ -78,7 +65,6 @@ class Cart extends Model
 	/**
 	 * 计算数量
 	 * @datetime 2018-01-30 20:26:18
-	 * @author   韩文博
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -90,7 +76,6 @@ class Cart extends Model
 	/**
 	 * 获取购物车单条数据
 	 * @datetime 2018-01-30 20:26:18
-	 * @author   韩文博
 	 * @param array  $condition 条件
 	 * @param string $field     字段
 	 * @return array | false
@@ -98,13 +83,12 @@ class Cart extends Model
 	public function getCartInfo( $condition = [], $field = '*' )
 	{
 		$info = $this->where( $condition )->field( $field )->find();
-		return $info ? $info->toArray() : false;
+		return $info;
 	}
 
 	/**
 	 * 获得购物车列表
 	 * @datetime 2018-01-30 20:26:18
-	 * @author   韩文博
 	 * @param    array  $condition
 	 * @param    string $field
 	 * @param    string $order
@@ -114,14 +98,14 @@ class Cart extends Model
 	public function getCartList( $condition = [], $field = '*', $order = '', $page = '1,10' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list ? $list->toArray() : false;
+		return $list ;
 	}
 
     /**
      * 修改信息
-     * @param  [type] $update    [description]
-     * @param  [type] $condition [description]
-     * @return [type]            [description]
+     * @param   $update
+     * @param   $condition
+     * @return
      */
     public function updateCart($condition = array(),$update = array()) {
         return $this->save($update,$condition);
@@ -129,9 +113,9 @@ class Cart extends Model
 
     /**
      * 获取某个字段
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @return [type]                   [数据]
+     * @param   $condition
+     * @param   $condition_str
+     * @return
      */
     public function getCartValue($condition = array(), $condition_str = '', $field = 'id') {
         return $this->where($condition)->where($condition_str)->value($field);
@@ -139,9 +123,9 @@ class Cart extends Model
 
     /**
      * 获取某个字段列
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @return [type]                   [数据]
+     * @param   $condition
+     * @param   $condition_str
+     * @return
      */
     public function getCartColumn($condition = array(), $condition_str = '', $field = 'id') {
         return $this->where($condition)->where($condition_str)->column($field);

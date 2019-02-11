@@ -31,7 +31,6 @@ class Shop extends Admin
 	 * @param  string $contact_number
 	 * @param  string $description
 	 * @param  string $host
-	 * @author 韩文博
 	 */
 	public function setBaseInfo()
 	{
@@ -63,7 +62,6 @@ class Shop extends Admin
 	 * 店铺配色方案设置
 	 * @method POST
 	 * @param  string $color_scheme
-	 * @author 韩文博
 	 */
 	public function setColorScheme()
 	{
@@ -79,7 +77,6 @@ class Shop extends Admin
 	 * 店铺首页模板选择【废弃】
 	 * @method POST
 	 * @param  int $portal_template_id
-	 * @author 韩文博
 	 */
 	public function setPortalTemplate()
 	{
@@ -94,7 +91,6 @@ class Shop extends Admin
 	/**
 	 * 店铺信息
 	 * @method GET
-	 * @author 韩文博
 	 */
 	public function info()
 	{
@@ -112,7 +108,6 @@ class Shop extends Admin
 	 * 店铺分类页风格设置
 	 * @method POST
 	 * @param  int $goods_category_style
-	 * @author 韩文博
 	 */
 	public function setGoodsCategoryStyle()
 	{
@@ -130,7 +125,6 @@ class Shop extends Admin
 	 * @param int $order_auto_close_expires         待付款订单N秒后自动关闭订单，默认604800秒
 	 * @param int $order_auto_confirm_expires       已发货订单后自动确认收货，默认604800秒
 	 * @param int $order_auto_close_refound_expires 已收货订单后关闭退款／退货功能，0代表确认收货后无法维权，默认0秒
-	 * @author 韩文博
 	 */
 	public function setOrderExpires()
 	{

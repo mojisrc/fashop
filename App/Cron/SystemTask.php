@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 WenShuaiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 WenShuaiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -61,7 +61,6 @@ class SystemTask
 	/**
 	 * 消息推送
 	 * @datetime 2017-11-03T14:13:24+0800
-	 * @author   韩文博
 	 */
 	public static function send()
 	{
@@ -110,7 +109,6 @@ class SystemTask
 	 * 获得任务列表
 	 * @method     GET
 	 * @datetime 2017-11-06T14:34:03+0800
-	 * @author   韩文博
 	 * @return array
 	 */
 	private function getTaskList()
@@ -129,7 +127,6 @@ class SystemTask
 	 * 修改单条数据
 	 * @method     GET
 	 * @datetime 2017-11-06T14:58:15+0800
-	 * @author   韩文博
 	 * @param    array $result
 	 */
 	private function updateRecord(array $result)
@@ -140,7 +137,6 @@ class SystemTask
 	/**
 	 * 批量修改
 	 * @datetime 2017-11-05T23:37:44+0800
-	 * @author   韩文博
 	 * todo 配置文件完善后 这里使用动态的前缀
 	 */
 	private function updateRecords(array $results)

@@ -23,7 +23,6 @@ class Jssdk extends BaseAbstract
 	 * @param bool  $debug
 	 * @param bool  $beta
 	 * @param bool  $json
-	 * @author 韩文博
 	 */
 	public function buildConfig( array $apis, bool $debug, bool $beta, bool $json )
 	{
@@ -33,7 +32,6 @@ class Jssdk extends BaseAbstract
 	/**
 	 * 设置当前URL，如果不想用默认读取的URL，可以使用此方法手动设置，通常不需要。
 	 * @param $url
-	 * @author 韩文博
 	 */
 	public function setUrl( string $url )
 	{

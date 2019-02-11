@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -21,7 +21,6 @@ class Orderrefund extends Server
 	 * 退款原因
 	 * @method GET
 	 * @param int refund_type 1为仅退款,2为退货退款
-	 * @author 韩文博
 	 */
 	public function reasonList()
 	{

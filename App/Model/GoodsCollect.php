@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -14,34 +14,25 @@
 namespace App\Model;
 
 use ezswoole\Model;
-use traits\model\SoftDelete;
+
 
 class GoodsCollect extends Model
 {
-	use SoftDelete;
-	protected $deleteTime = 'delete_time';
-	protected $resultSetType = 'collection';
+	protected $softDelete = true;
+	protected $createTime = true;
+
 	/**
 	 * 添加
-	 * @datetime 2017-04-19 09:47:46
-	 * @author   韩文博
 	 * @param  array $data
 	 * @return int pk
 	 */
-	public function addGoodsCollect( $data = [] )
+	public function addGoodsCollect( array $data )
 	{
-		$data['create_time'] = time();
-		$result              = $this->allowField( true )->save( $data );
-		if( $result ){
-			return $this->getLastInsID();
-		}
-		return $result;
+		return $this->add($data);
 	}
 
 	/**
 	 * 修改
-	 * @datetime 2017-04-19 09:47:46
-	 * @author   韩文博
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -53,8 +44,6 @@ class GoodsCollect extends Model
 
 	/**
 	 * 删除
-	 * @datetime 2017-04-19 09:47:46
-	 * @author   韩文博
 	 * @param    array $condition
 	 * @return   boolean
 	 */
@@ -65,8 +54,6 @@ class GoodsCollect extends Model
 
 	/**
 	 * 计算数量
-	 * @datetime 2017-04-19 09:47:46
-	 * @author   韩文博
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -77,8 +64,6 @@ class GoodsCollect extends Model
 
 	/**
 	 * 获取收藏单条数据
-	 * @datetime 2017-04-19 09:47:46
-	 * @author   韩文博
 	 * @param array  $condition 条件
 	 * @param string $field     字段
 	 * @return array
@@ -86,13 +71,11 @@ class GoodsCollect extends Model
 	public function getGoodsCollectInfo( $condition = [], $field = '*' )
 	{
 		$info = $this->where( $condition )->field( $field )->find();
-		return $info ? $info->toArray() : false;
+		return $info;
 	}
 
 	/**
 	 * 获得收藏列表
-	 * @datetime 2017-04-19 09:47:46
-	 * @author   韩文博
 	 * @param    array  $condition
 	 * @param    string $field
 	 * @param    string $group
@@ -103,7 +86,7 @@ class GoodsCollect extends Model
 	public function getGoodsCollectList( $condition = [], $field = '*', $group = '', $order = '', $page = '1,10' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list ? $list->toArray() : false;
+		return $list ;
 	}
 
 	/**
@@ -118,9 +101,9 @@ class GoodsCollect extends Model
 
     /**
      * 获取的id
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @return [type]                   [数据]
+     * @param   $condition
+     * @param   $condition_str
+     * @return
      */
     public function getGoodsCollectId($condition = array(), $condition_str = '') {
         return $this->where($condition)->where($condition_str)->value('id');
@@ -128,9 +111,9 @@ class GoodsCollect extends Model
 
     /**
      * 获取某个字段
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @return [type]                   [数据]
+     * @param   $condition
+     * @param   $condition_str
+     * @return
      */
     public function getGoodsCollectValue($condition = array(), $condition_str = '', $field = 'id') {
         return $this->where($condition)->where($condition_str)->value($field);
@@ -138,9 +121,9 @@ class GoodsCollect extends Model
 
     /**
      * 获取某个字段列
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @return [type]                   [数据]
+     * @param   $condition
+     * @param   $condition_str
+     * @return
      */
     public function getGoodsCollectColumn($condition = array(), $condition_str = '', $field = 'id') {
         return $this->where($condition)->where($condition_str)->column($field);

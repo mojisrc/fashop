@@ -21,7 +21,6 @@ class TemplateMessage extends BaseAbstract
 {
 	/**
 	 * 修改账号所属行业
-	 * @author 韩文博
 	 */
 	public function setIndustry()
 	{
@@ -42,7 +41,6 @@ class TemplateMessage extends BaseAbstract
 	 * 添加模板
 	 * 在公众号后台获取 $shortId 并添加到账户。
 	 * @method GET
-	 * @author 韩文博
 	 */
 	public function addTemplate()
 	{
@@ -52,7 +50,6 @@ class TemplateMessage extends BaseAbstract
 	/**
 	 * 获取所有模板列表
 	 * @method GET
-	 * @author 韩文博
 	 */
 	public function getPrivateTemplates()
 	{
@@ -63,7 +60,6 @@ class TemplateMessage extends BaseAbstract
 	/**
 	 * 删除模板
 	 * @method GET
-	 * @author 韩文博
 	 */
 	public function deletePrivateTemplate()
 	{
@@ -74,7 +70,6 @@ class TemplateMessage extends BaseAbstract
 	/**
 	 * 发送模板消息
 	 * @method GET
-	 * @author 韩文博
 	 */
 	public function send()
 	{
@@ -92,7 +87,6 @@ class TemplateMessage extends BaseAbstract
 	/**
 	 * 发送一次性订阅消息
 	 * @method GET
-	 * @author 韩文博
 	 */
 	public function sendSubscription()
 	{

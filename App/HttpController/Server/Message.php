@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 WenShuaiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 WenShuaiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -194,7 +194,6 @@ class Message extends Server {
 	 * 未读消息分组数量
 	 * @method     GET
 	 * @datetime 2017-06-21T11:25:51+0800
-	 * @author 韩文博
 	 */
 	public function unreadGroupCount() {
 
@@ -302,7 +301,6 @@ class Message extends Server {
 	 * @method     GET
 	 * @param string $type 类型
 	 * @datetime 2017-06-21T15:44:41+0800
-	 * @author 韩文博
 	 */
 	public function setGroupAllRead() {
 

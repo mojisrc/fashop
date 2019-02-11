@@ -98,7 +98,7 @@ class Refundoperation extends Server {
 	}
 	/**
 	 * 支付宝即时到账有密退款接口回调
-	 * @return [type] [description]
+	 * @return
 	 */
 	public function alipayRefundNotify() {
 		$post = $this->post;
@@ -158,7 +158,7 @@ class Refundoperation extends Server {
 	 * 微信支付退款
 	 * https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_4
 	 * refund_fee 退款总金额,单位为分,可以做部分退款
-	 * @return [type] [description]
+	 * @return
 	 */
 	public function wxpayRefund($data) {
 		//计算得出通知验证结果
@@ -200,7 +200,7 @@ class Refundoperation extends Server {
 	}
 	/**
 	 * 批量付款到支付宝账户有密接口
-	 * @return [type] [description]
+	 * @return
 	 */
 	public function batchpayment() {
 		header("Content-type:text/html;charset=utf-8");

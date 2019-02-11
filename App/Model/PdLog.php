@@ -5,20 +5,19 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
  */
 namespace App\Model;
 use ezswoole\Model;
-use traits\model\SoftDelete;
-use EasySwoole\Core\Component\Di;
+
+
 
 class PdLog extends Model {
-	use SoftDelete;
-    protected $deleteTime = 'delete_time';
-    protected $resultSetType = 'collection';
+	protected $softDelete = true;
+
 	/**
 	 * 取日志总数
 	 * @param array $condition
@@ -35,7 +34,7 @@ class PdLog extends Model {
 	 * @param string $order
 	 */
 	public function getPdLogList($condition = array(), $fields = '*', $order = '', $page = '1,20') {
-		$data = $this->where($condition)->field($field)->order($order)->page($page)->select();
+		$data = $this->where($condition)->field($fields)->order($order)->page($page)->select();
 		return $data ? $data->toArray() : $data;
 	}
 
@@ -43,8 +42,6 @@ class PdLog extends Model {
 	 * 变更预存款
 	 * @param array $change_type
 	 * @param array $data
-	 * @throws \Exception
-	 * @return unknown
 	 */
 	public function changePd($change_type, $data = array()) {
 		$log_data                = array();

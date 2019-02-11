@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -14,14 +14,12 @@
 namespace App\Model;
 
 use ezswoole\Model;
-use traits\model\SoftDelete;
-use EasySwoole\Core\Component\Di;
+
+
 
 class Order extends Model
 {
-	use SoftDelete;
-	protected $deleteTime = 'delete_time';
-	protected $resultSetType = 'collection';
+	protected $softDelete = true;
 
 	/**
 	 * 取单条订单信息
@@ -29,11 +27,8 @@ class Order extends Model
 	 * @param string $condition_string
 	 * @param string $fields
 	 * @param array  $extend 追加返回那些表的信息,如array('order_extend','order_goods')
-	 * @return array|false|Model|\PDOStatement|string
-	 * @throws \ezswoole\db\exception\DataNotFoundException
-	 * @throws \ezswoole\db\exception\ModelNotFoundException
+	 * @return array|false|Model|string
 	 * @throws \ezswoole\exception\DbException
-	 * @author 韩文博
 	 */
 	public function getOrderInfo( $condition = [], $condition_string = '', $fields = '*', $extend = [] )
 	{
@@ -96,29 +91,21 @@ class Order extends Model
 	 * @param array  $condition
 	 * @param string $field
 	 * @return array|bool
-	 * @throws \ezswoole\db\exception\DataNotFoundException
-	 * @throws \ezswoole\db\exception\ModelNotFoundException
-	 * @throws \ezswoole\exception\DbException
-	 * @author 韩文博
 	 */
 	public function getOrderExtendInfo( $condition = [], $field = '*' )
 	{
 		$info = model( 'OrderExtend' )->where( $condition )->find();
-		return $info ? $info->toArray() : false;
+		return $info;
 	}
 
 	/**
 	 * @param array $condition
 	 * @return array|bool
-	 * @throws \ezswoole\db\exception\DataNotFoundException
-	 * @throws \ezswoole\db\exception\ModelNotFoundException
-	 * @throws \ezswoole\exception\DbException
-	 * @author 韩文博
 	 */
 	public function getOrderPayInfo( $condition = [] )
 	{
 		$info = model( 'OrderPay' )->where( $condition )->find();
-		return $info ? $info->toArray() : false;
+		return $info;
 	}
 
 
@@ -130,7 +117,6 @@ class Order extends Model
 	 * @param string $page
 	 * @param array  $extend
 	 * @return array
-	 * @author 韩文博
 	 */
 	public function getOrderList( $condition = [], $condition_string = '', $field = '*', $order = 'id desc', $page = '1,20', $extend = [] )
 	{
@@ -344,7 +330,6 @@ class Order extends Model
 	 * @param string $fields
 	 * @param string $order
 	 * @return mixed
-	 * @author 韩文博
 	 */
 	public function getOrderGoodsInfo( $condition = [], $fields = '*', $order = 'id asc' )
 	{
@@ -409,11 +394,7 @@ class Order extends Model
 	 */
 	public function addOrder( $data )
 	{
-		$result = $this->allowField( true )->save( $data );
-		if( $result ){
-			return $this->getLastInsID();
-		}
-		return $result;
+		return $this->add($data);
 	}
 
 	/**
@@ -487,12 +468,11 @@ class Order extends Model
 	 * @throws \ezswoole\db\exception\DataNotFoundException
 	 * @throws \ezswoole\db\exception\ModelNotFoundException
 	 * @throws \ezswoole\exception\DbException
-	 * @author 韩文博
 	 */
 	public function getOrderLogList( $condition )
 	{
 		$list = model( 'OrderLog' )->where( $condition )->select();
-		return $list ? $list->toArray() : false;
+		return $list ;
 	}
 
 
@@ -501,7 +481,6 @@ class Order extends Model
 	 * @param $operate
 	 * @param $order_info
 	 * @return bool
-	 * @author 韩文博
 	 */
 	public function getOrderOperateState( $operate, $order_info )
 	{
@@ -640,7 +619,6 @@ class Order extends Model
 	 * @param $extend_msg
 	 * @return bool
 	 * @throws \ezswoole\exception\PDOException
-	 * @author 韩文博
 	 */
 	public function userChangeState( $state_type, $order_info, $user_id, $username, $extend_msg ) : bool
 	{
@@ -667,7 +645,6 @@ class Order extends Model
 	/**
 	 * 取消订单操作
 	 * @datetime 2017-05-30T19:34:04+0800
-	 * @author   韩文博
 	 * @param    array  $order_info 订单信息
 	 * @param    int    $user_id
 	 * @param    string $username
@@ -852,8 +829,8 @@ class Order extends Model
 
 	/**
 	 * 已支付但未发货的订单相关数据
-	 * @param  array $condition [description]
-	 * @return [type]            [description]
+	 * @param  array $condition
+	 * @return
 	 */
 	public function isPayNoSend( $condition = [] )
 	{
@@ -961,14 +938,14 @@ class Order extends Model
 
 	/**
 	 * 获得订单信息
-	 * @param  [type] $condition [description]
-	 * @param  [type] $field     [description]
-	 * @return [type]            [description]
+	 * @param   $condition
+	 * @param   $field
+	 * @return
 	 */
 	public function getOneOrderInfo( $condition = [], $field = '*' )
 	{
 		$data = $this->where( $condition )->field( $field )->find();
-		return $data ? $data->toArray() : [];
+		return $data;
 	}
 
 	/**
@@ -1043,13 +1020,13 @@ class Order extends Model
 
     /**
      * 列表
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $field            [字段]
-     * @param  [type] $order            [排序]
-     * @param  [type] $page             [分页]
-     * @param  [type] $group            [分组]
-     * @return [type]                   [数据]
+     * @param   $condition
+     * @param   $condition_str
+     * @param   $field
+     * @param   $order
+     * @param   $page
+     * @param   $group
+     * @return
      */
     public function getOrderCommonList($condition = array(), $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group='') {
         if($page == ''){
@@ -1058,15 +1035,15 @@ class Order extends Model
         }else{
             $data = $this->where($condition)->where($condition_str)->order($order)->field($field)->page($page)->group($group)->select();
         }
-        return $data ? $data->toArray() : array();
+        return $data;
     }
 
     /**
      * 获得数量
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $distinct         [去重]
-     * @return [type]                   [数据]
+     * @param   $condition
+     * @param   $condition_str
+     * @param   $distinct         [去重]
+     * @return
      */
     public function getOrderCommonCount($condition = array(), $condition_str = '', $distinct = '') {
         if($distinct == ''){
@@ -1080,19 +1057,19 @@ class Order extends Model
 
     /**
      * 获得信息
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $field            [字段]
-     * @return [type]                   [数据]
+     * @param   $condition
+     * @param   $condition_str
+     * @param   $field
+     * @return
      */
     public function getOrderCommonInfo($condition = array(), $condition_str = '', $field = '*') {
         $data = $this->where($condition)->where($condition_str)->field($field)->find();
-        return $data ? $data->toArray() : array();
+        return $data;
     }
 
     /**
      * 分佣 推广效果状态描述
-     * @param  [type] $update           [更新数据]
+     * @param   $update
      */
     public function distributionPromotionDesc($data) {
 

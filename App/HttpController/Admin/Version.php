@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -22,7 +22,6 @@ class Version extends Admin {
 	}
 	/**
 	 * 模板列表
-	 * @author 韩文博
 	 */
 	public function index() {
 		$list = model('Version')->paginate(10);
@@ -33,7 +32,6 @@ class Version extends Admin {
 	}
 	/**
 	 * 添加
-	 * @author 韩文博
 	 */
 	public function add() {
 		if ($this->post) {
@@ -51,7 +49,6 @@ class Version extends Admin {
 	}
 	/**
 	 * 修改
-	 * @author 韩文博
 	 */
 	public function edit() {
 		if ($this->post) {
@@ -67,7 +64,6 @@ class Version extends Admin {
 	}
 	/**
 	 * 删除
-	 * @author 韩文博
 	 */
 	public function del() {
 		$ids = input('post.ids');

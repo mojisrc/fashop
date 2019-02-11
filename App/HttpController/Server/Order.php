@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -186,7 +186,6 @@ class Order extends Server
 	 * 订单详细
 	 * @method GET
 	 * @param int $id 订单id
-	 * @author 韩文博
 	 */
 	public function info()
 	{
@@ -248,7 +247,6 @@ class Order extends Server
 	 * @method POST
 	 * @param int    $id           订单id
 	 * @param string $state_remark 状态备注，如：取消原因（改买其他商品、改配送方式、其他原因等等）
-	 * @author 韩文博
 	 */
 	public function cancel()
 	{
@@ -278,7 +276,6 @@ class Order extends Server
 	 * 确认收货
 	 * @method POST
 	 * @param int $id 订单id
-	 * @author 韩文博
 	 */
 	public function confirmReceipt()
 	{

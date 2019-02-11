@@ -2,17 +2,13 @@
 
 namespace App\Model;
 use ezswoole\Model;
-use traits\model\SoftDelete;
-use EasySwoole\Core\Component\Di;
-
+// todo 废弃
 class Type extends Model {
-	use SoftDelete;
-    protected $deleteTime = 'delete_time';
-    protected $resultSetType = 'collection';
+	protected $softDelete = true;
 
 	/**
 	 * 获取分类详细信息
-	 * @param  milit   $id 分类ID或标识
+	 * @param     $id 分类ID或标识
 	 * @param  boolean $field 查询字段
 	 * @return array     分类信息
 	 */

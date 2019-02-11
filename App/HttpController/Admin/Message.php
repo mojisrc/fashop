@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 WenShuaiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 WenShuaiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -72,7 +72,6 @@ class Message extends Admin {
 	 * 通知添加
 	 * @datetime 2017-06-04T18:53:14+0800
 	 * 如果是指定用户发送 user_ids 必填
-	 * @author 韩文博
 	 */
 	public function add() {
 		if ($this->post) {
@@ -152,7 +151,6 @@ class Message extends Admin {
 	 * 消息类型列表
 	 * @method     GET
 	 * @datetime 2017-06-14T12:38:04+0800
-	 * @author 韩文博
 	 */
 	public function messageTypeIndex() {
 		$list = model('MessageType')->getMessageTypeList([], '*', 'id desc', '1,1000');
@@ -163,7 +161,6 @@ class Message extends Admin {
 	 * 消息类型添加
 	 * @method     GET
 	 * @datetime 2017-06-14T12:27:15+0800
-	 * @author 韩文博
 	 */
 	public function messageTypeAdd() {
 		if ($this->post) {
@@ -178,7 +175,6 @@ class Message extends Admin {
 	 * 消息类型添加
 	 * @method     GET
 	 * @datetime 2017-06-14T12:27:15+0800
-	 * @author 韩文博
 	 */
 	public function messageTypeEdit() {
 		if ($this->post) {
@@ -197,7 +193,6 @@ class Message extends Admin {
 	 * 注意：返回的数据要拼成return的数据约定格式
 	 * @method     GET
 	 * @datetime 2017-06-14T14:06:51+0800
-	 * @author 韩文博
 	 * @param int $type_id 消息类型id
 	 * @param string $keywords 关键词
 	 * @return  array  [{

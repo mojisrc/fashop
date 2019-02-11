@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -14,13 +14,13 @@
 namespace App\Model;
 
 use ezswoole\Model;
-use traits\model\SoftDelete;
+
 
 class GoodsEvaluate extends Model
 {
-	use SoftDelete;
-	protected $deleteTime = 'delete_time';
-	protected $resultSetType = 'collection';
+	protected $softDelete = true;
+	protected $createTime = true;
+
 	protected $type
 		= [
 			'images'            => 'json',
@@ -29,8 +29,6 @@ class GoodsEvaluate extends Model
 
 	/**
 	 * 查询评价列表
-	 * @datetime 2017-05-28T21:48:45+0800
-	 * @author   韩文博
 	 * @param    array  $condition
 	 * @param    string $order
 	 * @param    string $field
@@ -40,17 +38,13 @@ class GoodsEvaluate extends Model
 	public function getGoodsEvaluateList( $condition, $field = '*', $order = 'id desc', $page = '1,20' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		$list = $list ? $list->toArray() : [];
 		return $list;
 	}
 
 	/**
 	 * 根据编号查询商品评价
-	 * @method     GET
-	 * @datetime 2017-05-28T21:49:17+0800
-	 * @author   韩文博
 	 * @param    int $id 评价id
-	 * @return   array
+	 * @return   array | bool
 	 */
 	public function getGoodsEvaluateInfoByID( $id )
 	{
@@ -60,7 +54,6 @@ class GoodsEvaluate extends Model
 		$info = $this->alias( 'evaluate' )->join( '__USER__ user', 'user.id = evaluate.user_id', 'LEFT' )->field( 'evaluate.*,user.avatar,user.nickname' )->where( [
 			'evaluate.id' => $id,
 		] )->find();
-		$info = $info ? $info->toArray() : [];
 		unset( $info['images'] );
 		return $info;
 	}
@@ -68,7 +61,6 @@ class GoodsEvaluate extends Model
 	/**
 	 * 根据商品编号查询商品评价信息
 	 * @datetime 2017-05-28T21:49:53+0800
-	 * @author   韩文博
 	 * @param    int $goods_id 商品id
 	 * @return   array
 	 */
@@ -176,7 +168,7 @@ class GoodsEvaluate extends Model
 	public function getGoodsEvaluateInfo( $condition = [], $field = '*' )
 	{
 		$data = $this->where( $condition )->field( $field )->find();
-		return $data ? $data->toArray() : [];
+		return $data;
 	}
 
 }

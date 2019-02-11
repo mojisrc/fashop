@@ -1,13 +1,13 @@
 <?php
 namespace App\Model;
 use ezswoole\Model;
-use traits\model\SoftDelete;
-use EasySwoole\Core\Component\Di;
+
+
 
 class Corn extends Model {
-	use SoftDelete;
-    protected $deleteTime = 'delete_time';
-    protected $resultSetType = 'collection';
+	protected $softDelete = true;
+
+
 
 	/**
 	 * 取单条任务信息

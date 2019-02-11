@@ -23,7 +23,6 @@ class Page extends Server
 	/**
 	 * 页面列表
 	 * @method GET
-	 * @author 韩文博
 	 */
 	public function list()
 	{
@@ -51,7 +50,6 @@ class Page extends Server
 	/**
 	 * 首页
 	 * @method GET
-	 * @author 韩文博
 	 */
 	public function portal()
 	{
@@ -70,7 +68,6 @@ class Page extends Server
 	 * 页面详情
 	 * @method GET
 	 * @param string $id
-	 * @author 韩文博
 	 */
 	public function info()
 	{

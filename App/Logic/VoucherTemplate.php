@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 WenShuaiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 WenShuaiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -20,8 +20,7 @@ class VoucherTemplate extends Model {
 	 * 获得可用优惠券模板的基础条件
 	 * @method     GET
 	 * @datetime 2017-06-21T02:01:40+0800
-	 * @author 韩文博
-	 * @return   [type]
+	 * @return
 	 */
 	public function getAvailableTemplateBasicCondition() {
 		return [

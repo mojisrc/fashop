@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 WenShuaiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 WenShuaiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -400,7 +400,7 @@ class GoodsSku
     public function syncGoodsCommonByGoods($id)
     {
         $list = model('Goods')->where(['id' => $id])->field('stock,visit_count,share_count,sale_num,evaluate_good_star,evaluate_count')->select();
-        $list = $list ? $list->toArray() : [];
+        $list = $list;
         $data = [
             'stock'              => 0,
             'sale_num'           => 0,

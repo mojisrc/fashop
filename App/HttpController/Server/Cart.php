@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -21,7 +21,6 @@ class Cart extends Server
 	 * 购物车列表
 	 * @method     GET | POST
 	 * @param array $ids 获得某几条
-	 * @author   韩文博
 	 */
 	public function list()
 	{
@@ -48,7 +47,6 @@ class Cart extends Server
 	 * @method POST
 	 * @param int $goods_sku_id 商品id
 	 * @param int $quantity     数量
-	 * @author   韩文博
 	 */
 	public function add()
 	{
@@ -103,7 +101,6 @@ class Cart extends Server
 	 * @method POST
 	 * @param int $goods_sku_id 商品id
 	 * @param int $quantity     数量
-	 * @author   韩文博
 	 */
 	public function edit()
 	{
@@ -155,7 +152,6 @@ class Cart extends Server
 	 * 删除购物车某条记录
 	 * @method POST
 	 * @param array $goods_sku_ids 商品id
-	 * @author   韩文博
 	 */
 	public function del()
 	{
@@ -181,7 +177,6 @@ class Cart extends Server
 	 * 购物车单条
 	 * @method     GET
 	 * @param int $goods_sku_id
-	 * @author   韩文博
 	 */
 	public function info()
 	{
@@ -209,7 +204,6 @@ class Cart extends Server
 	 * 是否存在某商品
 	 * @method GET
 	 * @param int $goods_sku_id 商品id
-	 * @author   韩文博
 	 */
 	public function exist()
 	{
@@ -234,7 +228,6 @@ class Cart extends Server
 	/**
 	 * 清空购物车
 	 * @method POST
-	 * @author   韩文博
 	 */
 	public function clear()
 	{
@@ -251,7 +244,6 @@ class Cart extends Server
 	/**
 	 * 获得购物车个数
 	 * @method     GET
-	 * @author   韩文博
 	 */
 	public function totalNum()
 	{
@@ -270,7 +262,6 @@ class Cart extends Server
 	 * @method     POST
 	 * @param int $goods_sku_ids 商品ids
 	 * @param int $is_check      选中状态 默认1选中 0未选中
-	 * @author   韩文博
 	 */
 	public function check()
 	{

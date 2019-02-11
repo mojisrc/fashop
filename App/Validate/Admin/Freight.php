@@ -53,7 +53,6 @@ class Freight extends Validate
 	 * @param $value
 	 * @param $rule
 	 * @param $data
-	 * @author   韩文博
 	 */
 	protected function checkPayType( $value, $rule, $data )
 	{
@@ -68,7 +67,6 @@ class Freight extends Validate
 	 * @param $value
 	 * @param $rule
 	 * @param $data
-	 * @author   韩文博
 	 */
 	protected function checkAreas( $value, $rule, $data )
 	{

@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -21,7 +21,6 @@ class Voucher extends Server {
 	/**
 	 * 某店优惠券模板
 	 * @method GET
-	 * @author 韩文博
 	 */
 	public function getVoucherTemplateList() {
 		$get  = $this->get;
@@ -38,7 +37,6 @@ class Voucher extends Server {
 	/**
 	 * 某人的优惠券
 	 * @method GET
-	 * @author 韩文博
 	 */
 	public function getUserVoucherList() {
 		$this->checkLogin();
@@ -56,7 +54,6 @@ class Voucher extends Server {
 	 * 领取优惠券
 	 * @method GET
 	 * @param $template_id 优惠券模板id
-	 * @author 韩文博
 	 */
 	public function receiveVoucher() {
 		$this->checkLogin();
@@ -103,7 +100,6 @@ class Voucher extends Server {
 	 * 个人中心优惠券
 	 * @method GET
 	 * @param  [int] $state，不传为全部 优惠券状态(1-未用,2-已用,3-过期)[非必填]
-	 * @author 韩文博
 	 */
 	public function userVoucherList() {
 		$this->checkLogin();

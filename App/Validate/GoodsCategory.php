@@ -9,7 +9,7 @@ use ezswoole\Validate;
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -47,7 +47,6 @@ class GoodsCategory extends Validate{
 	 * @param $rule
 	 * @param $data
 	 * @datetime 2017/12/20 0020 下午 4:14
-	 * @author 沈旭
 	 */
 	protected function checkSorts($value,$rule,$data){
 		if(empty($value) || !is_array($value) || count($value) < 1){

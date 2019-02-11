@@ -152,7 +152,6 @@ class Install
 
 	/**
 	 * 检查是否已安装
-	 * @author 韩文博
 	 */
 	public function checkStatus()
 	{
@@ -164,7 +163,6 @@ class Install
 	 * 检查开发环境是否符合
 	 * @method GET
 	 * @return array
-	 * @author 韩文博
 	 */
 	public function getEnvironmentStatus() : array
 	{
@@ -188,7 +186,6 @@ class Install
 	 * 检查目录是否可写
 	 * @method GET
 	 * @return array
-	 * @author 韩文博
 	 */
 	public function getDirectoryStatus() : array
 	{
@@ -212,7 +209,6 @@ class Install
 	 * @param string $password
 	 * @param string $dbname
 	 * @return bool | string
-	 * @author 韩文博
 	 */
 	public function checkDatabase( string $username, string $password, string $host = '127.0.0.1', int $port = 3306, string $prefix = 'fa_', string $dbname = 'fashop' )
 	{
@@ -248,7 +244,6 @@ class Install
 	 * @param string $password
 	 * @param string $repassword
 	 * @return bool
-	 * @author 韩文博
 	 */
 	public function checkAdminAccount( string $username, string $password, string $repassword )
 	{

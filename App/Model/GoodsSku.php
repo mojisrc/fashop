@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -14,20 +14,19 @@
 namespace App\Model;
 
 use ezswoole\Model;
-//use traits\model\SoftDelete;
+
+//
 
 class GoodsSku extends Model
 {
-//	use SoftDelete;
-	protected $deleteTime = 'delete_time';
-	protected $resultSetType = 'collection';
+	//	protected $softDelete = true;
 
 	protected $type
 		= [
 			'spec'       => 'json',
-            'goods_spec' => 'json',
+			'goods_spec' => 'json',
 
-        ];
+		];
 
 	const STATE1   = 1; // 出售中
 	const STATE0   = 0; // 下架
@@ -38,46 +37,25 @@ class GoodsSku extends Model
 
 	/**
 	 * 新增商品数据
-	 * @author 韩文博
-	 * @param array $insert 商品数据
+	 * @param array $data 商品数据
 	 * @return integer pk
 	 */
-	public function addGoodsSku( $insert )
+	public function addGoodsSku( array $data )
 	{
-		$result = $this->allowField( true )->save( $insert );
-		if( $result ){
-			return $this->getLastInsID();
-		}
-		return $result;
+		return $this->add( $data );
 	}
 
 	/**
 	 * 新增多条商品数据
-	 * @param array $insert
+	 * @param array $data
 	 */
-	public function addGoodsSkuAll( $insert )
+	public function addGoodsSkuAll( $data )
 	{
-		return $this->insertAll( $insert );
-	}
-
-	/**
-	 * 循环新增商品数据
-	 * @author 韩文博
-	 * @param array $insert 商品数据
-	 * @return integer pk
-	 */
-	public function addForGoodsSku( $insert )
-	{
-		$result = $this->data( $insert, true )->isUpdate( false )->save();
-		if( $result ){
-			return $this->getLastInsID();
-		}
-		return $result;
+		return $this->insertAll( $data );
 	}
 
 	/**
 	 * 商品SKU列表
-	 * @author 韩文博
 	 * @param array  $condition 条件
 	 * @param string $field     字段
 	 * @param string $order     排序
@@ -87,12 +65,11 @@ class GoodsSku extends Model
 	public function getGoodsSkuList( $condition, $field = '*', $order = 'id desc', $page = '1,10' ) : array
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list ? $list->toArray() : [];
+		return $list;
 	}
 
 	/**
 	 * 在售商品SKU列表
-	 * @author 韩文博
 	 * @param array   $condition 条件
 	 * @param string  $field     字段
 	 * @param string  $group     分组
@@ -110,10 +87,8 @@ class GoodsSku extends Model
 
 	/**
 	 * 商品SUK列表 show = 1 为出售中，show = 0为未出售（仓库中，违规，等待审核）
-	 * @author 韩文博
 	 * @param array  $condition
 	 * @param string $field
-	 * @return multitype:
 	 */
 	public function getGoodsSkuAsGoodsSkuShowList( $condition, $field = '*' )
 	{
@@ -131,22 +106,10 @@ class GoodsSku extends Model
 		return $this->update( $data, $condition, true );
 	}
 
-	/**
-	 * @method      遍历更新
-	 * @method GET
-	 * @date        2017-08-01
-	 * @Author      作者
-	 * @param       [type]     $data [description]
-	 * @return      [type]           [description]
-	 */
-	public function editForGoodsSku( $data )
-	{
-		return $this->data( $data, true )->isUpdate( true )->save();
-	}
 
 	/**
 	 * 修改多条数据
-	 * @param  [type] $update           [更新数据]
+	 * @param   $update
 	 */
 	public function updateAllGoodsSku( $update = [] )
 	{
@@ -155,7 +118,6 @@ class GoodsSku extends Model
 
 	/**
 	 * 获取单条商品SKU信息
-	 * @author 韩文博
 	 * @param array  $condition
 	 * @param string $field
 	 * @return array
@@ -163,12 +125,11 @@ class GoodsSku extends Model
 	public function getGoodsSkuInfo( $condition, $field = '*' )
 	{
 		$info = $this->where( $condition )->field( $field )->find();
-		return $info ? $info->toArray() : [];
+		return $info;
 	}
 
 	/**
 	 * 获取单条商品SKU信息
-	 * @author 韩文博
 	 * @param array  $condition
 	 * @param string $field
 	 * @return array
@@ -188,7 +149,6 @@ class GoodsSku extends Model
 
 	/**
 	 * 获取单条商品SKU信息，show = 1 为出售中，show = 0为未出售（仓库中，违规，等待审核）
-	 * @author 韩文博
 	 * @param array  $condition
 	 * @param string $field
 	 * @return array
@@ -201,7 +161,6 @@ class GoodsSku extends Model
 
 	/**
 	 * 获得商品SKU某字段的和
-	 * @author 韩文博
 	 * @param array  $condition
 	 * @param string $field
 	 * @return boolean
@@ -213,7 +172,6 @@ class GoodsSku extends Model
 
 	/**
 	 * 获得商品SKU数量
-	 * @author 韩文博
 	 * @param array  $condition
 	 * @param string $field
 	 * @return int
@@ -225,7 +183,6 @@ class GoodsSku extends Model
 
 	/**
 	 * 获得出售中商品SKU数量
-	 * @author 韩文博
 	 * @param array  $condition
 	 * @param string $field
 	 * @return int
@@ -238,8 +195,8 @@ class GoodsSku extends Model
 
 	/**
 	 * 获取的id
-	 * @param  [type] $condition [description]
-	 * @return [type]            [description]
+	 * @param   $condition
+	 * @return
 	 */
 	public function getGoodsSkuId( $condition )
 	{
@@ -248,8 +205,8 @@ class GoodsSku extends Model
 
 	/**
 	 * 获取的某个字段
-	 * @param  [type] $condition [description]
-	 * @return [type]            [description]
+	 * @param   $condition
+	 * @return
 	 */
 	public function getGoodsSkuValue( $condition, $field )
 	{
@@ -258,8 +215,8 @@ class GoodsSku extends Model
 
 	/**
 	 * 获取的某个字段列
-	 * @param  [type] $condition [description]
-	 * @return [type]            [description]
+	 * @param   $condition
+	 * @return
 	 */
 	public function getGoodsSkuColumn( $condition, $field )
 	{
@@ -268,7 +225,6 @@ class GoodsSku extends Model
 
 	/**
 	 * 删除商品SKU信息
-	 * @author 韩文博
 	 * @param array $condition
 	 * @return boolean
 	 */
@@ -280,8 +236,8 @@ class GoodsSku extends Model
 
 	/**
 	 * 获取某个字段+1
-	 * @param  [type] $condition [description]
-	 * @return [type]            [description]
+	 * @param   $condition
+	 * @return
 	 */
 	public function setIncGoodsSku( $condition, $field, $num )
 	{
@@ -290,8 +246,8 @@ class GoodsSku extends Model
 
 	/**
 	 * 获取某个字段+1
-	 * @param  [type] $condition [description]
-	 * @return [type]            [description]
+	 * @param   $condition
+	 * @return
 	 */
 	public function setDecGoodsSku( $condition, $field, $num )
 	{
@@ -304,7 +260,7 @@ class GoodsSku extends Model
 	 */
 	public function softDelGoodsSku( $condition )
 	{
-        return $this->save(['delete_time'=>time()],$condition);
+		return $this->save( ['delete_time' => time()], $condition );
 	}
 
 }

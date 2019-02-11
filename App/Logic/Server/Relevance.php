@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 WenShuaiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 WenShuaiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -113,7 +113,6 @@ class Relevance
 	 * @method GET
 	 * @return array|null
 	 * @throws \App\Utils\Exception
-	 * @author 韩文博
 	 */
 	public function binding() : ? array
 	{
@@ -163,7 +162,6 @@ class Relevance
 	 * TODO wechat_openid没有处理
 	 * @return mixed
 	 * @throws \App\Utils\Exception
-	 * @author 韩文博
 	 */
 	private function byPassword()
 	{
@@ -227,7 +225,6 @@ class Relevance
 
 	/**
 	 * @throws \App\Utils\Exception
-	 * @author 韩文博
 	 */
 	private function byWechatOpenid()
 	{
@@ -320,7 +317,6 @@ class Relevance
 
 	/**
 	 * @throws \App\Utils\Exception
-	 * @author 韩文博
 	 */
 	private function byWechatMini()
 	{

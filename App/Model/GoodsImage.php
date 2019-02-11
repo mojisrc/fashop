@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -14,34 +14,27 @@
 namespace App\Model;
 
 use ezswoole\Model;
-//use traits\model\SoftDelete;
+
+//
 
 class GoodsImage extends Model
 {
-//    use SoftDelete;
-    protected $deleteTime    = 'delete_time';
-    protected $resultSetType = 'collection';
+	//    protected $softDelete = true;
+	protected $createTime = true;
+
 
 	/**
 	 * 添加
-	 * @datetime 2017-04-19 10:46:57
-	 * @author   韩文博
 	 * @param  array $data
 	 * @return int pk
 	 */
-	public function addGoodsImage( $data = [] )
+	public function addGoodsImage( array $data )
 	{
-		$result = $this->allowField( true )->save( $data );
-		if( $result ){
-			return $this->getLastInsID();
-		}
-		return $result;
+		return $this->add( $data );
 	}
 
 	/**
 	 * 添加多条
-	 * @datetime 2017-04-19 10:46:57
-	 * @author   韩文博
 	 * @param array $data
 	 * @return boolean
 	 */
@@ -52,8 +45,6 @@ class GoodsImage extends Model
 
 	/**
 	 * 修改
-	 * @datetime 2017-04-19 10:46:57
-	 * @author   韩文博
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -68,8 +59,6 @@ class GoodsImage extends Model
 
 	/**
 	 * 删除
-	 * @datetime 2017-04-19 10:46:57
-	 * @author   韩文博
 	 * @param    array $condition
 	 * @return   boolean
 	 */
@@ -80,8 +69,6 @@ class GoodsImage extends Model
 
 	/**
 	 * 计算数量
-	 * @datetime 2017-04-19 10:46:57
-	 * @author   韩文博
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -92,8 +79,6 @@ class GoodsImage extends Model
 
 	/**
 	 * 获取商品图片单条数据
-	 * @datetime 2017-04-19 10:46:57
-	 * @author   韩文博
 	 * @param array  $condition 条件
 	 * @param string $field     字段
 	 * @return array
@@ -101,13 +86,11 @@ class GoodsImage extends Model
 	public function getGoodsImageInfo( $condition = [], $field = '*' )
 	{
 		$info = $this->where( $condition )->field( $field )->find();
-		return $info ? $info->toArray() : false;
+		return $info;
 	}
 
 	/**
 	 * 获得商品图片列表
-	 * @datetime 2017-04-19 10:46:57
-	 * @author   韩文博
 	 * @param    array  $condition
 	 * @param    string $field
 	 * @param    string $order
@@ -117,55 +100,56 @@ class GoodsImage extends Model
 	public function getGoodsImageList( $condition = [], $field = '*', $order = '', $page = '1,10' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list ? $list->toArray() : false;
+		return $list;
 	}
 
-    /**
-     * 列表更多
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $field            [字段]
-     * @param  [type] $order            [排序]
-     * @param  [type] $page             [分页]
-     * @param  [type] $group            [分组]
-     * @return [type]                   [数据]
-     */
-    public function getGoodsImageMoreList($condition = array(), $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group='') {
-        if($page == ''){
-            $data = $this->alias('goods_image')->join('__GOODS__ goods','goods_image.goods_id = goods.id','LEFT')->where($condition)->where($condition_str)->order($order)->field($field)->group($group)->select();
+	/**
+	 * 列表更多
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $field
+	 * @param   $order
+	 * @param   $page
+	 * @param   $group
+	 * @return
+	 */
+	public function getGoodsImageMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	{
+		if( $page == '' ){
+			$data = $this->alias( 'goods_image' )->join( '__GOODS__ goods', 'goods_image.goods_id = goods.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
 
-        }else{
-            $data = $this->alias('goods_image')->join('__GOODS__ goods','goods_image.goods_id = goods.id','LEFT')->where($condition)->where($condition_str)->order($order)->field($field)->page($page)->group($group)->select();
+		} else{
+			$data = $this->alias( 'goods_image' )->join( '__GOODS__ goods', 'goods_image.goods_id = goods.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 
-        }
-        return $data ? $data->toArray() : array();
-    }
+		}
+		return $data;
+	}
 
-    /**
-     * 获得数量
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $distinct         [去重]
-     * @return [type]                   [数据]
-     */
-    public function getGoodsImageMoreCount($condition = array(), $condition_str = '', $distinct = '') {
-        if($distinct == ''){
-            return $this->alias('goods_image')->join('__GOODS__ goods','goods_image.goods_id = goods.id','LEFT')->where($condition)->where($condition_str)->count();
+	/**
+	 * 获得数量
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $distinct [去重]
+	 * @return
+	 */
+	public function getGoodsImageMoreCount( $condition = [], $condition_str = '', $distinct = '' )
+	{
+		if( $distinct == '' ){
+			return $this->alias( 'goods_image' )->join( '__GOODS__ goods', 'goods_image.goods_id = goods.id', 'LEFT' )->where( $condition )->where( $condition_str )->count();
 
-        }else{
-            return $this->alias('goods_image')->join('__GOODS__ goods','goods_image.goods_id = goods.id','LEFT')->where($condition)->where($condition_str)->count("DISTINCT ".$distinct);
-        }
-    }
+		} else{
+			return $this->alias( 'goods_image' )->join( '__GOODS__ goods', 'goods_image.goods_id = goods.id', 'LEFT' )->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
+		}
+	}
+
 	/**
 	 * 软删除
-	 * @datetime 2017-04-19 10:46:57
-	 * @author   韩文博
 	 * @param    array $condition
 	 * @return   boolean
 	 */
 	public function softDelGoodsImage( $condition = [] )
 	{
-        return $this->save(['delete_time'=>time()],$condition);
+		return $this->save( ['delete_time' => time()], $condition );
 	}
 
 }

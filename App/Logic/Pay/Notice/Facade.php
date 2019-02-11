@@ -50,7 +50,6 @@ class  Facade
 	 * @throws \ezswoole\db\exception\DataNotFoundException
 	 * @throws \ezswoole\db\exception\ModelNotFoundException
 	 * @throws \ezswoole\exception\PDOException
-	 * @author 韩文博
 	 */
 	final public static function wechat( array $config = [] )
 	{

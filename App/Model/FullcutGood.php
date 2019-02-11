@@ -5,19 +5,17 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
  */
 namespace App\Model;
 use ezswoole\Model;
-use traits\model\SoftDelete;
+
 
 class FullcutGoods extends Model {
-    use SoftDelete;
-    protected $deleteTime = 'delete_time';
-    protected $resultSetType = 'collection';
+    protected $softDelete = true;
 
     // protected $type = [
     //     ''      =>  'json',
@@ -25,11 +23,11 @@ class FullcutGoods extends Model {
 
     /**
      * 列表
-     * @param  [type] $condition [条件]
-     * @param  [type] $field     [字段]
-     * @param  [type] $order     [排序]
-     * @param  string $page      [分页]
-     * @return [type]            [列表数据]
+     * @param   $condition
+     * @param   $field
+     * @param   $order
+     * @param  string $page
+     * @return             [列表数据]
      */
     public function getFullcutGoodsList($condition = array(), $field = '*', $order = 'id desc', $page = '1,20') {
         if($page == ''){
@@ -39,45 +37,45 @@ class FullcutGoods extends Model {
             $data = $this->where($condition)->order($order)->field($field)->page($page)->select();
 
         }
-        return $data ? $data->toArray() : array();
+        return $data;
     }
 
 	/**
 	 * 列表更多
-	 * @param  [type] $condition [description]
-	 * @param  [type] $field     [description]
-	 * @param  [type] $order     [description]
-	 * @param  string $page      [description]
-	 * @return [type]            [description]
+	 * @param   $condition
+	 * @param   $field
+	 * @param   $order
+	 * @param  string $page
+	 * @return
 	 */
 	public function getFullcutGoodsMoreList($condition = array(), $field = '*', $order = 'id desc', $page = '1,20') {
         $data = $this->alias('fullcut_goods')->join('__GOODS__ goods','fullcut_goods.goods_id = goods.id','LEFT')->where($condition)->order($order)->field($field)->page($page)->select();
-        return $data ? $data->toArray() : array();
+        return $data;
 	}
 
     /**
      * 查询普通的数据和软删除的数据
-     * @return [type] [description]
+     * @return
      */
     public function getWithTrashedFullcutGoodsList($condition = array(), $field = '*', $order = 'id desc', $page = '1,20'){
         $data = $this->withTrashed()->where($condition)->order($order)->field($field)->page($page)->select();  //查询普通的数据和软删除的数据
-        return $data ? $data->toArray() : array();
+        return $data;
     }
 
     /**
      * 只查询软删除的数据
-     * @return [type] [description]
+     * @return
      */
     public function getOnlyTrashedFullcutGoodsList($condition = array(), $field = '*', $order = 'id desc', $page = '1,20'){
         $data = $this->onlyTrashed()->where($condition)->order($order)->field($field)->page($page)->select(); //只查询软删除的
-        return $data ? $data->toArray() : array();
+        return $data;
     }
 
     /**
      * 获得数量
-     * @param  [type] $condition [description]
-     * @param  [type] $field     [description]
-     * @return [type]            [description]
+     * @param   $condition
+     * @param   $field
+     * @return
      */
     public function getFullcutGoodsCount($condition = array()) {
         return $this->where($condition)->count();
@@ -85,9 +83,9 @@ class FullcutGoods extends Model {
 
     /**
      * 获得数量
-     * @param  [type] $condition [description]
-     * @param  [type] $field     [description]
-     * @return [type]            [description]
+     * @param   $condition
+     * @param   $field
+     * @return
      */
     public function getDiscounGoodsMoretCount($condition = array()) {
         return $this->alias('fullcut_goods')->join('__GOODS__ goods','fullcut_goods.goods_id = goods.id','LEFT')->where($condition)->count();
@@ -95,20 +93,20 @@ class FullcutGoods extends Model {
 
     /**
      * 获得信息
-     * @param  [type] $condition [description]
-     * @param  [type] $field     [description]
-     * @return [type]            [description]
+     * @param   $condition
+     * @param   $field
+     * @return
      */
     public function getFullcutGoodsInfo($condition = array(), $field = '*') {
         $data = $this->where($condition)->field($field)->find();
-        return $data ? $data->toArray() : array();
+        return $data;
     }
 
     /**
      * 修改信息
-     * @param  [type] $update    [description]
-     * @param  [type] $condition [description]
-     * @return [type]            [description]
+     * @param   $update
+     * @param   $condition
+     * @return
      */
     public function updateFullcutGoods($condition = array(),$update = array()) {
         return $this->save($update,$condition);
@@ -151,8 +149,8 @@ class FullcutGoods extends Model {
 
     /**
      * 获取的id
-     * @param  [type] $condition [description]
-     * @return [type]            [description]
+     * @param   $condition
+     * @return
      */
     public function getFullcutGoodsId($condition) {
         return $this->where($condition)->value('id');
@@ -160,16 +158,16 @@ class FullcutGoods extends Model {
 
     /**
      * 获取的某个字段
-     * @param  [type] $condition [description]
-     * @return [type]            [description]
+     * @param   $condition
+     * @return
      */
     public function getFullcutGoodsValue($condition, $field) {
         return $this->where($condition)->value($field);
     }
     /**
      * 获取的某个字段列
-     * @param  [type] $condition [description]
-     * @return [type]            [description]
+     * @param   $condition
+     * @return
      */
     public function getFullcutGoodsColumn($condition, $field) {
         return $this->where($condition)->column($field);
@@ -177,16 +175,16 @@ class FullcutGoods extends Model {
 
     /**
      * 获取的某个字段+1
-     * @param  [type] $condition [description]
-     * @return [type]            [description]
+     * @param   $condition
+     * @return
      */
     public function setIncFullcutGoods($condition, $field, $num) {
         return $this->where($condition)->setInc($field, $num);
     }
     /**
      * 获取的某个字段+1
-     * @param  [type] $condition [description]
-     * @return [type]            [description]
+     * @param   $condition
+     * @return
      */
     public function setDecFullcutGoods($condition, $field, $num) {
         return $this->where($condition)->setDec($field, $num);
@@ -202,11 +200,11 @@ class FullcutGoods extends Model {
 
     /**
      * 获得商品sku列表
-     * @param  [type] $condition [description]
-     * @param  [type] $field     [description]
-     * @param  [type] $order     [description]
-     * @param  string $page      [description]
-     * @return [type]            [description]
+     * @param   $condition
+     * @param   $field
+     * @param   $order
+     * @param  string $page
+     * @return
      */
     public function getGoodsSkuMoreList($condition = array(), $field = '*', $order = 'id desc', $page = '1,20') {
 
@@ -218,14 +216,14 @@ class FullcutGoods extends Model {
 
         }
 
-        return $data ? $data->toArray() : array();
+        return $data;
     }
 
 
     /**
      * 获得商品sku数量
-     * @param  [type] $condition [description]
-     * @return [type]            [description]
+     * @param   $condition
+     * @return
      */
     public function getGoodsSkuMoreCount($condition = array()) {
         return $this->alias('goods_sku')->join('__FULLCUT_GOODS__ fullcut_goods','goods_sku.id = fullcut_goods.goods_sku_id','LEFT')->where($condition)->count();

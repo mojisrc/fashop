@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -14,45 +14,30 @@
 namespace App\Model;
 
 use ezswoole\Model;
-use traits\model\SoftDelete;
+
 
 class Page extends Model
 {
-	use SoftDelete;
-	protected $deleteTime = 'delete_time';
-	protected $resultSetType = 'collection';
+	protected $softDelete = true;
+	protected $createTime = true;
 
 	protected $type
 		= [
 			'body' => 'json',
 		];
-	/*
-		array
-		如果设置为强制转换为array类型，系统会自动把数组编码为json格式字符串写入数据库，取出来的时候会自动解码。
-		json
-		指定为json类型的话，数据会自动json_encode写入，并且在读取的时候自动json_decode处理。
-	 */
 
 	/**
 	 * 添加
-	 * @datetime 2017-10-17 15:18:56
-	 * @author   韩文博
 	 * @param  array $data
 	 * @return int pk
 	 */
-	public function addPage( $data = [] )
+	public function addPage( array $data )
 	{
-		$data['create_time'] = time();
-		$result              = $this->allowField( true )->save( $data );
-		if( $result ){
-			return $this->getLastInsID();
-		}
-		return $result;
+		return $this->add( $data );
 	}
+
 	/**
 	 * 修改
-	 * @datetime 2017-10-17 15:18:56
-	 * @author   韩文博
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -65,8 +50,6 @@ class Page extends Model
 
 	/**
 	 * 获取模板单条数据
-	 * @datetime 2017-10-17 15:18:56
-	 * @author   韩文博
 	 * @param array  $condition 条件
 	 * @param string $field     字段
 	 * @return array | false
@@ -74,13 +57,11 @@ class Page extends Model
 	public function getPageInfo( $condition = [], $field = '*' )
 	{
 		$info = $this->where( $condition )->field( $field )->find();
-		return $info ? $info->toArray() : false;
+		return $info;
 	}
 
 	/**
 	 * 获得模板列表
-	 * @datetime 2017-10-17 15:18:56
-	 * @author   韩文博
 	 * @param    array  $condition
 	 * @param    string $field
 	 * @param    string $order
@@ -90,15 +71,6 @@ class Page extends Model
 	public function getPageList( $condition = [], $field = '*', $order = '', $page = '1,10' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list ? $list->toArray() : false;
-	}
-
-	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelPage( $condition )
-	{
-		return $this->where( $condition )->find()->delete();
+		return $list;
 	}
 }

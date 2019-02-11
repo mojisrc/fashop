@@ -5,108 +5,100 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
  */
-namespace App\Model;
-use ezswoole\Model;
-use traits\model\SoftDelete;
 
-class SystemTask extends Model {
-	use SoftDelete;
-    protected $deleteTime = 'delete_time';
-    protected $resultSetType = 'collection';
+namespace App\Model;
+
+use ezswoole\Model;
+
+
+class SystemTask extends Model
+{
+	protected $softDelete = true;
+	protected $createTime = true;
+
 	/**
 	 * 添加
-	 * @datetime 2017-11-03 14:17:37
-	 * @author 韩文博
 	 * @param  array $data
 	 * @return int pk
 	 */
-	public function addSystemTask($data = array()) {
+	public function addSystemTask( $data = [] )
+	{
 		$data['create_time'] = time();
-		$result              = $this->allowField(true)->save($data);
-		if ($result) {
-			return $this->getLastInsID();
-		}
-		return $result;
+		return $this->add( $data );
 	}
+
 	/**
 	 * 添加多条
-	 * @datetime 2017-11-03 14:17:37
-	 * @author 韩文博
 	 * @param array $data
 	 * @return boolean
 	 */
-	public function addSystemTaskAll($data) {
-		return $this->insertAll($data);
+	public function addSystemTaskAll( $data )
+	{
+		return $this->insertAll( $data );
 	}
+
 	/**
 	 * 修改
-	 * @datetime 2017-11-03 14:17:37
-	 * @author 韩文博
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
 	 */
-	public function editSystemTask($condition = array(), $data = array()) {
-		return $this->update($data, $condition, true);
+	public function editSystemTask( $condition = [], $data = [] )
+	{
+		return $this->update( $data, $condition, true );
 	}
+
 	/**
 	 * 删除
-	 * @datetime 2017-11-03 14:17:37
-	 * @author 韩文博
 	 * @param    array $condition
 	 * @return   boolean
 	 */
-	public function delSystemTask($condition = array()) {
-		return $this->where($condition)->delete();
+	public function delSystemTask( $condition = [] )
+	{
+		return $this->where( $condition )->delete();
 	}
+
 	/**
 	 * 计算数量
-	 * @datetime 2017-11-03 14:17:37
-	 * @author 韩文博
 	 * @param array $condition 条件
 	 * @return int
 	 */
-	public function getSystemTaskCount($condition) {
-		return $this->where($condition)->count();
+	public function getSystemTaskCount( $condition )
+	{
+		return $this->where( $condition )->count();
 	}
+
 	/**
 	 * 获取消息推送单条数据
-	 * @datetime 2017-11-03 14:17:37
-	 * @author 韩文博
-	 * @param array $condition 条件
-	 * @param string $field 字段
+	 * @param array  $condition 条件
+	 * @param string $field     字段
 	 * @return array | false
 	 */
-	public function getSystemTaskInfo($condition = array(), $field = '*') {
-		$info = $this->where($condition)->field($field)->find();
-		return $info ? $info->toArray() : false;
+	public function getSystemTaskInfo( $condition = [], $field = '*' )
+	{
+		$info = $this->where( $condition )->field( $field )->find();
+		return $info;
 	}
+
 	/**
 	 * 获得消息推送列表
-	 * @datetime 2017-11-03 14:17:37
-	 * @author 韩文博
-	 * @param    array $condition
+	 * @param    array  $condition
 	 * @param    string $field
 	 * @param    string $order
 	 * @param    string $page
 	 * @return   array | false
 	 */
-	public function getSystemTaskList($condition = array(), $field = '*', $order = '', $page = '1,10') {
-		$list = $this->where($condition)->order($order)->field($field)->page($page)->select();
-		return $list ? $list->toArray() : false;
+	public function getSystemTaskList( $condition = [], $field = '*', $order = '', $page = '1,10' )
+	{
+		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
+		return $list;
 	}
 
-    /**
-     * 软删除
-     * @param    array  $condition
-     */
-    public function softDelSystemTask($condition) {
-        return $this->where($condition)->find()->delete();
-    }
 }
+
 ?>

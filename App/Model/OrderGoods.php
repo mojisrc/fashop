@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -14,14 +14,13 @@
 namespace App\Model;
 
 use ezswoole\Model;
-use traits\model\SoftDelete;
-use EasySwoole\Core\Component\Di;
+
 
 class OrderGoods extends Model
 {
-	use SoftDelete;
-	protected $deleteTime = 'delete_time';
-	protected $resultSetType = 'collection';
+	protected $softDelete = true;
+	protected $createTime = true;
+
 
 	protected $type
 		= [
@@ -30,25 +29,16 @@ class OrderGoods extends Model
 
 	/**
 	 * 添加
-	 * @datetime 2017-05-28 22:52:04
-	 * @author   韩文博
 	 * @param  array $data
 	 * @return int pk
 	 */
-	public function addOrderGoods( $data = [] )
+	public function addOrderGoods( array $data )
 	{
-		$data['create_time'] = time();
-		$result              = $this->allowField( true )->save( $data );
-		if( $result ){
-			return $this->getLastInsID();
-		}
-		return $result;
+		return $this->add( $data );
 	}
 
 	/**
 	 * 添加多条
-	 * @datetime 2017-05-28 22:52:04
-	 * @author   韩文博
 	 * @param array $data
 	 * @return boolean
 	 */
@@ -59,8 +49,6 @@ class OrderGoods extends Model
 
 	/**
 	 * 修改
-	 * @datetime 2017-05-28 22:52:04
-	 * @author   韩文博
 	 * @param    array $condition
 	 * @param    array $data
 	 * @param bool
@@ -72,8 +60,6 @@ class OrderGoods extends Model
 
 	/**
 	 * 删除
-	 * @datetime 2017-05-28 22:52:04
-	 * @author   韩文博
 	 * @param    array $condition
 	 * @return   boolean
 	 */
@@ -84,8 +70,6 @@ class OrderGoods extends Model
 
 	/**
 	 * 计算数量
-	 * @datetime 2017-05-28 22:52:04
-	 * @author   韩文博
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -96,8 +80,6 @@ class OrderGoods extends Model
 
 	/**
 	 * 获取订单商品单条数据
-	 * @datetime 2017-05-28 22:52:04
-	 * @author   韩文博
 	 * @param array  $condition 条件
 	 * @param string $field     字段
 	 * @return array | false
@@ -105,13 +87,11 @@ class OrderGoods extends Model
 	public function getOrderGoodsInfo( $condition = [], $field = '*' )
 	{
 		$info = $this->where( $condition )->field( $field )->find();
-		return $info ? $info->toArray() : false;
+		return $info;
 	}
 
 	/**
 	 * 获得订单商品列表
-	 * @datetime 2017-05-28 22:52:04
-	 * @author   韩文博
 	 * @param    array  $condition
 	 * @param    string $field
 	 * @param    string $order
@@ -120,13 +100,13 @@ class OrderGoods extends Model
 	 */
 	public function getOrderGoodsList( $condition = [], $field = '*', $order = '', $page = '1,10' )
 	{
-        if ($page == '') {
-            $list = $this->where($condition)->order($order)->field($field)->select();
+		if( $page == '' ){
+			$list = $this->where( $condition )->order( $order )->field( $field )->select();
 
-        } else {
-            $list = $this->where($condition)->order($order)->field($field)->page($page)->select();
-        }
-        return $list ? $list->toArray() : array();
+		} else{
+			$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
+		}
+		return $list;
 
 	}
 
@@ -182,43 +162,47 @@ class OrderGoods extends Model
 		return $this->where( $condition )->find()->delete();
 	}
 
-    /**
-     * 获取的id
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @return [type]                   [数据]
-     */
-    public function getOrderGoodsId($condition = array(), $condition_str = '') {
-        return $this->where($condition)->where($condition_str)->value('id');
-    }
+	/**
+	 * 获取的id
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @return
+	 */
+	public function getOrderGoodsId( $condition = [], $condition_str = '' )
+	{
+		return $this->where( $condition )->where( $condition_str )->value( 'id' );
+	}
 
-    /**
-     * 获取某个字段
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @return [type]                   [数据]
-     */
-    public function getOrderGoodsValue($condition = array(), $condition_str = '', $field = 'id') {
-        return $this->where($condition)->where($condition_str)->value($field);
-    }
-    /**
-     * 获取某个字段列
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @return [type]                   [数据]
-     */
-    public function getOrderGoodsColumn($condition = array(), $condition_str = '', $field = 'id')
-    {
-        return $this->where($condition)->where($condition_str)->column($field);
-    }
-    /**
-     * 修改多条数据
-     * @param  [type] $update           [更新数据]
-     */
-    public function updateAllOrderGoods($update = array())
-    {
-        return $this->saveAll($update);
-    }
+	/**
+	 * 获取某个字段
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @return
+	 */
+	public function getOrderGoodsValue( $condition = [], $condition_str = '', $field = 'id' )
+	{
+		return $this->where( $condition )->where( $condition_str )->value( $field );
+	}
+
+	/**
+	 * 获取某个字段列
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @return
+	 */
+	public function getOrderGoodsColumn( $condition = [], $condition_str = '', $field = 'id' )
+	{
+		return $this->where( $condition )->where( $condition_str )->column( $field );
+	}
+
+	/**
+	 * 修改多条数据
+	 * @param   $update
+	 */
+	public function updateAllOrderGoods( $update = [] )
+	{
+		return $this->saveAll( $update );
+	}
 
 }
 

@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -13,12 +13,12 @@
 namespace App\Model;
 
 use ezswoole\Model;
-use traits\model\SoftDelete;
+
 
 class DistributionRecruit extends Model {
-    use SoftDelete;
-    protected $deleteTime    = 'delete_time';
-    protected $resultSetType = 'collection';
+    protected $softDelete = true;
+
+
 
     protected $type = [
         // ''      =>  'json',
@@ -26,19 +26,19 @@ class DistributionRecruit extends Model {
 
     /**
      * 获得信息
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $field            [字段]
-     * @return [type]                   [数据]
+     * @param   $condition
+     * @param   $condition_str
+     * @param   $field
+     * @return
      */
     public function getDistributionRecruitInfo($condition = array(), $condition_str = '', $field = '*') {
         $data = $this->where($condition)->where($condition_str)->field($field)->find();
-        return $data ? $data->toArray() : array();
+        return $data;
     }
 
     /**
      * 添加单条数据
-     * @param  [type] $insert           [添加数据]
+     * @param   $insert
      */
     public function insertDistributionRecruit($insert = array()) {
         return $this->save($insert);
@@ -46,10 +46,10 @@ class DistributionRecruit extends Model {
 
     /**
      * 修改信息
-     * @param  [type] $update           [更新数据]
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @return [type]                   [数据]
+     * @param   $update
+     * @param   $condition
+     * @param   $condition_str
+     * @return
      */
     public function updateDistributionRecruit($condition = array(),$update = array()) {
         return $this->save($update,$condition);
@@ -57,8 +57,8 @@ class DistributionRecruit extends Model {
 
     /**
      * 删除
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
+     * @param   $condition
+     * @param   $condition_str
      */
     public function delDistributionRecruit($condition = array(), $condition_str = '') {
         return $this->where($condition)->where($condition_str)->delete();

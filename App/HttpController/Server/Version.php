@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 WenShuaiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 WenShuaiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -16,7 +16,6 @@ class Version extends Server {
 	/**
 	 * 获得APP最新版本
 	 * @method GET
-	 * @author 韩文博
 	 */
 	public function appLatestVersion() {
 
@@ -44,7 +43,6 @@ class Version extends Server {
 	 *    publish_time 发布时间
 	 *    description 版本描述
 	 * )
-	 * @author 韩文博
 	 */
 	public function appUpdate() {
 		$get      = $this->get;

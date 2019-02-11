@@ -4,18 +4,16 @@ namespace App\Model;
 
 use ezswoole\Model;
 use ezswoole\Log;
-use traits\model\SoftDelete;
 
 class User extends Model
 {
-	use SoftDelete;
-	protected $deleteTime = 'delete_time';
-	protected $resultSetType = 'collection';
+	protected $softDelete = true;
+	protected $createTime = true;
+
 
 	/**
 	 * 添加用户
 	 * @param array $data 用户信息
-	 * @author 韩文博
 	 * @throws \Exception
 	 */
 	public function addUser( array $data )
@@ -24,9 +22,9 @@ class User extends Model
 		try{
 			$now_time = time();
 			$user_id  = $this->insertGetId( array_merge( $data, [
-//				'invitation_code' => $this->getInvitationCode(),
-				'salt'            => $this->createSalt( 0 ),
-				'create_time'     => $now_time,
+				//				'invitation_code' => $this->getInvitationCode(),
+				'salt'        => $this->createSalt( 0 ),
+				'create_time' => $now_time,
 			] ) );
 			$this->commit();
 			return $user_id;
@@ -40,7 +38,6 @@ class User extends Model
 	/**
 	 * 添加多条
 	 * @datetime 2017-04-20 15:49:43
-	 * @author   韩文博
 	 * @param array $data
 	 * @return boolean
 	 */
@@ -52,7 +49,6 @@ class User extends Model
 	/**
 	 * 修改
 	 * @datetime 2017-04-20 15:49:43
-	 * @author   韩文博
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -65,7 +61,6 @@ class User extends Model
 	/**
 	 * 删除
 	 * @datetime 2017-04-20 15:49:43
-	 * @author   韩文博
 	 * @param    array $condition
 	 * @return   boolean
 	 */
@@ -77,7 +72,6 @@ class User extends Model
 	/**
 	 * 计算数量
 	 * @datetime 2017-04-20 15:49:43
-	 * @author   韩文博
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -97,13 +91,11 @@ class User extends Model
 	public function getUserList( $condition = [], $field = '*', $order = 'id desc', $page = "1,10" )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list ? $list->toArray() : false;
+		return $list;
 	}
 
 	/**
 	 * 获取单个用户信息
-	 * @datetime 2017-04-20T15:23:09+0800
-	 * @author   韩文博
 	 * @param    array  $condition
 	 * @param    string $field
 	 * @param    array  $extends
@@ -131,7 +123,6 @@ class User extends Model
 	 * 创建访问令牌，用户的salt
 	 * @param int $user_id 用户id
 	 * @return string
-	 * @author 韩文博
 	 */
 	public function createSalt( $user_id = 0 )
 	{
@@ -142,7 +133,7 @@ class User extends Model
 	public function getUserLevel( $condition = [], $field = '*' )
 	{
 		$info = $this->where( $condition )->alias( 'user' )->join( '__USER_LEVEL__ user_level', 'user.user_level_id = user_level.id', 'LEFT' )->field( $field )->find();
-		return $info ? $info->toArray() : false;
+		return $info;
 	}
 
 
@@ -172,39 +163,42 @@ class User extends Model
 		}
 	}
 
-    /**
-     * 修改多条数据
-     * @param  [type] $update           [更新数据]
-     */
-    public function updateAllUser($update = []) {
-        return $this->saveAll($update);
-    }
-    /**
-     * 获得排除字段的信息
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $exclude          [排除]
-     * @return [type]                   [数据]
-     */
-    public function getUserExcludeInfo($condition = [], $condition_str = '', $exclude = '') {
-        $data = $this->where($condition)->where($condition_str)->field($exclude,true)->find();
-        return $data ? $data->toArray() : array();
-    }
+	/**
+	 * 修改多条数据
+	 * @param   $update
+	 */
+	public function updateAllUser( $update = [] )
+	{
+		return $this->saveAll( $update );
+	}
 
-    /**
-     * 获得当前账号所有的用户ID
-     * @param  int user_id 当前用户id
-     */
-    public function getUserAllIds($user_id = 0) {
-        if($user_id <=0){
-            return [];
-        }
+	/**
+	 * todo
+	 * 获得排除字段的信息
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $exclude [排除]
+	 * @return
+	 */
+	public function getUserExcludeInfo( $condition = [], $condition_str = '', $exclude = '' )
+	{
+		$data = $this->where( $condition )->where( $condition_str )->field( $exclude, true )->find();
+		return $data;
+	}
 
-        $user_id_array      = [$user_id];
-        $user_open_model    = model('UserOpen');
-        $open_user_id_array = $user_open_model->getUserOpenColumn(['user_id' => $user_id], '', 'origin_user_id');
+	/**
+	 * 获得当前账号所有的用户ID
+	 * @param  int user_id 当前用户id
+	 */
+	public function getUserAllIds( $user_id = 0 )
+	{
+		if( $user_id <= 0 ){
+			return [];
+		}
 
-        return $open_user_id_array ? array_unique(array_merge($user_id_array,$open_user_id_array)) : $user_id_array;
-    }
+		$user_id_array      = [$user_id];
+		$open_user_id_array = UserOpen::getUserOpenColumn( ['user_id' => $user_id], '', 'origin_user_id' );
+		return $open_user_id_array ? array_unique( array_merge( $user_id_array, $open_user_id_array ) ) : $user_id_array;
+	}
 
 }

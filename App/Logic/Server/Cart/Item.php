@@ -342,7 +342,6 @@ class Item
 	 * @param Address $addressItem
 	 * @return float
 	 * @throws \Exception
-	 * @author 韩文博
 	 */
 	public function freightFeeByAddress( Address $addressItem ) : float
 	{

@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -14,32 +14,27 @@
 namespace App\Model;
 
 use ezswoole\Model;
-use traits\model\SoftDelete;
-use EasySwoole\Core\Component\Di;
+
+
 
 class OrderPay extends Model
 {
-	use SoftDelete;
-	protected $deleteTime = 'delete_time';
-	protected $resultSetType = 'collection';
+	protected $softDelete = true;
+
+
 
 	/**
 	 * 添加
-	 * @datetime 2018-04-06 22:19:06
-	 * @author   韩文博
 	 * @param  array $data
 	 * @return int pk
 	 */
-	public function addOrderPay( $data = [] )
+	public function addOrderPay( array $data )
 	{
-		return $this->save($data) ? $this->id : false;
-
+		return $this->add($data);
 	}
 
 	/**
 	 * 添加多条
-	 * @datetime 2018-04-06 22:19:06
-	 * @author   韩文博
 	 * @param array $data
 	 * @return boolean
 	 */
@@ -50,8 +45,6 @@ class OrderPay extends Model
 
 	/**
 	 * 修改
-	 * @datetime 2018-04-06 22:19:06
-	 * @author   韩文博
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   $this
@@ -63,8 +56,6 @@ class OrderPay extends Model
 
 	/**
 	 * 删除
-	 * @datetime 2018-04-06 22:19:06
-	 * @author   韩文博
 	 * @param    array $condition
 	 * @return   boolean
 	 */
@@ -75,8 +66,6 @@ class OrderPay extends Model
 
 	/**
 	 * 计算数量
-	 * @datetime 2018-04-06 22:19:06
-	 * @author   韩文博
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -87,8 +76,6 @@ class OrderPay extends Model
 
 	/**
 	 * 获取订单支付单条数据
-	 * @datetime 2018-04-06 22:19:06
-	 * @author   韩文博
 	 * @param array  $condition 条件
 	 * @param string $field     字段
 	 * @return array | false
@@ -96,13 +83,11 @@ class OrderPay extends Model
 	public function getOrderPayInfo( $condition = [], $field = '*' )
 	{
 		$info = $this->where( $condition )->field( $field )->find();
-		return $info ? $info->toArray() : false;
+		return $info;
 	}
 
 	/**
 	 * 获得订单支付列表
-	 * @datetime 2018-04-06 22:19:06
-	 * @author   韩文博
 	 * @param    array  $condition
 	 * @param    string $field
 	 * @param    string $order
@@ -112,7 +97,7 @@ class OrderPay extends Model
 	public function getOrderPayList( $condition = [], $field = '*', $order = '', $page = '1,10' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list ? $list->toArray() : false;
+		return $list ;
 	}
 
 	/**

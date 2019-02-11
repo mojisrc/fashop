@@ -24,7 +24,6 @@ class System extends Admin
 	/**
 	 * 系统信息
 	 * @method GET
-	 * @author 韩文博
 	 */
 	public function info()
 	{
@@ -70,7 +69,6 @@ class System extends Admin
 	/**
 	 * 最新版本
 	 * @method GET
-	 * @author 韩文博
 	 */
 	public function lastVersion()
 	{
@@ -99,7 +97,6 @@ class System extends Admin
 	/**
 	 * 下载更新包
 	 * @method GET
-	 * @author 韩文博
 	 * @throws
 	 */
 	public function update()

@@ -2,478 +2,309 @@
 /**
  * 用户资产模型
  */
+
 namespace App\Model;
 
 use ezswoole\Model;
-use traits\model\SoftDelete;
-use EasySwoole\Core\Component\Di;
 
-class UserAssets extends Model {
-    use SoftDelete;
-    protected $deleteTime = 'delete_time';
-    protected $resultSetType = 'collection';
-
-    protected $type = [
-        // ''      =>  'json',
-    ];
-
-    /**
-     * 列表
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $field            [字段]
-     * @param  [type] $order            [排序]
-     * @param  [type] $page             [分页]
-     * @param  [type] $group            [分组]
-     * @return [type]                   [数据]
-     */
-    public function getUserAssetsList($condition = array(), $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group='') {
-        if($page == ''){
-            $data = $this->where($condition)->where($condition_str)->order($order)->field($field)->group($group)->select();
-
-        }else{
-            $data = $this->where($condition)->where($condition_str)->order($order)->field($field)->page($page)->group($group)->select();
-        }
-        return $data ? $data->toArray() : array();
-    }
-
-    /**
-     * 获得数量
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $distinct         [去重]
-     * @return [type]                   [数据]
-     */
-    public function getUserAssetsCount($condition = array(), $condition_str = '', $distinct = '') {
-        if($distinct == ''){
-            return $this->where($condition)->where($condition_str)->count();
-
-        }else{
-            return $this->where($condition)->where($condition_str)->count("DISTINCT ".$distinct);
-
-        }
-    }
-
-    /**
-     * 列表更多
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $field            [字段]
-     * @param  [type] $order            [排序]
-     * @param  [type] $page             [分页]
-     * @param  [type] $group            [分组]
-     * @return [type]                   [数据]
-     */
-    public function getUserAssetsMoreList($condition = array(), $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group='') {
-        if($page == ''){
-        $data = $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->where($condition)->where($condition_str)->order($order)->field($field)->group($group)->select();
-
-        }else{
-            $data = $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->where($condition)->where($condition_str)->order($order)->field($field)->page($page)->group($group)->select();
-
-        }
-        return $data ? $data->toArray() : array();
-    }
-
-    /**
-     * 获得数量
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $distinct         [去重]
-     * @return [type]                   [数据]
-     */
-    public function getUserAssetsMoreCount($condition = array(), $condition_str = '', $distinct = '') {
-        if($distinct == ''){
-            return $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->where($condition)->where($condition_str)->count();
-
-        }else{
-            return $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->where($condition)->where($condition_str)->count("DISTINCT ".$distinct);
-        }
-    }
-
-    /**
-     * 查询普通的数据和软删除的数据
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $field            [字段]
-     * @param  [type] $order            [排序]
-     * @param  [type] $page             [分页]
-     * @param  [type] $group            [分组]
-     * @return [type]                   [数据]
-     */
-    public function getWithTrashedUserAssetsList($condition = array(), $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group=''){
-        $data = $this->withTrashed()->where($condition)->where($condition_str)->order($order)->field($field)->page($page)->group($group)->select();
-        return $data ? $data->toArray() : array();
-    }
-
-    /**
-     * 查询普通的数据和软删除的数据的数量
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $distinct         [去重]
-     * @return [type]                   [数据]
-     */
-    public function getWithTrashedUserAssetsCount($condition = array(), $condition_str = '', $distinct = '') {
-        if($distinct == ''){
-            return $this->withTrashed()->where($condition)->where($condition_str)->count();
-
-        }else{
-            return $this->withTrashed()->where($condition)->where($condition_str)->count("DISTINCT ".$distinct);
-
-        }
-    }
-
-    /**
-     * 查询普通的数据和软删除的数据更多
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $field            [字段]
-     * @param  [type] $order            [排序]
-     * @param  [type] $page             [分页]
-     * @param  [type] $group            [分组]
-     * @return [type]                   [数据]
-     */
-    public function getWithTrashedUserAssetsMoreList($condition = array(), $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group='') {
-        if($page == ''){
-            $data = $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->withTrashed()->where($condition)->where($condition_str)->order($order)->field($field)->group($group)->select();
-
-        }else{
-            $data = $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->withTrashed()->where($condition)->where($condition_str)->order($order)->field($field)->page($page)->group($group)->select();
-
-        }
-        return $data ? $data->toArray() : array();
-    }
-
-    /**
-     * 查询普通的数据和软删除的数据的数量
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $distinct         [去重]
-     * @return [type]                   [数据]
-     */
-    public function getWithTrashedUserAssetsMoreCount($condition = array(), $condition_str = '', $distinct = '') {
-        if($distinct == ''){
-            return $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->withTrashed()->where($condition)->where($condition_str)->count();
-
-        }else{
-            return $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->withTrashed()->where($condition)->where($condition_str)->count("DISTINCT ".$distinct);
-        }
-    }
-
-    /**
-     * 只查询软删除的数据
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $field            [字段]
-     * @param  [type] $order            [排序]
-     * @param  [type] $page             [分页]
-     * @param  [type] $group            [分组]
-     * @return [type]                   [数据]
-     */
-    public function getOnlyTrashedUserAssetsList($condition = array(), $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group=''){
-        $data = $this->onlyTrashed()->where($condition)->where($condition_str)->order($order)->field($field)->page($page)->group($group)->select();
-        return $data ? $data->toArray() : array();
-    }
-
-    /**
-     * 只查询软删除的数据的数量
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $distinct         [去重]
-     * @return [type]                   [数据]
-     */
-    public function getOnlyTrashedUserAssetsCount($condition = array(), $condition_str = '', $distinct = '') {
-        if($distinct == ''){
-            return $this->onlyTrashed()->where($condition)->where($condition_str)->count();
-
-        }else{
-            return $this->onlyTrashed()->where($condition)->where($condition_str)->count("DISTINCT ".$distinct);
-
-        }
-    }
-
-    /**
-     * 只查询软删除的数据更多
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $field            [字段]
-     * @param  [type] $order            [排序]
-     * @param  [type] $page             [分页]
-     * @param  [type] $group            [分组]
-     * @return [type]                   [数据]
-     */
-    public function getOnlyTrashedUserAssetsMoreList($condition = array(), $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group='') {
-        if($page == ''){
-        $data = $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->onlyTrashed()->where($condition)->where($condition_str)->order($order)->field($field)->group($group)->select();
-
-        }else{
-            $data = $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->onlyTrashed()->where($condition)->where($condition_str)->order($order)->field($field)->page($page)->group($group)->select();
-
-        }
-        return $data ? $data->toArray() : array();
-    }
-
-    /**
-     * 只查询软删除的数据的数量
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $distinct         [去重]
-     * @return [type]                   [数据]
-     */
-    public function getOnlyTrashedUserAssetsMoreCount($condition = array(), $condition_str = '', $distinct = '') {
-        if($distinct == ''){
-            return $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->onlyTrashed()->where($condition)->where($condition_str)->count();
-
-        }else{
-            return $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->onlyTrashed()->where($condition)->where($condition_str)->count("DISTINCT ".$distinct);
-        }
-    }
-
-    /**
-     * 获得信息
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $field            [字段]
-     * @return [type]                   [数据]
-     */
-    public function getUserAssetsInfo($condition = array(), $condition_str = '', $field = '*') {
-        $data = $this->where($condition)->where($condition_str)->field($field)->find();
-        return $data ? $data->toArray() : array();
-    }
-
-    /**
-     * 获得排除字段的信息
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $exclude          [排除]
-     * @return [type]                   [数据]
-     */
-    public function getUserAssetsExcludeInfo($condition = array(), $condition_str = '', $exclude = '') {
-        $data = $this->where($condition)->where($condition_str)->field($exclude,true)->find();
-        return $data ? $data->toArray() : array();
-    }
-
-    /**
-     * 获得信息更多
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $field            [字段]
-     * @return [type]                   [数据]
-     */
-    public function getUserAssetsMoreInfo($condition = array(), $condition_str = '', $field = '*') {
-        $data = $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->where($condition)->where($condition_str)->field($field)->find();
-        return $data ? $data->toArray() : array();
-    }
-
-    /**
-     * 获得排除字段的信息更多
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $exclude          [排除]
-     * @return [type]                   [数据]
-     */
-    public function getUserAssetsExcludeMoreInfo($condition = array(), $condition_str = '', $exclude = '*') {
-        $data = $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->where($condition)->where($condition_str)->field($exclude,true)->find();
-        return $data ? $data->toArray() : array();
-    }
-
-    /**
-     * 查询普通的数据和软删除的数据信息
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $field            [字段]
-     * @return [type]                   [数据]
-     */
-    public function getWithTrashedUserAssetsInfo($condition = array(), $condition_str = '', $field = '*'){
-        $data = $this->withTrashed()->where($condition)->where($condition_str)->field($field)->find();
-        return $data ? $data->toArray() : array();
-    }
-
-    /**
-     * 查询普通的数据和软删除的数据信息更多
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $field            [字段]
-     * @return [type]                   [数据]
-     */
-    public function getWithTrashedUserAssetsMoreInfo($condition = array(), $condition_str = '', $field = '*') {
-      $data = $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->withTrashed()->where($condition)->where($condition_str)->field($field)->find();
-        return $data ? $data->toArray() : array();
-    }
-
-    /**
-     * 查询普通的数据和软删除的排除字段数据信息
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $exclude          [排除]
-     * @return [type]                   [数据]
-     */
-    public function getWithTrashedUserAssetsExcludeInfo($condition = array(), $condition_str = '', $exclude = '*'){
-        $data = $this->withTrashed()->where($condition)->where($condition_str)->field($exclude,true)->find();
-        return $data ? $data->toArray() : array();
-    }
+class UserAssets extends Model
+{
+	protected $softDelete = true;
 
 
-    /**
-     * 查询普通的数据和软删除的排除字段数据信息更多
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $exclude          [排除]
-     * @return [type]                   [数据]
-     */
-    public function getWithTrashedUserAssetsExcludeMoreInfo($condition = array(), $condition_str = '', $exclude = '*') {
-      $data = $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->withTrashed()->where($condition)->where($condition_str)->field($exclude,true)->find();
-        return $data ? $data->toArray() : array();
-    }
+	protected $type
+		= [// ''      =>  'json',
+		];
 
-    /**
-     * 只查询软删除的数据信息
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $field            [字段]
-     * @return [type]                   [数据]
-     */
-    public function getOnlyTrashedUserAssetsInfo($condition = array(), $condition_str = '', $field = '*'){
-        $data = $this->onlyTrashed()->where($condition)->where($condition_str)->field($field)->find();
-        return $data ? $data->toArray() : array();
-    }
+	/**
+	 * 列表
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $field
+	 * @param   $order
+	 * @param   $page
+	 * @param   $group
+	 * @return
+	 */
+	public function getUserAssetsList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	{
+		if( $page == '' ){
+			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
 
-    /**
-     * 只查询软删除的数据信息更多
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $field            [字段]
-     * @return [type]                   [数据]
-     */
-    public function getOnlyTrashedUserAssetsMoreInfo($condition = array(), $condition_str = '', $field = '*') {
-      $data = $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->onlyTrashed()->where($condition)->where($condition_str)->field($field)->find();
-        return $data ? $data->toArray() : array();
-    }
+		} else{
+			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
+		}
+		return $data;
+	}
 
-    /**
-     * 只查询软删除的排除字段数据信息
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $exclude          [排除]
-     * @return [type]                   [数据]
-     */
-    public function getOnlyTrashedUserAssetsExcludeInfo($condition = array(), $condition_str = '', $exclude = '*'){
-        $data = $this->onlyTrashed()->where($condition)->where($condition_str)->field($exclude,true)->find();
-        return $data ? $data->toArray() : array();
-    }
+	/**
+	 * 获得数量
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $distinct [去重]
+	 * @return
+	 */
+	public function getUserAssetsCount( $condition = [], $condition_str = '', $distinct = '' )
+	{
+		if( $distinct == '' ){
+			return $this->where( $condition )->where( $condition_str )->count();
+		} else{
+			return $this->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
+
+		}
+	}
+
+	/**
+	 * 查询普通的数据和软删除的数据
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $field
+	 * @param   $order
+	 * @param   $page
+	 * @param   $group
+	 * @return
+	 */
+	public function getWithTrashedUserAssetsList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	{
+		$data = $this->withTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
+		return $data;
+	}
+
+	/**
+	 * 查询普通的数据和软删除的数据的数量
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $distinct [去重]
+	 * @return
+	 */
+	public function getWithTrashedUserAssetsCount( $condition = [], $condition_str = '', $distinct = '' )
+	{
+		if( $distinct == '' ){
+			return $this->withTrashed()->where( $condition )->where( $condition_str )->count();
+
+		} else{
+			return $this->withTrashed()->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
+
+		}
+	}
+
+	/**
+	 * 只查询软删除的数据
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $field
+	 * @param   $order
+	 * @param   $page
+	 * @param   $group
+	 * @return
+	 */
+	public function getOnlyTrashedUserAssetsList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	{
+		$data = $this->onlyTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
+		return $data;
+	}
+
+	/**
+	 * 只查询软删除的数据的数量
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $distinct [去重]
+	 * @return
+	 */
+	public function getOnlyTrashedUserAssetsCount( $condition = [], $condition_str = '', $distinct = '' )
+	{
+		if( $distinct == '' ){
+			return $this->onlyTrashed()->where( $condition )->where( $condition_str )->count();
+
+		} else{
+			return $this->onlyTrashed()->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
+
+		}
+	}
+
+	/**
+	 * 获得信息
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $field
+	 * @return
+	 */
+	public function getUserAssetsInfo( $condition = [], $condition_str = '', $field = '*' )
+	{
+		$data = $this->where( $condition )->where( $condition_str )->field( $field )->find();
+		return $data;
+	}
+
+	/**
+	 * 获得排除字段的信息
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $exclude [排除]
+	 * @return
+	 */
+	public function getUserAssetsExcludeInfo( $condition = [], $condition_str = '', $exclude = '' )
+	{
+		$data = $this->where( $condition )->where( $condition_str )->field( $exclude, true )->find();
+		return $data;
+	}
 
 
-    /**
-     * 只查询软删除的排除字段数据信息更多
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @param  [type] $exclude          [排除]
-     * @return [type]                   [数据]
-     */
-    public function getOnlyTrashedUserAssetsExcludeMoreInfo($condition = array(), $condition_str = '', $exclude = '*') {
-      $data = $this->alias('xxx1')->join('__XXX2__ xxx2','xxx1.xxx2_id = xxx2.id','LEFT')->onlyTrashed()->where($condition)->where($condition_str)->field($exclude,true)->find();
-        return $data ? $data->toArray() : array();
-    }
+	/**
+	 * 查询普通的数据和软删除的数据信息
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $field
+	 * @return
+	 */
+	public function getWithTrashedUserAssetsInfo( $condition = [], $condition_str = '', $field = '*' )
+	{
+		$data = $this->withTrashed()->where( $condition )->where( $condition_str )->field( $field )->find();
+		return $data;
+	}
 
-    /**
-     * 获取的id
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @return [type]                   [数据]
-     */
-    public function getUserAssetsId($condition = array(), $condition_str = '') {
-        return $this->where($condition)->where($condition_str)->value('id');
-    }
+	/**
+	 * 查询普通的数据和软删除的排除字段数据信息
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $exclude [排除]
+	 * @return
+	 */
+	public function getWithTrashedUserAssetsExcludeInfo( $condition = [], $condition_str = '', $exclude = '*' )
+	{
+		$data = $this->withTrashed()->where( $condition )->where( $condition_str )->field( $exclude, true )->find();
+		return $data;
+	}
 
-    /**
-     * 获取某个字段
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @return [type]                   [数据]
-     */
-    public function getUserAssetsValue($condition = array(), $condition_str = '', $field = 'id') {
-        return $this->where($condition)->where($condition_str)->value($field);
-    }
 
-    /**
-     * 获取某个字段列
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @return [type]                   [数据]
-     */
-    public function getUserAssetsColumn($condition = array(), $condition_str = '', $field = 'id') {
-        return $this->where($condition)->where($condition_str)->column($field);
-    }
+	/**
+	 * 只查询软删除的数据信息
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $field
+	 * @return
+	 */
+	public function getOnlyTrashedUserAssetsInfo( $condition = [], $condition_str = '', $field = '*' )
+	{
+		$data = $this->onlyTrashed()->where( $condition )->where( $condition_str )->field( $field )->find();
+		return $data;
+	}
 
-    /**
-     * 某个字段+1
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @return [type]                   [数据]
-     */
-    public function setIncUserAssets($condition = array(), $condition_str = '', $field, $num = 1) {
-        return $this->where($condition)->where($condition_str)->setInc($field, $num);
-    }
+	/**
+	 * 只查询软删除的排除字段数据信息
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $exclude [排除]
+	 * @return
+	 */
+	public function getOnlyTrashedUserAssetsExcludeInfo( $condition = [], $condition_str = '', $exclude = '*' )
+	{
+		$data = $this->onlyTrashed()->where( $condition )->where( $condition_str )->field( $exclude, true )->find();
+		return $data;
+	}
 
-    /**
-     * 某个字段-1
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @return [type]                   [数据]
-     */
-    public function setDecUserAssets($condition = array(), $condition_str = '', $field, $num = 1) {
-        return $this->where($condition)->where($condition_str)->setDec($field, $num);
-    }
 
-    /**
-     * 添加单条数据
-     * @param  [type] $insert           [添加数据]
-     */
-    public function insertUserAssets($insert = array()) {
-        return $this->save($insert) ? $this->id : false;
-    }
+	/**
+	 * 获取的id
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @return
+	 */
+	public function getUserAssetsId( $condition = [], $condition_str = '' )
+	{
+		return $this->where( $condition )->where( $condition_str )->value( 'id' );
+	}
 
-    /**
-     * 添加多条数据
-     * @param  [type] $insert           [添加数据]
-     */
-    public function insertAllUserAssets($insert = array()) {
-        return $this->saveAll($insert);
-    }
+	/**
+	 * 获取某个字段
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @return
+	 */
+	public function getUserAssetsValue( $condition = [], $condition_str = '', $field = 'id' )
+	{
+		return $this->where( $condition )->where( $condition_str )->value( $field );
+	}
 
-    /**
-     * 修改信息
-     * @param  [type] $update           [更新数据]
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     * @return [type]                   [数据]
-     */
-    public function updateUserAssets($condition = array(),$update = array()) {
-        return $this->save($update,$condition);
-    }
-    /**
-     * 修改多条数据
-     * @param  [type] $update           [更新数据]
-     */
-    public function updateAllUserAssets($update = array()) {
-        return $this->saveAll($update);
-    }
+	/**
+	 * 获取某个字段列
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @return
+	 */
+	public function getUserAssetsColumn( $condition = [], $condition_str = '', $field = 'id' )
+	{
+		return $this->where( $condition )->where( $condition_str )->column( $field );
+	}
 
-    /**
-     * 删除
-     * @param  [type] $condition        [条件]
-     * @param  [type] $condition_str    [条件]
-     */
-    public function delUserAssets($condition = array(), $condition_str = '') {
-        return $this->where($condition)->where($condition_str)->delete();
-    }
+	/**
+	 * 某个字段+1
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @return
+	 */
+	public function setIncUserAssets( $condition = [], $condition_str = '', $field, $num = 1 )
+	{
+		return $this->where( $condition )->where( $condition_str )->setInc( $field, $num );
+	}
 
-    /**
-     * 软删除
-     * @param    array  $condition
-     */
-    public function softDelUserAssets($condition = array(), $condition_str = '') {
-        return $this->where($condition)->where($condition_str)->find()->delete();
-    }
+	/**
+	 * 某个字段-1
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @return
+	 */
+	public function setDecUserAssets( $condition = [], $condition_str = '', $field, $num = 1 )
+	{
+		return $this->where( $condition )->where( $condition_str )->setDec( $field, $num );
+	}
+
+	/**
+	 * 添加单条数据
+	 * @param   $insert
+	 */
+	public function insertUserAssets( $insert = [] )
+	{
+		return $this->save( $insert ) ? $this->id : false;
+	}
+
+	/**
+	 * 添加多条数据
+	 * @param   $insert
+	 */
+	public function insertAllUserAssets( $insert = [] )
+	{
+		return $this->saveAll( $insert );
+	}
+
+	/**
+	 * 修改信息
+	 * @param   $update
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @return
+	 */
+	public function updateUserAssets( $condition = [], $update = [] )
+	{
+		return $this->save( $update, $condition );
+	}
+
+	/**
+	 * 修改多条数据
+	 * @param   $update
+	 */
+	public function updateAllUserAssets( $update = [] )
+	{
+		return $this->saveAll( $update );
+	}
+
+	/**
+	 * 删除
+	 * @param   $condition
+	 * @param   $condition_str
+	 */
+	public function delUserAssets( $condition = [], $condition_str = '' )
+	{
+		return $this->where( $condition )->where( $condition_str )->delete();
+	}
 
 }

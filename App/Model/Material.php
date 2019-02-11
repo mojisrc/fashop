@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -17,7 +17,7 @@ use ezswoole\Model;
 
 class Material extends Model
 {
-	protected $resultSetType = 'collection';
+	protected $createTime = true;
 	protected $type
 		= [
 			'media' => 'json',
@@ -25,25 +25,16 @@ class Material extends Model
 
 	/**
 	 * 添加
-	 * @datetime 2018-02-03 10:33:28
-	 * @author   韩文博
 	 * @param  array $data
 	 * @return int pk
 	 */
-	public function addMaterial( $data = [] )
+	public function addMaterial( array $data )
 	{
-		$data['create_time'] = time();
-		$result              = $this->allowField( true )->save( $data );
-		if( $result ){
-			return $this->getLastInsID();
-		}
-		return $result;
+		return $this->add( $data );
 	}
 
 	/**
 	 * 添加多条
-	 * @datetime 2018-02-03 10:33:28
-	 * @author   韩文博
 	 * @param array $data
 	 * @return boolean
 	 */
@@ -54,8 +45,6 @@ class Material extends Model
 
 	/**
 	 * 修改
-	 * @datetime 2018-02-03 10:33:28
-	 * @author   韩文博
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -67,8 +56,6 @@ class Material extends Model
 
 	/**
 	 * 删除
-	 * @datetime 2018-02-03 10:33:28
-	 * @author   韩文博
 	 * @param    array $condition
 	 * @return   boolean
 	 */
@@ -79,8 +66,6 @@ class Material extends Model
 
 	/**
 	 * 计算数量
-	 * @datetime 2018-02-03 10:33:28
-	 * @author   韩文博
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -91,8 +76,6 @@ class Material extends Model
 
 	/**
 	 * 获取素材单条数据
-	 * @datetime 2018-02-03 10:33:28
-	 * @author   韩文博
 	 * @param array  $condition 条件
 	 * @param string $field     字段
 	 * @return array | false
@@ -100,13 +83,11 @@ class Material extends Model
 	public function getMaterialInfo( $condition = [], $field = '*' )
 	{
 		$info = $this->where( $condition )->field( $field )->find();
-		return $info ? $info->toArray() : false;
+		return $info;
 	}
 
 	/**
 	 * 获得素材列表
-	 * @datetime 2018-02-03 10:33:28
-	 * @author   韩文博
 	 * @param    array  $condition
 	 * @param    string $field
 	 * @param    string $order
@@ -116,7 +97,7 @@ class Material extends Model
 	public function getMaterialList( $condition = [], $field = '*', $order = '', $page = '1,10' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list ? $list->toArray() : false;
+		return $list;
 	}
 }
 

@@ -14,34 +14,26 @@
 namespace App\Model;
 
 use ezswoole\Model;
-use traits\model\SoftDelete;
 
 class AccessToken extends Model
 {
-    protected $resultSetType = 'collection';
-
+	// todo create_time
+	// todo addAll
+	protected $softDelete = true;
 	/**
 	 * 添加
-	 * @datetime 2017-06-15 16:22:25
-	 * @author   韩文博
 	 * @param  array $data
 	 * @return int pk
 	 */
-	public function addAccessToken( $data = [] )
+	public function addAccessToken( array $data )
 	{
 		$data['create_time'] = time();
 		$data['ip']          = \App\Utils\Ip::getClientIp();
-		$result              = $this->allowField( true )->save( $data );
-		if( $result ){
-			return $this->getLastInsID();
-		}
-		return $result;
+		return $this->add($data);
 	}
 
 	/**
 	 * 添加多条
-	 * @datetime 2017-06-15 16:22:25
-	 * @author   韩文博
 	 * @param array $data
 	 * @return boolean
 	 */
@@ -52,8 +44,6 @@ class AccessToken extends Model
 
 	/**
 	 * 修改
-	 * @datetime 2017-06-15 16:22:25
-	 * @author   韩文博
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -65,8 +55,6 @@ class AccessToken extends Model
 
 	/**
 	 * 删除
-	 * @datetime 2017-06-15 16:22:25
-	 * @author   韩文博
 	 * @param    array $condition
 	 * @return   boolean
 	 */
@@ -77,8 +65,6 @@ class AccessToken extends Model
 
 	/**
 	 * 计算数量
-	 * @datetime 2017-06-15 16:22:25
-	 * @author   韩文博
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -89,21 +75,17 @@ class AccessToken extends Model
 
 	/**
 	 * 获取权限单条数据
-	 * @datetime 2017-10-17 15:18:56
-	 * @author 韩文博
 	 * @param array $condition 条件
 	 * @param string $field 字段
 	 * @return array | false
 	 */
 	public function getAccessTokenInfo($condition = array(), $field = '*',$order = 'create_time desc') {
 		$info = $this->where($condition)->field($field)->order($order)->find();
-		return $info ? $info->toArray() : false;
+		return $info;
 	}
 
 	/**
 	 * 获得消息列表
-	 * @datetime 2017-06-15 16:22:25
-	 * @author   韩文博
 	 * @param    array  $condition
 	 * @param    string $field
 	 * @param    string $order
@@ -114,7 +96,7 @@ class AccessToken extends Model
 	public function getAccessTokenList( $condition = [], $field = '*', $order = '', $page = '1,10', $group = '' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->group( $group )->page( $page )->select();
-		return $list ? $list->toArray() : false;
+		return $list ;
 	}
 	/**
 	 * 软删除

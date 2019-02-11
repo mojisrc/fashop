@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -17,12 +17,10 @@ use ezswoole\Model;
 
 class SmsProvider extends Model
 {
-	protected $resultSetType = 'collection';
 	protected $type
 		= [
 			'config' => 'json',
 		];
-
 
 	/**
 	 * 读取单行信息
@@ -30,17 +28,15 @@ class SmsProvider extends Model
 	 * @param
 	 * @return array 数组格式的返回结果
 	 */
-	public function getSmsProviderInfo( $condition = [], $field = '*' ) : ? array
+	public function getSmsProviderInfo( $condition = [], $field = '*' ) : ?array
 	{
 		$info = $this->where( $condition )->field( $field )->find();
-		return $info ? $info->toArray() : null;
+		return $info;
 	}
 
 
 	/**
-	 * 获得支付方式列表
-	 * @datetime 2017-05-18 18:11:40
-	 * @author   韩文博
+	 * 获得支付方式列表( array $data )
 	 * @param    array  $condition
 	 * @param    string $field
 	 * @param    string $order
@@ -50,7 +46,7 @@ class SmsProvider extends Model
 	public function getSmsProviderList( $condition = [], $field = '*', $order = '', $page = '1,10' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list ? $list->toArray() : false;
+		return $list;
 	}
 
 

@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -17,28 +17,18 @@ use ezswoole\Model;
 
 class WechatUser extends Model
 {
-	protected $resultSetType = 'collection';
-
 	/**
 	 * 添加
-	 * @datetime 2018-03-05 16:15:59
-	 * @author   韩文博
 	 * @param  array $data
 	 * @return int pk
 	 */
-	public function addWechatUser( $data = [] )
+	public function addWechatUser( array $data )
 	{
-		$result = $this->allowField( true )->save( $data );
-		if( $result ){
-			return $this->getLastInsID();
-		}
-		return $result;
+		return $this->add( $data );
 	}
 
 	/**
 	 * 添加多条
-	 * @datetime 2018-03-05 16:15:59
-	 * @author   韩文博
 	 * @param array $data
 	 * @return boolean
 	 */
@@ -49,8 +39,6 @@ class WechatUser extends Model
 
 	/**
 	 * 修改
-	 * @datetime 2018-03-05 16:15:59
-	 * @author   韩文博
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
@@ -62,8 +50,6 @@ class WechatUser extends Model
 
 	/**
 	 * 删除
-	 * @datetime 2018-03-05 16:15:59
-	 * @author   韩文博
 	 * @param    array $condition
 	 * @return   boolean
 	 */
@@ -74,8 +60,6 @@ class WechatUser extends Model
 
 	/**
 	 * 计算数量
-	 * @datetime 2018-03-05 16:15:59
-	 * @author   韩文博
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -86,22 +70,18 @@ class WechatUser extends Model
 
 	/**
 	 * 获取微信用户单条数据
-	 * @datetime 2018-03-05 16:15:59
-	 * @author   韩文博
 	 * @param array  $condition 条件
 	 * @param string $field     字段
 	 * @return array | false
 	 */
-	public function getWechatUserInfo( $condition = [], $field = '*' ,$order = 'id desc')
+	public function getWechatUserInfo( $condition = [], $field = '*', $order = 'id desc' )
 	{
-		$info = $this->where( $condition )->field( $field )->order($order)->find();
-		return $info ? $info->toArray() : false;
+		$info = $this->where( $condition )->field( $field )->order( $order )->find();
+		return $info;
 	}
 
 	/**
 	 * 获得微信用户列表
-	 * @datetime 2018-03-05 16:15:59
-	 * @author   韩文博
 	 * @param    array  $condition
 	 * @param    string $field
 	 * @param    string $order
@@ -111,7 +91,7 @@ class WechatUser extends Model
 	public function getWechatUserList( $condition = [], $field = '*', $order = '', $page = '1,10' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list ? $list->toArray() : false;
+		return $list;
 	}
 }
 

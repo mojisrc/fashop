@@ -51,7 +51,6 @@ class Member extends Admin
 	 * @param string $username 登陆账号
 	 * @param string $password 密码
 	 * @param string $nickname 昵称  非必填
-	 * @author   韩文博
 	 * @method POST
 	 */
 	public function add()
@@ -78,7 +77,6 @@ class Member extends Admin
 	 * @param string $avatar   头像 [非必填]
 	 * @param string $nickname 昵称 [非必填]
 	 * @param string $password 密码 [非必填]
-	 * @author   韩文博
 	 * @method POST
 	 */
 	public function edit()
@@ -131,7 +129,6 @@ class Member extends Admin
 	/**
 	 * 登陆信息
 	 * @method GET
-	 * @author 韩文博
 	 */
 	public function loginInfo()
 	{
@@ -156,7 +153,6 @@ class Member extends Admin
 	 * 删除后台用户
 	 * @method POST
 	 * @param int id
-	 * @author   韩文博
 	 */
 	public function del()
 	{
@@ -172,7 +168,6 @@ class Member extends Admin
 	 * 修改自己的密码
 	 * @param string $oldpassword 老密码
 	 * @param string $password    密码
-	 * @author   韩文博
 	 * @method POST
 	 */
 	public function selfPassword()
@@ -194,7 +189,6 @@ class Member extends Admin
 	 * @param string $username
 	 * @param string $password
 	 * @param string $verify_code
-	 * @author   韩文博
 	 * @method POST
 	 */
 	public function login()
@@ -218,7 +212,6 @@ class Member extends Admin
 	/**
 	 * @method POST
 	 * @param string access_token 目前仅支持头部去携带
-	 * @author 韩文博
 	 */
 	public function token()
 	{
@@ -239,7 +232,6 @@ class Member extends Admin
 	/**
 	 * 当前用户信息
 	 * @method GET
-	 * @author 韩文博
 	 */
 	public function self()
 	{
@@ -267,7 +259,6 @@ class Member extends Admin
 	 * 修改当前用户的信息
 	 * @param string $avatar   头像 [非必填]
 	 * @param string $nickname 昵称 [非必填]
-	 * @author   韩文博
 	 * @method POST
 	 */
 	public function selfEdit()
@@ -292,7 +283,6 @@ class Member extends Admin
 	/**
 	 * 退出
 	 * @method   POST
-	 * @author 韩文博
 	 */
 	public function logout()
 	{
@@ -318,7 +308,6 @@ class Member extends Admin
 	/**
 	 * 验证码
 	 * @method GET
-	 * @author 韩文博
 	 */
 	public function verifyCode()
 	{

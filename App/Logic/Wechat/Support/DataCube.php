@@ -34,7 +34,6 @@ class DataCube extends BaseAbstract
 	/**
 	 * 获取用户增减数据, 最大时间跨度：7;
 	 * @method GET
-	 * @author 韩文博
 	 */
 	public function userSummary(string $from , string  $to)
 	{
@@ -46,7 +45,6 @@ class DataCube extends BaseAbstract
 	 * @method GET
 	 * @param string $from
 	 * @param string $to
-	 * @author 韩文博
 	 */
 	public function articleSummary()
 	{
@@ -58,7 +56,6 @@ class DataCube extends BaseAbstract
 	 * @method GET
 	 * @param string $from
 	 * @param string $to
-	 * @author 韩文博
 	 */
 	public function articleTotal()
 	{
@@ -70,7 +67,6 @@ class DataCube extends BaseAbstract
 	 * @method GET
 	 * @param string $from
 	 * @param string $to
-	 * @author 韩文博
 	 */
 	public function userReadSummary()
 	{
@@ -82,7 +78,6 @@ class DataCube extends BaseAbstract
 	 * @method GET
 	 * @param string $from
 	 * @param string $to
-	 * @author 韩文博
 	 */
 	public function userReadHourly()
 	{
@@ -95,7 +90,6 @@ class DataCube extends BaseAbstract
 	 * @method GET
 	 * @param string $from
 	 * @param string $to
-	 * @author 韩文博
 	 */
 	public function userShareSummary()
 	{
@@ -108,7 +102,6 @@ class DataCube extends BaseAbstract
 	 * @method GET
 	 * @param string $from
 	 * @param string $to
-	 * @author 韩文博
 	 */
 	public function userShareHourly()
 	{
@@ -121,7 +114,6 @@ class DataCube extends BaseAbstract
 	 * @method GET
 	 * @param string $from
 	 * @param string $to
-	 * @author 韩文博
 	 */
 	public function upstreamMessageSummary()
 	{
@@ -134,7 +126,6 @@ class DataCube extends BaseAbstract
 	 * @method GET
 	 * @param string $from
 	 * @param string $to
-	 * @author 韩文博
 	 */
 	public function upstreamMessageHourly()
 	{
@@ -147,7 +138,6 @@ class DataCube extends BaseAbstract
 	 * @method GET
 	 * @param string $from
 	 * @param string $to
-	 * @author 韩文博
 	 */
 	public function upstreamMessageWeekly()
 	{
@@ -160,7 +150,6 @@ class DataCube extends BaseAbstract
 	 * @method GET
 	 * @param string $from
 	 * @param string $to
-	 * @author 韩文博
 	 */
 	public function upstreamMessageMonthly()
 	{
@@ -173,7 +162,6 @@ class DataCube extends BaseAbstract
 	 * @method GET
 	 * @param string $from
 	 * @param string $to
-	 * @author 韩文博
 	 */
 	public function upstreamMessageDistSummary()
 	{
@@ -186,7 +174,6 @@ class DataCube extends BaseAbstract
 	 * @method GET
 	 * @param string $from
 	 * @param string $to
-	 * @author 韩文博
 	 */
 	public function upstreamMessageDistWeekly()
 	{
@@ -199,7 +186,6 @@ class DataCube extends BaseAbstract
 	 * @method GET
 	 * @param string $from
 	 * @param string $to
-	 * @author 韩文博
 	 */
 	public function upstreamMessageDistMonthly()
 	{
@@ -212,7 +198,6 @@ class DataCube extends BaseAbstract
 	 * @method GET
 	 * @param string $from
 	 * @param string $to
-	 * @author 韩文博
 	 */
 	public function interfaceSummary()
 	{
@@ -225,7 +210,6 @@ class DataCube extends BaseAbstract
 	 * @method GET
 	 * @param string $from
 	 * @param string $to
-	 * @author 韩文博
 	 */
 	public function interfaceSummaryHourly()
 	{
@@ -239,7 +223,6 @@ class DataCube extends BaseAbstract
 	 * @param string $from
 	 * @param string $to
 	 * @param int    $cond_source
-	 * @author 韩文博
 	 */
 	public function cardSummary()
 	{
@@ -255,7 +238,6 @@ class DataCube extends BaseAbstract
 	 * @param string $to
 	 * @param int    $cond_source
 	 * @param string $card_id
-	 * @author 韩文博
 	 */
 	public function freeCardSummary()
 	{
@@ -271,7 +253,6 @@ class DataCube extends BaseAbstract
 	 * @param string $from
 	 * @param string $to
 	 * @param int    $cond_source
-	 * @author 韩文博
 	 */
 	public function memberCardSummary( string $from, string $to, int $condSource = 0 )
 	{

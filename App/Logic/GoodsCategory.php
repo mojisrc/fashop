@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -18,7 +18,6 @@ class GoodsCategory extends Model {
 	/**
 	 * 获得所有分类
 	 * @datetime 2017-04-18T15:00:22+0800
-	 * @author 韩文博
 	 * @return   int
 	 */
 	public function getAll() {
@@ -27,7 +26,6 @@ class GoodsCategory extends Model {
 	/**
 	 * 获得某个id下的下一集分类
 	 * @datetime 2017-04-18T15:00:53+0800
-	 * @author 韩文博
 	 * @param    integer $id 父级id
 	 * @return   array
 	 */
@@ -43,7 +41,6 @@ class GoodsCategory extends Model {
 	/**
 	 * 获得某个点下的所有子 如果出现重复现象请在添加唯一flag
 	 * @datetime 2017-04-18T15:00:22+0800
-	 * @author 韩文博
 	 * @param    integer $id
 	 * @param    string $flag
 	 * @return   array
@@ -54,7 +51,6 @@ class GoodsCategory extends Model {
 	/**
 	 * 获得son的id
 	 * @datetime 2017-04-18T15:02:10+0800
-	 * @author 韩文博
 	 * @param    integer $id
 	 * @return   array
 	 */
@@ -70,7 +66,6 @@ class GoodsCategory extends Model {
 	/**
 	 * 获得某条分类
 	 * @datetime 2017-04-18T15:03:14+0800
-	 * @author 韩文博
 	 * @param    integer $id
 	 * @return   array
 	 */
@@ -84,7 +79,6 @@ class GoodsCategory extends Model {
 	/**
 	 * 获得所有分类的树形结构
 	 * @datetime 2017-04-18T15:03:44+0800
-	 * @author 韩文博
 	 * @return   array
 	 */
 	public function getTree() {
@@ -93,7 +87,6 @@ class GoodsCategory extends Model {
 	/**
 	 * 获得某个点下的树形结构 root填主节点的id即可
 	 * @datetime 2017-04-18T15:04:11+0800
-	 * @author 韩文博
 	 * @param    integer $root
 	 * @param    string $pk
 	 * @param    string $pid
@@ -106,7 +99,6 @@ class GoodsCategory extends Model {
 	/**
 	 * 获得某个点下的所有子一级
 	 * @datetime 2017-04-18T15:04:34+0800
-	 * @author 韩文博
 	 * @param    integer $id
 	 * @return   array
 	 */
@@ -116,7 +108,6 @@ class GoodsCategory extends Model {
 	/**
 	 * 获得某个点下的所有子的id
 	 * @datetime 2017-04-18T15:07:04+0800
-	 * @author 韩文博
 	 * @param    integer $id
 	 * @return   array
 	 */
@@ -130,7 +121,6 @@ class GoodsCategory extends Model {
 	/**
 	 * 获得某个殿下的所有id和自己的id
 	 * @datetime 2017-04-18T15:07:27+0800
-	 * @author 韩文博
 	 * @param    integer $id
 	 * @return   array
 	 */

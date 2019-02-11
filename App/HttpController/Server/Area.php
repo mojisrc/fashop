@@ -5,7 +5,7 @@
  *
  *
  *
- * @copyright  Copyright (c) 2016-2017 MoJiKeJi Inc. (http://www.fashop.cn)
+ * @copyright  Copyright (c) 2019 MoJiKeJi Inc. (http://www.fashop.cn)
  * @license    http://www.fashop.cn
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
@@ -67,7 +67,6 @@ class Area extends Server
 	 * @param string $up_level ,默认2，向上两层 @todo
 	 * @todo   拓展其他方式的获取 如id
 	 *                         为：不只为微信端做服务
-	 * @author 韩文博
 	 */
 	public function info()
 	{
