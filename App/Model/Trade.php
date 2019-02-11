@@ -20,9 +20,6 @@ class Trade extends Model
 {
 	protected $softDelete = true;
 
-
-	protected $tableName = '';
-
 	/**
 	 * 订单处理天数
 	 *

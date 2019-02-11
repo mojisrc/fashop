@@ -16,7 +16,6 @@ namespace App\Model;
 use ezswoole\Model;
 
 
-
 class Order extends Model
 {
 	protected $softDelete = true;
@@ -32,7 +31,7 @@ class Order extends Model
 	 */
 	public function getOrderInfo( $condition = [], $condition_string = '', $fields = '*', $extend = [] )
 	{
-		$order_info = $this->field( $fields )->where( $condition )->where($condition_string)->find();
+		$order_info = $this->field( $fields )->where( $condition )->where( $condition_string )->find();
 		if( empty( $order_info ) ){
 			return [];
 		} else{
@@ -121,25 +120,21 @@ class Order extends Model
 	public function getOrderList( $condition = [], $condition_string = '', $field = '*', $order = 'id desc', $page = '1,20', $extend = [] )
 	{
 		if( $page == '' ){
-			$list = $this->field( $field )->where( $condition )->where($condition_string)->order( $order )->select();
-
+			$list = $this->field( $field )->where( $condition )->where( $condition_string )->order( $order )->select();
 		} else{
-			$list = $this->field( $field )->where( $condition )->where($condition_string)->order( $order )->page( $page )->select();
+			$list = $this->field( $field )->where( $condition )->where( $condition_string )->order( $order )->page( $page )->select();
 		}
-
-        $list = $list->toArray();
-		if( empty( $list ) ){
+		if( !$list ){
 			return [];
-
-        }
+		}
 
 		$order_list = [];
 		foreach( $list as $order ){
-			$order['state_desc']   = self::orderState( $order );
+			$order['state_desc'] = self::orderState( $order );
 			//1默认2拼团商品3限时折扣商品4组合套装5赠品
-			if($order['goods_type'] == 2){
-                $order['group_state_desc']   = self::orderGroupState( $order );
-            }
+			if( $order['goods_type'] == 2 ){
+				$order['group_state_desc'] = self::orderGroupState( $order );
+			}
 			$order['payment_name'] = self::orderPaymentName( $order['payment_code'] );
 			if( !empty( $extend ) ){
 				$order_list[$order['id']] = $order;
@@ -188,33 +183,36 @@ class Order extends Model
 
 		return array_values( $order_list );
 	}
+
 	/**
 	 * 返回以原数组某个值为下标的新数据
 	 *
-	 * @param array $array
+	 * @param array  $array
 	 * @param string $key
-	 * @param int $type 1一维数组2二维数组
+	 * @param int    $type 1一维数组2二维数组
 	 * @return array
 	 */
-	private function array_under_reset($array, $key, $type = 1){
-		if (!$key) {
+	private function array_under_reset( $array, $key, $type = 1 )
+	{
+		if( !$key ){
 			return $array;
 		}
 
-		if (is_array($array)) {
-			$tmp = array();
-			foreach ($array as $v) {
-				if ($type === 1) {
+		if( is_array( $array ) ){
+			$tmp = [];
+			foreach( $array as $v ){
+				if( $type === 1 ){
 					$tmp[$v[$key]] = $v;
-				} elseif ($type === 2) {
+				} elseif( $type === 2 ){
 					$tmp[$v[$key]][] = $v;
 				}
 			}
 			return $tmp;
-		} else {
+		} else{
 			return $array;
 		}
 	}
+
 	/**
 	 * 已取消订单数量
 	 * @param array $condition
@@ -334,7 +332,7 @@ class Order extends Model
 	public function getOrderGoodsInfo( $condition = [], $fields = '*', $order = 'id asc' )
 	{
 		$data = model( 'OrderGoods' )->where( $condition )->field( $fields )->order( $order )->find();
-		return $data ? $data->toArray() : $data;
+		return $data;
 	}
 
 	/**
@@ -394,7 +392,7 @@ class Order extends Model
 	 */
 	public function addOrder( $data )
 	{
-		return $this->add($data);
+		return $this->add( $data );
 	}
 
 	/**
@@ -472,7 +470,7 @@ class Order extends Model
 	public function getOrderLogList( $condition )
 	{
 		$list = model( 'OrderLog' )->where( $condition )->select();
-		return $list ;
+		return $list;
 	}
 
 
@@ -949,7 +947,6 @@ class Order extends Model
 	}
 
 
-
 	/**
 	 * 取得订单状态文字输出形式
 	 *
@@ -977,29 +974,31 @@ class Order extends Model
 		}
 		return $order_state;
 	}
-    /**
-     * 取得订单拼团状态文字输出形式
-     * @param array $order_info          订单数组
-     * @return string $order_group_state 描述输出
-     */
-    static function orderGroupState( $order_info )
-    {
-        switch( $order_info['group_state'] ){
-            case \App\Logic\Order::group_state_new:
-                $order_group_state = '待付款';
-                break;
-            case \App\Logic\Order::group_state_pay:
-                $order_group_state = '待开团';
-                break;
-            case \App\Logic\Order::group_state_success:
-                $order_group_state = '拼团成功';
-                break;
-            case \App\Logic\Order::group_state_fail:
-                $order_group_state = '拼团失败';
-                break;
-        }
-        return $order_group_state;
-    }
+
+	/**
+	 * 取得订单拼团状态文字输出形式
+	 * @param array $order_info 订单数组
+	 * @return string $order_group_state 描述输出
+	 */
+	static function orderGroupState( $order_info )
+	{
+		switch( $order_info['group_state'] ){
+		case \App\Logic\Order::group_state_new:
+			$order_group_state = '待付款';
+		break;
+		case \App\Logic\Order::group_state_pay:
+			$order_group_state = '待开团';
+		break;
+		case \App\Logic\Order::group_state_success:
+			$order_group_state = '拼团成功';
+		break;
+		case \App\Logic\Order::group_state_fail:
+			$order_group_state = '拼团失败';
+		break;
+		}
+		return $order_group_state;
+	}
+
 	/**
 	 * 取得订单支付类型文字输出形式
 	 *
@@ -1011,109 +1010,113 @@ class Order extends Model
 		return str_replace( ['offline', 'online', 'alipay', 'tenpay', 'chinabank', 'predeposit'], ['货到付款', '在线付款', '支付宝', '财付通', '网银在线', '预存款'], $payment_code );
 	}
 
-    /**
-     * 列表
-     * @param   $condition
-     * @param   $condition_str
-     * @param   $field
-     * @param   $order
-     * @param   $page
-     * @param   $group
-     * @return
-     */
-    public function getOrderCommonList($condition = array(), $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group='') {
-        if($page == ''){
-            $data = $this->where($condition)->where($condition_str)->order($order)->field($field)->group($group)->select();
+	/**
+	 * 列表
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $field
+	 * @param   $order
+	 * @param   $page
+	 * @param   $group
+	 * @return
+	 */
+	public function getOrderCommonList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	{
+		if( $page == '' ){
+			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
 
-        }else{
-            $data = $this->where($condition)->where($condition_str)->order($order)->field($field)->page($page)->group($group)->select();
-        }
-        return $data;
-    }
+		} else{
+			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
+		}
+		return $data;
+	}
 
-    /**
-     * 获得数量
-     * @param   $condition
-     * @param   $condition_str
-     * @param   $distinct         [去重]
-     * @return
-     */
-    public function getOrderCommonCount($condition = array(), $condition_str = '', $distinct = '') {
-        if($distinct == ''){
-            return $this->where($condition)->where($condition_str)->count();
+	/**
+	 * 获得数量
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $distinct [去重]
+	 * @return
+	 */
+	public function getOrderCommonCount( $condition = [], $condition_str = '', $distinct = '' )
+	{
+		if( $distinct == '' ){
+			return $this->where( $condition )->where( $condition_str )->count();
 
-        }else{
-            return $this->where($condition)->where($condition_str)->count("DISTINCT ".$distinct);
+		} else{
+			return $this->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
 
-        }
-    }
+		}
+	}
 
-    /**
-     * 获得信息
-     * @param   $condition
-     * @param   $condition_str
-     * @param   $field
-     * @return
-     */
-    public function getOrderCommonInfo($condition = array(), $condition_str = '', $field = '*') {
-        $data = $this->where($condition)->where($condition_str)->field($field)->find();
-        return $data;
-    }
+	/**
+	 * 获得信息
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @param   $field
+	 * @return
+	 */
+	public function getOrderCommonInfo( $condition = [], $condition_str = '', $field = '*' )
+	{
+		$data = $this->where( $condition )->where( $condition_str )->field( $field )->find();
+		return $data;
+	}
 
-    /**
-     * 分佣 推广效果状态描述
-     * @param   $update
-     */
-    public function distributionPromotionDesc($data) {
+	/**
+	 * 分佣 推广效果状态描述
+	 * @param   $update
+	 */
+	public function distributionPromotionDesc( $data )
+	{
 
-        foreach ($data as $key => $value) {
-            $amount      = ($value['revise_amount'] > 0) ? $value['revise_amount'] : $value['amount'];
-            $freight_fee = ($value['revise_freight_fee'] > 0) ? $value['revise_freight_fee'] : $value['freight_fee'];
+		foreach( $data as $key => $value ){
+			$amount      = ($value['revise_amount'] > 0) ? $value['revise_amount'] : $value['amount'];
+			$freight_fee = ($value['revise_freight_fee'] > 0) ? $value['revise_freight_fee'] : $value['freight_fee'];
 
-            if ($value['pay_name'] != 'online') {
-                $data[$key]['distribution_state'] = 1;  //货到付款不参与结算
-                continue;
-            }
+			if( $value['pay_name'] != 'online' ){
+				$data[$key]['distribution_state'] = 1;  //货到付款不参与结算
+				continue;
+			}
 
-            if ($value['state'] == 0) {
-                $data[$key]['distribution_state'] = 2;  //订单关闭  [不显示佣金比例和佣金]
-                continue;
-            }
-            if ($value['state'] == 10) {
-                $data[$key]['distribution_state'] = 3;  //待付款   [不显示佣金比例和佣金]
-                continue;
-            }
+			if( $value['state'] == 0 ){
+				$data[$key]['distribution_state'] = 2;  //订单关闭  [不显示佣金比例和佣金]
+				continue;
+			}
+			if( $value['state'] == 10 ){
+				$data[$key]['distribution_state'] = 3;  //待付款   [不显示佣金比例和佣金]
+				continue;
+			}
 
-            if (floatval(array_sum(array_column($value['extend_order_goods'], 'distribution_ratio'))) == 0) {
-                $data[$key]['distribution_state'] = 4;  //无佣金 [原因是 商品不参与推广] [不显示佣金比例和佣金]
-                continue;
-            }
+			if( floatval( array_sum( array_column( $value['extend_order_goods'], 'distribution_ratio' ) ) ) == 0 ){
+				$data[$key]['distribution_state'] = 4;  //无佣金 [原因是 商品不参与推广] [不显示佣金比例和佣金]
+				continue;
+			}
 
-            if ($value['state'] >= 20) {
-                if ($value['refund_amount'] > 0) {
-                    if (($amount - $freight_fee - $value['refund_amount']) > 0) {
-                        if (distribution_settlement == 0) {
-                            $data[$key]['distribution_state'] = 5;  //待结算,部分退款
+			if( $value['state'] >= 20 ){
+				if( $value['refund_amount'] > 0 ){
+					if( ($amount - $freight_fee - $value['refund_amount']) > 0 ){
+						if( distribution_settlement == 0 ){
+							$data[$key]['distribution_state'] = 5;  //待结算,部分退款
 
-                        } else {
-                            $data[$key]['distribution_state'] = 6;  //已结算,部分退款
-                        }
-                    } else {
-                        $data[$key]['distribution_state'] = 7;  //不结算,全额退款
-                    }
+						} else{
+							$data[$key]['distribution_state'] = 6;  //已结算,部分退款
+						}
+					} else{
+						$data[$key]['distribution_state'] = 7;  //不结算,全额退款
+					}
 
-                } else {
-                    if (distribution_settlement == 0) {
-                        $data[$key]['distribution_state'] = 8;  //待结算
+				} else{
+					if( distribution_settlement == 0 ){
+						$data[$key]['distribution_state'] = 8;  //待结算
 
-                    } else {
-                        $data[$key]['distribution_state'] = 9;  //已结算
-                    }
-                }
-            }
-        }
-        return $data;
-    }
+					} else{
+						$data[$key]['distribution_state'] = 9;  //已结算
+					}
+				}
+			}
+		}
+		return $data;
+	}
 
 }
 

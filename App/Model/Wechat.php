@@ -43,7 +43,7 @@ class Wechat extends Model
 	 */
 	public function addWechat( array $data )
 	{
-		return $this->add($data);
+		return $this->add( $data );
 	}
 
 	/**
@@ -64,7 +64,7 @@ class Wechat extends Model
 	 */
 	public function editWechat( $condition = [], $data = [] )
 	{
-		return $this->edit( $data, $condition, true );
+		return $this->where( $condition )->edit( $data );
 	}
 
 	/**
@@ -110,7 +110,7 @@ class Wechat extends Model
 	public function getWechatList( $condition = [], $field = '*', $order = '', $page = '1,10' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list ;
+		return $list;
 	}
 }
 

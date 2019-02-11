@@ -47,7 +47,7 @@ class VerifyCode extends Model
 	 */
 	public function editVerifyCode( $condition = [], $data = [] )
 	{
-		return $this->edit( $data, $condition, true );
+		return $this->where( $condition )->edit( $data );
 	}
 
 	/**

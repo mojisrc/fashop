@@ -49,7 +49,7 @@ class Statistics extends Model
 	 */
 	public function editStatistics( $condition = [], $data = [] )
 	{
-		return $this->edit( $data, $condition, true );
+		return $this->where($condition)->edit($data);
 	}
 
 	/**

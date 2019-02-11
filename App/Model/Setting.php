@@ -42,7 +42,7 @@ class Setting extends Model
 	 */
 	public function editSetting( $condition = [], $data = [] )
 	{
-		return $this->edit( $data, $condition, true );
+		return $this->where( $condition )->edit( $data );
 	}
 
 	/**

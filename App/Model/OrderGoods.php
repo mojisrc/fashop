@@ -55,7 +55,7 @@ class OrderGoods extends Model
 	 */
 	public function editOrderGoods( $condition = [], $data = [] )
 	{
-		return !!$this->edit( $data, $condition, true )->saveResult;
+		return !!$this->where($condition)->edit($data)->saveResult;
 	}
 
 	/**
@@ -152,7 +152,6 @@ class OrderGoods extends Model
 		return $this->join( '__GOODS__ goods ON order_goods.goods_id = goods.id', 'inner' )->where( $condition )->count( "DISTINCT order_goods.goods_id" );
 
 	}
-
 
 
 	/**

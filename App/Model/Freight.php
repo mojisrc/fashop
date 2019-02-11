@@ -55,7 +55,7 @@ class Freight extends Model
 	public function editFreight( $condition = [], $data = [] )
 	{
 		$data['update_time'] = time();
-		return $this->edit( $data, $condition, true );
+		return $this->where($condition)->edit($data);
 	}
 
 	/**

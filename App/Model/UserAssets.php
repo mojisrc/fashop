@@ -11,11 +11,6 @@ class UserAssets extends Model
 {
 	protected $softDelete = true;
 
-
-	protected $type
-		= [// ''      =>  'json',
-		];
-
 	/**
 	 * 列表
 	 * @param   $condition

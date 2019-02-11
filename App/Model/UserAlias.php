@@ -11,10 +11,6 @@ class UserAlias extends Model
 {
 	protected $softDelete = true;
 
-	protected $type
-		= [// ''      =>  'json',
-		];
-
 	/**
 	 * 列表
 	 * @param   $condition
@@ -162,19 +158,6 @@ class UserAlias extends Model
 	}
 
 	/**
-	 * 查询普通的数据和软删除的数据信息更多
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $field
-	 * @return
-	 */
-	public function getWithTrashedUserAliasMoreInfo( $condition = [], $condition_str = '', $field = '*' )
-	{
-		$data = $this->alias( 'xxx1' )->join( '__XXX2__ xxx2', 'xxx1.xxx2_id = xxx2.id', 'LEFT' )->withTrashed()->where( $condition )->where( $condition_str )->field( $field )->find();
-		return $data;
-	}
-
-	/**
 	 * 查询普通的数据和软删除的排除字段数据信息
 	 * @param   $condition
 	 * @param   $condition_str
@@ -250,7 +233,7 @@ class UserAlias extends Model
 
 	/**
 	 * 某个字段+1
-	 * @param   $condition
+	 * @param array  $condition
 	 * @param   $condition_str
 	 * @return
 	 */
@@ -318,7 +301,6 @@ class UserAlias extends Model
 	{
 		return $this->where( $condition )->where( $condition_str )->del();
 	}
-
 
 
 }

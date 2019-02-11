@@ -17,8 +17,6 @@ use ezswoole\Model;
 
 class UserWechat extends Model
 {
-
-
 	/**
 	 * 添加
 	 * @param  array $data
@@ -47,7 +45,7 @@ class UserWechat extends Model
 	 */
 	public function editUserWechat( $condition = [], $data = [] )
 	{
-		return $this->edit( $data, $condition, true );
+		return $this->where( $condition )->edit( $data );
 	}
 
 	/**

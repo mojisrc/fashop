@@ -49,7 +49,7 @@ class Sms extends Model
 	 */
 	public function editSms( $condition = [], $data = [] )
 	{
-		return $this->edit( $data, $condition, true );
+		return $this->where( $condition )->edit( $data );
 	}
 
 	/**

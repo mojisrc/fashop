@@ -47,7 +47,7 @@ class Image extends Model
 	 */
 	public function editImage( $condition = [], $data = [] )
 	{
-		return $this->edit( $data, $condition, true );
+		return $this->where($condition)->edit($data);
 	}
 
 	/**

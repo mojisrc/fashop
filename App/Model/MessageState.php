@@ -49,7 +49,7 @@ class MessageState extends Model
 	 */
 	public function editMessageState( $condition = [], $data = [] )
 	{
-		return $this->edit( $data, $condition, true );
+		return $this->where($condition)->edit($data);
 	}
 
 	/**

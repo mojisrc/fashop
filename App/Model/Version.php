@@ -48,7 +48,7 @@ class Version extends Model
 	 */
 	public function editVersion( $condition = [], $data = [] )
 	{
-		return $this->edit( $data, $condition, true );
+		return $this->where( $condition )->edit( $data );
 	}
 
 	/**

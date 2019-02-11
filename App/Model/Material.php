@@ -51,7 +51,7 @@ class Material extends Model
 	 */
 	public function editMaterial( $condition = [], $data = [] )
 	{
-		return $this->edit( $data, $condition, true );
+		return $this->where($condition)->edit($data);
 	}
 
 	/**

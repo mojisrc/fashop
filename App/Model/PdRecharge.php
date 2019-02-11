@@ -28,7 +28,7 @@ class PdRecharge extends Model
 	public function getPdRechargeList( $condition = [], $fields = '*', $order = '', $page = '1,20' )
 	{
 		$data = $this->where( $condition )->field( $fields )->order( $order )->page( $page )->select();
-		return $data ? $data->toArray() : $data;
+		return $data;
 	}
 
 	/**
@@ -47,7 +47,7 @@ class PdRecharge extends Model
 	 */
 	public function editPdRecharge( $condition = [], $data )
 	{
-		return $this->edit( $data, $condition, true );
+		return $this->where($condition)->edit($data);
 	}
 
 	/**
@@ -58,7 +58,7 @@ class PdRecharge extends Model
 	public function getPdRechargeInfo( $condition = [], $fields = '*' )
 	{
 		$data = $this->where( $condition )->field( $fields )->find();
-		return $data ? $data->toArray() : $data;
+		return $data;
 	}
 
 	/**

@@ -16,7 +16,6 @@ namespace App\Model;
 use ezswoole\Model;
 
 
-
 class OrderLog extends Model
 {
 	protected $softDelete = true;
@@ -30,7 +29,7 @@ class OrderLog extends Model
 	 */
 	public function addOrderLog( array $data )
 	{
-		return $this->add($data);
+		return $this->add( $data );
 	}
 
 	/**
@@ -51,7 +50,7 @@ class OrderLog extends Model
 	 */
 	public function editOrderLog( $condition = [], $data = [] )
 	{
-		return $this->edit( $data, $condition, true );
+		return $this->where($condition)->edit($data);
 	}
 
 	/**
@@ -97,7 +96,7 @@ class OrderLog extends Model
 	public function getOrderLogList( $condition = [], $field = '*', $order = '', $page = '1,10' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list ;
+		return $list;
 	}
 
 

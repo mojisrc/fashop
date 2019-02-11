@@ -53,7 +53,7 @@ class Express extends Model
 	public function editExpress( $condition = [], $data = [] )
 	{
 		$data['update_time'] = time();
-		return $this->edit( $data, $condition, true );
+		return $this->where($condition)->edit($data);
 	}
 
 	/**

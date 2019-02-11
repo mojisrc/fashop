@@ -50,7 +50,7 @@ class Message extends Model
 	 */
 	public function editMessage( $condition = [], $data = [] )
 	{
-		return $this->edit( $data, $condition, true );
+		return $this->where($condition)->edit($data);
 	}
 
 	/**
@@ -113,7 +113,7 @@ class Message extends Model
 	public function getMessageListMore( $condition, $field = '*', $order = "id desc", $page = '1,10', $group = '' )
 	{
 		$data = $this->alias( 'message' )->join( '__MESSAGE_STATE__ message_state', 'message.id = message_state.message_id', 'LEFT' )->where( $condition )->field( $field )->page( $page )->order( $order )->group( $group )->select();
-		return $data ? $data->toArray() : $data;
+		return $data;
 	}
 
 

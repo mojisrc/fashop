@@ -23,6 +23,7 @@ class WechatBroadcast extends Model
 			'condition'    => 'json',
 			'send_content' => 'json',
 		];
+
 	/**
 	 * 添加
 	 * @param  array $data
@@ -30,7 +31,7 @@ class WechatBroadcast extends Model
 	 */
 	public function addWechatBroadcast( array $data )
 	{
-		return $this->add($data);
+		return $this->add( $data );
 	}
 
 	/**
@@ -51,7 +52,7 @@ class WechatBroadcast extends Model
 	 */
 	public function editWechatBroadcast( $condition = [], $data = [] )
 	{
-		return $this->edit( $data, $condition, true );
+		return $this->where( $condition )->edit( $data );
 	}
 
 	/**
@@ -97,7 +98,7 @@ class WechatBroadcast extends Model
 	public function getWechatBroadcastList( $condition = [], $field = '*', $order = '', $page = '1,10' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list ;
+		return $list;
 	}
 }
 

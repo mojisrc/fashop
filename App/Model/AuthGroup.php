@@ -54,7 +54,7 @@ class AuthGroup extends Model
 	 */
 	public function editAuthGroup( $condition = [], $data = [] )
 	{
-		return $this->edit( $data, $condition, true );
+		return $this->where($condition)->edit($data);
 	}
 
 	/**

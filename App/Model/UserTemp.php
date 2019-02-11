@@ -32,15 +32,13 @@ use ezswoole\Model;
 
 class UserTemp extends Model
 {
-
-
 	/**
 	 * 添加
 	 * @param  array $data
 	 */
 	public function addUserTemp( array $data )
 	{
-		return $this->add($data);
+		return $this->add( $data );
 	}
 
 	/**
@@ -61,7 +59,7 @@ class UserTemp extends Model
 	 */
 	public function editUserTemp( $condition = [], $data = [] )
 	{
-		return $this->edit( $data, $condition, true );
+		return $this->where( $condition )->edit( $data );
 	}
 
 	/**
@@ -107,7 +105,7 @@ class UserTemp extends Model
 	public function getUserTempList( $condition = [], $field = '*', $order = '', $page = '1,10' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list ;
+		return $list;
 	}
 }
 

@@ -51,7 +51,7 @@ class WechatAutoReplyKeywords extends Model
 	 */
 	public function editWechatAutoReplyKeywords( $condition = [], $data = [] )
 	{
-		return $this->edit( $data, $condition, true );
+		return $this->where($condition)->edit($data);
 	}
 
 	/**

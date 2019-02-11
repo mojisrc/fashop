@@ -157,7 +157,7 @@ class OrderRefund extends Model
 	 */
 	public function editOrderRefund( $condition, $data )
 	{
-		return !!$this->edit( $data, $condition, true )->saveResult;
+		return !!$this->where($condition)->edit($data)->saveResult;
 	}
 
 	/**

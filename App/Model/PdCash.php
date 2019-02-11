@@ -39,7 +39,7 @@ class PdCash extends Model
 	public function getPdCashList( $condition = [], $field = '*', $order = '', $page = '1,20' )
 	{
 		$data = $this->where( $condition )->field( $field )->order( $order )->page( $page )->select();
-		return $data ? $data->toArray() : $data;
+		return $data;
 	}
 
 	/**
@@ -58,7 +58,7 @@ class PdCash extends Model
 	 */
 	public function editPdCash( $condition = [], $data )
 	{
-		return $this->edit( $data, $condition, true );
+		return $this->where( $condition )->edit( $data );
 	}
 
 	/**
@@ -69,7 +69,7 @@ class PdCash extends Model
 	public function getPdCashInfo( $condition = [], $field = '*' )
 	{
 		$data = $this->where( $condition )->field( $field )->find();
-		return $data ? $data->toArray() : $data;
+		return $data;
 	}
 
 	/**

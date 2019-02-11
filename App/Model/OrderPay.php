@@ -16,11 +16,9 @@ namespace App\Model;
 use ezswoole\Model;
 
 
-
 class OrderPay extends Model
 {
 	protected $softDelete = true;
-
 
 
 	/**
@@ -30,7 +28,7 @@ class OrderPay extends Model
 	 */
 	public function addOrderPay( array $data )
 	{
-		return $this->add($data);
+		return $this->add( $data );
 	}
 
 	/**
@@ -51,7 +49,7 @@ class OrderPay extends Model
 	 */
 	public function editOrderPay( $condition = [], $data = [] )
 	{
-		return $this->edit( $data, $condition, true );
+		return $this->where($condition)->edit($data);
 	}
 
 	/**
@@ -97,7 +95,7 @@ class OrderPay extends Model
 	public function getOrderPayList( $condition = [], $field = '*', $order = '', $page = '1,10' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list ;
+		return $list;
 	}
 
 }
