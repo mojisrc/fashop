@@ -30,7 +30,7 @@ class Group extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getGroupList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getGroupList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page ){
 			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
@@ -78,7 +78,7 @@ class Group extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getWithTrashedGroupList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getWithTrashedGroupList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		$data = $this->withTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 		return $data;
@@ -112,7 +112,7 @@ class Group extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getOnlyTrashedGroupList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getOnlyTrashedGroupList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		$data = $this->onlyTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 		return $data;

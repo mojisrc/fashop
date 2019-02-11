@@ -21,7 +21,7 @@ class UserAlias extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getUserAliasList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getUserAliasList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
 			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
@@ -60,7 +60,7 @@ class UserAlias extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getWithTrashedUserAliasList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getWithTrashedUserAliasList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		$data = $this->withTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 		return $data;
@@ -94,7 +94,7 @@ class UserAlias extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getOnlyTrashedUserAliasList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getOnlyTrashedUserAliasList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		$data = $this->onlyTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 		return $data;

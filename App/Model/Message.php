@@ -94,7 +94,7 @@ class Message extends Model
 	 * @param    string $group
 	 * @return   array | false
 	 */
-	public function getMessageList( $condition = [], $field = '*', $order = '', $page = '1,10', $group = '' )
+	public function getMessageList( $condition = [], $field = '*', $order = '', $page = [1,10], $group = '' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->group( $group )->page( $page )->select();
 		return $list;
@@ -110,7 +110,7 @@ class Message extends Model
 	 * @return   array
 	 * @author 孙泉
 	 */
-	public function getMessageListMore( $condition, $field = '*', $order = "id desc", $page = '1,10', $group = '' )
+	public function getMessageListMore( $condition, $field = '*', $order = "id desc", $page = [1,10], $group = '' )
 	{
 		$data = $this->alias( 'message' )->join( '__MESSAGE_STATE__ message_state', 'message.id = message_state.message_id', 'LEFT' )->where( $condition )->field( $field )->page( $page )->order( $order )->group( $group )->select();
 		return $data;

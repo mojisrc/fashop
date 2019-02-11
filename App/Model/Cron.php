@@ -7,6 +7,7 @@ use ezswoole\Model;
 class Cron extends Model
 {
 	protected $softDelete = true;
+
 	/**
 	 * 取单条任务信息
 	 * @param array $condition
@@ -41,29 +42,20 @@ class Cron extends Model
 	/**
 	 * 保存任务队列
 	 *
-	 * @param array $insert
-	 * @return boolean
+	 * @param array $data
 	 */
-	public function addCron( $insert )
+	public function addCron( array $data )
 	{
-		$result = $this->allowField( true )->save( $insert );
-		if( $result ){
-			return $this->getLastInsID();
-		}
-		return $result;
+		return $this->add( $data );
 	}
-
 	/**
-	 * 删除任务队列
-	 *
-	 * @param array $condition
-	 * @return array
+	 * @param $condition
+	 * @return bool|null
 	 */
 	public function delCron( $condition )
 	{
 		return $this->where( $condition )->del();
 	}
-
 
 
 }

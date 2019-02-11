@@ -31,7 +31,7 @@ class DistributorLevel extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getDistributorLevelList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getDistributorLevelList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
 			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();

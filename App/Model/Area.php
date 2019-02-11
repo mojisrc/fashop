@@ -80,41 +80,11 @@ class Area extends Model
 	 * @param    string $page
 	 * @return   array
 	 */
-	public function getAreaList( $condition = [], $field = '*', $order = '', $page = '1,10' )
+	public function getAreaList( $condition = [], $field = '*', $order = '', $page = [1,10] )
 	{
 		return $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 	}
 
-	/**
-	 * todo 废弃
-	 * 获取id
-	 * @param $condition
-	 */
-	public function getAreaId( $condition )
-	{
-		return $this->where( $condition )->value( 'id' );
-	}
-
-	/**
-	 * todo 废弃
-	 * 获取某个字段
-	 * @param   $condition
-	 */
-	public function getAreaValue( $condition, $field )
-	{
-		return $this->where( $condition )->value( $field );
-	}
-
-	/**
-	 * todo 废弃
-	 * 获取某个字段列
-	 * @param   $condition
-	 * @return
-	 */
-	public function getAreaColumn( $condition, $field )
-	{
-		return $this->where( $condition )->column( $field );
-	}
 }
 
 ?>

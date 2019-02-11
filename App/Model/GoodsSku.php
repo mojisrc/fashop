@@ -55,7 +55,7 @@ class GoodsSku extends Model
 	 * @param string $page      分页
 	 * @return array 二维数组
 	 */
-	public function getGoodsSkuList( $condition, $field = '*', $order = 'id desc', $page = '1,10' ) : array
+	public function getGoodsSkuList( $condition, $field = '*', $order = 'id desc', $page = [1,10] ) : array
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $list;
@@ -72,7 +72,7 @@ class GoodsSku extends Model
 	 * @param boolean $lock      是否锁定
 	 * @return array
 	 */
-	public function getGoodsSkuOnlineList( $condition, $field = '*', $page = '1,10', $order = 'id desc', $limit = 1000, $group = '', $lock = false )
+	public function getGoodsSkuOnlineList( $condition, $field = '*', $page = [1,10], $order = 'id desc', $limit = 1000, $group = '', $lock = false )
 	{
 		$condition['state'] = self::STATE1;
 		return $this->getGoodsSkuList( $condition, $field, $group, $order, $page );

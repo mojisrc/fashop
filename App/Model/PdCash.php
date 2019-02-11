@@ -36,7 +36,7 @@ class PdCash extends Model
 	 * @param string $field
 	 * @param string $order
 	 */
-	public function getPdCashList( $condition = [], $field = '*', $order = '', $page = '1,20' )
+	public function getPdCashList( $condition = [], $field = '*', $order = '', $page = [1,20] )
 	{
 		$data = $this->where( $condition )->field( $field )->order( $order )->page( $page )->select();
 		return $data;

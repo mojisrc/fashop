@@ -50,7 +50,7 @@ class Address extends Model
 	 * @param    string $page
 	 * @return   array
 	 */
-	public function getAddressList( $condition = [], $field = '*', $order = '', $page = '1,10' )
+	public function getAddressList( $condition = [], $field = '*', $order = '', $page = [1,10] )
 	{
 		return $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 	}

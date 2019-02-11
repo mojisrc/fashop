@@ -22,7 +22,7 @@ class UserOpen extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getUserOpenList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getUserOpenList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
 			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
@@ -61,7 +61,7 @@ class UserOpen extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getWithTrashedUserOpenList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getWithTrashedUserOpenList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		$data = $this->withTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 		return $data;
@@ -95,7 +95,7 @@ class UserOpen extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getOnlyTrashedUserOpenList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getOnlyTrashedUserOpenList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		$data = $this->onlyTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 		return $data;

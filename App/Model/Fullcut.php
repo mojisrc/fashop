@@ -34,7 +34,7 @@ class Fullcut extends Model
 	 * @param  string $page
 	 * @return             [列表数据]
 	 */
-	public function getFullcutList( $condition = [], $field = '*', $order = 'id desc', $page = '1,20' )
+	public function getFullcutList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20] )
 	{
 		$data = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $data;
@@ -45,7 +45,7 @@ class Fullcut extends Model
 	 * 查询普通的数据和软删除的数据
 	 * @return
 	 */
-	public function getWithTrashedFullcutList( $condition = [], $field = '*', $order = 'id desc', $page = '1,20' )
+	public function getWithTrashedFullcutList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20] )
 	{
 		$data = $this->withTrashed()->where( $condition )->order( $order )->field( $field )->page( $page )->select();  //查询普通的数据和软删除的数据
 		return $data;
@@ -55,7 +55,7 @@ class Fullcut extends Model
 	 * 只查询软删除的数据
 	 * @return
 	 */
-	public function getOnlyTrashedFullcutList( $condition = [], $field = '*', $order = 'id desc', $page = '1,20' )
+	public function getOnlyTrashedFullcutList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20] )
 	{
 		$data = $this->onlyTrashed()->where( $condition )->order( $order )->field( $field )->page( $page )->select(); //只查询软删除的
 		return $data;

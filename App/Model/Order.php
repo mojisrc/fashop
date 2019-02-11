@@ -117,7 +117,7 @@ class Order extends Model
 	 * @param array  $extend
 	 * @return array
 	 */
-	public function getOrderList( $condition = [], $condition_string = '', $field = '*', $order = 'id desc', $page = '1,20', $extend = [] )
+	public function getOrderList( $condition = [], $condition_string = '', $field = '*', $order = 'id desc', $page = [1,20], $extend = [] )
 	{
 		if( $page == '' ){
 			$list = $this->field( $field )->where( $condition )->where( $condition_string )->order( $order )->select();
@@ -1020,7 +1020,7 @@ class Order extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getOrderCommonList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getOrderCommonList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
 			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();

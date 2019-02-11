@@ -10,11 +10,9 @@
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
  */
-
 namespace App\Model;
 
 use ezswoole\Model;
-
 
 class Coupon extends Model
 {
@@ -29,7 +27,7 @@ class Coupon extends Model
 	 * @param  string $page
 	 * @return             [列表数据]
 	 */
-	public function getCouponList( $condition = [], $field = '*', $order = 'id desc', $page = '1,20' )
+	public function getCouponList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20] )
 	{
 		$data = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $data;
@@ -40,7 +38,7 @@ class Coupon extends Model
 	 * 查询普通的数据和软删除的数据
 	 * @return
 	 */
-	public function getWithTrashedCouponList( $condition = [], $field = '*', $order = 'id desc', $page = '1,20' )
+	public function getWithTrashedCouponList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20] )
 	{
 		$data = $this->withTrashed()->where( $condition )->order( $order )->field( $field )->page( $page )->select();  //查询普通的数据和软删除的数据
 		return $data;
@@ -50,7 +48,7 @@ class Coupon extends Model
 	 * 只查询软删除的数据
 	 * @return
 	 */
-	public function getOnlyTrashedCouponList( $condition = [], $field = '*', $order = 'id desc', $page = '1,20' )
+	public function getOnlyTrashedCouponList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20] )
 	{
 		$data = $this->onlyTrashed()->where( $condition )->order( $order )->field( $field )->page( $page )->select(); //只查询软删除的
 		return $data;

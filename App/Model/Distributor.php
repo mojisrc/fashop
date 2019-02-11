@@ -31,7 +31,7 @@ class Distributor extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getDistributorList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getDistributorList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
 			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
@@ -69,7 +69,7 @@ class Distributor extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getDistributorMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getDistributorMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
 			$data = $this->alias( 'distributor' )->join( '__USER__ user', 'distributor.user_id = user.id', 'LEFT' )->join( '__USER__ invite_user', 'distributor.inviter_id = invite_user.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();

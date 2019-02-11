@@ -22,7 +22,7 @@ class UserProfile extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getUserProfileList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getUserProfileList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
 			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
@@ -61,7 +61,7 @@ class UserProfile extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getUserProfileMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getUserProfileMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
 			$data = $this->alias( 'user_profile' )->join( '__USER__ user', 'user_profile.user_id = user.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
@@ -100,7 +100,7 @@ class UserProfile extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getWithTrashedUserProfileList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getWithTrashedUserProfileList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		$data = $this->withTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 		return $data;
@@ -134,7 +134,7 @@ class UserProfile extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getWithTrashedUserProfileMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getWithTrashedUserProfileMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
 			$data = $this->alias( 'user_profile' )->join( '__USER__ user', 'user_profile.user_id = user.id', 'LEFT' )->withTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
@@ -173,7 +173,7 @@ class UserProfile extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getOnlyTrashedUserProfileList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getOnlyTrashedUserProfileList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		$data = $this->onlyTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 		return $data;
@@ -207,7 +207,7 @@ class UserProfile extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getOnlyTrashedUserProfileMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getOnlyTrashedUserProfileMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
 			$data = $this->alias( 'user_profile' )->join( '__USER__ user', 'user_profile.user_id = user.id', 'LEFT' )->onlyTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();

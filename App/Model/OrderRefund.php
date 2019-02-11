@@ -173,7 +173,7 @@ class OrderRefund extends Model
 	 * //类型:refund_type 1为退款,2为退货
 	 * @return array
 	 */
-	public function getOrderRefundList( $condition = [], $field = '*', $order = 'id desc', $page = '1,20' )
+	public function getOrderRefundList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20] )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $list;

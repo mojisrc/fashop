@@ -31,7 +31,7 @@ class GroupGoods extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getGroupGoodsList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getGroupGoodsList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
 			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
@@ -70,7 +70,7 @@ class GroupGoods extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getGroupGoodsMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getGroupGoodsMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
 			$data = $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
@@ -109,7 +109,7 @@ class GroupGoods extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getWithTrashedGroupGoodsList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getWithTrashedGroupGoodsList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		$data = $this->withTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 		return $data;
@@ -143,7 +143,7 @@ class GroupGoods extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getWithTrashedGroupGoodsMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getWithTrashedGroupGoodsMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
 			$data = $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->withTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
@@ -182,7 +182,7 @@ class GroupGoods extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getOnlyTrashedGroupGoodsList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getOnlyTrashedGroupGoodsList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		$data = $this->onlyTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 		return $data;
@@ -216,7 +216,7 @@ class GroupGoods extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getOnlyTrashedGroupGoodsMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getOnlyTrashedGroupGoodsMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
 			$data = $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->onlyTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
@@ -547,7 +547,7 @@ class GroupGoods extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getGoodsSkuMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getGoodsSkuMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
 			$data = $this->alias( 'group_goods' )->join( '__GOODS_SKU__ goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
@@ -568,7 +568,7 @@ class GroupGoods extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getGroupGoodsSkuMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getGroupGoodsSkuMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
 			$data = $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->join( '__GOODS_SKU__ goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();

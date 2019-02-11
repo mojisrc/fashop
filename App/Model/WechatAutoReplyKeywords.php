@@ -91,7 +91,7 @@ class WechatAutoReplyKeywords extends Model
 	 * @param    string $page
 	 * @return   array | false
 	 */
-	public function getWechatAutoReplyKeywordsList( $condition = [], $field = '*', $order = '', $page = '1,10' )
+	public function getWechatAutoReplyKeywordsList( $condition = [], $field = '*', $order = '', $page = [1,10] )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $list;

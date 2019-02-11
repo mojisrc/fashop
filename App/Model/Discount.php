@@ -30,7 +30,7 @@ class Discount extends Model
 	 * @param  string $page
 	 * @return             [列表数据]
 	 */
-	public function getDiscountList( $condition = [], $field = '*', $order = 'id desc', $page = '1,20' )
+	public function getDiscountList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20] )
 	{
 		$data = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $data;
@@ -44,7 +44,7 @@ class Discount extends Model
 	 * @param  string $page
 	 * @return
 	 */
-	public function getDiscountMoreList( $condition = [], $field = '*', $order = 'id desc', $page = '1,20' )
+	public function getDiscountMoreList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20] )
 	{
 		$data = $this->alias( 'xx1' )->join( '__XX2__ xx2', 'xx1.id = xx2.xx1_id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $data;
@@ -54,7 +54,7 @@ class Discount extends Model
 	 * 查询普通的数据和软删除的数据
 	 * @return
 	 */
-	public function getWithTrashedDiscountList( $condition = [], $field = '*', $order = 'id desc', $page = '1,20' )
+	public function getWithTrashedDiscountList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20] )
 	{
 		$data = $this->withTrashed()->where( $condition )->order( $order )->field( $field )->page( $page )->select();  //查询普通的数据和软删除的数据
 		return $data;
@@ -64,7 +64,7 @@ class Discount extends Model
 	 * 只查询软删除的数据
 	 * @return
 	 */
-	public function getOnlyTrashedDiscountList( $condition = [], $field = '*', $order = 'id desc', $page = '1,20' )
+	public function getOnlyTrashedDiscountList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20] )
 	{
 		$data = $this->onlyTrashed()->where( $condition )->order( $order )->field( $field )->page( $page )->select(); //只查询软删除的
 		return $data;

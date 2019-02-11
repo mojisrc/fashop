@@ -97,7 +97,7 @@ class GoodsImage extends Model
 	 * @param    string $page
 	 * @return   array
 	 */
-	public function getGoodsImageList( $condition = [], $field = '*', $order = '', $page = '1,10' )
+	public function getGoodsImageList( $condition = [], $field = '*', $order = '', $page = [1,10] )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $list;
@@ -113,7 +113,7 @@ class GoodsImage extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getGoodsImageMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = '1,20', $group = '' )
+	public function getGoodsImageMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
 			$data = $this->alias( 'goods_image' )->join( '__GOODS__ goods', 'goods_image.goods_id = goods.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();

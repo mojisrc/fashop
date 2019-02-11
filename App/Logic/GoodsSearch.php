@@ -424,7 +424,7 @@ class GoodsSearch
      * @param float $price_to 价格区间结束
      * @return   array
      */
-    public function getGoodsList($search_options, $field = "id,title,category_ids,price,img,freight", $order = '', $page = '1,10')
+    public function getGoodsList($search_options, $field = "id,title,category_ids,price,img,freight", $order = '', $page = [1,10])
     {
         // 分类
         if (isset($search_options['category_id'])) {

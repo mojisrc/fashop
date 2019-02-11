@@ -82,7 +82,7 @@ class Goods extends Model
 	 * @param string $order     排序
 	 * @return array
 	 */
-	public function getGoodsOnlineList( $condition, $field = '*', $order = "id desc", $page = '1,10' )
+	public function getGoodsOnlineList( $condition, $field = '*', $order = "id desc", $page = [1,10] )
 	{
 		$condition['is_on_sale'] = self::STATE1;
 
@@ -97,7 +97,7 @@ class Goods extends Model
 	 * @param string $order     排序
 	 * @return array
 	 */
-	public function getGoodsOfflineList( $condition, $field = '*', $order = "id desc", $page = '1,10' )
+	public function getGoodsOfflineList( $condition, $field = '*', $order = "id desc", $page = [1,10] )
 	{
 		$condition['is_on_sale'] = self::STATE0;
 		return $this->getGoodsList( $condition, $field, $order, $page );

@@ -25,7 +25,7 @@ class PdRecharge extends Model
 	 * @param string $order
 	 * @param string $page
 	 */
-	public function getPdRechargeList( $condition = [], $fields = '*', $order = '', $page = '1,20' )
+	public function getPdRechargeList( $condition = [], $fields = '*', $order = '', $page = [1,20] )
 	{
 		$data = $this->where( $condition )->field( $fields )->order( $order )->page( $page )->select();
 		return $data;

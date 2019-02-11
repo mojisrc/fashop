@@ -26,7 +26,7 @@ class FullcutGoods extends Model {
      * @param  string $page
      * @return             [列表数据]
      */
-    public function getFullcutGoodsList($condition = array(), $field = '*', $order = 'id desc', $page = '1,20') {
+    public function getFullcutGoodsList($condition = array(), $field = '*', $order = 'id desc', $page = [1,20]) {
         if($page == ''){
             $data = $this->where($condition)->order($order)->field($field)->select();
 
@@ -45,7 +45,7 @@ class FullcutGoods extends Model {
 	 * @param  string $page
 	 * @return
 	 */
-	public function getFullcutGoodsMoreList($condition = array(), $field = '*', $order = 'id desc', $page = '1,20') {
+	public function getFullcutGoodsMoreList($condition = array(), $field = '*', $order = 'id desc', $page = [1,20]) {
         $data = $this->alias('fullcut_goods')->join('__GOODS__ goods','fullcut_goods.goods_id = goods.id','LEFT')->where($condition)->order($order)->field($field)->page($page)->select();
         return $data;
 	}
@@ -54,7 +54,7 @@ class FullcutGoods extends Model {
      * 查询普通的数据和软删除的数据
      * @return
      */
-    public function getWithTrashedFullcutGoodsList($condition = array(), $field = '*', $order = 'id desc', $page = '1,20'){
+    public function getWithTrashedFullcutGoodsList($condition = array(), $field = '*', $order = 'id desc', $page = [1,20]){
         $data = $this->withTrashed()->where($condition)->order($order)->field($field)->page($page)->select();  //查询普通的数据和软删除的数据
         return $data;
     }
@@ -63,7 +63,7 @@ class FullcutGoods extends Model {
      * 只查询软删除的数据
      * @return
      */
-    public function getOnlyTrashedFullcutGoodsList($condition = array(), $field = '*', $order = 'id desc', $page = '1,20'){
+    public function getOnlyTrashedFullcutGoodsList($condition = array(), $field = '*', $order = 'id desc', $page = [1,20]){
         $data = $this->onlyTrashed()->where($condition)->order($order)->field($field)->page($page)->select(); //只查询软删除的
         return $data;
     }
@@ -196,7 +196,7 @@ class FullcutGoods extends Model {
      * @param  string $page
      * @return
      */
-    public function getGoodsSkuMoreList($condition = array(), $field = '*', $order = 'id desc', $page = '1,20') {
+    public function getGoodsSkuMoreList($condition = array(), $field = '*', $order = 'id desc', $page = [1,20]) {
 
         if($page == ''){
             $data = $this->alias('goods_sku')->join('__FULLCUT_GOODS__ fullcut_goods','goods_sku.id = fullcut_goods.goods_sku_id','LEFT')->where($condition)->order($order)->field($field)->select();

@@ -28,7 +28,7 @@ class CouponGoods extends Model
 	 * @param  string $page
 	 * @return             [列表数据]
 	 */
-	public function getCouponGoodsList( $condition = [], $field = '*', $order = 'id desc', $page = '1,20' )
+	public function getCouponGoodsList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20] )
 	{
 		if( $page == '' ){
 			$data = $this->where( $condition )->order( $order )->field( $field )->select();
@@ -48,7 +48,7 @@ class CouponGoods extends Model
 	 * @param  string $page
 	 * @return
 	 */
-	public function getCouponGoodsMoreList( $condition = [], $field = '*', $order = 'id desc', $page = '1,20' )
+	public function getCouponGoodsMoreList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20] )
 	{
 		$data = $this->alias( 'coupon_goods' )->join( '__GOODS__ goods', 'coupon_goods.goods_id = goods.id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $data;
@@ -58,7 +58,7 @@ class CouponGoods extends Model
 	 * 查询普通的数据和软删除的数据
 	 * @return
 	 */
-	public function getWithTrashedCouponGoodsList( $condition = [], $field = '*', $order = 'id desc', $page = '1,20' )
+	public function getWithTrashedCouponGoodsList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20] )
 	{
 		$data = $this->withTrashed()->where( $condition )->order( $order )->field( $field )->page( $page )->select();  //查询普通的数据和软删除的数据
 		return $data;
@@ -68,7 +68,7 @@ class CouponGoods extends Model
 	 * 只查询软删除的数据
 	 * @return
 	 */
-	public function getOnlyTrashedCouponGoodsList( $condition = [], $field = '*', $order = 'id desc', $page = '1,20' )
+	public function getOnlyTrashedCouponGoodsList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20] )
 	{
 		$data = $this->onlyTrashed()->where( $condition )->order( $order )->field( $field )->page( $page )->select(); //只查询软删除的
 		return $data;
@@ -219,7 +219,7 @@ class CouponGoods extends Model
 	 * @param  string $page
 	 * @return
 	 */
-	public function getGoodsSkuMoreList( $condition = [], $field = '*', $order = 'id desc', $page = '1,20' )
+	public function getGoodsSkuMoreList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20] )
 	{
 
 		if( $page == '' ){

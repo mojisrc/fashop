@@ -17,7 +17,7 @@ class OrderRefundReason extends Model
 	 * @param  string $page
 	 * @return             [退款\退款退货原因(线上+线下)列表数据]
 	 */
-	public function getOrderRefundReasonList( $condition = [], $field = '*', $order = 'id asc', $page = '1,20' )
+	public function getOrderRefundReasonList( $condition = [], $field = '*', $order = 'id asc', $page = [1,20] )
 	{
 		$data = $this->order( $order )->where( $condition )->field( $field )->page( $page )->select();
 		return $data;

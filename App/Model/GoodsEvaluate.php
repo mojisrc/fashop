@@ -30,7 +30,7 @@ class GoodsEvaluate extends Model
 	 * @param    string $page
 	 * @return   array
 	 */
-	public function getGoodsEvaluateList( $condition, $field = '*', $order = 'id desc', $page = '1,20' )
+	public function getGoodsEvaluateList( $condition, $field = '*', $order = 'id desc', $page = [1,20] )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $list;
