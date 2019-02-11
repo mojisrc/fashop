@@ -19,11 +19,7 @@ use ezswoole\Model;
 class Coupon extends Model
 {
 	protected $softDelete = true;
-
-	protected $type
-		= [
-			'partake' => 'json',
-		];
+	protected $jsonFields = ['partake'];
 
 	/**
 	 * 列表

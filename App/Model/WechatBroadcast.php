@@ -18,11 +18,7 @@ use ezswoole\Model;
 class WechatBroadcast extends Model
 {
 	protected $createTime = true;
-	protected $type
-		= [
-			'condition'    => 'json',
-			'send_content' => 'json',
-		];
+	protected $jsonFields = ['condition','send_content'];
 
 	/**
 	 * 添加

@@ -20,12 +20,7 @@ class GoodsEvaluate extends Model
 {
 	protected $softDelete = true;
 	protected $createTime = true;
-
-	protected $type
-		= [
-			'images'            => 'json',
-			'additional_images' => 'json',
-		];
+	protected $jsonFields = ['images','additional_images'];
 
 	/**
 	 * 查询评价列表

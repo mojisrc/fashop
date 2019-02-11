@@ -20,13 +20,7 @@ class OrderRefund extends Model
 {
 	protected $softDelete = true;
 
-	protected $type
-		= [
-			'goods_spec'      => 'json',
-			'images'          => 'json',
-			'tracking_images' => 'json',
-			'user_images'     => 'json',
-		];
+	protected $jsonFields = ['goods_spec','images','tracking_images','user_images'];
 
 	/**
 	 * 增加退款\退款退货

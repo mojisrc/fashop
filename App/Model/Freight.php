@@ -21,10 +21,7 @@ class Freight extends Model
 	protected $softDelete = true;
 	protected $createTime = true;
 
-	protected $type
-		= [
-			'areas' => 'json',
-		];
+	protected $jsonFields = ['areas'];
 
 	/**
 	 * 添加

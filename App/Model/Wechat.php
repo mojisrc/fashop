@@ -31,11 +31,7 @@ use ezswoole\Model;
 
 class Wechat extends Model
 {
-	protected $type
-		= [
-			'auto_reply_subscribe_replay_content' => 'json',
-		];
-
+	protected $jsonFields = ['auto_reply_subscribe_replay_content'];
 	/**
 	 * 添加
 	 * @param  array $data

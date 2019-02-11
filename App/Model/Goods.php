@@ -32,16 +32,6 @@ class Goods extends Model
 			'spec_list',
 			'image_spec_images',
 		];
-	protected $type
-		= [
-			'category_ids'      => 'json',
-			'sku_list'          => 'json',
-			'images'            => 'json',
-			'body'              => 'json',
-			'spec_list'         => 'json',
-			'image_spec_images' => 'json',
-		];
-
 	const STATE1 = 1; // 出售中
 	const STATE0 = 0; // 下架
 

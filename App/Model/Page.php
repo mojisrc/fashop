@@ -21,10 +21,7 @@ class Page extends Model
 	protected $softDelete = true;
 	protected $createTime = true;
 
-	protected $type
-		= [
-			'body' => 'json',
-		];
+	protected $jsonFields = ['body'];
 
 	/**
 	 * 添加

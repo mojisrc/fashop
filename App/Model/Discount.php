@@ -20,10 +20,7 @@ class Discount extends Model
 {
 	protected $softDelete = true;
 
-	protected $type
-		= [
-			'partake' => 'json',
-		];
+	protected $jsonFields = ['partake'];
 
 	/**
 	 * 列表

@@ -20,12 +20,7 @@ class OrderGoods extends Model
 {
 	protected $softDelete = true;
 	protected $createTime = true;
-
-
-	protected $type
-		= [
-			'goods_spec' => 'json',
-		];
+	protected $jsonFields = ['goods_spec'];
 
 	/**
 	 * 添加

@@ -19,12 +19,7 @@ use ezswoole\Model;
 
 class GoodsSku extends Model
 {
-	protected $type
-		= [
-			'spec'       => 'json',
-			'goods_spec' => 'json',
-
-		];
+	protected $jsonFields = ['spec','goods_spec'];
 
 	const STATE1   = 1; // 出售中
 	const STATE0   = 0; // 下架

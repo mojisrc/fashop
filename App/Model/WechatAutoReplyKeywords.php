@@ -18,10 +18,7 @@ use ezswoole\Model;
 class WechatAutoReplyKeywords extends Model
 {
 	protected $createTime = true;
-	protected $type
-		= [
-			'replay_content' => 'json',
-		];
+	protected $jsonFields = ['replay_content'];
 
 	/**
 	 * 添加

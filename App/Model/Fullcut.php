@@ -19,12 +19,12 @@ use ezswoole\Model;
 class Fullcut extends Model
 {
 	protected $softDelete = true;
-	protected $type
-		= [
-			'partake'   => 'json',
-			'hierarchy' => 'json', //层级 至多5个,每个(包涵fll_price满XXX元,minus减XXX元,discountsXXX折,type满减类型 默认0减XXX元  1打XXX折)
 
-		];
+	protected $jsonFields = [
+		'partake',
+		//层级 至多5个,每个(包涵fll_price满XXX元,minus减XXX元,discountsXXX折,type满减类型 默认0减XXX元  1打XXX折)
+		'hierarchy'
+	];
 
 	/**
 	 * 列表

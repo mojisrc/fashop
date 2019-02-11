@@ -19,13 +19,7 @@ use ezswoole\Model;
 class OrderExtend extends Model
 {
 	protected $softDelete = true;
-
-	protected $type
-		= [
-			'reciver_info' => 'json',
-			'invoice_info' => 'json',
-		];
-
+	protected $jsonFields = ['reciver_info','invoice_info'];
 	/**
 	 * 列表
 	 * @param   $condition

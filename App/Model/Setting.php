@@ -17,12 +17,7 @@ use ezswoole\Model;
 
 class Setting extends Model
 {
-
-	protected $type
-		= [
-			'config' => 'json',
-		];
-
+	protected $jsonFields = ['config'];
 	/**
 	 * @param array  $condition 条件
 	 * @param string $field     字段

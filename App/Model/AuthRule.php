@@ -45,7 +45,7 @@ class AuthRule extends Model
 	 */
 	public function editAuthRule( $condition = [], $data = [] )
 	{
-		return $this->where($condition)->edit($data);
+		return $this->where( $condition )->edit( $data );
 	}
 
 	/**

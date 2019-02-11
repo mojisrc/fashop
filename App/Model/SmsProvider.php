@@ -17,10 +17,7 @@ use ezswoole\Model;
 
 class SmsProvider extends Model
 {
-	protected $type
-		= [
-			'config' => 'json',
-		];
+	protected $jsonFields = ['config'];
 
 	/**
 	 * 读取单行信息

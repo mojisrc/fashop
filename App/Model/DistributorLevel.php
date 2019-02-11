@@ -19,11 +19,7 @@ class DistributorLevel extends Model
 {
 	protected $softDelete = true;
 
-	protected $type
-		= [
-			'upgrade_rules' => 'json',
-		];
-
+	protected $jsonFields = ['upgrade_rules'];
 
 	/**
 	 * 列表

@@ -11,11 +11,7 @@ use ezswoole\Model;
 class UserOpen extends Model
 {
 	protected $softDelete = true;
-	protected $type
-		= [
-			'info_aggregate' => 'json',
-		];
-
+	protected $jsonFields = ['info_aggregate'];
 	/**
 	 * 列表
 	 * @param   $condition

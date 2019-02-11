@@ -16,8 +16,6 @@ use ezswoole\Model;
 
 class AuthGroupAccess extends Model
 {
-
-
 	/**
 	 * 添加
 	 * @datetime 2017-10-17 15:20:26

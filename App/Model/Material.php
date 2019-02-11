@@ -18,11 +18,7 @@ use ezswoole\Model;
 class Material extends Model
 {
 	protected $createTime = true;
-	protected $type
-		= [
-			'media' => 'json',
-		];
-
+	protected $jsonFields = ['media'];
 	/**
 	 * 添加
 	 * @param  array $data

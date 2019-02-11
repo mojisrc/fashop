@@ -19,11 +19,7 @@ use ezswoole\Model;
 class GroupGoods extends Model
 {
 	protected $softDelete = true;
-
-	protected $type
-		= [
-			'spec' => 'json',
-		];
+	protected $jsonFields = ['spec'];
 
 	/**
 	 * 列表
