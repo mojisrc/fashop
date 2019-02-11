@@ -38,7 +38,7 @@ class VoucherTemplate extends Model
 	 */
 	public function addVoucherTemplateAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

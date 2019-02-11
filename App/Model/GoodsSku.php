@@ -44,7 +44,7 @@ class GoodsSku extends Model
 	 */
 	public function addGoodsSkuAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**
@@ -106,7 +106,7 @@ class GoodsSku extends Model
 	 */
 	public function updateAllGoodsSku( $update = [] )
 	{
-		return $this->saveAll( $update );
+		return $this->editMulti( $update );
 	}
 
 	/**

@@ -40,7 +40,7 @@ class Express extends Model
 	 */
 	public function addExpressAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

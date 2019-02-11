@@ -126,7 +126,7 @@ class DiscountGoods extends Model
 	 */
 	public function updateAllDiscountGoods( $update )
 	{
-		return $this->saveAll( $update );
+		return $this->editMulti( $update );
 	}
 
 	/**
@@ -146,7 +146,7 @@ class DiscountGoods extends Model
 	 */
 	public function insertAllDiscountGoods( $insert )
 	{
-		return $this->saveAll( $insert );
+		return $this->addMulti( $insert );
 	}
 
 	/**

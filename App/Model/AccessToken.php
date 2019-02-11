@@ -39,7 +39,7 @@ class AccessToken extends Model
 	 */
 	public function addAccessTokenAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**
@@ -50,7 +50,7 @@ class AccessToken extends Model
 	 */
 	public function editAccessToken( $condition = [], $data = [] )
 	{
-		return $this->where($condition)->edit($data);
+		return $this->where( $condition )->edit( $data );
 	}
 
 	/**
@@ -94,7 +94,7 @@ class AccessToken extends Model
 	 * @param    string $group
 	 * @return   array | false
 	 */
-	public function getAccessTokenList( $condition = [], $field = '*', $order = '', $page = [1,10], $group = '' )
+	public function getAccessTokenList( $condition = [], $field = '*', $order = '', $page = [1, 10], $group = '' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->group( $group )->page( $page )->select();
 		return $list;

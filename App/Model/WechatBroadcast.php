@@ -37,7 +37,7 @@ class WechatBroadcast extends Model
 	 */
 	public function addWechatBroadcastAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

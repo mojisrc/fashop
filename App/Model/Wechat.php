@@ -49,7 +49,7 @@ class Wechat extends Model
 	 */
 	public function addWechatAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

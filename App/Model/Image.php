@@ -36,7 +36,7 @@ class Image extends Model
 	 */
 	public function addImageAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

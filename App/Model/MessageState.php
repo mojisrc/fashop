@@ -38,7 +38,7 @@ class MessageState extends Model
 	 */
 	public function addMessageStateAll( array $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

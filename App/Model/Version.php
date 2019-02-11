@@ -37,7 +37,7 @@ class Version extends Model
 	 */
 	public function addVersionAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

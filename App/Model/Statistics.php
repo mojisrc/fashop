@@ -38,7 +38,7 @@ class Statistics extends Model
 	 */
 	public function addStatisticsAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

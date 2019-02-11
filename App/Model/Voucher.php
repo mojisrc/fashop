@@ -146,7 +146,7 @@ class Voucher extends Model
 	 */
 	public function addVoucherAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

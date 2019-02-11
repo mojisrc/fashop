@@ -52,7 +52,7 @@ class Goods extends Model
 	 */
 	public function addGoodsAll( $insert )
 	{
-		return $this->insertAll( $insert );
+		return $this->addMulti( $insert );
 	}
 
 	/**
@@ -299,7 +299,7 @@ class Goods extends Model
 	 */
 	public function updateAllGoods( $update = [] )
 	{
-		return $this->saveAll( $update );
+		return $this->editMulti( $update );
 	}
 
 }

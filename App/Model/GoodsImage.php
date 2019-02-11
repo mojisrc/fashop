@@ -40,7 +40,7 @@ class GoodsImage extends Model
 	 */
 	public function addGoodsImageAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

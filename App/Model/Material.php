@@ -36,7 +36,7 @@ class Material extends Model
 	 */
 	public function addMaterialAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

@@ -65,7 +65,7 @@ class OrderRefundReason extends Model
 	 */
 	public function insertAllOrderRefundReason( $insert )
 	{
-		return $this->insertAll( $insert );
+		return $this->addMulti( $insert );
 	}
 
 	/**

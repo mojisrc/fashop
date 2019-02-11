@@ -37,7 +37,7 @@ class Cart extends Model
 	 */
 	public function addCartAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

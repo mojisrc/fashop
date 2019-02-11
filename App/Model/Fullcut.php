@@ -102,7 +102,7 @@ class Fullcut extends Model
 	 */
 	public function updateAllFullcut( $update )
 	{
-		return $this->saveAll( $update );
+		return $this->editMulti( $update );
 	}
 
 	/**
@@ -122,7 +122,7 @@ class Fullcut extends Model
 	 */
 	public function insertAllFullcut( $insert )
 	{
-		return $this->saveAll( $insert );
+		return $this->addMulti( $insert );
 	}
 
 	/**

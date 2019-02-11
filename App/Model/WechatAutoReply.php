@@ -37,7 +37,7 @@ class WechatAutoReply extends Model
 	 */
 	public function addWechatAutoReplyAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

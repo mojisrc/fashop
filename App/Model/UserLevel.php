@@ -40,7 +40,7 @@ class UserLevel extends Model
 	 */
 	public function addUserLevelAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

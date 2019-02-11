@@ -205,7 +205,7 @@ class Distributor extends Model
 	 */
 	public function insertAllDistributor( $insert = [] )
 	{
-		return $this->saveAll( $insert );
+		return $this->addMulti( $insert );
 	}
 
 	/**
@@ -226,7 +226,7 @@ class Distributor extends Model
 	 */
 	public function updateAllDistributor( $update = [] )
 	{
-		return $this->saveAll( $update );
+		return $this->editMulti( $update );
 	}
 
 	/**

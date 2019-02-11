@@ -37,7 +37,7 @@ class GoodsSpecValue extends Model
 	 */
 	public function addGoodsSpecValueAll( array $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

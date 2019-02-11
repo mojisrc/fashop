@@ -34,7 +34,7 @@ class AuthRule extends Model
 	 */
 	public function addAuthRuleAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

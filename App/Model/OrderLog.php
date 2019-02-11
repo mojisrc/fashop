@@ -39,7 +39,7 @@ class OrderLog extends Model
 	 */
 	public function addOrderLogAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

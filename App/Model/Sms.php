@@ -38,7 +38,7 @@ class Sms extends Model
 	 */
 	public function addSmsAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

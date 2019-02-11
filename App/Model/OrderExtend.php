@@ -276,7 +276,7 @@ class OrderExtend extends Model
 	 */
 	public function insertAllOrderExtend( $insert = [] )
 	{
-		return $this->saveAll( $insert );
+		return $this->addMulti( $insert );
 	}
 
 	/**
@@ -297,7 +297,7 @@ class OrderExtend extends Model
 	 */
 	public function updateAllOrderExtend( $update = [] )
 	{
-		return $this->saveAll( $update );
+		return $this->editMulti( $update );
 	}
 
 	/**

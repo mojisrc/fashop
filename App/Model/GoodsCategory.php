@@ -38,7 +38,7 @@ class GoodsCategory extends Model
 	 */
 	public function addGoodsCategoryAll( array $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

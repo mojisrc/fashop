@@ -37,7 +37,7 @@ class Area extends Model
 	 */
 	public function addAreaAll( array $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

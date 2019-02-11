@@ -39,7 +39,7 @@ class MessageType extends Model
 	 */
 	public function addMessageTypeAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

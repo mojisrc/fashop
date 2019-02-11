@@ -412,7 +412,7 @@ class Order extends Model
 	 */
 	public function addOrderGoods( $data )
 	{
-		return model( 'OrderGoods' )->insertAll( $data );
+		return model( 'OrderGoods' )->addMulti( $data );
 	}
 
 	/**

@@ -37,7 +37,7 @@ class Shop extends Model
 	 */
 	public function addShopAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

@@ -38,7 +38,7 @@ class Upload extends Model
 	 */
 	public function addUploadAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

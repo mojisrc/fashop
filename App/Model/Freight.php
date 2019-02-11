@@ -40,7 +40,7 @@ class Freight extends Model
 	 */
 	public function addFreightAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

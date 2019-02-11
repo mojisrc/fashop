@@ -37,7 +37,7 @@ class WechatAutoReplyKeywords extends Model
 	 */
 	public function addWechatAutoReplyKeywordsAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

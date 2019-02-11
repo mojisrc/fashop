@@ -155,7 +155,7 @@ class DistributionGoods extends Model
 	 */
 	public function insertAllDistributionGoods( $insert = [] )
 	{
-		return $this->saveAll( $insert );
+		return $this->addMulti( $insert );
 	}
 
 	/**
@@ -176,7 +176,7 @@ class DistributionGoods extends Model
 	 */
 	public function updateAllDistributionGoods( $update = [] )
 	{
-		return $this->saveAll( $update );
+		return $this->editMulti( $update );
 	}
 
 	/**

@@ -43,7 +43,7 @@ class User extends Model
 	 */
 	public function addUserAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**
@@ -169,7 +169,7 @@ class User extends Model
 	 */
 	public function updateAllUser( $update = [] )
 	{
-		return $this->saveAll( $update );
+		return $this->editMulti( $update );
 	}
 
 	/**

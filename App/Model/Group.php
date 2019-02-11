@@ -285,7 +285,7 @@ class Group extends Model
 	 */
 	public function insertAllGroup( $insert = [] )
 	{
-		return $this->saveAll( $insert );
+		return $this->addMulti( $insert );
 	}
 
 	/**
@@ -306,7 +306,7 @@ class Group extends Model
 	 */
 	public function updateAllGroup( $update = [] )
 	{
-		return $this->saveAll( $update );
+		return $this->editMulti( $update );
 	}
 
 	/**

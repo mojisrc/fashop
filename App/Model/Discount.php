@@ -122,7 +122,7 @@ class Discount extends Model
 	 */
 	public function updateAllDiscount( $update )
 	{
-		return $this->saveAll( $update );
+		return $this->editMulti( $update );
 	}
 
 	/**
@@ -142,7 +142,7 @@ class Discount extends Model
 	 */
 	public function insertAllDiscount( $insert )
 	{
-		return $this->saveAll( $insert );
+		return $this->addMulti( $insert );
 	}
 
 	/**

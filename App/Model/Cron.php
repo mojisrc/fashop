@@ -36,7 +36,7 @@ class Cron extends Model
 	 */
 	public function addCronAll( $insert )
 	{
-		return $this->insertAll( $insert );
+		return $this->addMulti( $insert );
 	}
 
 	/**

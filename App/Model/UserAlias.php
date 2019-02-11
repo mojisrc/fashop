@@ -268,7 +268,7 @@ class UserAlias extends Model
 	 */
 	public function insertAllUserAlias( $insert = [] )
 	{
-		return $this->saveAll( $insert );
+		return $this->addMulti( $insert );
 	}
 
 	/**
@@ -289,7 +289,7 @@ class UserAlias extends Model
 	 */
 	public function updateAllUserAlias( $update = [] )
 	{
-		return $this->saveAll( $update );
+		return $this->editMulti( $update );
 	}
 
 	/**

@@ -48,7 +48,7 @@ class UserTemp extends Model
 	 */
 	public function addUserTempAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

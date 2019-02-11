@@ -484,7 +484,7 @@ class GroupGoods extends Model
 	 */
 	public function insertAllGroupGoods( $insert = [] )
 	{
-		return $this->saveAll( $insert );
+		return $this->addMulti( $insert );
 	}
 
 	/**
@@ -505,7 +505,7 @@ class GroupGoods extends Model
 	 */
 	public function updateAllGroupGoods( $update = [] )
 	{
-		return $this->saveAll( $update );
+		return $this->editMulti( $update );
 	}
 
 	/**

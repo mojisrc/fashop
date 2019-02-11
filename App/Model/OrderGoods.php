@@ -188,7 +188,7 @@ class OrderGoods extends Model
 	 */
 	public function updateAllOrderGoods( $update = [] )
 	{
-		return $this->saveAll( $update );
+		return $this->editMulti( $update );
 	}
 
 }

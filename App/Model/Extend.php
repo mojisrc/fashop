@@ -39,7 +39,7 @@ class Extend extends Model
 	 */
 	public function addExtendAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

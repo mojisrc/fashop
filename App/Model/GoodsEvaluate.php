@@ -130,7 +130,7 @@ class GoodsEvaluate extends Model
 	 */
 	public function addGoodsEvaluateAll( $param )
 	{
-		return $this->insertAll( $param );
+		return $this->addMulti( $param );
 	}
 
 	/**

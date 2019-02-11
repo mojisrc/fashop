@@ -464,7 +464,7 @@ class UserProfile extends Model
 	 */
 	public function insertAllUserProfile( $insert = [] )
 	{
-		return $this->saveAll( $insert );
+		return $this->addMulti( $insert );
 	}
 
 	/**
@@ -485,7 +485,7 @@ class UserProfile extends Model
 	 */
 	public function updateAllUserProfile( $update = [] )
 	{
-		return $this->saveAll( $update );
+		return $this->editMulti( $update );
 	}
 
 	/**

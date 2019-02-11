@@ -46,7 +46,7 @@ class Visit extends Model
 	 */
 	public function addVisitAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

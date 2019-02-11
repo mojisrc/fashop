@@ -38,7 +38,7 @@ class OrderPay extends Model
 	 */
 	public function addOrderPayAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

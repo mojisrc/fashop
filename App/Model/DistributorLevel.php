@@ -143,7 +143,7 @@ class DistributorLevel extends Model
 	 */
 	public function insertAllDistributorLevel( $insert = [] )
 	{
-		return $this->saveAll( $insert );
+		return $this->addMulti( $insert );
 	}
 
 	/**
@@ -164,7 +164,7 @@ class DistributorLevel extends Model
 	 */
 	public function updateAllDistributorLevel( $update = [] )
 	{
-		return $this->saveAll( $update );
+		return $this->editMulti( $update );
 	}
 
 	/**

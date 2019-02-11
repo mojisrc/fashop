@@ -92,7 +92,7 @@ class DistributionConfig extends Model
 	 */
 	public function insertAllDistributionConfig( $insert = [] )
 	{
-		return $this->saveAll( $insert );
+		return $this->addMulti( $insert );
 	}
 
 	/**
@@ -113,7 +113,7 @@ class DistributionConfig extends Model
 	 */
 	public function updateAllDistributionConfig( $update = [] )
 	{
-		return $this->saveAll( $update );
+		return $this->editMulti( $update );
 	}
 
 	/**

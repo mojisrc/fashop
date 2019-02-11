@@ -36,7 +36,7 @@ class VerifyCode extends Model
 	 */
 	public function addVerifyCodeAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

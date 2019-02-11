@@ -39,7 +39,7 @@ class SystemTask extends Model
 	 */
 	public function addSystemTaskAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

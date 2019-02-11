@@ -33,7 +33,7 @@ class AuthGroupAccess extends Model
 	 */
 	public function addAuthGroupAccessAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

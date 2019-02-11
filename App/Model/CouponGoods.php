@@ -126,7 +126,7 @@ class CouponGoods extends Model
 	 */
 	public function updateAllCouponGoods( $update )
 	{
-		return $this->saveAll( $update );
+		return $this->editMulti( $update );
 	}
 
 	/**
@@ -146,7 +146,7 @@ class CouponGoods extends Model
 	 */
 	public function insertAllCouponGoods( $insert )
 	{
-		return $this->saveAll( $insert );
+		return $this->addMulti( $insert );
 	}
 
 	/**

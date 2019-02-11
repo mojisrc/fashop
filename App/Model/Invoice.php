@@ -41,7 +41,7 @@ class Invoice extends Model {
 	 * @return boolean
 	 */
 	public function addInvoiceAll($data) {
-		return $this->insertAll($data);
+		return $this->addMulti($data);
 	}
 	/**
 	 * 修改

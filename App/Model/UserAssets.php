@@ -268,7 +268,7 @@ class UserAssets extends Model
 	 */
 	public function insertAllUserAssets( $insert = [] )
 	{
-		return $this->saveAll( $insert );
+		return $this->addMulti( $insert );
 	}
 
 	/**
@@ -289,7 +289,7 @@ class UserAssets extends Model
 	 */
 	public function updateAllUserAssets( $update = [] )
 	{
-		return $this->saveAll( $update );
+		return $this->editMulti( $update );
 	}
 
 	/**

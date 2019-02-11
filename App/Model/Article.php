@@ -38,7 +38,7 @@ class Article extends Model
 	 */
 	public function addArticleAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

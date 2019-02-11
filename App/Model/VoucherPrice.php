@@ -37,7 +37,7 @@ class VoucherPrice extends Model
 	 */
 	public function addVoucherPriceAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

@@ -36,7 +36,7 @@ class Auth extends Model
 	 */
 	public function addAuthAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

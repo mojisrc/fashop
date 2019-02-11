@@ -36,7 +36,7 @@ class GoodsSpec extends Model
 	 */
 	public function addGoodsSpecAll( array $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

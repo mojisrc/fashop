@@ -34,7 +34,7 @@ class UserWechat extends Model
 	 */
 	public function addUserWechatAll( $data )
 	{
-		return $this->insertAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

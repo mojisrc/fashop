@@ -268,7 +268,7 @@ class UserOpen extends Model
 	 */
 	public function insertAllUserOpen( $insert = [] )
 	{
-		return $this->saveAll( $insert );
+		return $this->addMulti( $insert );
 	}
 
 	/**
@@ -289,7 +289,7 @@ class UserOpen extends Model
 	 */
 	public function updateAllUserOpen( $update = [] )
 	{
-		return $this->saveAll( $update );
+		return $this->editMulti( $update );
 	}
 
 	/**
