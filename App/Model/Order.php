@@ -344,7 +344,7 @@ class Order extends Model
 	 */
 	public function updateOrderGoodsInfo( $condition = [], $update_data )
 	{
-		return model( 'OrderGoods' )->where( $condition )->update( $update_data );
+		return model( 'OrderGoods' )->where( $condition )->edit( $update_data );
 	}
 
 	/**
@@ -435,7 +435,7 @@ class Order extends Model
 	 */
 	public function editOrder( $condition, $data )
 	{
-		return $this->where( $condition )->update( $data );
+		return $this->where( $condition )->edit( $data );
 	}
 
 	/**
@@ -446,7 +446,7 @@ class Order extends Model
 	 */
 	public function editOrderExtend( $condition, $data )
 	{
-		return model( 'OrderExtend' )->where( $condition )->update( $data );
+		return model( 'OrderExtend' )->where( $condition )->edit( $data );
 	}
 
 	/**
@@ -457,7 +457,7 @@ class Order extends Model
 	 */
 	public function editOrderPay( $data, $condition )
 	{
-		return model( 'OrderPay' )->where( $condition )->update( $data );
+		return model( 'OrderPay' )->where( $condition )->edit( $data );
 	}
 
 
@@ -948,14 +948,7 @@ class Order extends Model
 		return $data;
 	}
 
-	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelOrder( $condition )
-	{
-		return $this->where( $condition )->find()->delete();
-	}
+
 
 	/**
 	 * 取得订单状态文字输出形式

@@ -43,7 +43,7 @@ class OrderRefundReason extends Model
 	 */
 	public function updateOrderRefundReason( $update, $condition )
 	{
-		return $this->where( $condition )->update( $update );
+		return $this->where( $condition )->edit( $update );
 	}
 
 	/**
@@ -76,7 +76,7 @@ class OrderRefundReason extends Model
 	 */
 	public function delOrderRefundReason( $condition )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**
@@ -129,12 +129,4 @@ class OrderRefundReason extends Model
 		return $this->where( $condition )->setDec( $field, $num );
 	}
 
-	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelOrderRefundReason( $condition )
-	{
-		return $this->where( $condition )->find()->delete();
-	}
 }

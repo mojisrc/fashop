@@ -49,7 +49,7 @@ class Sms extends Model
 	 */
 	public function editSms( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -59,7 +59,7 @@ class Sms extends Model
 	 */
 	public function delSms( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**
@@ -100,14 +100,6 @@ class Sms extends Model
 		return $list;
 	}
 
-	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelSms( $condition )
-	{
-		return $this->where( $condition )->find()->delete();
-	}
 }
 
 ?>

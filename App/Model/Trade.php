@@ -145,7 +145,7 @@ class Trade extends Model
 				$data                  = [];
 				$data['stock']         = ['exp', 'stock+'.$goods_num]; //库存
 				$data['sale_num']      = ['exp', 'sale_num-'.$goods_num]; //销售记录
-				$state                 = $this->table( '__GOODS__' )->where( $condition )->update( $data );
+				$state                 = $this->table( '__GOODS__' )->where( $condition )->edit( $data );
 			}
 			$order_cancel         = $this->getOrderState( 'order_cancel' ); //订单状态0:已取消
 			$order_array          = [];
@@ -186,7 +186,7 @@ class Trade extends Model
 		$refund_array['return_type']    = '1'; //退货类型:1为不用退货,2为需要退货
 		$refund_array['seller_time']    = time();
 		$refund_array['seller_message'] = lang( 'order_max_day' ).$refund_confirm.lang( 'order_day_refund' );
-		$this->table( '__REFUND_RETURN__' )->where( $condition_sql )->update( $refund_array );
+		$this->table( '__REFUND_RETURN__' )->where( $condition_sql )->edit( $refund_array );
 
 		$return_confirm = $this->getMaxDay( 'return_confirm' ); //卖家不处理收货时按弃货处理
 		$day            = time() - $return_confirm * 60 * 60 * 24;
@@ -203,7 +203,7 @@ class Trade extends Model
 		$refund_array['refund_state']   = '2'; //状态:1为处理中,2为待管理员处理,3为已完成
 		$refund_array['return_type']    = '1'; //退货类型:1为不用退货,2为需要退货
 		$refund_array['seller_message'] = lang( 'order_max_day' ).$return_confirm.'天未处理收货，按弃货处理';
-		$this->table( '__REFUND_RETURN__' )->where( $condition_sql )->update( $refund_array );
+		$this->table( '__REFUND_RETURN__' )->where( $condition_sql )->edit( $refund_array );
 	}
 
 	/**

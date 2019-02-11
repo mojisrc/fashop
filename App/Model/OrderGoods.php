@@ -55,7 +55,7 @@ class OrderGoods extends Model
 	 */
 	public function editOrderGoods( $condition = [], $data = [] )
 	{
-		return !!$this->update( $data, $condition, true )->saveResult;
+		return !!$this->edit( $data, $condition, true )->saveResult;
 	}
 
 	/**
@@ -65,7 +65,7 @@ class OrderGoods extends Model
 	 */
 	public function delOrderGoods( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**
@@ -153,14 +153,7 @@ class OrderGoods extends Model
 
 	}
 
-	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelOrderGoods( $condition )
-	{
-		return $this->where( $condition )->find()->delete();
-	}
+
 
 	/**
 	 * 获取的id

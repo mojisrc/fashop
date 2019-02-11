@@ -54,7 +54,7 @@ class GoodsImage extends Model
 		// return $this->foreach ($condition as $key => $value) {
 		// 	$this->db->where($key, $value);
 		// }
-		// return $this->db->update($this->table, $data);
+		// return $this->db->edit($this->table, $data);
 	}
 
 	/**
@@ -64,7 +64,7 @@ class GoodsImage extends Model
 	 */
 	public function delGoodsImage( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**

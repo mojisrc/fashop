@@ -54,7 +54,7 @@ class AuthGroup extends Model
 	 */
 	public function editAuthGroup( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -65,7 +65,7 @@ class AuthGroup extends Model
 	 */
 	public function delAuthGroup( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**
@@ -104,7 +104,7 @@ class AuthGroup extends Model
 	public function getAuthGroupList( $condition = [], $field = '*', $order = '', $page = '1,10' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list ;
+		return $list;
 	}
 }
 

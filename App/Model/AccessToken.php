@@ -17,9 +17,10 @@ use ezswoole\Model;
 
 class AccessToken extends Model
 {
-	// todo create_time
 	// todo addAll
 	protected $softDelete = true;
+	protected $createTime = true;
+
 	/**
 	 * 添加
 	 * @param  array $data
@@ -27,9 +28,8 @@ class AccessToken extends Model
 	 */
 	public function addAccessToken( array $data )
 	{
-		$data['create_time'] = time();
-		$data['ip']          = \App\Utils\Ip::getClientIp();
-		return $this->add($data);
+		$data['ip'] = \App\Utils\Ip::getClientIp();
+		return $this->add( $data );
 	}
 
 	/**
@@ -50,7 +50,7 @@ class AccessToken extends Model
 	 */
 	public function editAccessToken( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -60,7 +60,7 @@ class AccessToken extends Model
 	 */
 	public function delAccessToken( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**
@@ -75,12 +75,13 @@ class AccessToken extends Model
 
 	/**
 	 * 获取权限单条数据
-	 * @param array $condition 条件
-	 * @param string $field 字段
+	 * @param array  $condition 条件
+	 * @param string $field     字段
 	 * @return array | false
 	 */
-	public function getAccessTokenInfo($condition = array(), $field = '*',$order = 'create_time desc') {
-		$info = $this->where($condition)->field($field)->order($order)->find();
+	public function getAccessTokenInfo( $condition = [], $field = '*', $order = 'create_time desc' )
+	{
+		$info = $this->where( $condition )->field( $field )->order( $order )->find();
 		return $info;
 	}
 
@@ -96,14 +97,7 @@ class AccessToken extends Model
 	public function getAccessTokenList( $condition = [], $field = '*', $order = '', $page = '1,10', $group = '' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->group( $group )->page( $page )->select();
-		return $list ;
-	}
-	/**
-	 * 软删除
-	 * @param    array  $condition
-	 */
-	public function softDelAccessToken($condition) {
-        return $this->where($condition)->find()->delete();
+		return $list;
 	}
 
 }

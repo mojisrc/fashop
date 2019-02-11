@@ -57,7 +57,7 @@ class Visit extends Model
 	 */
 	public function editVisit( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -67,7 +67,7 @@ class Visit extends Model
 	 */
 	public function delVisit( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**

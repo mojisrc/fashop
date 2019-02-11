@@ -37,7 +37,7 @@ class SmsScene extends Model
 	 */
 	public function editSmsScene( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -47,7 +47,7 @@ class SmsScene extends Model
 	 */
 	public function delSmsScene( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**

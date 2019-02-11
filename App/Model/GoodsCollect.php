@@ -28,7 +28,7 @@ class GoodsCollect extends Model
 	 */
 	public function addGoodsCollect( array $data )
 	{
-		return $this->add($data);
+		return $this->add( $data );
 	}
 
 	/**
@@ -39,7 +39,7 @@ class GoodsCollect extends Model
 	 */
 	public function editGoodsCollect( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -47,9 +47,9 @@ class GoodsCollect extends Model
 	 * @param    array $condition
 	 * @return   boolean
 	 */
-	public function delGoodsCollect($condition = [], $condition_str = '')
+	public function delGoodsCollect( $condition = [], $condition_str = '' )
 	{
-        return $this->where($condition)->where($condition_str)->delete();
+		return $this->where( $condition )->where( $condition_str )->del();
 	}
 
 	/**
@@ -86,48 +86,43 @@ class GoodsCollect extends Model
 	public function getGoodsCollectList( $condition = [], $field = '*', $group = '', $order = '', $page = '1,10' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list ;
+		return $list;
+	}
+
+
+
+	/**
+	 * 获取的id
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @return
+	 */
+	public function getGoodsCollectId( $condition = [], $condition_str = '' )
+	{
+		return $this->where( $condition )->where( $condition_str )->value( 'id' );
 	}
 
 	/**
-	 * 软删除
-	 * @param    array $condition
+	 * 获取某个字段
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @return
 	 */
-	public function softDelGoodsCollect( $condition )
+	public function getGoodsCollectValue( $condition = [], $condition_str = '', $field = 'id' )
 	{
-		return $this->where( $condition )->find()->delete();
+		return $this->where( $condition )->where( $condition_str )->value( $field );
 	}
 
-
-    /**
-     * 获取的id
-     * @param   $condition
-     * @param   $condition_str
-     * @return
-     */
-    public function getGoodsCollectId($condition = array(), $condition_str = '') {
-        return $this->where($condition)->where($condition_str)->value('id');
-    }
-
-    /**
-     * 获取某个字段
-     * @param   $condition
-     * @param   $condition_str
-     * @return
-     */
-    public function getGoodsCollectValue($condition = array(), $condition_str = '', $field = 'id') {
-        return $this->where($condition)->where($condition_str)->value($field);
-    }
-
-    /**
-     * 获取某个字段列
-     * @param   $condition
-     * @param   $condition_str
-     * @return
-     */
-    public function getGoodsCollectColumn($condition = array(), $condition_str = '', $field = 'id') {
-        return $this->where($condition)->where($condition_str)->column($field);
-    }
+	/**
+	 * 获取某个字段列
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @return
+	 */
+	public function getGoodsCollectColumn( $condition = [], $condition_str = '', $field = 'id' )
+	{
+		return $this->where( $condition )->where( $condition_str )->column( $field );
+	}
 
 
 }

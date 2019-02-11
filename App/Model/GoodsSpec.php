@@ -19,7 +19,6 @@ use ezswoole\Model;
 
 class GoodsSpec extends Model
 {
-	//	protected $softDelete = true;
 	/**
 	 * 添加
 	 * @param  array $data
@@ -48,7 +47,7 @@ class GoodsSpec extends Model
 	 */
 	public function editGoodsSpec( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -58,7 +57,7 @@ class GoodsSpec extends Model
 	 */
 	public function delGoodsSpec( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**
@@ -95,15 +94,6 @@ class GoodsSpec extends Model
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $list;
-	}
-
-	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelGoodsSpec( $condition )
-	{
-		return $this->where( $condition )->find()->delete();
 	}
 }
 

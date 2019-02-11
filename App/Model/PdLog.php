@@ -136,11 +136,5 @@ class PdLog extends Model {
 		}
 		return $insert;
 	}
-    /**
-     * 软删除
-     * @param    array  $condition
-     */
-    public function softDelPdLog($condition) {
-        return $this->where($condition)->find()->delete();
-    }
+
 }

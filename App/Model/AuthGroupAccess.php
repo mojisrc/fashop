@@ -49,7 +49,7 @@ class AuthGroupAccess extends Model
 	 */
 	public function editAuthGroupAccess( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -60,7 +60,7 @@ class AuthGroupAccess extends Model
 	 */
 	public function delAuthGroupAccess( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**
@@ -99,7 +99,7 @@ class AuthGroupAccess extends Model
 	public function getAuthGroupAccessList( $condition = [], $field = '*', $order = '', $page = '1,10' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list ;
+		return $list;
 	}
 }
 

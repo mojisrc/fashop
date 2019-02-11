@@ -51,7 +51,7 @@ class UserLevel extends Model
 	 */
 	public function editUserLevel( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -61,7 +61,7 @@ class UserLevel extends Model
 	 */
 	public function delUserLevel( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**

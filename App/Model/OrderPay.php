@@ -51,7 +51,7 @@ class OrderPay extends Model
 	 */
 	public function editOrderPay( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -61,7 +61,7 @@ class OrderPay extends Model
 	 */
 	public function delOrderPay( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**
@@ -100,14 +100,6 @@ class OrderPay extends Model
 		return $list ;
 	}
 
-	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelOrderPay( $condition )
-	{
-		return $this->where( $condition )->find()->delete();
-	}
 }
 
 ?>

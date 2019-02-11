@@ -20,7 +20,6 @@ class Info extends Model
 	protected $softDelete = true;
 	protected $createTime = true;
 
-
 	/**
 	 * 添加
 	 * @param  array $data
@@ -28,7 +27,6 @@ class Info extends Model
 	 */
 	public function addInfo( array $data )
 	{
-		$data['create_time'] = time();
 		return $this->add( $data );
 	}
 
@@ -50,7 +48,7 @@ class Info extends Model
 	 */
 	public function editInfo( $condition = [], $data = [] )
 	{
-		return $this->where( $condition )->update( $data );
+		return $this->where( $condition )->edit( $data );
 	}
 
 	/**
@@ -60,7 +58,7 @@ class Info extends Model
 	 */
 	public function delInfo( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 

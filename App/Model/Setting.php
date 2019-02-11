@@ -42,7 +42,7 @@ class Setting extends Model
 	 */
 	public function editSetting( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -52,7 +52,7 @@ class Setting extends Model
 	 */
 	public function delSetting( array $condition = [], $condition_str = '' )
 	{
-		return $this->where( $condition )->where( $condition_str )->delete();
+		return $this->where( $condition )->where( $condition_str )->del();
 	}
 
 }

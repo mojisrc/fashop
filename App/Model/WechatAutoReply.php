@@ -52,7 +52,7 @@ class WechatAutoReply extends Model
 	 */
 	public function editWechatAutoReply( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -62,7 +62,7 @@ class WechatAutoReply extends Model
 	 */
 	public function delWechatAutoReply( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**

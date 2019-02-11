@@ -18,9 +18,11 @@ use ezswoole\Model;
 class Cart extends Model
 {
 	protected $createTime = true;
-	protected $type = [
-		'goods_spec'=>'json'
-	];
+	protected $type
+		= [
+			'goods_spec' => 'json',
+		];
+
 	/**
 	 * 添加
 	 * @param  array $data
@@ -49,7 +51,7 @@ class Cart extends Model
 	 */
 	public function editCart( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -59,7 +61,7 @@ class Cart extends Model
 	 */
 	public function delCart( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**
@@ -98,38 +100,41 @@ class Cart extends Model
 	public function getCartList( $condition = [], $field = '*', $order = '', $page = '1,10' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list ;
+		return $list;
 	}
 
-    /**
-     * 修改信息
-     * @param   $update
-     * @param   $condition
-     * @return
-     */
-    public function updateCart($condition = array(),$update = array()) {
-        return $this->save($update,$condition);
-    }
+	/**
+	 * 修改信息
+	 * @param   $update
+	 * @param   $condition
+	 * @return
+	 */
+	public function updateCart( $condition = [], $update = [] )
+	{
+		return $this->save( $update, $condition );
+	}
 
-    /**
-     * 获取某个字段
-     * @param   $condition
-     * @param   $condition_str
-     * @return
-     */
-    public function getCartValue($condition = array(), $condition_str = '', $field = 'id') {
-        return $this->where($condition)->where($condition_str)->value($field);
-    }
+	/**
+	 * 获取某个字段
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @return
+	 */
+	public function getCartValue( $condition = [], $condition_str = '', $field = 'id' )
+	{
+		return $this->where( $condition )->where( $condition_str )->value( $field );
+	}
 
-    /**
-     * 获取某个字段列
-     * @param   $condition
-     * @param   $condition_str
-     * @return
-     */
-    public function getCartColumn($condition = array(), $condition_str = '', $field = 'id') {
-        return $this->where($condition)->where($condition_str)->column($field);
-    }
+	/**
+	 * 获取某个字段列
+	 * @param   $condition
+	 * @param   $condition_str
+	 * @return
+	 */
+	public function getCartColumn( $condition = [], $condition_str = '', $field = 'id' )
+	{
+		return $this->where( $condition )->where( $condition_str )->column( $field );
+	}
 }
 
 ?>

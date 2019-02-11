@@ -500,7 +500,7 @@ class UserProfile extends Model
 	 */
 	public function delUserProfile( $condition = [], $condition_str = '' )
 	{
-		return $this->where( $condition )->where( $condition_str )->delete();
+		return $this->where( $condition )->where( $condition_str )->del();
 	}
 
 }

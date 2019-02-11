@@ -80,7 +80,7 @@ class Voucher extends Model
 	 */
 	public function checkExpired()
 	{
-		return $this->where( ['end_date' => ['lt', time()], 'state' => ['neq', 2]] )->update( ['state' => 3] );
+		return $this->where( ['end_date' => ['lt', time()], 'state' => ['neq', 2]] )->edit( ['state' => 3] );
 	}
 
 	/**
@@ -158,7 +158,7 @@ class Voucher extends Model
 	 */
 	public function editVoucher( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -169,7 +169,7 @@ class Voucher extends Model
 	 */
 	public function delVoucher( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**

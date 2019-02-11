@@ -17,11 +17,8 @@ use ezswoole\Model;
 
 class AuthRule extends Model
 {
-
-
 	/**
 	 * 添加
-	 * @datetime 2017-10-18 17:24:55
 	 * @param  array $data
 	 * @return int pk
 	 */
@@ -32,7 +29,6 @@ class AuthRule extends Model
 
 	/**
 	 * 添加多条
-	 * @datetime 2017-10-18 17:24:55
 	 * @param array $data
 	 * @return boolean
 	 */
@@ -43,30 +39,27 @@ class AuthRule extends Model
 
 	/**
 	 * 修改
-	 * @datetime 2017-10-18 17:24:55
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
 	 */
 	public function editAuthRule( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
 	 * 删除
-	 * @datetime 2017-10-18 17:24:55
 	 * @param    array $condition
 	 * @return   boolean
 	 */
 	public function delAuthRule( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**
 	 * 计算数量
-	 * @datetime 2017-10-18 17:24:55
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -77,7 +70,6 @@ class AuthRule extends Model
 
 	/**
 	 * 获取权限节点单条数据
-	 * @datetime 2017-10-18 17:24:55
 	 * @param array  $condition 条件
 	 * @param string $field     字段
 	 * @return array | false
@@ -90,7 +82,6 @@ class AuthRule extends Model
 
 	/**
 	 * 获得权限节点列表
-	 * @datetime 2017-10-18 17:24:55
 	 * @param    array  $condition
 	 * @param    string $field
 	 * @param    string $order
@@ -100,7 +91,7 @@ class AuthRule extends Model
 	public function getAuthRuleList( $condition = [], $field = '*', $order = '', $page = '1,10' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list ;
+		return $list;
 	}
 }
 

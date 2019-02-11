@@ -22,7 +22,6 @@ class Extend extends Model
 	protected $softDelete = true;
 	protected $createTime = true;
 
-
 	/**
 	 * 添加
 	 * @param  array $data
@@ -35,7 +34,6 @@ class Extend extends Model
 
 	/**
 	 * 添加多条
-	 * @datetime 2017-07-24 22:47:42
 	 * @param array $data
 	 * @return boolean
 	 */
@@ -46,30 +44,27 @@ class Extend extends Model
 
 	/**
 	 * 修改
-	 * @datetime 2017-07-24 22:47:42
 	 * @param    array $condition
 	 * @param    array $data
 	 * @return   boolean
 	 */
 	public function editExtend( $condition = [], $data = [] )
 	{
-		return $this->where( $condition )->update( $data );
+		return $this->where( $condition )->edit( $data );
 	}
 
 	/**
 	 * 删除
-	 * @datetime 2017-07-24 22:47:42
 	 * @param    array $condition
 	 * @return   boolean
 	 */
 	public function delExtend( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**
 	 * 计算数量
-	 * @datetime 2017-07-24 22:47:42
 	 * @param array $condition 条件
 	 * @return int
 	 */
@@ -80,7 +75,6 @@ class Extend extends Model
 
 	/**
 	 * 获取物流单条数据
-	 * @datetime 2017-07-24 22:47:42
 	 * @param array  $condition 条件
 	 * @param string $field     字段
 	 * @return array | false
@@ -93,7 +87,6 @@ class Extend extends Model
 
 	/**
 	 * 获得物流列表
-	 * @datetime 2017-07-24 22:47:42
 	 * @param    array  $condition
 	 * @param    string $field
 	 * @param    string $order
@@ -106,14 +99,7 @@ class Extend extends Model
 		return $list ;
 	}
 
-	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelExtend( $condition )
-	{
-		return $this->where( $condition )->find()->delete();
-	}
+
 }
 
 ?>

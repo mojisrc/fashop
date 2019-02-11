@@ -50,7 +50,7 @@ class MessageType extends Model
 	 */
 	public function editMessageType( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -60,7 +60,7 @@ class MessageType extends Model
 	 */
 	public function delMessageType( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**
@@ -99,14 +99,6 @@ class MessageType extends Model
 		return $list;
 	}
 
-	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelMessageType( $condition )
-	{
-		return $this->where( $condition )->find()->delete();
-	}
 }
 
 ?>

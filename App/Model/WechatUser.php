@@ -45,7 +45,7 @@ class WechatUser extends Model
 	 */
 	public function editWechatUser( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -55,7 +55,7 @@ class WechatUser extends Model
 	 */
 	public function delWechatUser( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**

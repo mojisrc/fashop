@@ -33,7 +33,7 @@ class Freight extends Model
 	 */
 	public function addFreight( array $data )
 	{
-		return $this->add($data);
+		return $this->add( $data );
 	}
 
 	/**
@@ -55,7 +55,7 @@ class Freight extends Model
 	public function editFreight( $condition = [], $data = [] )
 	{
 		$data['update_time'] = time();
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -92,20 +92,6 @@ class Freight extends Model
 	public function getFreightList( $condition = [], $field = '*', $order = '', $page = '1,10' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list ;
-	}
-
-	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelFreight( $condition )
-	{
-		$find = $this->where( $condition )->find();
-		if( $find ){
-			return $find->delete();
-		} else{
-			return false;
-		}
+		return $list;
 	}
 }

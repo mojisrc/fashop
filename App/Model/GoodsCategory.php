@@ -21,7 +21,6 @@ class GoodsCategory extends Model
 	protected $softDelete = true;
 	protected $createTime = true;
 
-
 	/**
 	 * 添加
 	 * @param  array $data
@@ -29,7 +28,7 @@ class GoodsCategory extends Model
 	 */
 	public function addGoodsCategory( array $data )
 	{
-		return $this->add($data);
+		return $this->add( $data );
 	}
 
 	/**
@@ -50,7 +49,7 @@ class GoodsCategory extends Model
 	 */
 	public function editGoodsCategory( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -60,7 +59,7 @@ class GoodsCategory extends Model
 	 */
 	public function delGoodsCategory( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**
@@ -71,8 +70,8 @@ class GoodsCategory extends Model
 	 */
 	public function getGoodsCategoryList( $condition, $field = '*', $order = 'pid asc,sort asc,id asc', $page = '0,10' )
 	{
-		$list                = $this->field( $field )->where( $condition )->order( $order )->page( $page )->select();
-		return $list ;
+		$list = $this->field( $field )->where( $condition )->order( $order )->page( $page )->select();
+		return $list;
 	}
 
 	/**
@@ -263,7 +262,12 @@ class GoodsCategory extends Model
 	 */
 	public function softDelGoodsCategory( $condition )
 	{
-		$find = $this->where( $condition )->find();		if($find){			return $find->delete();		}else{			return false;		}
+		$find = $this->where( $condition )->find();
+		if( $find ){
+			return $find->del();
+		} else{
+			return false;
+		}
 	}
 }
 

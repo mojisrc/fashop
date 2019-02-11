@@ -191,7 +191,7 @@ class DistributionGoods extends Model
 	 */
 	public function delDistributionGoods( $condition = [], $condition_str = '' )
 	{
-		return $this->where( $condition )->where( $condition_str )->delete();
+		return $this->where( $condition )->where( $condition_str )->del();
 	}
 
 	/**

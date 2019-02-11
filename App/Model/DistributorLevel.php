@@ -15,7 +15,6 @@ namespace App\Model;
 
 use ezswoole\Model;
 
-
 class DistributorLevel extends Model
 {
 	protected $softDelete = true;
@@ -179,16 +178,7 @@ class DistributorLevel extends Model
 	 */
 	public function delDistributorLevel( $condition = [], $condition_str = '' )
 	{
-		return $this->where( $condition )->where( $condition_str )->delete();
-	}
-
-	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelDistributorLevel( $condition = [] )
-	{
-		return $this->save( ['delete_time' => time()], $condition );
+		return $this->where( $condition )->where( $condition_str )->del();
 	}
 
 }

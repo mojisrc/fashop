@@ -157,7 +157,7 @@ class OrderRefund extends Model
 	 */
 	public function editOrderRefund( $condition, $data )
 	{
-		return !!$this->update( $data, $condition, true )->saveResult;
+		return !!$this->edit( $data, $condition, true )->saveResult;
 	}
 
 	/**
@@ -499,15 +499,6 @@ class OrderRefund extends Model
 
 		}
 		return $state_desc;
-	}
-
-	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelOrderRefund( $condition )
-	{
-		return $this->where( $condition )->find()->delete();
 	}
 
 	/**

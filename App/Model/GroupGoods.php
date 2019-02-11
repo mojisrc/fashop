@@ -20,7 +20,6 @@ class GroupGoods extends Model
 {
 	protected $softDelete = true;
 
-
 	protected $type
 		= [
 			'spec' => 'json',
@@ -520,17 +519,10 @@ class GroupGoods extends Model
 	 */
 	public function delGroupGoods( $condition = [], $condition_str = '' )
 	{
-		return $this->where( $condition )->where( $condition_str )->delete();
+		return $this->where( $condition )->where( $condition_str )->del();
 	}
 
-	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelGroupGoods( $condition = [], $condition_str = '' )
-	{
-		return $this->where( $condition )->where( $condition_str )->find()->delete();
-	}
+
 
 	/**
 	 * 获得商品sku数量

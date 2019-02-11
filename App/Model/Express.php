@@ -16,7 +16,6 @@ namespace App\Model;
 use ezswoole\Model;
 
 
-
 class Express extends Model
 {
 	protected $softDelete = true;
@@ -54,7 +53,7 @@ class Express extends Model
 	public function editExpress( $condition = [], $data = [] )
 	{
 		$data['update_time'] = time();
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -65,7 +64,7 @@ class Express extends Model
 	 */
 	public function delExpress( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**
@@ -104,17 +103,10 @@ class Express extends Model
 	public function getExpressList( $condition = [], $field = '*', $order = '', $page = '1,10' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list ;
+		return $list;
 	}
 
-	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelExpress( $condition )
-	{
-		return $this->where( $condition )->find()->delete();
-	}
+
 
 	/**
 	 * 获取某个字段

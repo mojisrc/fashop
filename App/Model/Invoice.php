@@ -50,7 +50,7 @@ class Invoice extends Model {
 	 * @return   boolean
 	 */
 	public function editInvoice($condition = array(), $data = array()) {
-		return $this->update($data, $condition, true);
+		return $this->where($condition)->edit($data);
 	}
 	/**
 	 * 删除
@@ -58,7 +58,7 @@ class Invoice extends Model {
 	 * @return   boolean
 	 */
 	public function delInvoice($condition = array()) {
-		return $this->where($condition)->delete();
+		return $this->where($condition)->del();
 	}
 	/**
 	 * 计算数量
@@ -91,12 +91,5 @@ class Invoice extends Model {
 		return $list ;
 	}
 
-    /**
-     * 软删除
-     * @param    array  $condition
-     */
-    public function softDelInvoice($condition) {
-        return $this->where($condition)->find()->delete();
-    }
 }
 ?>

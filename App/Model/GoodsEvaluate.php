@@ -127,7 +127,7 @@ class GoodsEvaluate extends Model
 	 */
 	public function editGoodsEvaluate( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -143,21 +143,7 @@ class GoodsEvaluate extends Model
 	 */
 	public function delGoodsEvaluate( $condition )
 	{
-		return $this->where( $condition )->delete();
-	}
-
-	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelGoodsEvaluate( $condition )
-	{
-		$find = $this->where( $condition )->find();
-		if( $find ){
-			return $find->delete();
-		} else{
-			return false;
-		}
+		return $this->where( $condition )->del();
 	}
 
 	/**

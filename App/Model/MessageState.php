@@ -49,7 +49,7 @@ class MessageState extends Model
 	 */
 	public function editMessageState( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -59,7 +59,7 @@ class MessageState extends Model
 	 */
 	public function delMessageState( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**
@@ -109,20 +109,12 @@ class MessageState extends Model
 		if( $user_id > 0 && !empty( $ids ) ){
 			$condition['to_user_id'] = $user_id;
 			$condition['id']         = ['in', $ids];
-			return $this->where( $condition )->update( $param );
+			return $this->where( $condition )->edit( $param );
 		} else{
 			return false;
 		}
 	}
 
-	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelMessageState( $condition )
-	{
-		return $this->where( $condition )->find()->delete();
-	}
 }
 
 ?>

@@ -64,7 +64,7 @@ class Wechat extends Model
 	 */
 	public function editWechat( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -74,7 +74,7 @@ class Wechat extends Model
 	 */
 	public function delWechat( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**

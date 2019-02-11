@@ -55,7 +55,7 @@ class User extends Model
 	 */
 	public function editUser( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -66,7 +66,7 @@ class User extends Model
 	 */
 	public function delUser( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**
@@ -157,7 +157,7 @@ class User extends Model
 	{
 		$find = $this->where( $condition )->find();
 		if( $find ){
-			return $find->delete();
+			return $find->del();
 		} else{
 			return false;
 		}

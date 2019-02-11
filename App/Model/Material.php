@@ -51,7 +51,7 @@ class Material extends Model
 	 */
 	public function editMaterial( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -61,7 +61,7 @@ class Material extends Model
 	 */
 	public function delMaterial( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**

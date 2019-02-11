@@ -48,7 +48,7 @@ class Shop extends Model
 	 */
 	public function editShop( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -58,7 +58,7 @@ class Shop extends Model
 	 */
 	public function delShop( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**

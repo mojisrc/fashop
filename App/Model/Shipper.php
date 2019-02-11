@@ -46,7 +46,7 @@ class Shipper extends Model{
 	 */
 	public function editShipper($condition = array(), $data = array()) {
 		$data['update_time'] = time();
-		return $this->update($data, $condition, true);
+		return $this->where($condition)->edit($data);
 	}
 	/**
 	 * 获取单条数据
@@ -87,6 +87,6 @@ class Shipper extends Model{
 	 * @param string $table 表名
 	 */
 	public function delShipper($condition) {
-		return $this->where($condition)->delete();
+		return $this->where($condition)->del();
 	}
 }

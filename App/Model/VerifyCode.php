@@ -47,7 +47,7 @@ class VerifyCode extends Model
 	 */
 	public function editVerifyCode( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -57,7 +57,7 @@ class VerifyCode extends Model
 	 */
 	public function delVerifyCode( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**

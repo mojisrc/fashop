@@ -45,7 +45,7 @@ class Page extends Model
 	public function editPage( $condition = [], $data = [] )
 	{
 		$data['update_time'] = time();
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**

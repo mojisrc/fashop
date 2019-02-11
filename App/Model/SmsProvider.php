@@ -55,7 +55,7 @@ class SmsProvider extends Model
 	 */
 	public function editSmsProvider( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 }

@@ -48,7 +48,7 @@ class VoucherPrice extends Model
 	 */
 	public function editVoucherPrice( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -58,7 +58,7 @@ class VoucherPrice extends Model
 	 */
 	public function delVoucherPrice( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**

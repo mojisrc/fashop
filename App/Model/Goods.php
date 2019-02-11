@@ -52,7 +52,6 @@ class Goods extends Model
 	 */
 	public function addGoods( $data )
 	{
-		$data['create_time'] = time();
 		return $this->add( $data );
 	}
 
@@ -166,7 +165,7 @@ class Goods extends Model
 	 */
 	public function editGoods( $condition, $update )
 	{
-		return $this->update( $update, $condition, true );
+		return $this->edit( $update, $condition, true );
 	}
 
 	/**
@@ -178,7 +177,7 @@ class Goods extends Model
 	public function editGoodsNoLock( $update, $condition )
 	{
 		$condition['lock'] = 0;
-		return $this->update( $update, $condition, true );
+		return $this->edit( $update, $condition, true );
 	}
 
 	/**
@@ -189,7 +188,7 @@ class Goods extends Model
 	public function editGoodsLock( $condition )
 	{
 		$update = ['lock' => 1];
-		return $this->update( $update, $condition, true );
+		return $this->edit( $update, $condition, true );
 	}
 
 	/**
@@ -200,7 +199,7 @@ class Goods extends Model
 	public function editGoodsUnlock( $condition ) : bool
 	{
 		$update = ['lock' => 0];
-		return $this->update( $update, $condition, true );
+		return $this->edit( $update, $condition, true );
 	}
 
 	/**

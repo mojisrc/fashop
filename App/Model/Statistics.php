@@ -49,7 +49,7 @@ class Statistics extends Model
 	 */
 	public function editStatistics( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -59,7 +59,7 @@ class Statistics extends Model
 	 */
 	public function delStatistics( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**
@@ -99,14 +99,6 @@ class Statistics extends Model
 		return $list;
 	}
 
-	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelStatistics( $condition )
-	{
-		return $this->where( $condition )->find()->delete();
-	}
 }
 
 ?>

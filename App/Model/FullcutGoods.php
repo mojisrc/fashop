@@ -17,9 +17,6 @@ use ezswoole\Model;
 class FullcutGoods extends Model {
     protected $softDelete = true;
 
-    // protected $type = [
-    //     ''      =>  'json',
-    // ];
 
     /**
      * 列表
@@ -144,7 +141,7 @@ class FullcutGoods extends Model {
      * @param array $insert 数据
      */
     public function delFullcutGoods($condition) {
-        return $this->where($condition)->delete();
+        return $this->where($condition)->del();
     }
 
     /**
@@ -190,13 +187,6 @@ class FullcutGoods extends Model {
         return $this->where($condition)->setDec($field, $num);
     }
 
-    /**
-     * 软删除
-     * @param    array  $condition
-     */
-    public function softDelFullcutGoods($condition) {
-        return $this->where($condition)->find()->delete();
-    }
 
     /**
      * 获得商品sku列表

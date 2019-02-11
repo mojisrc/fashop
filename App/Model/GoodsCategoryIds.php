@@ -17,10 +17,6 @@ use ezswoole\Model;
 
 class GoodsCategoryIds extends Model {
     protected $softDelete = true;
-    protected $type = [
-        // ''      =>  'json',
-    ];
-
     /**
      * 列表
      * @param   $condition
@@ -140,7 +136,7 @@ class GoodsCategoryIds extends Model {
      * @param   $condition_str
      */
     public function delGoodsCategoryIds($condition = array(), $condition_str = '') {
-        return $this->where($condition)->where($condition_str)->delete();
+        return $this->where($condition)->where($condition_str)->del();
     }
 
     /**

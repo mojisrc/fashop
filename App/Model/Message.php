@@ -50,7 +50,7 @@ class Message extends Model
 	 */
 	public function editMessage( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -60,7 +60,7 @@ class Message extends Model
 	 */
 	public function delMessage( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**
@@ -116,14 +116,7 @@ class Message extends Model
 		return $data ? $data->toArray() : $data;
 	}
 
-	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelMessage( $condition )
-	{
-		return $this->where( $condition )->find()->delete();
-	}
+
 }
 
 ?>

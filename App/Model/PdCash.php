@@ -58,7 +58,7 @@ class PdCash extends Model
 	 */
 	public function editPdCash( $condition = [], $data )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -78,7 +78,7 @@ class PdCash extends Model
 	 */
 	public function delPdCash( $condition )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 }

@@ -51,7 +51,7 @@ class WechatBroadcast extends Model
 	 */
 	public function editWechatBroadcast( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -61,7 +61,7 @@ class WechatBroadcast extends Model
 	 */
 	public function delWechatBroadcast( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**

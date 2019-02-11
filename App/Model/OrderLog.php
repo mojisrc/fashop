@@ -51,7 +51,7 @@ class OrderLog extends Model
 	 */
 	public function editOrderLog( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -61,7 +61,7 @@ class OrderLog extends Model
 	 */
 	public function delOrderLog( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**
@@ -100,14 +100,6 @@ class OrderLog extends Model
 		return $list ;
 	}
 
-	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelOrderLog( $condition )
-	{
-		return $this->where( $condition )->find()->delete();
-	}
 
 }
 

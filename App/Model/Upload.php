@@ -49,7 +49,7 @@ class Upload extends Model
 	 */
 	public function editUpload( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -59,7 +59,7 @@ class Upload extends Model
 	 */
 	public function delUpload( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**

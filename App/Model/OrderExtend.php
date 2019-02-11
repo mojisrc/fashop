@@ -313,16 +313,9 @@ class OrderExtend extends Model
 	 */
 	public function delOrderExtend( $condition = [], $condition_str = '' )
 	{
-		return $this->where( $condition )->where( $condition_str )->delete();
+		return $this->where( $condition )->where( $condition_str )->del();
 	}
 
-	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelOrderExtend( $condition = [], $condition_str = '' )
-	{
-		return $this->where( $condition )->where( $condition_str )->find()->delete();
-	}
+
 
 }

@@ -48,7 +48,7 @@ class GoodsSpecValue extends Model
 	 */
 	public function updateGoodsSpecValue( $update, $condition )
 	{
-		return $this->where( $condition )->update( $update );
+		return $this->where( $condition )->edit( $update );
 	}
 
 	/**
@@ -58,7 +58,7 @@ class GoodsSpecValue extends Model
 	 */
 	public function delGoodsSpecValue( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**

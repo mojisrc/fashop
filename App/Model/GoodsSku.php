@@ -19,8 +19,6 @@ use ezswoole\Model;
 
 class GoodsSku extends Model
 {
-	//	protected $softDelete = true;
-
 	protected $type
 		= [
 			'spec'       => 'json',
@@ -103,7 +101,7 @@ class GoodsSku extends Model
 	 */
 	public function editGoodsSku( $condition, $data )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 
@@ -230,7 +228,7 @@ class GoodsSku extends Model
 	 */
 	public function delGoodsSku( $condition )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 
@@ -252,15 +250,6 @@ class GoodsSku extends Model
 	public function setDecGoodsSku( $condition, $field, $num )
 	{
 		return $this->where( $condition )->setDec( $field, $num );
-	}
-
-	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelGoodsSku( $condition )
-	{
-		return $this->save( ['delete_time' => time()], $condition );
 	}
 
 }

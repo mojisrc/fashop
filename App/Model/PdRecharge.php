@@ -47,7 +47,7 @@ class PdRecharge extends Model
 	 */
 	public function editPdRecharge( $condition = [], $data )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -76,17 +76,7 @@ class PdRecharge extends Model
 	 */
 	public function delPdRecharge( $condition )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
-
-	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelPdRecharge( $condition )
-	{
-		return $this->where( $condition )->find()->delete();
-	}
-
 
 }

@@ -49,7 +49,7 @@ class VoucherTemplate extends Model
 	 */
 	public function editVoucherTemplate( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -59,7 +59,7 @@ class VoucherTemplate extends Model
 	 */
 	public function delVoucherTemplate( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**

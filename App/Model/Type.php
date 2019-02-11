@@ -72,12 +72,5 @@ class Type extends Model {
 		return $info;
 	}
 
-    /**
-     * 软删除
-     * @param    array  $condition
-     */
-    public function softDelType($condition) {
-        return $this->where($condition)->find()->delete();
-    }
 }
 ?>

@@ -50,7 +50,7 @@ class SystemTask extends Model
 	 */
 	public function editSystemTask( $condition = [], $data = [] )
 	{
-		return $this->update( $data, $condition, true );
+		return $this->edit( $data, $condition, true );
 	}
 
 	/**
@@ -60,7 +60,7 @@ class SystemTask extends Model
 	 */
 	public function delSystemTask( $condition = [] )
 	{
-		return $this->where( $condition )->delete();
+		return $this->where( $condition )->del();
 	}
 
 	/**
