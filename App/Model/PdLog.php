@@ -36,7 +36,7 @@ class PdLog extends Model
 	 * @param string $field
 	 * @param string $order
 	 */
-	public function getPdLogList( $condition = [], $fields = '*', $order = '', $page = [1,20] )
+	public function getPdLogList( $condition = [], $fields = '*', $order = 'id desc', $page = [1,20] )
 	{
 		$data = $this->where( $condition )->field( $fields )->order( $order )->page( $page )->select();
 		return $data;

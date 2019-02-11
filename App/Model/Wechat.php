@@ -103,7 +103,7 @@ class Wechat extends Model
 	 * @param    string $page
 	 * @return   array | false
 	 */
-	public function getWechatList( $condition = [], $field = '*', $order = '', $page = [1,10] )
+	public function getWechatList( $condition = [], $field = '*', $order = 'id desc', $page = [1,10] )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $list;

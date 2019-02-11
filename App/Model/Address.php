@@ -21,55 +21,48 @@ class Address extends Model
 	protected $softDelete = true;
 
 	/**
-	 * 取得买家默认收货地址
-	 * @param    array $condition
-	 * @return   array
+	 * @param array  $condition
+	 * @param string $field
+	 * @return array|bool
 	 */
-	public function getDefaultAddressInfo( $condition = [], $field = '' )
+	public function getDefaultAddressInfo( $condition = [], $field = '*' )
 	{
 		$condition['is_default'] = 1;
 		return $this->where( $condition )->field( $field )->find();
 	}
 
 	/**
-	 * 获得某条收获地址的详情
-	 * @param    array $condition
-	 * @return   array
+	 * @param array  $condition
+	 * @param string $field
+	 * @return array|bool
 	 */
-	public function getAddressInfo( $condition = [], $field = '' )
+	public function getAddressInfo( $condition = [], $field = '*' )
 	{
 		return $this->where( $condition )->field( $field )->find();
 	}
-
 	/**
-	 * 获得收获地址列表
-	 * @param    array  $condition
-	 * @param    string $field
-	 * @param    string $group
-	 * @param    string $order
-	 * @param    string $page
-	 * @return   array
+	 * @param array  $condition
+	 * @param string $field
+	 * @param string $order
+	 * @param array  $page
+	 * @return array|bool|false|null
 	 */
-	public function getAddressList( $condition = [], $field = '*', $order = '', $page = [1,10] )
+	public function getAddressList( $condition = [], $field = '*', $order = 'id desc', $page = [1, 10] )
 	{
 		return $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 	}
-
 	/**
-	 * 新增地址
-	 * @param    array $data
-	 * @return   integer pk
+	 * @param array $data
+	 * @return bool|int
 	 */
 	public function addAddress( array $data )
 	{
 		return $this->add( $data );
 	}
-
 	/**
-	 * 更新地址信息
-	 * @param    array $condition
-	 * @param    array $data
-	 * @return   boolean
+	 * @param array $condition
+	 * @param array $data
+	 * @return bool|mixed
 	 */
 	public function editAddress( $condition = [], $data = [] )
 	{

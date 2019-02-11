@@ -21,9 +21,8 @@ class Area extends Model
 	protected $createTime = true;
 
 	/**
-	 * 添加
-	 * @param  array $data
-	 * @return int pk
+	 * @param array $data
+	 * @return bool|int
 	 */
 	public function addArea( array $data )
 	{
@@ -31,20 +30,9 @@ class Area extends Model
 	}
 
 	/**
-	 * 添加多条
+	 * @param array $condition
 	 * @param array $data
-	 * @return boolean
-	 */
-	public function addAreaAll( array $data )
-	{
-		return $this->addMulti( $data );
-	}
-
-	/**
-	 * 修改
-	 * @param    array $condition
-	 * @param    array $data
-	 * @return   boolean
+	 * @return bool|mixed
 	 */
 	public function editArea( $condition = [], $data = [] )
 	{
@@ -52,9 +40,8 @@ class Area extends Model
 	}
 
 	/**
-	 * 删除
-	 * @param    array $condition
-	 * @return   boolean
+	 * @param array $condition
+	 * @return bool|null
 	 */
 	public function delArea( $condition = [] )
 	{
@@ -62,10 +49,9 @@ class Area extends Model
 	}
 
 	/**
-	 * 获取地区单条数据
-	 * @param array  $condition 条件
-	 * @param string|array $field     字段
-	 * @return array
+	 * @param array  $condition
+	 * @param string $field
+	 * @return array|bool
 	 */
 	public function getAreaInfo( $condition = [], $field = '*' )
 	{
@@ -73,14 +59,13 @@ class Area extends Model
 	}
 
 	/**
-	 * 获得地区列表
-	 * @param    array  $condition
-	 * @param    string $field
-	 * @param    string $order
-	 * @param    string $page
-	 * @return   array
+	 * @param array  $condition
+	 * @param string $field
+	 * @param string $order
+	 * @param array  $page
+	 * @return array|bool|false|null
 	 */
-	public function getAreaList( $condition = [], $field = '*', $order = '', $page = [1,10] )
+	public function getAreaList( $condition = [], $field = '*', $order = 'id desc', $page = [1, 10] )
 	{
 		return $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 	}

@@ -93,7 +93,7 @@ class OrderGoods extends Model
 	 * @param    string $page
 	 * @return   array | false
 	 */
-	public function getOrderGoodsList( $condition = [], $field = '*', $order = '', $page = [1,10] )
+	public function getOrderGoodsList( $condition = [], $field = '*', $order = 'id desc', $page = [1,10] )
 	{
 		if( $page == '' ){
 			$list = $this->where( $condition )->order( $order )->field( $field )->select();
@@ -129,7 +129,7 @@ class OrderGoods extends Model
 	 * @param boolean $lock      是否锁定
 	 * @return array 二维数组
 	 */
-	public function getOrderGoodsMoreList( $condition, $field = '*', $group = '', $order = '', $page = [1,20] )
+	public function getOrderGoodsMoreList( $condition, $field = '*', $group = '', $order = 'id desc', $page = [1,20] )
 	{
 		return $this->join( '__GOODS__ goods ON order_goods.goods_id = goods.id', 'inner' )->field( $field )->where( $condition )->group( $group )->order( $order )->paginate( $page )->select();
 

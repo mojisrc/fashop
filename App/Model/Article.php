@@ -22,30 +22,17 @@ class Article extends Model
 	protected $createTime = true;
 
 	/**
-	 * 添加
-	 * @param  array $data
-	 * @return int pk
+	 * @param array $data
+	 * @return bool|int
 	 */
 	public function addArticle( array $data )
 	{
 		return $this->add( $data );
 	}
-
 	/**
-	 * 添加多条
+	 * @param array $condition
 	 * @param array $data
-	 * @return boolean
-	 */
-	public function addArticleAll( $data )
-	{
-		return $this->addMulti( $data );
-	}
-
-	/**
-	 * 修改
-	 * @param    array $condition
-	 * @param    array $data
-	 * @return   boolean
+	 * @return bool|mixed
 	 */
 	public function editArticle( $condition = [], $data = [] )
 	{
@@ -53,35 +40,30 @@ class Article extends Model
 	}
 
 	/**
-	 * 删除
-	 * @param    array $condition
-	 * @return   boolean
+	 * @param array $condition
+	 * @return bool|null
 	 */
 	public function delArticle( $condition = [] )
 	{
 		return $this->where( $condition )->del();
 	}
-
 	/**
-	 * 获取文章单条数据
-	 * @param array  $condition 条件
-	 * @param string $field     字段
-	 * @return array
+	 * @param array  $condition
+	 * @param string $field
+	 * @return array|bool
 	 */
 	public function getArticleInfo( $condition = [], $field = '*' )
 	{
 		return $this->where( $condition )->field( $field )->find();
 	}
-
 	/**
-	 * 获得文章列表
-	 * @param    array  $condition
-	 * @param    string $field
-	 * @param    string $order
-	 * @param    string $page
-	 * @return   array
+	 * @param array  $condition
+	 * @param string $field
+	 * @param string $order
+	 * @param array  $page
+	 * @return array|bool|false|null
 	 */
-	public function getArticleList( $condition = [], $field = '*', $order = '', $page = [1,10] )
+	public function getArticleList( $condition = [], $field = '*', $order = 'id desc', $page = [1,10] )
 	{
 		return $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 	}

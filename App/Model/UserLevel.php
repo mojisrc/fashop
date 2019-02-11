@@ -94,7 +94,7 @@ class UserLevel extends Model
 	 * @param    string $page
 	 * @return   array | false
 	 */
-	public function getUserLevelList( $condition = [], $field = '*', $order = '', $page = [1,10] )
+	public function getUserLevelList( $condition = [], $field = '*', $order = 'id desc', $page = [1,10] )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $list;

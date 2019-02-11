@@ -88,7 +88,7 @@ class UserWechat extends Model
 	 * @param    string $page
 	 * @return   array | false
 	 */
-	public function getUserWechatList( $condition = [], $field = '*', $order = '', $page = [1,10] )
+	public function getUserWechatList( $condition = [], $field = '*', $order = 'id desc', $page = [1,10] )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $list;

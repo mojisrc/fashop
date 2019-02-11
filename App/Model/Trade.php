@@ -142,7 +142,6 @@ class Trade extends Model
 				$data                  = [];
 				$data['stock']         = ['exp', 'stock+'.$goods_num]; //库存
 				$data['sale_num']      = ['exp', 'sale_num-'.$goods_num]; //销售记录
-				$state                 = $this->table( '__GOODS__' )->where( $condition )->edit( $data );
 			}
 			$order_cancel         = $this->getOrderState( 'order_cancel' ); //订单状态0:已取消
 			$order_array          = [];
@@ -222,7 +221,6 @@ class Trade extends Model
 				$log_array['msg']      = lang( 'order_completed' );
 				$log_array['time']     = time();
 			}
-			$state                        = true;
 			$order_array                  = [];
 			$order_array['finnshed_time'] = time();
 			$order_array['state']         = $order_completed;
