@@ -75,7 +75,7 @@ class GoodsImage
 				$addData[$key]['is_default'] = 0;
 			}
 		}
-		$count = $this->getModel()->addGoodsImageAll( $addData );
+		$count = $this->getModel()->addMultiGoodsImage( $addData );
 		if( $count > 0 ){
 			return true;
 		} else{

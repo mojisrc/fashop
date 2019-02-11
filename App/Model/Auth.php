@@ -20,9 +20,8 @@ class Auth extends Model
 	protected $createTime = true;
 
 	/**
-	 * 添加
-	 * @param  array $data
-	 * @return int pk
+	 * @param array $data
+	 * @return bool|int
 	 */
 	public function addAuth( array $data )
 	{
@@ -30,30 +29,18 @@ class Auth extends Model
 	}
 
 	/**
-	 * 添加多条
+	 * @param array $condition
 	 * @param array $data
-	 * @return boolean
-	 */
-	public function addAuthAll( $data )
-	{
-		return $this->addMulti( $data );
-	}
-
-	/**
-	 * 修改
-	 * @param    array $condition
-	 * @param    array $data
-	 * @return   boolean
+	 * @return bool|mixed
 	 */
 	public function editAuth( $condition = [], $data = [] )
 	{
-		return $this->where($condition)->edit($data);
+		return $this->where( $condition )->edit( $data );
 	}
 
 	/**
-	 * 删除
-	 * @param    array $condition
-	 * @return   boolean
+	 * @param array $condition
+	 * @return bool|null
 	 */
 	public function delAuth( $condition = [] )
 	{
@@ -61,36 +48,23 @@ class Auth extends Model
 	}
 
 	/**
-	 * 计算数量
-	 * @param array $condition 条件
-	 * @return int
-	 */
-	public function getAuthCount( $condition )
-	{
-		return $this->where( $condition )->count();
-	}
-
-	/**
-	 * 获取权限单条数据
-	 * @param array  $condition 条件
-	 * @param string $field     字段
-	 * @return array | false
+	 * @param array  $condition
+	 * @param string $field
+	 * @return array|bool
 	 */
 	public function getAuthInfo( $condition = [], $field = '*' )
 	{
-		$info = $this->where( $condition )->field( $field )->find();
-		return $info;
+		return $this->where( $condition )->field( $field )->find();
 	}
 
 	/**
-	 * 获得权限列表
-	 * @param    array  $condition
-	 * @param    string $field
-	 * @param    string $order
-	 * @param    string $page
-	 * @return   array | false
+	 * @param array  $condition
+	 * @param string $field
+	 * @param string $order
+	 * @param array  $page
+	 * @return array|bool|false|null
 	 */
-	public function getAuthList( $condition = [], $field = '*', $order = 'id desc', $page = [1,10] )
+	public function getAuthList( $condition = [], $field = '*', $order = 'id desc', $page = [1, 10] )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $list;

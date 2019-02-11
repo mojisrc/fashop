@@ -111,7 +111,7 @@ class GoodsSku
                 $addData[$key]['img'] = $sku['img'];
             }
         }
-        $count = $this->getModel()->addGoodsSkuAll($addData);
+        $count = $this->getModel()->addMultiGoodsSku($addData);
         if ($count > 0) {
             return true;
         } else {
@@ -216,7 +216,7 @@ class GoodsSku
                     $addData[$key]['img'] = $sku['img'];
                 }
             }
-            $count = $this->getModel()->addGoodsSkuAll($addData);
+            $count = $this->getModel()->addMultiGoodsSku($addData);
             if (!$count) {
                 throw new \Exception("goods sku add all fail");
             }

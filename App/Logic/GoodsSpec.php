@@ -54,7 +54,7 @@ class GoodsSpec extends Model
 				$attribute[$key]['spec_id'] = $spec_id;
 			}
 			//添加到规格的值表
-			return model( 'GoodsSpecValue' )->addGoodsSpecValueAll( $attribute );
+			return model( 'GoodsSpecValue' )->addMultiGoodsSpecValue( $attribute );
 		}
 		return $spec_id;
 	}

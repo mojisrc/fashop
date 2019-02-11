@@ -20,13 +20,11 @@ class Freight extends Model
 {
 	protected $softDelete = true;
 	protected $createTime = true;
-
 	protected $jsonFields = ['areas'];
 
 	/**
-	 * 添加
-	 * @param  array $data
-	 * @return int pk
+	 * @param array $data
+	 * @return bool|int
 	 */
 	public function addFreight( array $data )
 	{
@@ -34,32 +32,20 @@ class Freight extends Model
 	}
 
 	/**
-	 * 添加多条
+	 * @param array $condition
 	 * @param array $data
-	 * @return boolean
-	 */
-	public function addFreightAll( $data )
-	{
-		return $this->addMulti( $data );
-	}
-
-	/**
-	 * 修改
-	 * @param    array $condition
-	 * @param    array $data
-	 * @return   boolean
+	 * @return bool|mixed
 	 */
 	public function editFreight( $condition = [], $data = [] )
 	{
 		$data['update_time'] = time();
-		return $this->where($condition)->edit($data);
+		return $this->where( $condition )->edit( $data );
 	}
 
 	/**
-	 * 获取单条数据
-	 * @param array  $condition 条件
-	 * @param string $field     字段
-	 * @return array | false
+	 * @param array  $condition
+	 * @param string $field
+	 * @return array|bool
 	 */
 	public function getFreightInfo( $condition = [], $field = '*' )
 	{
@@ -68,25 +54,13 @@ class Freight extends Model
 	}
 
 	/**
-	 * 获取总条数
-	 * @method
-	 * @param $condition
-	 * @author   沈旭
+	 * @param array  $condition
+	 * @param string $field
+	 * @param string $order
+	 * @param array  $page
+	 * @return array|bool|false|null
 	 */
-	public function getFreightCount( $condition )
-	{
-		return $this->where( $condition )->count();
-	}
-
-	/**
-	 * 获得列表
-	 * @param    array  $condition
-	 * @param    string $field
-	 * @param    string $order
-	 * @param    string $page
-	 * @return   array | false
-	 */
-	public function getFreightList( $condition = [], $field = '*', $order = 'id desc', $page = [1,10] )
+	public function getFreightList( $condition = [], $field = '*', $order = 'id desc', $page = [1, 10] )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $list;

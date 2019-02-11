@@ -540,7 +540,7 @@ class Goods
                 $addCategoryIds[$key]['goods_id']    = $this->id;
                 $addCategoryIds[$key]['category_id'] = $value;
             }
-            model('GoodsCategoryIds')->insertAllGoodsCategoryIds($addCategoryIds);
+            model('GoodsCategoryIds')->addMultiGoodsCategoryIds($addCategoryIds);
 
             $goodsModel->commit();
             return true;
@@ -598,13 +598,13 @@ class Goods
             $GoodsImage->add();
 
             $goods_category_ids_model = model('GoodsCategoryIds');
-            $goods_category_ids_model->delGoodsCategoryIds(['goods_id' => $this->id], '');
+            $goods_category_ids_model->delGoodsCategoryIds(['goods_id' => $this->id]);
             $addCategoryIds = [];
             foreach ($this->categoryIds as $key => $value) {
                 $addCategoryIds[$key]['goods_id']    = $this->id;
                 $addCategoryIds[$key]['category_id'] = $value;
             }
-            $goods_category_ids_model->insertAllGoodsCategoryIds($addCategoryIds);
+            $goods_category_ids_model->addMultiGoodsCategoryIds($addCategoryIds);
 
             $goodsModel->commit();
             return true;

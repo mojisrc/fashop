@@ -608,7 +608,7 @@ class Buy
 				'sale_num' => ['exp', 'sale_num+'.$sku_item->getGoodsNum()],
 			];
 		}
-		$state = model( 'GoodsSku' )->updateAllGoodsSku( $goods_sku_update_data );
+		$state = model( 'GoodsSku' )->editMultiGoodsSku( $goods_sku_update_data );
 
 		if( !$state ){
 			throw new \Exception( '更新库存GoodsSku失败' );
@@ -622,7 +622,7 @@ class Buy
 					'sale_num' => ['exp', 'sale_num+'.$goods_item['sale_num']],
 				];
 			}
-			$state = model( 'Goods' )->updateAllGoods( $goods_update_data );
+			$state = model( 'Goods' )->editMultiGoods( $goods_update_data );
 			if( !$state){
 				throw new \Exception( '更新Goods库存失败' );
 			}

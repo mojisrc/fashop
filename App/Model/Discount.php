@@ -19,7 +19,6 @@ use ezswoole\Model;
 class Discount extends Model
 {
 	protected $softDelete = true;
-
 	protected $jsonFields = ['partake'];
 
 	/**

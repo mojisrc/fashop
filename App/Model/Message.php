@@ -21,79 +21,22 @@ class Message extends Model
 	protected $softDelete = true;
 	protected $createTime = true;
 
-
-	/**
-	 * 添加
-	 * @param  array $data
-	 * @return int pk
-	 */
 	public function addMessage( array $data )
 	{
 		return $this->add( $data );
 	}
 
-	/**
-	 * 添加多条
-	 * @param array $data
-	 * @return boolean
-	 */
-	public function addMessageAll( $data )
-	{
-		return $this->addMulti( $data );
-	}
-
-	/**
-	 * 修改
-	 * @param    array $condition
-	 * @param    array $data
-	 * @return   boolean
-	 */
 	public function editMessage( $condition = [], $data = [] )
 	{
 		return $this->where($condition)->edit($data);
 	}
 
-	/**
-	 * 删除
-	 * @param    array $condition
-	 * @return   boolean
-	 */
+
 	public function delMessage( $condition = [] )
 	{
 		return $this->where( $condition )->del();
 	}
 
-	/**
-	 * 计算数量
-	 * @param array $condition 条件
-	 * @return int
-	 */
-	public function getMessageCount( $condition )
-	{
-		return $this->where( $condition )->count();
-	}
-
-	/**
-	 * 获取消息单条数据
-	 * @param array  $condition 条件
-	 * @param string $field     字段
-	 * @return array | false
-	 */
-	public function getMessageInfo( $condition = [], $field = '*' )
-	{
-		$info = $this->where( $condition )->field( $field )->find();
-		return $info;
-	}
-
-	/**
-	 * 获得消息列表
-	 * @param    array  $condition
-	 * @param    string $field
-	 * @param    string $order
-	 * @param    string $page
-	 * @param    string $group
-	 * @return   array | false
-	 */
 	public function getMessageList( $condition = [], $field = '*', $order = 'id desc', $page = [1,10], $group = '' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->group( $group )->page( $page )->select();
@@ -101,6 +44,7 @@ class Message extends Model
 	}
 
 	/**
+	 * todo
 	 * 消息列表
 	 * @param    array  $condition
 	 * @param    string $field

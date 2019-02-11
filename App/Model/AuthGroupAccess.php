@@ -17,9 +17,8 @@ use ezswoole\Model;
 class AuthGroupAccess extends Model
 {
 	/**
-	 * 添加
-	 * @param  array $data
-	 * @return int pk
+	 * @param array $data
+	 * @return bool|int
 	 */
 	public function addAuthGroupAccess( array $data )
 	{
@@ -27,20 +26,18 @@ class AuthGroupAccess extends Model
 	}
 
 	/**
-	 * 添加多条
-	 * @param array $data
-	 * @return boolean
+	 * @param $data
+	 * @return bool
 	 */
-	public function addAuthGroupAccessAll( $data )
+	public function addMultiAuthGroupAccess( $data )
 	{
 		return $this->addMulti( $data );
 	}
 
 	/**
-	 * 修改
-	 * @param    array $condition
-	 * @param    array $data
-	 * @return   boolean
+	 * @param array $condition
+	 * @param array $data
+	 * @return bool|mixed
 	 */
 	public function editAuthGroupAccess( $condition = [], $data = [] )
 	{
@@ -48,9 +45,8 @@ class AuthGroupAccess extends Model
 	}
 
 	/**
-	 * 删除
-	 * @param    array $condition
-	 * @return   boolean
+	 * @param array $condition
+	 * @return bool|null
 	 */
 	public function delAuthGroupAccess( $condition = [] )
 	{
@@ -58,20 +54,9 @@ class AuthGroupAccess extends Model
 	}
 
 	/**
-	 * 计算数量
-	 * @param array $condition 条件
-	 * @return int
-	 */
-	public function getAuthGroupAccessCount( $condition )
-	{
-		return $this->where( $condition )->count();
-	}
-
-	/**
-	 * 获取权限组角色单条数据
-	 * @param array  $condition 条件
-	 * @param string $field     字段
-	 * @return array | false
+	 * @param array  $condition
+	 * @param string $field
+	 * @return array|bool
 	 */
 	public function getAuthGroupAccessInfo( $condition = [], $field = '*' )
 	{
@@ -81,11 +66,11 @@ class AuthGroupAccess extends Model
 
 	/**
 	 * 获得权限组角色列表
-	 * @param    array  $condition
-	 * @param    string $field
-	 * @param    string $order
-	 * @param    string $page
-	 * @return   array | false
+	 * @param array  $condition
+	 * @param string $field
+	 * @param string $order
+	 * @param array  $page
+	 * @return array|bool|false|null
 	 */
 	public function getAuthGroupAccessList( $condition = [], $field = '*', $order = 'id desc', $page = [1,10] )
 	{

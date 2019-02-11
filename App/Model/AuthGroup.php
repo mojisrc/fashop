@@ -18,16 +18,11 @@ use ezswoole\Model;
 class AuthGroup extends Model
 {
 
-	protected $type
-		= [
-			'rule_ids' => 'array',
-		];
+	protected $arrayFields = ['rule_ids'];
 
 	/**
-	 * 添加
-	 * @datetime 2017-10-17 15:19:34
-	 * @param  array $data
-	 * @return int pk
+	 * @param array $data
+	 * @return bool|int
 	 */
 	public function addAuthGroup( array $data )
 	{
@@ -35,33 +30,18 @@ class AuthGroup extends Model
 	}
 
 	/**
-	 * 添加多条
-	 * @datetime 2017-10-17 15:19:34
+	 * @param array $condition
 	 * @param array $data
-	 * @return boolean
-	 */
-	public function addAuthGroupAll( $data )
-	{
-		return $this->addMulti( $data );
-	}
-
-	/**
-	 * 修改
-	 * @datetime 2017-10-17 15:19:34
-	 * @param    array $condition
-	 * @param    array $data
-	 * @return   boolean
+	 * @return bool|mixed
 	 */
 	public function editAuthGroup( $condition = [], $data = [] )
 	{
-		return $this->where($condition)->edit($data);
+		return $this->where( $condition )->edit( $data );
 	}
 
 	/**
-	 * 删除
-	 * @datetime 2017-10-17 15:19:34
-	 * @param    array $condition
-	 * @return   boolean
+	 * @param array $condition
+	 * @return bool|null
 	 */
 	public function delAuthGroup( $condition = [] )
 	{
@@ -69,22 +49,10 @@ class AuthGroup extends Model
 	}
 
 	/**
-	 * 计算数量
-	 * @datetime 2017-10-17 15:19:34
-	 * @param array $condition 条件
-	 * @return int
-	 */
-	public function getAuthGroupCount( $condition )
-	{
-		return $this->where( $condition )->count();
-	}
-
-	/**
 	 * 获取权限角色单条数据
-	 * @datetime 2017-10-17 15:19:34
-	 * @param array  $condition 条件
-	 * @param string $field     字段
-	 * @return array | false
+	 * @param array  $condition
+	 * @param string $field
+	 * @return array|bool
 	 */
 	public function getAuthGroupInfo( $condition = [], $field = '*' )
 	{
@@ -93,15 +61,13 @@ class AuthGroup extends Model
 	}
 
 	/**
-	 * 获得权限角色列表
-	 * @datetime 2017-10-17 15:19:34
-	 * @param    array  $condition
-	 * @param    string $field
-	 * @param    string $order
-	 * @param    string $page
-	 * @return   array | false
+	 * @param array  $condition
+	 * @param string $field
+	 * @param string $order
+	 * @param array  $page
+	 * @return array|bool|false|null
 	 */
-	public function getAuthGroupList( $condition = [], $field = '*', $order = 'id desc', $page = [1,10] )
+	public function getAuthGroupList( $condition = [], $field = '*', $order = 'id desc', $page = [1, 10] )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $list;

@@ -20,38 +20,7 @@ class GoodsEvaluate extends Model
 {
 	protected $softDelete = true;
 	protected $createTime = true;
-	protected $jsonFields = ['images','additional_images'];
-
-	/**
-	 * 查询评价列表
-	 * @param    array  $condition
-	 * @param    string $order
-	 * @param    string $field
-	 * @param    string $page
-	 * @return   array
-	 */
-	public function getGoodsEvaluateList( $condition, $field = '*', $order = 'id desc', $page = [1,20] )
-	{
-		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list;
-	}
-
-	/**
-	 * 根据编号查询商品评价
-	 * @param    int $id 评价id
-	 * @return   array | bool
-	 */
-	public function getGoodsEvaluateInfoByID( $id )
-	{
-		if( intval( $id ) <= 0 ){
-			return false;
-		}
-		$info = $this->alias( 'evaluate' )->join( '__USER__ user', 'user.id = evaluate.user_id', 'LEFT' )->field( 'evaluate.*,user.avatar,user.nickname' )->where( [
-			'evaluate.id' => $id,
-		] )->find();
-		unset( $info['images'] );
-		return $info;
-	}
+	protected $jsonFields = ['images', 'additional_images'];
 
 	/**
 	 * 根据商品编号查询商品评价信息
@@ -107,44 +76,29 @@ class GoodsEvaluate extends Model
 	}
 
 	/**
-	 * 添加商品评价
+	 * @param array $data
+	 * @return bool|int
 	 */
-	public function addGoodsEvaluate( array $insert )
+	public function addGoodsEvaluate( array $data )
 	{
-		$insert['create_time'] = time();
-		return $this->save( $insert ) ? $this->id : false;
+		return $this->add( $data );
+	}
+
+
+	/**
+	 * @param array $condition
+	 * @param array $data
+	 * @return bool|mixed
+	 */
+	public function editGoodsEvaluate(array $condition , array $data )
+	{
+		return $this->where( $condition )->edit( $data );
 	}
 
 	/**
-	 * 修改
-	 * @param    array $condition
-	 * @param    array $data
-	 */
-	public function editGoodsEvaluate( $condition = [], $data = [] )
-	{
-		return $this->where($condition)->edit($data);
-	}
-
-	/**
-	 * 批量添加商品评价
-	 */
-	public function addGoodsEvaluateAll( $param )
-	{
-		return $this->addMulti( $param );
-	}
-
-	/**
-	 * 删除商品评价
-	 */
-	public function delGoodsEvaluate( $condition )
-	{
-		return $this->where( $condition )->del();
-	}
-
-	/**
-	 * 获得大条信息
-	 * @param  array $condition
-	 * @param  string] $field
+	 * @param array  $condition
+	 * @param string $field
+	 * @return array|bool
 	 */
 	public function getGoodsEvaluateInfo( $condition = [], $field = '*' )
 	{

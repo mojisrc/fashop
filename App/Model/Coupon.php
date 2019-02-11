@@ -21,12 +21,11 @@ class Coupon extends Model
 	protected $jsonFields = ['partake'];
 
 	/**
-	 * 列表
-	 * @param         $condition
-	 * @param         $field
-	 * @param         $order
-	 * @param  string $page
-	 * @return             [列表数据]
+	 * @param array  $condition
+	 * @param string $field
+	 * @param string $order
+	 * @param array  $page
+	 * @return array|bool|false|null
 	 */
 	public function getCouponList( $condition = [], $field = '*', $order = 'id desc', $page = [1, 20] )
 	{

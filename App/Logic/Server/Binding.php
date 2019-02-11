@@ -375,7 +375,7 @@ class Binding
                 return null;
             }
 
-            $card_ids = model('Cart')->getCartColumn(['user_id'=>$user_id], '', 'id');
+            $card_ids = model('Cart')->where(['user_id'=>$user_id])->column();
             if($card_ids){
                 $cart_result =model('Cart')->editCart( ['id'=>['in', $card_ids]], ['user_id'=>$master_user_id] );
                 if(!$cart_result){

@@ -21,23 +21,18 @@ class Order extends Model
 	protected $softDelete = true;
 
 	/**
-	 * 取单条订单信息
 	 * @param array  $condition
 	 * @param string $condition_string
 	 * @param string $fields
 	 * @param array  $extend 追加返回那些表的信息,如array('order_extend','order_goods')
-	 * @return array|false|Model|string
-	 * @throws \ezswoole\exception\DbException
+	 * @return array|bool
 	 */
 	public function getOrderInfo( $condition = [], $condition_string = '', $fields = '*', $extend = [] )
 	{
 		$order_info = $this->field( $fields )->where( $condition )->where( $condition_string )->find();
 		if( empty( $order_info ) ){
 			return [];
-		} else{
-			$order_info = $order_info->toArray();
 		}
-
 		//追加返回订单扩展表信息
 		if( in_array( 'order_extend', $extend ) ){
 			$order_info['extend_order_extend'] = $this->getOrderExtendInfo( ['id' => $order_info['id']] );
@@ -117,7 +112,7 @@ class Order extends Model
 	 * @param array  $extend
 	 * @return array
 	 */
-	public function getOrderList( $condition = [], $condition_string = '', $field = '*', $order = 'id desc', $page = [1,20], $extend = [] )
+	public function getOrderList( $condition = [], $condition_string = '', $field = '*', $order = 'id desc', $page = [1, 20], $extend = [] )
 	{
 		if( $page == '' ){
 			$list = $this->field( $field )->where( $condition )->where( $condition_string )->order( $order )->select();
@@ -1020,7 +1015,7 @@ class Order extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getOrderCommonList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
+	public function getOrderCommonList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1, 20], $group = '' )
 	{
 		if( $page == '' ){
 			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();

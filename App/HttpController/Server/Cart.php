@@ -279,7 +279,7 @@ class Cart extends Server
 				$condition['user_id']      = ['eq', $user['id']];
 				$condition['goods_sku_id'] = ['in', $this->post['goods_sku_ids']];
 
-				$result = $cart_model->updateCart( $condition, ['is_check' => $this->post['is_check']] );
+				$result = $cart_model->editCart( $condition, ['is_check' => $this->post['is_check']] );
 				if( !$result ){
 					return $this->send( Code::error, [], '编辑失败' );
 				}

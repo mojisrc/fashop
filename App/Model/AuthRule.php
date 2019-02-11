@@ -18,9 +18,8 @@ use ezswoole\Model;
 class AuthRule extends Model
 {
 	/**
-	 * 添加
-	 * @param  array $data
-	 * @return int pk
+	 * @param array $data
+	 * @return bool|int
 	 */
 	public function addAuthRule( array $data )
 	{
@@ -28,20 +27,9 @@ class AuthRule extends Model
 	}
 
 	/**
-	 * 添加多条
+	 * @param array $condition
 	 * @param array $data
-	 * @return boolean
-	 */
-	public function addAuthRuleAll( $data )
-	{
-		return $this->addMulti( $data );
-	}
-
-	/**
-	 * 修改
-	 * @param    array $condition
-	 * @param    array $data
-	 * @return   boolean
+	 * @return bool|mixed
 	 */
 	public function editAuthRule( $condition = [], $data = [] )
 	{
@@ -49,9 +37,8 @@ class AuthRule extends Model
 	}
 
 	/**
-	 * 删除
-	 * @param    array $condition
-	 * @return   boolean
+	 * @param array $condition
+	 * @return bool|null
 	 */
 	public function delAuthRule( $condition = [] )
 	{
@@ -59,20 +46,9 @@ class AuthRule extends Model
 	}
 
 	/**
-	 * 计算数量
-	 * @param array $condition 条件
-	 * @return int
-	 */
-	public function getAuthRuleCount( $condition )
-	{
-		return $this->where( $condition )->count();
-	}
-
-	/**
-	 * 获取权限节点单条数据
-	 * @param array  $condition 条件
-	 * @param string $field     字段
-	 * @return array | false
+	 * @param array  $condition
+	 * @param string $field
+	 * @return array|bool
 	 */
 	public function getAuthRuleInfo( $condition = [], $field = '*' )
 	{
@@ -81,14 +57,13 @@ class AuthRule extends Model
 	}
 
 	/**
-	 * 获得权限节点列表
-	 * @param    array  $condition
-	 * @param    string $field
-	 * @param    string $order
-	 * @param    string $page
-	 * @return   array | false
+	 * @param array  $condition
+	 * @param string $field
+	 * @param string $order
+	 * @param array  $page
+	 * @return array|bool|false|null
 	 */
-	public function getAuthRuleList( $condition = [], $field = '*', $order = 'id desc', $page = [1,10] )
+	public function getAuthRuleList( $condition = [], $field = '*', $order = 'id desc', $page = [1, 10] )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $list;

@@ -124,7 +124,7 @@ class Message extends Admin {
 						];
 					}
 
-					$result = model('MessageState')->addMessageStateAll($add_data);
+					$result = model('MessageState')->addMultiMessageState($add_data);
 
 					if ($result) {
 						$message_model->commit();

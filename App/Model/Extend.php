@@ -15,38 +15,24 @@ namespace App\Model;
 
 use ezswoole\Model;
 
-
-
 class Extend extends Model
 {
 	protected $softDelete = true;
 	protected $createTime = true;
 
 	/**
-	 * 添加
-	 * @param  array $data
-	 * @return int pk
+	 * @param array $data
+	 * @return bool|int
 	 */
 	public function addExtend( array $data )
 	{
-		return $this->add($data);
+		return $this->add( $data );
 	}
 
 	/**
-	 * 添加多条
+	 * @param array $condition
 	 * @param array $data
-	 * @return boolean
-	 */
-	public function addExtendAll( $data )
-	{
-		return $this->addMulti( $data );
-	}
-
-	/**
-	 * 修改
-	 * @param    array $condition
-	 * @param    array $data
-	 * @return   boolean
+	 * @return bool|mixed
 	 */
 	public function editExtend( $condition = [], $data = [] )
 	{
@@ -54,9 +40,8 @@ class Extend extends Model
 	}
 
 	/**
-	 * 删除
-	 * @param    array $condition
-	 * @return   boolean
+	 * @param array $condition
+	 * @return bool|null
 	 */
 	public function delExtend( $condition = [] )
 	{
@@ -64,9 +49,8 @@ class Extend extends Model
 	}
 
 	/**
-	 * 计算数量
-	 * @param array $condition 条件
-	 * @return int
+	 * @param $condition
+	 * @return array|bool|int|null
 	 */
 	public function getExtendCount( $condition )
 	{
@@ -74,10 +58,9 @@ class Extend extends Model
 	}
 
 	/**
-	 * 获取物流单条数据
-	 * @param array  $condition 条件
-	 * @param string $field     字段
-	 * @return array | false
+	 * @param array  $condition
+	 * @param string $field
+	 * @return array|bool
 	 */
 	public function getExtendInfo( $condition = [], $field = '*' )
 	{
@@ -86,17 +69,17 @@ class Extend extends Model
 	}
 
 	/**
-	 * 获得物流列表
-	 * @param    array  $condition
-	 * @param    string $field
-	 * @param    string $order
-	 * @param    string $page
-	 * @return   array | false
+	 * @param array  $condition
+	 * @param string $field
+	 * @param string $order
+	 * @param array  $page
+	 * @return array|bool|false|null
+	 * @throws \EasySwoole\Mysqli\Exceptions\OrderByFail
 	 */
-	public function getExtendList( $condition = [], $field = '*', $order = 'id desc', $page = [1,10] )
+	public function getExtendList( $condition = [], $field = '*', $order = 'id desc', $page = [1, 10] )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
-		return $list ;
+		return $list;
 	}
 
 

@@ -9,8 +9,8 @@ class Cron extends Model
 	protected $softDelete = true;
 
 	/**
-	 * 取单条任务信息
 	 * @param array $condition
+	 * @return array|bool
 	 */
 	public function getCronInfo( $condition = [] )
 	{
@@ -18,10 +18,9 @@ class Cron extends Model
 	}
 
 	/**
-	 * 任务队列列表
-	 * @param array  $condition
-	 * @param number $limit
-	 * @return array
+	 * @param     $condition
+	 * @param int $limit
+	 * @return array|bool|false|null
 	 */
 	public function getCronList( $condition, $limit = 10 )
 	{
@@ -29,25 +28,14 @@ class Cron extends Model
 	}
 
 	/**
-	 * 保存任务队列
-	 *
-	 * @param array $insert
-	 * @return array
-	 */
-	public function addCronAll( $insert )
-	{
-		return $this->addMulti( $insert );
-	}
-
-	/**
-	 * 保存任务队列
-	 *
 	 * @param array $data
+	 * @return bool|int
 	 */
 	public function addCron( array $data )
 	{
 		return $this->add( $data );
 	}
+
 	/**
 	 * @param $condition
 	 * @return bool|null

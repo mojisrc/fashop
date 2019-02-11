@@ -21,9 +21,8 @@ class Cart extends Model
 	protected $jsonFields = ['goods_spec'];
 
 	/**
-	 * 添加
-	 * @param  array $data
-	 * @return int pk
+	 * @param array $data
+	 * @return bool|int
 	 */
 	public function addCart( array $data )
 	{
@@ -31,20 +30,9 @@ class Cart extends Model
 	}
 
 	/**
-	 * 添加多条
+	 * @param array $condition
 	 * @param array $data
-	 * @return boolean
-	 */
-	public function addCartAll( $data )
-	{
-		return $this->addMulti( $data );
-	}
-
-	/**
-	 * 修改
-	 * @param    array $condition
-	 * @param    array $data
-	 * @return   boolean
+	 * @return bool|mixed
 	 */
 	public function editCart( $condition = [], $data = [] )
 	{
@@ -52,32 +40,17 @@ class Cart extends Model
 	}
 
 	/**
-	 * 删除
-	 * @param    array $condition
-	 * @return   boolean
+	 * @param array $condition
+	 * @return bool|null
 	 */
 	public function delCart( $condition = [] )
 	{
 		return $this->where( $condition )->del();
 	}
-
 	/**
-	 * 计算数量
-	 * @datetime 2018-01-30 20:26:18
-	 * @param array $condition 条件
-	 * @return int
-	 */
-	public function getCartCount( $condition )
-	{
-		return $this->where( $condition )->count();
-	}
-
-	/**
-	 * 获取购物车单条数据
-	 * @datetime 2018-01-30 20:26:18
-	 * @param array  $condition 条件
-	 * @param string $field     字段
-	 * @return array | false
+	 * @param array  $condition
+	 * @param string $field
+	 * @return array|bool
 	 */
 	public function getCartInfo( $condition = [], $field = '*' )
 	{
@@ -86,13 +59,11 @@ class Cart extends Model
 	}
 
 	/**
-	 * 获得购物车列表
-	 * @datetime 2018-01-30 20:26:18
-	 * @param    array  $condition
-	 * @param    string $field
-	 * @param    string $order
-	 * @param    string $page
-	 * @return   array | false
+	 * @param array  $condition
+	 * @param string $field
+	 * @param string $order
+	 * @param array  $page
+	 * @return array|bool|false|null
 	 */
 	public function getCartList( $condition = [], $field = '*', $order = 'id desc', $page = [1,10] )
 	{
@@ -100,38 +71,6 @@ class Cart extends Model
 		return $list;
 	}
 
-	/**
-	 * 修改信息
-	 * @param   $update
-	 * @param   $condition
-	 * @return
-	 */
-	public function updateCart( $condition = [], $update = [] )
-	{
-		return $this->save( $update, $condition );
-	}
-
-	/**
-	 * 获取某个字段
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @return
-	 */
-	public function getCartValue( $condition = [], $condition_str = '', $field = 'id' )
-	{
-		return $this->where( $condition )->where( $condition_str )->value( $field );
-	}
-
-	/**
-	 * 获取某个字段列
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @return
-	 */
-	public function getCartColumn( $condition = [], $condition_str = '', $field = 'id' )
-	{
-		return $this->where( $condition )->where( $condition_str )->column( $field );
-	}
 }
 
 ?>

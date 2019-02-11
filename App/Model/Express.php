@@ -21,11 +21,9 @@ class Express extends Model
 	protected $softDelete = true;
 	protected $createTime = true;
 
-
 	/**
-	 * 添加
-	 * @param  array $data
-	 * @return int pk
+	 * @param $data
+	 * @return bool|int
 	 */
 	public function addExpress( $data )
 	{
@@ -33,34 +31,19 @@ class Express extends Model
 	}
 
 	/**
-	 * 添加多条
-	 * @datetime 2017-10-25 12:11:10
+	 * @param array $condition
 	 * @param array $data
-	 * @return boolean
-	 */
-	public function addExpressAll( $data )
-	{
-		return $this->addMulti( $data );
-	}
-
-	/**
-	 * 修改
-	 * @datetime 2017-10-25 12:11:10
-	 * @param    array $condition
-	 * @param    array $data
-	 * @return   boolean
+	 * @return bool|mixed
 	 */
 	public function editExpress( $condition = [], $data = [] )
 	{
 		$data['update_time'] = time();
-		return $this->where($condition)->edit($data);
+		return $this->where( $condition )->edit( $data );
 	}
 
 	/**
-	 * 删除
-	 * @datetime 2017-10-25 12:11:10
-	 * @param    array $condition
-	 * @return   boolean
+	 * @param array $condition
+	 * @return bool|null
 	 */
 	public function delExpress( $condition = [] )
 	{
@@ -68,10 +51,8 @@ class Express extends Model
 	}
 
 	/**
-	 * 计算数量
-	 * @datetime 2017-10-25 12:11:10
-	 * @param array $condition 条件
-	 * @return int
+	 * @param $condition
+	 * @return array|bool|int|null
 	 */
 	public function getExpressCount( $condition )
 	{
@@ -79,11 +60,9 @@ class Express extends Model
 	}
 
 	/**
-	 * 获取快递公司单条数据
-	 * @datetime 2017-10-25 12:11:10
-	 * @param array  $condition 条件
-	 * @param string $field     字段
-	 * @return array | false
+	 * @param array  $condition
+	 * @param string $field
+	 * @return array|bool
 	 */
 	public function getExpressInfo( $condition = [], $field = '*' )
 	{
@@ -92,26 +71,22 @@ class Express extends Model
 	}
 
 	/**
-	 * 获得快递公司列表
-	 * @datetime 2017-10-25 12:11:10
-	 * @param    array  $condition
-	 * @param    string $field
-	 * @param    string $order
-	 * @param    string $page
-	 * @return   array | false
+	 * @param array  $condition
+	 * @param string $field
+	 * @param string $order
+	 * @param array  $page
+	 * @return array|bool|false|null
 	 */
-	public function getExpressList( $condition = [], $field = '*', $order = 'id desc', $page = [1,10] )
+	public function getExpressList( $condition = [], $field = '*', $order = 'id desc', $page = [1, 10] )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $list;
 	}
 
-
-
 	/**
-	 * 获取某个字段
-	 * @param   $condition
-	 * @return
+	 * @param $condition
+	 * @param $field
+	 * @return array|bool|null
 	 */
 	public function getExpressValue( $condition, $field )
 	{
@@ -119,9 +94,9 @@ class Express extends Model
 	}
 
 	/**
-	 * 获取某个字段列
-	 * @param   $condition
-	 * @return
+	 * @param $condition
+	 * @param $field
+	 * @return array|bool
 	 */
 	public function getExpressColumn( $condition, $field )
 	{
