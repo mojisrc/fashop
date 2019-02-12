@@ -169,7 +169,7 @@ class Statistics extends Admin
         $user_db                 = db('User');
         $condition['state']      = 1;//默认1 0禁止 1正常
         $condition['is_discard'] = 0;//被丢弃 默认0否 1是[用于绑定后的失效的占位行]
-        $condition['id']         = ['gt', 1];//超级管理员 临时解决后台用户问题
+        $condition['id']         = ['>', 1];//超级管理员 临时解决后台用户问题
 
         $group = 'days';
         $field = "count(id) as number,date_format(FROM_UNIXTIME(create_time, '%Y-%m-%d %H:%i:%S'),'%Y-%m-%d') as days";
@@ -432,7 +432,7 @@ class Statistics extends Admin
         $condition               = [];
         $condition['state']      = 1;//默认1 0禁止 1正常
         $condition['is_discard'] = 0;//被丢弃 默认0否 1是[用于绑定后的失效的占位行]
-        $condition['id']         = ['gt', 1];//超级管理员 临时解决后台用户问题
+        $condition['id']         = ['>', 1];//超级管理员 临时解决后台用户问题
         $yesterday_new_user      = $user_db->where($condition)->whereTime('create_time', 'yesterday')->count();
         return $yesterday_new_user;
     }
@@ -446,7 +446,7 @@ class Statistics extends Admin
         $condition               = [];
         $condition['state']      = 1;//默认1 0禁止 1正常
         $condition['is_discard'] = 0;//被丢弃 默认0否 1是[用于绑定后的失效的占位行]
-        $condition['id']         = ['gt', 1];//超级管理员 临时解决后台用户问题
+        $condition['id']         = ['>', 1];//超级管理员 临时解决后台用户问题
         $all_user                = $user_db->where($condition)->count();
         return $all_user;
     }

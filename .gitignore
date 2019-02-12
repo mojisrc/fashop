@@ -23,3 +23,4 @@ src/swoole_log.txt
 /tests/tmp
 
 dev.php
+produce.php

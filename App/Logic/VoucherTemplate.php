@@ -25,8 +25,8 @@ class VoucherTemplate extends Model {
 	public function getAvailableTemplateBasicCondition() {
 		return [
 			'state'    => 1,
-			'surplus'  => ['gt', 0],
-			'end_date' => ['lt', time()],
+			'surplus'  => ['>', 0],
+			'end_date' => ['<', time()],
 		];
 	}
 }

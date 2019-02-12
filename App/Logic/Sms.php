@@ -29,7 +29,7 @@ class Sms extends Model
 		$code_find = \App\Model\Sms::getSmsInfo( [
 			'phone'       => $phone,
 			'code'        => $code,
-			'create_time' => [['gt', time() - 60 * 10], ['lt', time()]],
+			'create_time' => [['>', time() - 60 * 10], ['<', time()]],
 			'model'       => $model,
 		] );
 		if( $code_find ){

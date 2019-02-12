@@ -154,7 +154,7 @@ function execute_action($rules = false, $action_id = null, $user_id = null) {
 
 		//检查执行周期
 		$map                = array('action_id' => $action_id, 'user_id' => $user_id);
-		$map['create_time'] = array('gt', time() - intval($rule['cycle']) * 3600);
+		$map['create_time'] = array('>', time() - intval($rule['cycle']) * 3600);
 		$exec_count         = db('ActionLog')->where($map)->count();
 		if ($exec_count > $rule['max']) {
 			continue;
@@ -183,7 +183,7 @@ function get_action($id = null, $field = null) {
 	}
 	$list = cache('action_list');
 	if (empty($list[$id])) {
-		$map       = array('status' => array('gt', -1), 'id' => $id);
+		$map       = array('status' => array('>', -1), 'id' => $id);
 		$list[$id] = db('Action')->where($map)->field(true)->find();
 	}
 	return empty($field) ? $list[$id] : $list[$id][$field];

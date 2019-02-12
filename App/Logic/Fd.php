@@ -100,7 +100,7 @@ class Fd
 	static function clearAll() : bool
 	{
 		try{
-			$table = config( 'database.prefix' )."fd";
+			$table = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix')."fd";
 			db()->execute( "truncate {$table}" );
 			return true;
 		} catch( \Exception $e ){

@@ -25,7 +25,7 @@ class Voucher extends Server {
 	public function getVoucherTemplateList() {
 		$d    = model('VoucherTemplate');
 		$list = $d->alias('template')
-			->where(array('template.end_date' => array('gt', time()), 'template.state' => 1))
+			->where(array('template.end_date' => array('>', time()), 'template.state' => 1))
 			->field('template.*,(SELECT count(*) FROM ' . config('database.prefix') . 'coupon WHERE template_id = template.id) as receive_times,
             (SELECT count(*) FROM ' . config('database.prefix') . 'coupon WHERE template_id = template.id AND owner_id ' . ($this->user['id'] ? '= ' : '<> ') . $this->user['id'] . ') as receive_state
             ')

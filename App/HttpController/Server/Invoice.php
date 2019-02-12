@@ -67,7 +67,6 @@ class Invoice extends Server
 	public function detail()
 	{
 		$this->checkLogin();
-		$invoice_model = model( 'Invoice' );
 		$get           = $this->get;
 		$info          = \App\Model\Invoice::getInvoiceInfo( ['id' => $get['id']] );
 		return $this->faJson( ['data' => $info ? $info : null], 0 );
@@ -76,13 +75,10 @@ class Invoice extends Server
 	/**
 	 * 买家发票列表
 	 * @method GET
-	 * @datetime 2017-05-19T10:48:06+0800
 	 */
 	public function lists()
 	{
-		$this->checkLogin();
 		$get           = $this->get;
-		$invoice_model = model( 'Invoice' );
 		$page_class    = new Page( $count, ($get['rows'] > 0 && config( 'db_setting.api_max_rows' ) >= $get['rows']) ? $get['rows'] : config( 'db_setting.api_default_rows' ) );
 		$page          = $page_class->currentPage.','.$page_class->listRows;
 		$list          = \App\Model\Invoice::getInvoiceList( ['user_id' => $this->user['id']], '*', 'id desc', $page );
@@ -106,7 +102,6 @@ class Invoice extends Server
 	 * @param string $receive_province               收票人省份 [非必填]
 	 * @param string $receive_address                送票地址 [非必填]
 	 * @param string $consumption_type               发票消费分类 [非必填] 该类型列表由 Invoice/invoiceConsumptionTypeList 接口获得
-	 * @datetime 2017-05-19T10:48:06+0800
 	 */
 	public function add()
 	{

@@ -34,8 +34,8 @@ class Version extends Server {
 	 * todo 版本对比
 	 * app是否更新
 	 * @method GET
-	 * @param $platform 平台enum('ios','android')
-	 * @param $version 你的版本号
+	 * @param string $platform 平台enum('ios','android')
+	 * @param string $version 你的版本号
 	 * @return array(
 	 *    update_state  enum('required必须更新','optional可选','noneed不要求')
 	 *    version 版本号
@@ -47,9 +47,8 @@ class Version extends Server {
 	public function appUpdate() {
 		$get      = $this->get;
 		$platform = strtolower($get['platform']);
-		$model    = model('Version');
 
-		$find = \App\Model\Page::getVersionInfo([
+		$find = \App\Model\Version::getVersionInfo([
 			'platform' => $platform,
 			'version'  => $get['version'],
 		]);

@@ -6,7 +6,6 @@ use App\Utils\Code;
 
 /**
  * 商品分类
- * Class Goodscategory
  * @package App\HttpController\Server
  */
 class Goodscategory extends Server

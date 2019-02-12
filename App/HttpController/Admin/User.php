@@ -137,7 +137,7 @@ class User extends Admin
 			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
 			$user_id           = $this->get['id'];
-			$table_prefix      = config( 'database.prefix' );
+			$table_prefix      = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
 			$table_user        = $table_prefix.'user';
 			$table_order       = $table_prefix.'order';
 			$table_order_goods = $table_prefix.'order_goods';

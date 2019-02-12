@@ -60,7 +60,7 @@ class Goods extends Server
 				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				$goods_info         = \App\Model\Goods::getGoodsInfo( ['id' => $this->get['id']] );
-				$goods_info['skus'] = \App\Model\GoodsSku::getGoodsSkuList( ['goods_id' => $this->get['id']], '*', 'id desc', '1,10000' );
+				$goods_info['skus'] = \App\Model\GoodsSku::getGoodsSkuList( ['goods_id' => $this->get['id']], '*', 'id desc', [1,10000] );
 				$this->send( Code::success, ['info' => $goods_info] );
 			}
 		} else{
@@ -74,11 +74,11 @@ class Goods extends Server
 		if( $this->validator( $this->get, 'Goods.sku' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			$goods_info = \App\Model\Goods::alias( 'goods' )->join( 'goods_sku', 'goods.id = goods_sku.goods_id', 'LEFT' )->where( [
+			$goods_info = \App\Model\Goods::join( 'goods_sku', 'goods.id = goods_sku.goods_id', 'LEFT' )->where( [
 				'goods_sku.id' => $this->get['goods_sku_id'],
 			] )->field( 'goods.*,goods_sku.id as goods_sku_id' )->find();
 
-			$goods_info['skus'] = \App\Model\GoodsSku::getGoodsSkuList( ['goods_id' => $goods_info['id']], '*', 'id desc', '1,10000' );
+			$goods_info['skus'] = \App\Model\GoodsSku::getGoodsSkuList( ['goods_id' => $goods_info['id']], '*', 'id desc', [1,10000] );
 			$this->send( Code::success, ['info' => $goods_info] );
 		}
 	}
@@ -153,32 +153,32 @@ class Goods extends Server
 		if( intval( $param['goods_id'] <= 0 ) ){
 			$this->send( Code::param_error, [], '参数错误' );
 		} else{
-			$condition['evaluate.goods_id'] = $param['goods_id'];
+			$condition['goods_evaluate.goods_id'] = $param['goods_id'];
 
 			if( isset( $param['type'] ) ){
 				switch( $param['type'] ){
 				case 'positive':
-					$condition['evaluate.score'] = 5;
+					$condition['goods_evaluate.score'] = 5;
 				break;
 				case 'moderate':
-					$condition['evaluate.score'] = ['in', '3,4'];
+					$condition['goods_evaluate.score'] = ['in', '3,4'];
 				break;
 
 				case 'negative':
-					$condition['evaluate.score'] = ['in', '1,2'];
+					$condition['goods_evaluate.score'] = ['in', '1,2'];
 				break;
 				}
 			}
 			if( isset( $param['has_image'] ) ){
-				$condition['evaluate.images'] = ['neq', 'null'];
+				$condition['goods_evaluate.images'] = ['neq', 'null'];
 			}
 
 			if( isset( $this->get['ids'] ) && is_array( $this->get['ids'] ) ){
-				$condition['evaluate.id'] = ['in', $this->get['ids']];
+				$condition['goods_evaluate.id'] = ['in', $this->get['ids']];
 			}
 
-			$count = \App\Model\GoodsEvaluate::alias( 'evaluate' )->join( 'order order', 'evaluate.order_id = order.id', 'LEFT' )->group( 'evaluate.id' )->where( $condition )->count();
-			$list  = \App\Model\GoodsEvaluate::alias( 'evaluate' )->join( 'order order', 'evaluate.order_id = order.id', 'LEFT' )->join( 'order_goods goods', 'evaluate.order_goods_id = goods.id' )->join( 'user user', 'evaluate.user_id = user.id', 'LEFT' )->join( 'user_profile user_profile', 'user.id = user_profile.user_id', 'LEFT' )->where( $condition )->field( 'evaluate.id,score,evaluate.goods_img,evaluate.content,evaluate.create_time,evaluate.images,additional_content,additional_images,additional_time,reply_content,reply_content2,display,top,goods.goods_spec,user.phone,user_profile.nickname,user_profile.avatar' )->order( 'evaluate.id desc' )->page( $this->getPageLimit() )->group( 'evaluate.id' )->select();
+			$count = \App\Model\GoodsEvaluate::join( 'order order', 'goods_evaluate.order_id = order.id', 'LEFT' )->group( 'goods_evaluate.id' )->where( $condition )->count();
+			$list  = \App\Model\GoodsEvaluate::join( 'order order', 'goods_evaluate.order_id = order.id', 'LEFT' )->join( 'order_goods goods', 'goods_evaluate.order_goods_id = goods.id' )->join( 'user user', 'goods_evaluate.user_id = user.id', 'LEFT' )->join( 'user_profile user_profile', 'user.id = user_profile.user_id', 'LEFT' )->where( $condition )->field( 'goods_evaluate.id,score,goods_evaluate.goods_img,goods_evaluate.content,goods_evaluate.create_time,goods_evaluate.images,additional_content,additional_images,additional_time,reply_content,reply_content2,display,top,goods.goods_spec,user.phone,user_profile.nickname,user_profile.avatar' )->order( 'goods_evaluate.id desc' )->page( $this->getPageLimit() )->group( 'goods_evaluate.id' )->select();
 			$this->send( Code::success, [
 				'total_number' => $count,
 				'list'         => $list,

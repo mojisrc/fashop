@@ -29,8 +29,8 @@ class Voucher extends Model
 	 */
 	public function getUserAvailableVoucherInfo( $coupon_id, $user_id, $goods_total = 0 )
 	{
-		$condition['start_date'] = ['lt', time()];
-		$condition['end_date']   = ['gt', time()];
+		$condition['start_date'] = ['<', time()];
+		$condition['end_date']   = ['>', time()];
 		$condition['state']      = 1;
 		$condition['limit']      = ['elt', $goods_total];
 		$condition['owner_id']   = $user_id;
@@ -49,8 +49,8 @@ class Voucher extends Model
 		$this->checkExpired();
 		$condition               = [];
 		$condition['owner_id']   = $user_id;
-		$condition['start_date'] = ['lt', time()];
-		$condition['end_date']   = ['gt', time()];
+		$condition['start_date'] = ['<', time()];
+		$condition['end_date']   = ['>', time()];
 		$condition['state']      = 1;
 		$condition['limit']      = ['elt', $goods_total];
 		$list                    = $this->getVoucherList( $condition, '*', 'id desc', [1,100] );
@@ -80,7 +80,7 @@ class Voucher extends Model
 	 */
 	public function checkExpired()
 	{
-		return $this->where( ['end_date' => ['lt', time()], 'state' => ['neq', 2]] )->edit( ['state' => 3] );
+		return $this->where( ['end_date' => ['<', time()], 'state' => ['neq', 2]] )->edit( ['state' => 3] );
 	}
 
 	/**
@@ -93,7 +93,7 @@ class Voucher extends Model
 	public function getUserTemplateVoucher( $template_id, $user_id )
 	{
 		$result = [];
-		$result = Db::table( '__VOUCHER_TEMPLATE__ template' )->field( 'template.*,(SELECT count(*) FROM '.config( 'database.prefix' ).'coupon WHERE owner_id = '.$user_id.' AND template_id = '.$template_id.') as receive_times' )->where( ['template.id' => $template_id, 'state' => 1, 'end_date' => ['gt', time()]] )->find();
+		$result = Db::table( '__VOUCHER_TEMPLATE__ template' )->field( 'template.*,(SELECT count(*) FROM '.\EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix').'coupon WHERE owner_id = '.$user_id.' AND template_id = '.$template_id.') as receive_times' )->where( ['template.id' => $template_id, 'state' => 1, 'end_date' => ['>', time()]] )->find();
 		return $result;
 	}
 
@@ -109,7 +109,7 @@ class Voucher extends Model
 			return [];
 		}
 
-		$info = $this->table( '__VOUCHER_TEMPLATE__ template' )->field( 'template.*' )->where( ['id' => $vid, 'state' => $this->templatestate_arr['usable'][0], 'end_date' => ['gt', time()]] )->find();
+		$info = $this->table( '__VOUCHER_TEMPLATE__ template' )->field( 'template.*' )->where( ['id' => $vid, 'state' => $this->templatestate_arr['usable'][0], 'end_date' => ['>', time()]] )->find();
 
 		if( empty( $info ) || $info['total'] <= $info['giveout'] ){
 			$info = [];

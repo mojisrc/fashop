@@ -42,7 +42,7 @@ class Group extends Admin
 
 			switch( $get['state'] ){
 			case 0:
-				$condition['start_time'] = ['gt', $time];
+				$condition['start_time'] = ['>', $time];
 				$condition['is_show']    = 1;
 			break;
 			case 10:
@@ -81,7 +81,7 @@ class Group extends Admin
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
-			$prefix            = config( 'database.prefix' );
+			$prefix            = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
 			$table_goods       = $prefix."goods";
 			$table_group       = $prefix."group";
 			$table_group_goods = $prefix."group_goods";

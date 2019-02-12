@@ -12,7 +12,6 @@
  */
 
 namespace App\HttpController\Server;
-
 use App\Logic\Pay\Notice\Facade as PayNoticeFacade;
 use App\Utils\Code;
 use ezswoole\Log;

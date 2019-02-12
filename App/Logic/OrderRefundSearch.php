@@ -321,14 +321,14 @@ class OrderRefundSearch
                     $this->condition['handle_state']  = 20; //平台处理状态 默认0处理中(未处理) 10拒绝(驳回) 20同意 30成功(已完成)
                     $this->condition['refund_type']   = 2;  //申请类型:1为仅退款,2为退货退款)
                     $this->condition['tracking_no']   = ['EXP', 'IS NOT NULL']; //退款退货物 买家发货流单号
-                    $this->condition['tracking_time'] = ['gt', '0']; //退款退货物 买家发货时间,默认为0
+                    $this->condition['tracking_time'] = ['>', '0']; //退款退货物 买家发货时间,默认为0
                     $this->condition['receive']       = 1; //平台是否收到买家退货退款货物 1未收到货 2已收到货
                     break;
                 case 4:
                     $this->condition['handle_state']  = 20; //平台处理状态 默认0处理中(未处理) 10拒绝(驳回) 20同意 30成功(已完成)
                     $this->condition['refund_type']   = 2;  //申请类型:1为仅退款,2为退货退款)
                     $this->condition['tracking_no']   = ['EXP', 'IS NOT NULL']; //退款退货物 买家发货流单号
-                    $this->condition['tracking_time'] = ['gt', '0']; //退款退货物 买家发货时间,默认为0
+                    $this->condition['tracking_time'] = ['>', '0']; //退款退货物 买家发货时间,默认为0
                     $this->condition['receive']       = 2; //平台是否收到买家退货退款货物 1未收到货 2已收到货
                     break;
                 case 5:

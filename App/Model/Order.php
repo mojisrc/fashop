@@ -268,7 +268,7 @@ class Order extends Model
 	{
 		$condition['no_display']    = 0;
 		$condition['state']         = \App\Logic\Order::state_success;
-		$condition['finnshed_time'] = ['gt', time() - \App\Logic\Order::ORDER_EVALUATE_TIME];
+		$condition['finnshed_time'] = ['>', time() - \App\Logic\Order::ORDER_EVALUATE_TIME];
 		return $this->getOrderCount( $condition );
 	}
 
@@ -281,7 +281,7 @@ class Order extends Model
 		$condition['no_display']     = 0;
 		$condition['state']          = \App\Logic\Order::state_success;
 		$condition['evaluate_state'] = 0;
-		$condition['finnshed_time']  = ['gt', time() - \App\Logic\Order::ORDER_EVALUATE_TIME];
+		$condition['finnshed_time']  = ['>', time() - \App\Logic\Order::ORDER_EVALUATE_TIME];
 		// $condition['refund_state'] = array('eq',0);
 		// $condition['lock_state'] = array('eq',0);
 		return $this->getOrderCount( $condition );
@@ -295,7 +295,7 @@ class Order extends Model
 	{
 		$condition['state']        = \App\Logic\Order::state_pay;
 		$condition['refund_state'] = ['neq', 0]; // 退款状态:0是无退款,1是部分退款,2是全部退款
-		$condition['lock_state']   = ['gt', 0]; // 锁定状态:0是正常,大于0是锁定,默认是0
+		$condition['lock_state']   = ['>', 0]; // 锁定状态:0是正常,大于0是锁定,默认是0
 		return $this->getOrderCount( $condition );
 	}
 
@@ -910,7 +910,7 @@ class Order extends Model
 	{
 		$condition['state']          = \App\Logic\Order::state_success;
 		$condition['evaluate_state'] = 0;
-		$condition['finnshed_time']  = ['gt', time() - \App\Logic\Order::ORDER_EVALUATE_TIME];
+		$condition['finnshed_time']  = ['>', time() - \App\Logic\Order::ORDER_EVALUATE_TIME];
 		$condition['refund_state']   = ['eq', 0];
 		$condition['lock_state']     = ['eq', 0];
 		return $this->getOrderCount( $condition );
@@ -923,7 +923,7 @@ class Order extends Model
 	public function getAdminOrderRefundCount( $condition = [] )
 	{
 		$condition['refund_state'] = ['neq', 0]; // 退款状态:0是无退款,1是部分退款,2是全部退款
-		$condition['lock_state']   = ['gt', 0]; // 锁定状态:0是正常,大于0是锁定,默认是0
+		$condition['lock_state']   = ['>', 0]; // 锁定状态:0是正常,大于0是锁定,默认是0
 		return $this->getOrderCount( $condition );
 	}
 	// Admin使用

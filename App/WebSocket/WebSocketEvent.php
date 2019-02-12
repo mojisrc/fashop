@@ -22,7 +22,6 @@ class WebSocketEvent
         if ($this->customHandShake($request, $response) && $this->secWebsocketAccept($request, $response)) {
             // 接受握手 还需要101状态码以切换状态
             $response->status(101);
-            var_dump('shake success at fd :' . $request->fd);
             $response->end();
             return true;
         }

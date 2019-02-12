@@ -130,7 +130,7 @@ class Trade
 	 */
 	public function editOrderCancel( $order_id, $log_data )
 	{
-		$goods_list = \App\Model\OrderGoods::getOrderGoodsList( ['order_id' => $order_id], 'order_id,goods_num,goods_sku_id,goods_id', 'id desc', '1,10000' );
+		$goods_list = \App\Model\OrderGoods::getOrderGoodsList( ['order_id' => $order_id], 'order_id,goods_num,goods_sku_id,goods_id', 'id desc', [1,10000] );
 		if( !empty( $goods_list ) && is_array( $goods_list ) ){
 			$GoodsSkuModel = model( 'GoodsSku' );
 			foreach( $goods_list as $goods_info ){
@@ -168,7 +168,7 @@ class Trade
 		$day                       = time() - $refund_confirm * 60 * 60 * 24;
 		$condition                 = [];
 		$condition['seller_state'] = 1; //状态:1为待审核,2为同意,3为不同意
-		$condition['create_time']  = ['lt', $day];
+		$condition['create_time']  = ['<', $day];
 		$condition['user_id']     = $user_id;
 
 		$refund_data                   = [];
@@ -186,7 +186,7 @@ class Trade
 		$condition['seller_state'] = 2; //状态:1为待审核,2为同意,3为不同意
 		$condition['goods_state']  = 2;
 		$condition['return_type']  = 2;
-		$condition['delay_time']   = ['lt', $day];
+		$condition['delay_time']   = ['<', $day];
 		$condition['user_id']     = $user_id;
 
 		$refund_data                   = [];

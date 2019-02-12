@@ -308,7 +308,7 @@ class UserSearch
 	{
         $this->condition               = [];
         $this->condition['is_discard'] = 0;         //被丢弃 默认0否 1是[用于绑定后的失效的占位行]
-        $this->condition['id']         = ['gt', 1]; //临时解决后台超级管理员账号问题[不显示后台超级管理员]
+        $this->condition['id']         = ['>', 1]; //临时解决后台超级管理员账号问题[不显示后台超级管理员]
 
         $table_prefix                  = config('database.prefix');
         $table_user                    = $table_prefix . 'user';

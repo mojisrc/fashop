@@ -209,7 +209,7 @@ class Order extends Admin
 			if( empty( $order_info ) ){
 				$this->send( Code::error, [], '没有该订单' );
 			} else{
-				$prefix             = config( 'database.prefix' );
+				$prefix             = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
 				$table_user_profile = $prefix."user_profile";
 				$orderLogic         = new OrderLogic( ['order.group_sign' => $order_info['group_sign']] );
 				$field              = 'order.*'.",(SELECT nickname FROM $table_user_profile WHERE user_id=order.user_id) AS user_nickname";

@@ -18,7 +18,6 @@ use ezswoole\Db;
 
 /**
  * 地区管理
- * Class Area
  * @package App\HttpController\Server
  */
 class Area extends Server

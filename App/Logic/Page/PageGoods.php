@@ -53,7 +53,7 @@ class PageGoods
             foreach ($goods_key as $key => $value) {
                 $goods_ids = $bodys[$value]['data'] ? array_column($bodys[$value]['data'], 'id') : [];
                 if ($goods_ids) {
-                    $goods_list            = \App\Model\Goods::getGoodsList(['is_on_sale' => 1, 'id' => ['in', $goods_ids]], '*', 'sale_time desc', '1,10000');
+                    $goods_list            = \App\Model\Goods::getGoodsList(['is_on_sale' => 1, 'id' => ['in', $goods_ids]], '*', 'sale_time desc', [1,10000]);
                     $bodys[$value]['data'] = $goods_list;
                 } else {
                     $bodys[$value]['data'] = [];

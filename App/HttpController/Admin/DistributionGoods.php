@@ -122,7 +122,7 @@ class DistributionGoods extends Admin
         } else {
             $goods_condition               = [];
             $goods_condition['is_on_sale'] = 1;
-            $goods_condition['stock']      = ['gt', 0]; //查询库存大于0
+            $goods_condition['stock']      = ['>', 0]; //查询库存大于0
             $goods_condition['id']         = $post['goods_id'];
             $goods_info                    = \App\Model\Goods::getGoodsInfo($goods_condition, '*');
             if (!$goods_info) {

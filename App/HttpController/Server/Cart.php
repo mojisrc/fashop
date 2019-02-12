@@ -272,9 +272,10 @@ class Cart extends Server
 				$condition['goods_sku_id'] = ['in', $this->post['goods_sku_ids']];
 				$result                    = \App\Model\Cart::editCart( $condition, ['is_check' => $this->post['is_check']] );
 				if( !$result ){
-					return $this->send( Code::error, [], '编辑失败' );
+					$this->send( Code::error, [], '编辑失败' );
+				} else{
+					$this->send( Code::success );
 				}
-				$this->send( Code::success );
 			}
 		}
 	}

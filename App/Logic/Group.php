@@ -45,7 +45,7 @@ class Group
             $nonredundant_group_ids = array_unique($group_ids);//去掉重复
             $map                    = [];
             $map['id']              = ['in', $nonredundant_group_ids];
-            $map['end_time']        = ['lt', time()];
+            $map['end_time']        = ['<', time()];
             $map['is_show']         = 0;
             $group_count            = \App\Model\Group::getGroupCount($map);
             if ($group_count == count($nonredundant_group_ids)) { //所有查出来的拼团都是无效的

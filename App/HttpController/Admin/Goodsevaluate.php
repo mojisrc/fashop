@@ -33,7 +33,7 @@ class Goodsevaluate extends Admin
 	 */
 	public function list()
 	{
-		$table_prefix       = config( 'database.prefix' );
+		$table_prefix       = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
 		$table_user         = $table_prefix.'user';
 		$table_user_profile = $table_prefix.'user_profile';
 

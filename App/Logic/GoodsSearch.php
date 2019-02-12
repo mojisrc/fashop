@@ -46,7 +46,7 @@ class GoodsSearch
      */
     private $condition;
     /**
-     * @var string
+     * @var array
      */
     private $page;
     /**
@@ -80,7 +80,7 @@ class GoodsSearch
     private $saleState;
 
     /**
-     * @var array [ 'gt' , time()]
+     * @var array [ '>' , time()]
      */
     private $saleTime;
     /**
@@ -381,7 +381,7 @@ class GoodsSearch
             if ($this->stock == 0) {
                 $this->condition['stock'] = 0;
             } else {
-                $this->condition['stock'] = ['gt', 0];
+                $this->condition['stock'] = ['>', 0];
             }
         }
 
@@ -403,14 +403,12 @@ class GoodsSearch
 
     public function list(): ?array
     {
-
 	    $this->make();
         return $this->goodsModel->getGoodsList($this->condition, $this->field, $this->order, $this->page);
     }
 
     /**
      * 获得商品列表
-     * @author   韩文博
      * @param array $search_options 搜索条件
      * @param string $field 字段
      * @param string $order 排序

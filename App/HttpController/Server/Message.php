@@ -80,17 +80,12 @@ class Message extends Server
 	{
 		if( $this->verifyResourceRequest() !== true ){
 			$this->send( Code::user_access_token_error );
-
 		} else{
-
 			$get = $this->get;
-
 			// 1系统公告
 			if( $get['type_id'] === '' || $get['type_id'] === null || $get['type_id'] === false ){
 				$this->send( Code::error );
-
 			} else{
-
 				try{
 					$user         = $this->getRequestUser();
 					$user_id      = $user['id'];
@@ -100,23 +95,17 @@ class Message extends Server
 					$where_string = "message_state.to_user_id=$user_id AND message_state.del_state=0 AND message_state.del_time=0 AND message.type_id=$type";
 					switch( $type ){
 					case 1:
-
-						$count = \App\Model\Message::alias( 'message' )->join( '__MESSAGE_STATE__ message_state', 'message.id = message_state.message_id', 'LEFT' )->where( $where_string )->count();
-
+						$count        = \App\Model\Message::alias( 'message' )->join( '__MESSAGE_STATE__ message_state', 'message.id = message_state.message_id', 'LEFT' )->where( $where_string )->count();
 						$field        = 'message_state.*,message.type_id,title,body,relation_model,relation_model_id,message.create_time';
 						$order        = 'message.create_time desc';
 						$message_list = \App\Model\Message::getMessageListMore( $where_string, $field, $order, $this->getPageLimit(), $group = '' );
-
-						$list = array_values( $message_list );
-
+						$list         = array_values( $message_list );
 					break;
 					}
-
 					$this->send( Code::success, [
 						'total_number' => $count,
 						'list'         => $list,
 					] );
-
 				} catch( \Exception $e ){
 					$this->send( Code::server_error, [], $e->getMessage() );
 				}

@@ -39,12 +39,12 @@ class Coupon extends Admin
 		if( $this->get['state'] ){
 			switch ($this->get['state']) {
 				case 0:
-					$condition['start_time'] = array('gt',time());
+					$condition['start_time'] = array('>',time());
 					break;
 
 				case 1:
 					$condition['start_time'] = array('elt',time());
-					$condition['end_time']   = array('gt',time());
+					$condition['end_time']   = array('>',time());
 					break;
 
 				case 2:

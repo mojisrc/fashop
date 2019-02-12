@@ -40,12 +40,12 @@ class Fullcut extends Admin
 		if( $this->get['state'] ){
 			switch( $this->get['state'] ){
 			case 0:
-				$condition['start_time'] = ['gt', time()];
+				$condition['start_time'] = ['>', time()];
 			break;
 
 			case 1:
 				$condition['start_time'] = ['elt', time()];
-				$condition['end_time']   = ['gt', time()];
+				$condition['end_time']   = ['>', time()];
 			break;
 
 			case 2:

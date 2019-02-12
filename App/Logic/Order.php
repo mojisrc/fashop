@@ -263,7 +263,7 @@ class Order extends Logic
 		if( !empty( $this->userIds ) ){
 			$this->condition['order.user_id'] = ['in', $this->userIds];
 		}
-		$prefix             = config( 'database.prefix' );
+		$prefix             = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
 		$table_order_extend = $prefix."order_extend";
 		$table_order_goods  = $prefix."order_goods";
 		if( !empty( $this->keywords ) && !empty( $this->keywordsType ) ){
@@ -302,8 +302,8 @@ class Order extends Logic
 
 		if( !empty( $this->feedback ) ){
 			//维权状态：退款处理中 todo、退款结束 closed
-			$this->condition['order.refund_state'] = ['gt', 0]; // 退款状态:0是无退款,1是部分退款,2是全部退款
-			$this->condition['order.lock_state']   = ['gt', 0];   // 锁定状态:0是正常,大于0是锁定,默认是0
+			$this->condition['order.refund_state'] = ['>', 0]; // 退款状态:0是无退款,1是部分退款,2是全部退款
+			$this->condition['order.lock_state']   = ['>', 0];   // 锁定状态:0是正常,大于0是锁定,默认是0
 			switch( $this->feedback ){
 			case 'todo':
 				$this->condition["id"] = [

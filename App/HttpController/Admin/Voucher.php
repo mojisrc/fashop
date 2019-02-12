@@ -187,7 +187,7 @@ class Voucher extends Admin {
 		$condition['id']       = $get['id'];
 		// $condition['state']    = 1;
 		// $condition['give_out'] = array('elt', '0');
-		// $condition['end_date'] = array('gt', time());
+		// $condition['end_date'] = array('>', time());
 		$row                   = $coupon_template_model->getVoucherTemplateInfo($condition);
 
 
@@ -293,7 +293,7 @@ class Voucher extends Admin {
 	private function check_coupon_expire($coupon_id = '') {
 		$condition = array();
 		if (empty($coupon_id)) {
-			$condition['end_date'] = array('lt', time());
+			$condition['end_date'] = array('<', time());
 		} else {
 			$condition['id'] = $coupon_id;
 		}

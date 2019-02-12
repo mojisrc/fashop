@@ -23,7 +23,7 @@ class Voucher extends Model {
 	 */
 	function setExpiredVoucherState() {
 		// 更改过期的优惠券为过去(1-未用,2-已用,3-过期,4-收回)
-		return model('Voucher')->editVoucher(['end_date' => ['lt', time()]], ['state' => 3]);
+		return model('Voucher')->editVoucher(['end_date' => ['<', time()]], ['state' => 3]);
 	}
 	/**
 	 * 添加优惠券

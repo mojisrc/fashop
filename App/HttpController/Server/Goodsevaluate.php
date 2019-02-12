@@ -33,8 +33,7 @@ class Goodsevaluate extends Server
             $this->send( Code::user_access_token_error );
         } else{
             $get                         = $this->get;
-
-            $prefix                      = config( 'database.prefix' );
+            $prefix                      = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
             $table_order                 = $prefix."order";
             $table_order_goods           = $prefix."order_goods";
 

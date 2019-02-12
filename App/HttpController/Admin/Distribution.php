@@ -38,7 +38,7 @@ class Distribution extends Admin
         $table_distributor                       = $prefix . "distributor";
         $table_user                              = $prefix . "user";
         $condition                               = [];
-        $condition['order.distribution_user_id'] = ['gt', 0];
+        $condition['order.distribution_user_id'] = ['>', 0];
 
         if (isset($get['distributor_phone'])) {
             $condition["(SELECT phone FROM $table_user WHERE id=order.distribution_user_id)"] = $get['distributor_phone'];
@@ -204,8 +204,6 @@ class Distribution extends Admin
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {
-            $distribution_config_model = model('DistributionConfig');
-            var_dump('验证ok!');
             return $this->send(Code::success);
 
         }

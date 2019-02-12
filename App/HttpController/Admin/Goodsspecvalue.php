@@ -35,7 +35,7 @@ class Goodsspecvalue extends Admin
 		} else{
 			$condition            = [];
 			$condition['spec_id'] = $this->get['spec_id'];
-			$list                 = \App\Model\GoodsSpecValue::getGoodsSpecValueList( $condition, 'id,name', 'id desc', '1,10000' );
+			$list                 = \App\Model\GoodsSpecValue::getGoodsSpecValueList( $condition, 'id,name', 'id desc', [1,10000] );
 			$this->send( Code::success, [
 				'list' => $list,
 			] );

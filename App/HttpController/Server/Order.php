@@ -33,7 +33,7 @@ class Order extends Server
 	 */
 	public function stateNum()
 	{
-		$prefix            = config( 'database.prefix' );
+		$prefix            = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
 		$table_order       = $prefix."order";
 		$table_order_goods = $prefix."order_goods";
 		$param             = [];
@@ -372,7 +372,7 @@ class Order extends Server
 				if( !$order_info ){
 					return $this->send( Code::param_error, [], '参数错误' );
 				} else{
-					$prefix             = config( 'database.prefix' );
+					$prefix             = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
 					$table_order        = $prefix."order";
 					$table_user_profile = $prefix."user_profile";
 					$field              = 'group_identity,user_id'.",(SELECT avatar FROM $table_user_profile WHERE user_id=$table_order.user_id) AS user_avatar";
@@ -392,7 +392,7 @@ class Order extends Server
 	public function antoSetOrderGroup()
 	{
 		$condition['state']           = 20;              //已付款
-		$condition['group_end_time']  = ['lt', time()];  //拼团时限已过期
+		$condition['group_end_time']  = ['<', time()];  //拼团时限已过期
 		$condition['group_state']     = 1;               //正在进行中(待开团)
 		$condition['goods_type']      = 2;               //拼团订单
 		$condition['group_identity']  = 1;               //团长

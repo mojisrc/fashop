@@ -27,7 +27,7 @@ class Orderrefund extends Server
 		if( !isset( $this->get['refund_type'] ) || !in_array( $this->get['refund_type'], [1, 2] ) ){
 			$this->send( Code::param_error );
 		} else{
-			$list = model( 'OrderRefundReason' )->getOrderRefundReasonList( [
+			$list = \App\Model\OrderRefundReason::getOrderRefundReasonList( [
 				'type' => $this->get['refund_type'],
 			], '*', 'id asc', '1,1000' );
 			$this->send( Code::success, [
@@ -91,7 +91,6 @@ class Orderrefund extends Server
 			$this->send( Code::user_access_token_error );
 		} else{
 			$user                 = $this->getRequestUser();
-			$refund_model         = model( 'OrderRefund' );
 			$condition['user_id'] = ['in', \App\Model\User::getUserAllIds($user['id'])];
 			$keyword_type         = ['order_sn', 'refund_sn', 'goods_title'];
 			if( isset( $this->get['keywords'] ) && trim( $this->get['keywords'] ) != '' && in_array( $this->get['keywords_type'], $keyword_type ) ){
@@ -158,7 +157,6 @@ class Orderrefund extends Server
 				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				$user                  = $this->getRequestUser();
-				$order_refund_model    = model( 'OrderRefund' );
 				$condition['id']       = $this->post['id'];
 				$condition['user_id']  = ['in', \App\Model\User::getUserAllIds($user['id'])];
 				$condition['is_close'] = 0;
@@ -182,7 +180,7 @@ class Orderrefund extends Server
 					}
 				}
 
-				$refund_data = $order_refund_model->getOrderRefundInfo( $condition, 'handle_state,refund_type' );
+				$refund_data = \App\Model\OrderRefund::getOrderRefundInfo( $condition, 'handle_state,refund_type' );
 				if( !$refund_data ){
 					return $this->send( Code::error, [], '退款信息不存在' );
 
@@ -193,7 +191,7 @@ class Orderrefund extends Server
 				if( (int)$refund_data['refund_type'] != 2 ){
 					return $this->send( Code::error, [], '退货退款类型才可以填写订单号' );
 				}
-				$order_res = $order_refund_model->editOrderRefund( $condition, $update );
+				$order_res = \App\Model\OrderRefund::editOrderRefund( $condition, $update );
 				if( !$order_res ){
 					return $this->send( Code::error, [], '添加物流单号失败' );
 				}
@@ -217,9 +215,6 @@ class Orderrefund extends Server
 			if( $this->validator( $this->post, 'Server/OrderRefund.revoke' ) !== true ){
 				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
-				$refund_model      = model( 'OrderRefund' );
-				$order_goods_model = model( 'OrderGoods' );
-				$order_model       = model( 'Order' );
 				$refund            = \App\Model\OrderRefund::getOrderRefundInfo( ['id' => $this->post['id']] );
 				// 只有未处理的可以撤销退款
 				if( $refund['handle_state'] != 0 ){

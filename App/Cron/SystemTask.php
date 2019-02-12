@@ -115,7 +115,7 @@ class SystemTask
 	{
 		$condition['state'] = 0;
 		if ($this->runTimes === 0) {
-			$condition['id'] = ['gt', $this->maxProcessingId];
+			$condition['id'] = ['>', $this->maxProcessingId];
 		}
 		$this->runTimes++;
 
