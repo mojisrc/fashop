@@ -52,7 +52,7 @@ class Area extends Admin
 		} else{
 			$condition['level'] = 1;
 		}
-		$list = \App\Model\Area::getAreaList($condition, 'id,name,pid,longitude,latitude', 'id asc', [1,100000] );
+		$list = \App\Model\Area::init()->getAreaList($condition, 'id,name,pid,longitude,latitude', 'id asc', [1,100000] );
 		$this->send( Code::success, [
 			'list' => isset($get['tree'])  ? \App\Utils\Tree::listToTree( $list ) : $list,
 		] );

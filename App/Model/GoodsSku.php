@@ -91,7 +91,9 @@ class GoodsSku extends Model
 	{
 		return $this->where( $condition )->count();
 	}
-
+	public function delGoodsSku(array $condition){
+		$this->where($condition)->del();
+	}
 }
 
 ?>

@@ -194,6 +194,10 @@ class Goods extends Model
 		return $this->editMulti( $update );
 	}
 
+	public function delGoods(array $condition){
+		$this->where($condition)->del();
+	}
+
 }
 
 ?>

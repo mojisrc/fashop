@@ -22,7 +22,7 @@ class Article extends Admin
 	public function list()
 	{
 		$condition = [];
-		$list = \App\Model\Article::getArticleList( $condition, '*', 'id asc', [1,100000] );
+		$list = \App\Model\Article::init()->getArticleList( $condition, '*', 'id asc', [1,100000] );
 		$this->send( Code::success, [
 			'list'         => $list,
 			'total_number' => 100,

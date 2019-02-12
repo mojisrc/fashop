@@ -174,8 +174,8 @@ class Page extends Admin
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$module = \App\Model\Page::where( ['id' => $this->post['id']] )->value( 'module' );
-			\App\Model\Page::model()->editPage( ['module' => $module], ['is_portal' => 0] );
-			\App\Model\Page::model()->editPage( ['id' => $this->post['id']], ['is_portal' => 1] );
+			\App\Model\Page::init()->editPage( ['module' => $module], ['is_portal' => 0] );
+			\App\Model\Page::init()->editPage( ['id' => $this->post['id']], ['is_portal' => 1] );
 			$this->send( Code::success );
 		}
 	}

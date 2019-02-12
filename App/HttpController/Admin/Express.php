@@ -36,10 +36,10 @@ class Express extends Admin
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
-			$express_id    = \App\Model\Express::addExpress( $post );
+			$express_id = \App\Model\Express::init()->addExpress( $post );
 			if( $express_id ){
 				if( $this->post['is_commonly_use'] === 1 ){
-					\App\Model\Express::editExpress( ['id' => ['neq', $express_id]], ['is_commonly_use' => 0] );
+					\App\Model\Express::init()->editExpress( ['id' => ['neq', $express_id]], ['is_commonly_use' => 0] );
 				}
 				return $this->send( Code::success );
 			} else{
@@ -59,40 +59,41 @@ class Express extends Admin
 	{
 		$error = $this->validator( $this->post, 'Admin/Express.edit' );
 		if( $error !== true ){
-			return $this->send( Code::error, [], $error );
+			$this->send( Code::error, [], $error );
 		} else{
-			\App\Model\Express::editExpress( ['id' => $this->post['id']], $this->post );
+			\App\Model\Express::init()->editExpress( ['id' => $this->post['id']], $this->post );
 			if( $this->post['is_commonly_use'] === 1 ){
-				\App\Model\Express::editExpress( ['id' => ['neq', $this->post['id']]], ['is_commonly_use' => 0] );
+				\App\Model\Express::init()->editExpress( ['id' => ['neq', $this->post['id']]], ['is_commonly_use' => 0] );
+			} else{
+				$this->send( Code::success, [], '修改成功' );
 			}
-			return $this->send( Code::success, [], '修改成功' );
 		}
 	}
 
-    /**
-     * 设置为常用物流状态
-     * @method POST
-     * @param int id $express表ID
-     */
-    public function setCommonlyUse()
-    {
-        if( $this->validator( $this->post, 'Admin/Express.set' ) !== true ){
-            return $this->send( Code::param_error, [], $this->getValidator()->getError() );
-        } else{
-            $find          = \App\Model\Express::getExpressInfo( ['id' => $this->post['id']], 'id' );
-            if( !$find ){
-                return $this->send( Code::param_error );
-            } else{
-                $result        = \App\Model\Express::editExpress( ['id' => $this->post['id']], ['is_commonly_use' => 1] );
-                if( $result ){
-                    \App\Model\Express::editExpress( ['id' => ['neq', $this->post['id']]], ['is_commonly_use' => 0] );
-                    return $this->send( Code::success );
-                } else{
-                    return $this->send( Code::error );
-                }
-            }
-        }
-    }
+	/**
+	 * 设置为常用物流状态
+	 * @method POST
+	 * @param int id $express表ID
+	 */
+	public function setCommonlyUse()
+	{
+		if( $this->validator( $this->post, 'Admin/Express.set' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
+		} else{
+			$find = \App\Model\Express::init()->getExpressInfo( ['id' => $this->post['id']], 'id' );
+			if( !$find ){
+				$this->send( Code::param_error );
+			} else{
+				$result = \App\Model\Express::init()->editExpress( ['id' => $this->post['id']], ['is_commonly_use' => 1] );
+				if( $result ){
+					\App\Model\Express::init()->editExpress( ['id' => ['neq', $this->post['id']]], ['is_commonly_use' => 0] );
+					$this->send( Code::success );
+				} else{
+					$this->send( Code::error );
+				}
+			}
+		}
+	}
 
 	/**
 	 * 物流公司列表
@@ -117,10 +118,10 @@ class Express extends Admin
 			break;
 			}
 		}
-		$count         = \App\Model\Express::getExpressCount( $condition );
-		$list          = \App\Model\Express::getExpressList( $condition, '*', 'is_commonly_use desc,id desc', $this->getPageLimit() );
+		$expressModel = new \App\Model\Express;
+		$list         = $expressModel->getExpressList( $condition, '*', 'is_commonly_use desc,id desc', $this->getPageLimit() );
 		$this->send( Code::success, [
-			'total_number' => $count,
+			'total_number' => $expressModel->count(),
 			'list'         => $list,
 		] );
 	}
@@ -132,7 +133,7 @@ class Express extends Admin
 	 */
 	public function info()
 	{
-		$info       = \App\Model\Express::getExpressInfo( ['id' => $this->get['id']] );
+		$info = \App\Model\Express::getExpressInfo( ['id' => $this->get['id']] );
 		$this->send( Code::success, ['info' => $info] );
 	}
 
@@ -151,7 +152,7 @@ class Express extends Admin
 			$condition       = [];
 			$condition['id'] = $post['id'];
 
-			$row           = \App\Model\Express::getExpressInfo( $condition, '*' );
+			$row = \App\Model\Express::getExpressInfo( $condition, '*' );
 			if( !$row ){
 				return $this->send( Code::param_error );
 			}
