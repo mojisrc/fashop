@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-use ezswoole\Model;
+
 use ezswoole\Log;
 
 class User extends Model

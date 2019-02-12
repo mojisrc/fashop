@@ -13,7 +13,7 @@
 
 namespace App\Model;
 
-use ezswoole\Model;
+
 
 
 class GroupGoods extends Model
@@ -73,10 +73,10 @@ class GroupGoods extends Model
 	public function getGroupGoodsMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
-			$data = $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
+			$data = $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
 
 		} else{
-			$data = $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
+			$data = $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 
 		}
 		return $data;
@@ -92,10 +92,10 @@ class GroupGoods extends Model
 	public function getGroupGoodsMoreCount( $condition = [], $condition_str = '', $distinct = '' )
 	{
 		if( $distinct == '' ){
-			return $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->where( $condition )->where( $condition_str )->count();
+			return $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->where( $condition )->where( $condition_str )->count();
 
 		} else{
-			return $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
+			return $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
 		}
 	}
 
@@ -146,10 +146,10 @@ class GroupGoods extends Model
 	public function getWithTrashedGroupGoodsMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
-			$data = $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->withTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
+			$data = $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->withTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
 
 		} else{
-			$data = $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->withTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
+			$data = $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->withTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 
 		}
 		return $data;
@@ -165,10 +165,10 @@ class GroupGoods extends Model
 	public function getWithTrashedGroupGoodsMoreCount( $condition = [], $condition_str = '', $distinct = '' )
 	{
 		if( $distinct == '' ){
-			return $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->withTrashed()->where( $condition )->where( $condition_str )->count();
+			return $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->withTrashed()->where( $condition )->where( $condition_str )->count();
 
 		} else{
-			return $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->withTrashed()->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
+			return $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->withTrashed()->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
 		}
 	}
 
@@ -219,10 +219,10 @@ class GroupGoods extends Model
 	public function getOnlyTrashedGroupGoodsMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
-			$data = $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->onlyTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
+			$data = $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->onlyTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
 
 		} else{
-			$data = $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->onlyTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
+			$data = $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->onlyTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 
 		}
 		return $data;
@@ -238,10 +238,10 @@ class GroupGoods extends Model
 	public function getOnlyTrashedGroupGoodsMoreCount( $condition = [], $condition_str = '', $distinct = '' )
 	{
 		if( $distinct == '' ){
-			return $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->onlyTrashed()->where( $condition )->where( $condition_str )->count();
+			return $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->onlyTrashed()->where( $condition )->where( $condition_str )->count();
 
 		} else{
-			return $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->onlyTrashed()->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
+			return $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->onlyTrashed()->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
 		}
 	}
 
@@ -280,7 +280,7 @@ class GroupGoods extends Model
 	 */
 	public function getGroupGoodsMoreInfo( $condition = [], $condition_str = '', $field = '*' )
 	{
-		$data = $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->where( $condition )->where( $condition_str )->field( $field )->find();
+		$data = $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->where( $condition )->where( $condition_str )->field( $field )->find();
 		return $data;
 	}
 
@@ -293,7 +293,7 @@ class GroupGoods extends Model
 	 */
 	public function getGroupGoodsExcludeMoreInfo( $condition = [], $condition_str = '', $exclude = '*' )
 	{
-		$data = $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->where( $condition )->where( $condition_str )->field( $exclude, true )->find();
+		$data = $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->where( $condition )->where( $condition_str )->field( $exclude, true )->find();
 		return $data;
 	}
 
@@ -319,7 +319,7 @@ class GroupGoods extends Model
 	 */
 	public function getWithTrashedGroupGoodsMoreInfo( $condition = [], $condition_str = '', $field = '*' )
 	{
-		$data = $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->withTrashed()->where( $condition )->where( $condition_str )->field( $field )->find();
+		$data = $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->withTrashed()->where( $condition )->where( $condition_str )->field( $field )->find();
 		return $data;
 	}
 
@@ -346,7 +346,7 @@ class GroupGoods extends Model
 	 */
 	public function getWithTrashedGroupGoodsExcludeMoreInfo( $condition = [], $condition_str = '', $exclude = '*' )
 	{
-		$data = $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->withTrashed()->where( $condition )->where( $condition_str )->field( $exclude, true )->find();
+		$data = $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->withTrashed()->where( $condition )->where( $condition_str )->field( $exclude, true )->find();
 		return $data;
 	}
 
@@ -372,7 +372,7 @@ class GroupGoods extends Model
 	 */
 	public function getOnlyTrashedGroupGoodsMoreInfo( $condition = [], $condition_str = '', $field = '*' )
 	{
-		$data = $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->onlyTrashed()->where( $condition )->where( $condition_str )->field( $field )->find();
+		$data = $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->onlyTrashed()->where( $condition )->where( $condition_str )->field( $field )->find();
 		return $data;
 	}
 
@@ -399,7 +399,7 @@ class GroupGoods extends Model
 	 */
 	public function getOnlyTrashedGroupGoodsExcludeMoreInfo( $condition = [], $condition_str = '', $exclude = '*' )
 	{
-		$data = $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->onlyTrashed()->where( $condition )->where( $condition_str )->field( $exclude, true )->find();
+		$data = $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->onlyTrashed()->where( $condition )->where( $condition_str )->field( $exclude, true )->find();
 		return $data;
 	}
 
@@ -530,10 +530,10 @@ class GroupGoods extends Model
 	public function getGoodsSkuMoreCount( $condition = [], $condition_str = '', $distinct = '' )
 	{
 		if( $distinct == '' ){
-			return $this->alias( 'group_goods' )->join( '__GOODS_SKU__ goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->count();
+			return $this->join( '__GOODS_SKU__ goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->count();
 
 		} else{
-			return $this->alias( 'group_goods' )->join( '__GOODS_SKU__ goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
+			return $this->join( '__GOODS_SKU__ goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
 		}
 	}
 
@@ -550,10 +550,10 @@ class GroupGoods extends Model
 	public function getGoodsSkuMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
-			$data = $this->alias( 'group_goods' )->join( '__GOODS_SKU__ goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
+			$data = $this->join( '__GOODS_SKU__ goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
 
 		} else{
-			$data = $this->alias( 'group_goods' )->join( '__GOODS_SKU__ goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
+			$data = $this->join( '__GOODS_SKU__ goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 		}
 		return $data;
 	}
@@ -571,10 +571,10 @@ class GroupGoods extends Model
 	public function getGroupGoodsSkuMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
-			$data = $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->join( '__GOODS_SKU__ goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
+			$data = $this->join( 'group', 'group_goods.group_id = group.id', 'LEFT' )->join( 'goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
 
 		} else{
-			$data = $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->join( '__GOODS_SKU__ goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
+			$data = $this->join( 'group', 'group_goods.group_id = group.id', 'LEFT' )->join( 'goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 
 		}
 		return $data;
@@ -590,10 +590,10 @@ class GroupGoods extends Model
 	public function getGroupGoodsSkuMoreCount( $condition = [], $condition_str = '', $distinct = '' )
 	{
 		if( $distinct == '' ){
-			return $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->join( '__GOODS_SKU__ goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->count();
+			return $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->join( '__GOODS_SKU__ goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->count();
 
 		} else{
-			return $this->alias( 'group_goods' )->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->join( '__GOODS_SKU__ goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
+			return $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->join( '__GOODS_SKU__ goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
 		}
 	}
 

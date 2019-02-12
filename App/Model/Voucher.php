@@ -13,7 +13,7 @@
 
 namespace App\Model;
 
-use ezswoole\Model;
+
 
 class Voucher extends Model
 {

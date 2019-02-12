@@ -13,7 +13,7 @@
 
 namespace App\Model;
 
-use ezswoole\Model;
+
 
 
 class Trade extends Model

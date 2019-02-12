@@ -17,13 +17,13 @@ use ezswoole\Model;
 class Voucher extends Model {
 	/**
 	 * 检查是否过期
-	 * @param $phone 手机号
-	 * @param $code 邀请码
-	 * @param $model 模块名
+	 * @param string $phone 手机号
+	 * @param string $code 邀请码
+	 * @param string $model 模块名
 	 */
 	function setExpiredVoucherState() {
 		// 更改过期的优惠券为过去(1-未用,2-已用,3-过期,4-收回)
-		return model('Voucher')->editVoucher(['end_date' => ['<', time()]], ['state' => 3]);
+		return \App\Model\Voucher::editVoucher(['end_date' => ['<', time()]], ['state' => 3]);
 	}
 	/**
 	 * 添加优惠券
@@ -53,8 +53,7 @@ class Voucher extends Model {
 			return throw new \Exception('优惠券已过期');
 		}
 		// 判断用户领取的数量是否超过限制
-		$coupon_model      = model('Voucher');
-		$user_coupon_count = \App\Model\Coupon::getVoucherCount(['owner_id' => $owner_id]);
+		$user_coupon_count = \App\Model\Voucher::getVoucherCount(['owner_id' => $owner_id]);
 		if ($user_coupon_count >= $coupon_template_info['each_limit']) {
 			return throw new \Exception('已经超出该优惠券每人可领张数');
 		}
@@ -70,7 +69,7 @@ class Voucher extends Model {
 		$data['state']       = 1;
 		$data['owner_id']    = $owner_id;
 
-		$relation_model_id = \App\Model\Coupon::addVoucher($data);
+		$relation_model_id = \App\Model\Voucher::addVoucher($data);
 		// 添加消息通知，过滤外部字符变量
 		$fliter[0] = ['[title]', '[start_date]', '[end_date]'];
 		$fliter[1] = [$coupon_template_info['title'], date('Y-m-d H:i', $coupon_template_info['start_date']), date('Y-m-d H:i', $coupon_template_info['end_date'])];

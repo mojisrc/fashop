@@ -28,7 +28,7 @@ namespace App\Model;
 
 namespace App\Model;
 
-use ezswoole\Model;
+
 
 class UserTemp extends Model
 {

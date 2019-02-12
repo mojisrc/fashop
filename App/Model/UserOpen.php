@@ -5,7 +5,7 @@
 
 namespace App\Model;
 
-use ezswoole\Model;
+
 
 
 class UserOpen extends Model

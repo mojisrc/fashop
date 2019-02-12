@@ -13,7 +13,7 @@
 
 namespace App\Model;
 
-use ezswoole\Model;
+
 
 
 class Fullcut extends Model

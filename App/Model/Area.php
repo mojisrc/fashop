@@ -13,7 +13,6 @@
 
 namespace App\Model;
 
-use ezswoole\Model;
 
 class Area extends Model
 {

@@ -23,8 +23,6 @@ use App\Logic\Page\PageGoods as PageGoodsLogic;
 
 /**
  * 页面
- * Class Page
- * @package App\HttpController\Admin
  */
 class Page extends Admin
 {
@@ -49,8 +47,13 @@ class Page extends Admin
 			if( isset( $this->get['type'] ) ){
 				$condition['type'] = $this->get['type'];
 			}
-			$count = \App\Model\Page::where( $condition )->count();
-			$list  = \App\Model\Page::getPageList( $condition, '*', 'id desc', $this->getPageLimit() );
+			$pageModel = new \App\Model\Page;
+			$pageModel->where( $condition );
+			$pageModel->page( $this->getPageLimit() );
+			$pageModel->order( 'id desc' );
+			$pageModel->select();
+			$count = $pageModel->count();
+			$list  = $pageModel->select();
 
 			if( isset( $this->get['mobile'] ) ){
 				$shop     = Db::name( 'Shop' )->where( ['id' => 1] )->field( 'host,salt' )->find();
@@ -97,12 +100,13 @@ class Page extends Admin
 				if( isset( $this->post['clone_from_id'] ) ){
 					$data['clone_from_id'] = $this->post['clone_from_id'];
 				}
-				$PageBodyFormat = new PageBodyFormat();
-				\App\Model\Page::addPage( [
+				$pageBodyFormat = new PageBodyFormat();
+				$pageModel      = new \App\Model\Page;
+				$pageModel->addPage( [
 					'name'             => $this->post['name'],
 					'description'      => $this->post['description'],
 					'background_color' => $this->post['background_color'],
-					'body'             => $PageBodyFormat->formatBody( $this->post['body'] ),
+					'body'             => $pageBodyFormat->formatBody( $this->post['body'] ),
 					'is_system'        => 0,
 					'module'           => $this->post['module'] ? $this->post['module'] : 'wechat_mini',
 				] );
@@ -129,16 +133,17 @@ class Page extends Admin
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			try{
-				$data       = [];
+				$data = [];
 				if( isset( $this->post['description'] ) ){
 					$data['description'] = $this->post['description'];
 				}
-				$PageBodyFormat = new PageBodyFormat();
-				\App\Model\Page::editPage( ['id' => $this->post['id']], [
+				$pageModel      = new \App\Model\Page;
+				$pageBodyFormat = new PageBodyFormat();
+				$pageModel->editPage( ['id' => $this->post['id']], [
 					'name'             => $this->post['name'],
 					'description'      => $this->post['description'],
 					'background_color' => $this->post['background_color'],
-					'body'             => $PageBodyFormat->formatBody( $this->post['body'] ),
+					'body'             => $pageBodyFormat->formatBody( $this->post['body'] ),
 					'is_system'        => 0,
 					'module'           => $this->post['module'] ? $this->post['module'] : 'wechat_mini',
 				] );
@@ -151,7 +156,8 @@ class Page extends Admin
 
 	public function info()
 	{
-		$info           = \App\Model\Page::getPageInfo( ['id' => $this->get['id']] );
+		$pageModel      = new \App\Model\Page;
+		$info           = $pageModel->getPageInfo( ['id' => $this->get['id']] );
 		$pageGoodsLogic = new PageGoodsLogic();
 		$info['body']   = $pageGoodsLogic->filterGoods( $info['body'] );
 		$this->send( Code::success, ['info' => $info] );
@@ -167,9 +173,9 @@ class Page extends Admin
 		if( $this->validator( $this->post, 'Admin/Page.setPortal' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			$info = \App\Model\Page::getPageInfo( ['id' => $this->post['id']], 'module' );
-			\App\Model\Page::editPage( ['module' => $info['module']], ['is_portal' => 0] );
-			\App\Model\Page::editPage( ['id' => $this->post['id']], ['is_portal' => 1] );
+			$module = \App\Model\Page::where( ['id' => $this->post['id']] )->value( 'module' );
+			\App\Model\Page::model()->editPage( ['module' => $module], ['is_portal' => 0] );
+			\App\Model\Page::model()->editPage( ['id' => $this->post['id']], ['is_portal' => 1] );
 			$this->send( Code::success );
 		}
 	}

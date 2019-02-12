@@ -13,13 +13,12 @@
 
 namespace App\Model;
 
-use ezswoole\Model;
+
 
 
 class Address extends Model
 {
 	protected $softDelete = true;
-
 	/**
 	 * @param array  $condition
 	 * @param string $field
@@ -40,6 +39,7 @@ class Address extends Model
 	{
 		return $this->where( $condition )->field( $field )->find();
 	}
+
 	/**
 	 * @param array  $condition
 	 * @param string $field
@@ -51,6 +51,7 @@ class Address extends Model
 	{
 		return $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 	}
+
 	/**
 	 * @param array $data
 	 * @return bool|int
@@ -59,6 +60,7 @@ class Address extends Model
 	{
 		return $this->add( $data );
 	}
+
 	/**
 	 * @param array $condition
 	 * @param array $data

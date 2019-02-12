@@ -42,8 +42,7 @@ class WechatUser
 	public function updateWechatUsersInfo( array $openids )
 	{
 		$_user_list       = $this->wechat->user->select( $openids );
-		$wechatUserModel  = model( 'WechatUser' );
-		$wechat_user_list = $wechatUserModel->getWechatUserList( [
+		$wechat_user_list = \App\Model\WechatUser::getWechatUserList( [
 			'openid' => [
 				'in',
 				$openids,
@@ -68,6 +67,6 @@ class WechatUser
 				'tagid_list'     => json_encode( $user['tagid_list'] ),
 			];
 		}
-		return $wechatUserModel->updateAll( $datas );
+		return \App\Model\WechatUser::updateAll( $datas );
 	}
 }

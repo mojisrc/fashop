@@ -13,16 +13,9 @@
 
 namespace App\Model;
 
-use ezswoole\Model;
-
-//
-
 class Goods extends Model
 {
-	//	protected $softDelete = true;
 	protected $createTime = true;
-
-
 	protected $jsonFields
 		= [
 			'category_ids',
@@ -51,7 +44,7 @@ class Goods extends Model
 	 * @param array  $page
 	 * @return array|bool|false|null
 	 */
-	public function getGoodsList( $condition, $field = '*', $order ='id desc', $page = [1, 10] )
+	public function getGoodsList( $condition, $field = '*', $order = 'id desc', $page = [1, 10] )
 	{
 		$list = $this->where( $condition )->field( $field )->order( $order )->page( $page )->select();
 		return $list ?? [];
@@ -101,7 +94,7 @@ class Goods extends Model
 			}
 			$stock       = \App\Model\Goods::getGoodsList( [
 				'goods_id' => ['in', $goods_array,],
-			], 'stock,goods_id,id', '',  [1,10000] );
+			], 'stock,goods_id,id', '', [1, 10000] );
 			$stock_array = [];
 			foreach( $stock as $val ){
 				if( !isset( $stock_array[$val['goods_id']] ) ){

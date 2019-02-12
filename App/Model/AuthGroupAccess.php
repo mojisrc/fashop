@@ -12,7 +12,7 @@
  */
 namespace App\Model;
 
-use ezswoole\Model;
+
 
 class AuthGroupAccess extends Model
 {

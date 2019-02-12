@@ -11,7 +11,7 @@
  * @since      File available since Release v1.1
  */
 namespace App\Model;
-use ezswoole\Model;
+
 
 class Invoice extends Model {
 	protected $softDelete = true;

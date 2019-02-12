@@ -25,7 +25,7 @@ class WechatUser
 			$wechat = new WechatFactory();
 			// 获得最后一个openid
 			$wechatUserModel  = model( 'WechatUser' );
-			$last_user        = $wechatUserModel->getWechatUserInfo( ['app_id' => $config['app_id']], '*', 'id desc' );
+			$last_user        = \App\Model\WechatUser::getWechatUserInfo( ['app_id' => $config['app_id']], '*', 'id desc' );
 			$user_openid_list = $wechat->user->list( $last_user['openid'] ? $last_user['openid'] : null );
 			if(!empty($user_openid_list) && isset($user_openid_list['data']) && $user_openid_list['data']['openid']){
 				$openids          = $user_openid_list['data']['openid'];
@@ -56,7 +56,7 @@ class WechatUser
 							];
 						}
 					}
-					$wechatUserModel->addWechatUserAll( $datas );
+					\App\Model\WechatUser::addWechatUserAll( $datas );
 				}
 			}
 
@@ -69,7 +69,7 @@ class WechatUser
 		// todo 批量异步执行，一步到位
 		$config = \App\Model\Wechat::getWechatInfo( ['id' => 1] );
 		$wechatUserModel  = model( 'WechatUser' );
-		$user_list = $wechatUserModel->getWechatUserList(['app_id' => $config['app_id']],'id,openid','');
+		$user_list = \App\Model\WechatUser::getWechatUserList(['app_id' => $config['app_id']],'id,openid','');
 		// 获得
 		if( !empty( $user_list ) && is_array( $user_list ) ){
 			$now_time = time();

@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-use ezswoole\Model;
+
 
 class Cron extends Model
 {

@@ -13,9 +13,10 @@
 
 namespace App\Model;
 
-use ezswoole\Model;
-
-
+/**
+ * Class Page
+ * @package App\Model
+ */
 class Page extends Model
 {
 	protected $softDelete = true;
@@ -33,7 +34,6 @@ class Page extends Model
 		$data['update_time'] = time();
 		return $this->where( $condition )->edit( $data );
 	}
-
 
 	public function getPageInfo( $condition = [], $field = '*' )
 	{

@@ -14,8 +14,6 @@
 namespace App\HttpController\Server;
 
 use App\Utils\Code;
-use Hashids\Hashids;
-use ezswoole\Db;
 use App\Logic\Page\PageGoods as PageGoodsLogic;
 
 class Page extends Server
@@ -27,8 +25,9 @@ class Page extends Server
 	public function list()
 	{
 		try{
-			$total = \App\Model\Page::where( [] )->count();
-			$list  = \App\Model\Page::getPageList( [], '*', 'id desc', $this->getPageLimit() );
+			$pageModel = new \App\Model\Page;
+			$total     = $pageModel->count();
+			$list      = $pageModel->getPageList( [], '*', 'id desc', $this->getPageLimit() );
 			$this->send( Code::success, [
 				'list'         => $list,
 				'total_number' => $total,
@@ -38,15 +37,15 @@ class Page extends Server
 		}
 	}
 
+
 	/**
 	 * 首页
 	 * @method GET
 	 */
 	public function portal()
 	{
-		$info           = \App\Model\Page::getPageInfo( [
-			'is_portal' => 1,
-		] );
+		$pageModel      = new \App\Model\Page;
+		$info           = $pageModel->getPageInfo( ['is_portal' => 1] );
 		$pageGoodsLogic = new PageGoodsLogic();
 		$info['body']   = $pageGoodsLogic->filterGoods( $info['body'] );
 
@@ -62,7 +61,6 @@ class Page extends Server
 	 */
 	public function info()
 	{
-
 		if( !isset( $this->get['id'] ) ){
 			$this->send( Code::param_error );
 		} else{

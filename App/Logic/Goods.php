@@ -680,12 +680,10 @@ class Goods
      */
     public function filter()
     {
-        $group_model                       = model('Group');
-        $group_goods_model                 = model('GroupGoods');
         $condition                         = [];
         $condition['group_goods.goods_id'] = $this->id;
-        $group_goods                       = \App\Model\GroupGoods::getGroupGoodsSkuMoreList($condition, '', 'group_goods.*,group.end_time,group.is_show', 'group_goods.id desc', '1,200', '');
-        if (!group_goods) {
+        $group_goods                       = \App\Model\GroupGoods::model()->getGroupGoodsSkuMoreList($condition, '', 'group_goods.*,group.end_time,group.is_show', 'group_goods.id desc', '1,200', '');
+        if (!$group_goods) {
             return false;
         } else {
             if ($group_goods['end_time'] < time() && $group_goods['is_show'] == 0) {

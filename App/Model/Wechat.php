@@ -27,7 +27,7 @@ namespace App\Model;
 
 namespace App\Model;
 
-use ezswoole\Model;
+
 
 class Wechat extends Model
 {

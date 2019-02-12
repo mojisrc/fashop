@@ -54,7 +54,7 @@ class Voucher extends Admin {
 		$get        = $this->get;
 		$coupon_id = $get['id'];
 		if ($coupon_id > 0) {
-			$result = model('Voucher')->editVoucher(['id' => $coupon_id], ['state' => 4]);
+			$result = \App\Model\Voucher::editVoucher(['id' => $coupon_id], ['state' => 4]);
 			return $this->send( Code::success );
 		} else {
 			return $this->send( Code::param_error );
