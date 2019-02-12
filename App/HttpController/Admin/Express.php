@@ -76,8 +76,8 @@ class Express extends Admin
      */
     public function setCommonlyUse()
     {
-        if( $this->validate( $this->post, 'Admin/Express.set' ) !== true ){
-            return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+        if( $this->validator( $this->post, 'Admin/Express.set' ) !== true ){
+            return $this->send( Code::param_error, [], $this->getValidator()->getError() );
         } else{
             $find          = \App\Model\Express::getExpressInfo( ['id' => $this->post['id']], 'id' );
             if( !$find ){

@@ -38,8 +38,8 @@ class Goodscategory extends Admin
      */
     public function add()
     {
-        if ($this->validate($this->post, 'Admin/GoodsCategory.add') !== true) {
-            return $this->send(Code::param_error, [], $this->getValidate()->getError());
+        if ($this->validator($this->post, 'Admin/GoodsCategory.add') !== true) {
+            return $this->send(Code::param_error, [], $this->getValidator()->getError());
         } else {
             $pid                  = $this->post['pid'];
             $prefix               = config('database.prefix');
@@ -68,8 +68,8 @@ class Goodscategory extends Admin
      */
     public function edit()
     {
-        if ($this->validate($this->post, 'Admin/GoodsCategory.edit') !== true) {
-            return $this->send(Code::param_error, [], $this->getValidate()->getError());
+        if ($this->validator($this->post, 'Admin/GoodsCategory.edit') !== true) {
+            return $this->send(Code::param_error, [], $this->getValidator()->getError());
         } else {
             $data = ['name' => $this->post['name']];
             if (isset($this->post['pid']) && $this->post['id'] !== $this->post['pid']) {
@@ -99,8 +99,8 @@ class Goodscategory extends Admin
      */
     public function info()
     {
-        if ($this->validate($this->get, 'Admin/GoodsCategory.info') !== true) {
-            $this->send(Code::param_error, [], $this->getValidate()->getError());
+        if ($this->validator($this->get, 'Admin/GoodsCategory.info') !== true) {
+            $this->send(Code::param_error, [], $this->getValidator()->getError());
         } else {
             $info                 = \App\Model\GoodsCategory::getGoodsCategoryInfo(['id' => $this->get['id']], '*');
             if (!$info) {
@@ -119,8 +119,8 @@ class Goodscategory extends Admin
      */
     public function del()
     {
-        if ($this->validate($this->post, 'Admin/GoodsCategory.del') !== true) {
-            $this->send(Code::param_error, [], $this->getValidate()->getError());
+        if ($this->validator($this->post, 'Admin/GoodsCategory.del') !== true) {
+            $this->send(Code::param_error, [], $this->getValidator()->getError());
         } else {
 
             $condition       = [];
@@ -152,8 +152,8 @@ class Goodscategory extends Admin
      */
     public function sort()
     {
-        if ($this->validate($this->post, 'Admin/GoodsCategory.sort') !== true) {
-            return $this->send(Code::param_error, [], $this->getValidate()->getError());
+        if ($this->validator($this->post, 'Admin/GoodsCategory.sort') !== true) {
+            return $this->send(Code::param_error, [], $this->getValidator()->getError());
         } else {
             $is_display_order = $this->post['sorts'];
             $sql              = "UPDATE " . config('database.prefix') . "goods_category SET sort = CASE id ";

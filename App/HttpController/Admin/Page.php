@@ -86,8 +86,8 @@ class Page extends Admin
 	 */
 	public function add()
 	{
-		if( $this->validate( $this->post, 'Admin/Page.add' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Page.add' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			try{
 				$data = [];
@@ -125,8 +125,8 @@ class Page extends Admin
 	 */
 	public function edit()
 	{
-		if( $this->validate( $this->post, 'Admin/Page.edit' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Page.edit' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			try{
 				$page_model = model( 'Page' );
@@ -165,8 +165,8 @@ class Page extends Admin
 	 */
 	public function setPortal()
 	{
-		if( $this->validate( $this->post, 'Admin/Page.setPortal' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Page.setPortal' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$info = \App\Model\Page::getPageInfo( ['id' => $this->post['id']], 'module' );
 			\App\Model\Page::editPage( ['module' => $info['module']], ['is_portal' => 0] );

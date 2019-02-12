@@ -166,8 +166,8 @@ class Order extends Admin
 	 */
 	public function info()
 	{
-		if( $this->validate( $this->get, 'Admin/Order.info' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Admin/Order.info' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$order_id        = $this->get['id'];
 			$condition['id'] = $order_id;
@@ -179,10 +179,9 @@ class Order extends Admin
 			if( empty( $order_info ) ){
 				$this->send( Code::error, [], '没有该订单' );
 			} else{
-				$log_list     = \App\Model\Order::getOrderLogList( ['order_id' => $order_id] );
-				$refund_model = model( 'OrderRefund' );
-				$return_list  = \App\Model\OrderRefund::getOrderRefundList( ['order_id' => $order_id, 'refund_type' => 2] );
-				$refund_list  = \App\Model\OrderRefund::getOrderRefundList( ['order_id' => $order_id, 'refund_type' => 1] );
+				$log_list    = \App\Model\Order::getOrderLogList( ['order_id' => $order_id] );
+				$return_list = \App\Model\OrderRefund::getOrderRefundList( ['order_id' => $order_id, 'refund_type' => 2] );
+				$refund_list = \App\Model\OrderRefund::getOrderRefundList( ['order_id' => $order_id, 'refund_type' => 1] );
 				$this->send( Code::success, [
 					'info'        => $order_info,
 					'order_log'   => $log_list,
@@ -200,13 +199,12 @@ class Order extends Admin
 	 */
 	public function groupInfo()
 	{
-		if( $this->validate( $this->get, 'Admin/Order.groupInfo' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Admin/Order.groupInfo' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$order_id                = $this->get['id'];
 			$condition['id']         = $order_id;
 			$condition['goods_type'] = 2;
-			$order_model             = model( 'Order' );
 			$order_info              = \App\Model\Order::getOrderInfo( $condition );
 			if( empty( $order_info ) ){
 				$this->send( Code::error, [], '没有该订单' );
@@ -240,8 +238,8 @@ class Order extends Admin
 	 */
 	public function setSend()
 	{
-		if( $this->validate( $this->post, 'Admin/Order.setSend' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Order.setSend' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$order_id = $this->post['id'];
 
@@ -263,7 +261,6 @@ class Order extends Admin
 			}
 
 			try{
-				$order_model = model( 'Order' );
 				\App\Model\Order::startTrans();
 				$data                    = [];
 				$data['deliver_name']    = $this->post['deliver_name'];
@@ -323,11 +320,9 @@ class Order extends Admin
 	 */
 	public function logisticsQuery()
 	{
-		if( $this->validate( $this->get, 'Admin/Order.logisticsQuery' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Admin/Order.logisticsQuery' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			$express_model = model( 'Express' );
-
 			$kuaidi100_code = \App\Model\Express::getExpressValue( ['id' => $this->get['express_id']], 'kuaidi100_code' );
 
 			if( empty( $kuaidi100_code ) ){
@@ -348,21 +343,19 @@ class Order extends Admin
 	 */
 	public function changePrice()
 	{
-		if( $this->validate( $this->post, 'Admin/Order.changePrice' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Order.changePrice' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			$post              = $this->post;
-			$order_model       = model( 'Order' );
-			$order_goods_model = model( 'OrderGoods' );
-			$order_goods_ids   = array_column( $post['revise_goods'], 'id' );
+			$post            = $this->post;
+			$order_goods_ids = array_column( $post['revise_goods'], 'id' );
 			if( count( $order_goods_ids ) != count( array_unique( $order_goods_ids ) ) ){
 				return $this->send( Code::error, [], '参数错误' );
 			}
-			$order_ids = $order_goods_model->getOrderGoodsColumn( ['id' => ['in', $order_goods_ids]], '', 'order_id' );
+			$order_ids = \App\Model\OrderGoods::getOrderGoodsColumn( ['id' => ['in', $order_goods_ids]], '', 'order_id' );
 			if( !$order_ids || count( array_count_values( $order_ids ) ) != 1 ){
 				return $this->send( Code::error, [], '没有该订单' );
 			} else{
-				$order_goods = $order_goods_model->getOrderGoodsList( ['id' => ['in', $order_goods_ids]], 'id,goods_pay_price', 'id asc', '1,30' );
+				$order_goods = \App\Model\OrderGoods::getOrderGoodsList( ['id' => ['in', $order_goods_ids]], 'id,goods_pay_price', 'id asc', '1,30' );
 				if( !$order_goods ){
 					return $this->send( Code::error, [], '没有该订单' );
 				} else{
@@ -391,7 +384,7 @@ class Order extends Admin
 								return $this->send( Code::error, [], '商品实际支付金额不可以小于0' );
 							}
 						}
-						$order_goods_result = $order_goods_model->updateAllOrderGoods( $order_goods_update );
+						$order_goods_result = \App\Model\OrderGoods::editMultiOrderGoods( $order_goods_update );
 
 						$order_update                       = [];
 						$order_update['revise_amount']      = array_sum( array_column( $order_goods_update, 'goods_revise_price' ) ) + $post['revise_freight_fee'];

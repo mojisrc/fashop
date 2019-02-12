@@ -70,8 +70,8 @@ class Area extends Server
 	 */
 	public function info()
 	{
-		if( $this->validate( $this->get, 'Server/Area.info' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Server/Area.info' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			try{
 				$area = Db::name( 'Area' )->where( ['name' => $this->get['name']] )->field( 'id,pid,name' )->find();

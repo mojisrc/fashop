@@ -85,9 +85,9 @@ class Order extends Server
 
 			$result['state_success'] = $orderLogic->stateType( 'state_success' )->count();
 
-			$result['state_unevaluate'] = model( 'OrderGoods' )->getOrderGoodsCount( ['user_id' => ['in', \App\Model\User::getUserAllIds( $user['id'] )], 'evaluate_state' => 0, "(SElECT state FROM $table_order where id =$table_order_goods.order_id)" => 40] );
+			$result['state_unevaluate'] = \App\Model\OrderGoods::getOrderGoodsCount( ['user_id' => ['in', \App\Model\User::getUserAllIds( $user['id'] )], 'evaluate_state' => 0, "(SElECT state FROM $table_order where id =$table_order_goods.order_id)" => 40] );
 
-			$result['state_refund'] = model( 'OrderRefund' )->getOrderRefundCount( ['user_id' => ['in', \App\Model\User::getUserAllIds( $user['id'] )], 'handle_state' => 0] );
+			$result['state_refund'] = \App\Model\OrderRefund::getOrderRefundCount( ['user_id' => ['in', \App\Model\User::getUserAllIds( $user['id'] )], 'handle_state' => 0] );
 
 			return $this->send( Code::success, $result );
 		} catch( \Exception $e ){
@@ -151,7 +151,6 @@ class Order extends Server
 
 				$count       = $orderLogic->count();
 				$list        = $orderLogic->list();
-				$order_model = model( 'Order' );
 				foreach( $list as $key => $order_info ){
 					//显示取消订单
 					$list[$key]['if_cancel'] = \App\Model\Order::getOrderOperateState( 'user_cancel', $order_info );
@@ -192,8 +191,8 @@ class Order extends Server
 		if( $this->verifyResourceRequest() !== true ){
 			$this->send( Code::user_access_token_error );
 		} else{
-			if( $this->validate( $this->get, 'Server/Order.info' ) !== true ){
-				$this->send( Code::param_error, [], $this->getValidate()->getError() );
+			if( $this->validator( $this->get, 'Server/Order.info' ) !== true ){
+				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				$user     = $this->getRequestUser();
 				$order_id = $this->get['id'];
@@ -251,8 +250,8 @@ class Order extends Server
 		if( $this->verifyResourceRequest() !== true ){
 			$this->send( Code::user_access_token_error );
 		} else{
-			if( $this->validate( $this->post, 'Server/Order.cancel' ) !== true ){
-				$this->send( Code::param_error, [], $this->getValidate()->getError() );
+			if( $this->validator( $this->post, 'Server/Order.cancel' ) !== true ){
+				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				$user                 = $this->getRequestUser();
 				$condition['id']      = $this->post['id'];
@@ -279,8 +278,8 @@ class Order extends Server
 		if( $this->verifyResourceRequest() !== true ){
 			$this->send( Code::user_access_token_error );
 		} else{
-			if( $this->validate( $this->post, 'Server/Order.confirmReceipt' ) !== true ){
-				$this->send( Code::param_error, [], $this->getValidate()->getError() );
+			if( $this->validator( $this->post, 'Server/Order.confirmReceipt' ) !== true ){
+				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				$user                 = $this->getRequestUser();
 				$condition['id']      = $this->post['id'];
@@ -308,8 +307,8 @@ class Order extends Server
 		if( $this->verifyResourceRequest() !== true ){
 			$this->send( Code::user_access_token_error );
 		} else{
-			if( $this->validate( $this->get, 'Server/Order.goodsList' ) !== true ){
-				$this->send( Code::param_error, [], $this->getValidate()->getError() );
+			if( $this->validator( $this->get, 'Server/Order.goodsList' ) !== true ){
+				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				$user                  = $this->getRequestUser();
 				$condition['order_id'] = $this->get['id'];
@@ -334,8 +333,8 @@ class Order extends Server
 		if( $this->verifyResourceRequest() !== true ){
 			$this->send( Code::user_access_token_error );
 		} else{
-			if( $this->validate( $this->get, 'Server/Order.goodsInfo' ) !== true ){
-				$this->send( Code::param_error, [], $this->getValidate()->getError() );
+			if( $this->validator( $this->get, 'Server/Order.goodsInfo' ) !== true ){
+				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				$user                 = $this->getRequestUser();
 				$condition['id']      = $this->get['id'];
@@ -360,8 +359,8 @@ class Order extends Server
 		if( $this->verifyResourceRequest() !== true ){
 			$this->send( Code::user_access_token_error );
 		} else{
-			if( $this->validate( $get, 'Server/Order.groupInfo' ) !== true ){
-				$this->send( Code::param_error, [], $this->getValidate()->getError() );
+			if( $this->validator( $get, 'Server/Order.groupInfo' ) !== true ){
+				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				$order_id                = $get['id'];
 				$user                    = $this->getRequestUser();
@@ -429,8 +428,8 @@ class Order extends Server
 		if( $this->verifyResourceRequest() !== true ){
 			$this->send( Code::user_access_token_error );
 		} else{
-			if( $this->validate( $get, 'Server/Order.groupInfo' ) !== true ){
-				$this->send( Code::param_error, [], $this->getValidate()->getError() );
+			if( $this->validator( $get, 'Server/Order.groupInfo' ) !== true ){
+				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				$order_id             = $get['id'];
 				$user                 = $this->getRequestUser();
@@ -476,8 +475,8 @@ class Order extends Server
 // 		$this->send( Code::user_access_token_error );
 // 	} else{
 // 		$user = $this->getRequestUser();
-// 		if( $this->validate( $this->get, 'Server/Order.info' ) !== true ){
-// 			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+// 		if( $this->validator( $this->get, 'Server/Order.info' ) !== true ){
+// 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 // 		} else{
 // 			$order_model          = model( 'Order' );
 // 			$condition['id']      = $this->get['id'];

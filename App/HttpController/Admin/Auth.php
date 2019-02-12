@@ -21,8 +21,8 @@ class Auth extends Admin
 	 */
 	public function groupAuthorise()
 	{
-		if( $this->validate( $this->post, 'Admin/AuthGroup.groupAuthorise' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/AuthGroup.groupAuthorise' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$auth_group_model = model( 'AuthGroup' );
 			$auth_group_model->editAuthGroup( ['id' => $this->post['id']], ['rule_ids' => $this->post['rule_ids']] );
@@ -50,8 +50,8 @@ class Auth extends Admin
 	 */
 	public function groupInfo()
 	{
-		if( $this->validate( $this->get, 'Admin/AuthGroup.groupInfo' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Admin/AuthGroup.groupInfo' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$info = \App\Model\AuthGroup::getAuthGroupInfo( ['id' => $this->get['id']] );
 			return $this->send( Code::success, ['info' => $info] );
@@ -65,8 +65,8 @@ class Auth extends Admin
 	 */
 	public function groupMemberList()
 	{
-		if( $this->validate( $this->get, 'Admin/AuthGroup.groupMemberList' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Admin/AuthGroup.groupMemberList' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$user_ids     = model( 'AuthGroupAccess' )->where( ['group_id' => $this->get['id']] )->column( 'uid' );
 			$list         = [];
@@ -89,8 +89,8 @@ class Auth extends Admin
 	 */
 	public function groupMemberEdit()
 	{
-		if( $this->validate( $this->post, 'Admin/AuthGroupAccess.groupMemberEdit' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/AuthGroupAccess.groupMemberEdit' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$post  = $this->post;
 			$model = model( 'AuthGroupAccess' );
@@ -112,8 +112,8 @@ class Auth extends Admin
 	 */
 	public function groupAdd()
 	{
-		if( $this->validate( $this->post, 'Admin/AuthGroup.add' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/AuthGroup.add' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			\App\Model\AuthGroup::addAuthGroup( $this->post );
 			return $this->send();
@@ -128,8 +128,8 @@ class Auth extends Admin
 	 */
 	public function groupEdit()
 	{
-		if( $this->validate( $this->post, 'Admin/AuthGroup.edit' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/AuthGroup.edit' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			\App\Model\AuthGroup::editAuthGroup( ['id' => $this->post['id']], $this->post );
 			return $this->send();
@@ -143,8 +143,8 @@ class Auth extends Admin
 	 */
 	public function groupDel()
 	{
-		if( $this->validate( $this->post, 'Admin/AuthGroup.del' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/AuthGroup.del' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			\App\Model\AuthGroup::delAuthGroup( ['id' => $this->post['id']] );
 			model( 'AuthGroupAccess' )->delAuthGroupAccess( ['group_id' => $this->post['id']] );
@@ -170,8 +170,8 @@ class Auth extends Admin
 	 */
 	public function ruleInfo()
 	{
-		if( $this->validate( $this->get, 'Admin/AuthRule.info' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Admin/AuthRule.info' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$info = \App\Model\AuthRule::getAuthRuleInfo( ['id' => $this->get['id']] );
 			return $this->send( Code::success, ['data' => ['info' => $info]] );
@@ -188,8 +188,8 @@ class Auth extends Admin
 	 */
 	public function ruleAdd()
 	{
-		if( $this->validate( $this->post, 'Admin/AuthRule.add' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/AuthRule.add' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			\App\Model\AuthRule::addAuthRule( $this->post );
 			return $this->send();
@@ -207,8 +207,8 @@ class Auth extends Admin
 	 */
 	public function ruleEdit()
 	{
-		if( $this->validate( $this->post, 'Admin/AuthRule.edit' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/AuthRule.edit' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			\App\Model\AuthRule::editAuthRule( ['id' => $this->post['id']], $this->post );
 			return $this->send();
@@ -222,8 +222,8 @@ class Auth extends Admin
 	 */
 	public function ruleDel()
 	{
-		if( $this->validate( $this->post, 'Admin/AuthRule.del' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/AuthRule.del' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$model        = model( 'AuthRule' );
 			$exsist_child = \App\Model\Page::where( ['pid' => $this->post['id']] )->column( 'id' );
@@ -244,8 +244,8 @@ class Auth extends Admin
 	 */
 	public function ruleSort()
 	{
-		if( $this->validate( $this->post, 'Admin/AuthRule.sort' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/AuthRule.sort' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$is_display_order = $this->post['sorts'];
 			$sql              = "UPDATE ".Config::getInstance()->getConf( 'database.prefix' )."auth_rule SET sort = CASE id ";

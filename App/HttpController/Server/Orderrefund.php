@@ -54,8 +54,8 @@ class Orderrefund extends Server
 		if( $this->verifyResourceRequest() !== true ){
 			$this->send( Code::user_access_token_error );
 		} else{
-			if( $this->validate( $this->post, 'Server/OrderRefund.apply' ) !== true ){
-				$this->send( Code::param_error, [], $this->getValidate()->getError() );
+			if( $this->validator( $this->post, 'Server/OrderRefund.apply' ) !== true ){
+				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				try{
 					$user                  = $this->getRequestUser();
@@ -92,7 +92,7 @@ class Orderrefund extends Server
 		} else{
 			$user                 = $this->getRequestUser();
 			$refund_model         = model( 'OrderRefund' );
-			$condition['user_id'] = ['in', model('User')->getUserAllIds($user['id'])];
+			$condition['user_id'] = ['in', \App\Model\User::getUserAllIds($user['id'])];
 			$keyword_type         = ['order_sn', 'refund_sn', 'goods_title'];
 			if( isset( $this->get['keywords'] ) && trim( $this->get['keywords'] ) != '' && in_array( $this->get['keywords_type'], $keyword_type ) ){
 				$type             = $this->get['keywords_type'];
@@ -129,9 +129,9 @@ class Orderrefund extends Server
 			if( !isset( $this->get['id'] ) ){
 				$this->send( Code::param_error );
 			} else{
-				$info = model( 'OrderRefund' )->getOrderRefundInfo( [
+				$info = \App\Model\OrderRefund::getOrderRefundInfo( [
 					'id'      => intval( $this->get['id'] ),
-					'user_id' => ['in', model('User')->getUserAllIds($user['id'])],
+					'user_id' => ['in', \App\Model\User::getUserAllIds($user['id'])],
 				] );
 				$this->send( Code::success, ['info' => $info] );
 			}
@@ -154,13 +154,13 @@ class Orderrefund extends Server
 		if( $this->verifyResourceRequest() !== true ){
 			$this->send( Code::user_access_token_error );
 		} else{
-			if( $this->validate( $this->post, 'Server/OrderRefund.setTrackingNo' ) !== true ){
-				$this->send( Code::param_error, [], $this->getValidate()->getError() );
+			if( $this->validator( $this->post, 'Server/OrderRefund.setTrackingNo' ) !== true ){
+				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				$user                  = $this->getRequestUser();
 				$order_refund_model    = model( 'OrderRefund' );
 				$condition['id']       = $this->post['id'];
-				$condition['user_id']  = ['in', model('User')->getUserAllIds($user['id'])];
+				$condition['user_id']  = ['in', \App\Model\User::getUserAllIds($user['id'])];
 				$condition['is_close'] = 0;
 
                 $update['tracking_company'] = $this->post['tracking_company'];
@@ -214,8 +214,8 @@ class Orderrefund extends Server
 		if( $this->verifyResourceRequest() !== true ){
 			$this->send( Code::user_access_token_error );
 		} else{
-			if( $this->validate( $this->post, 'Server/OrderRefund.revoke' ) !== true ){
-				$this->send( Code::param_error, [], $this->getValidate()->getError() );
+			if( $this->validator( $this->post, 'Server/OrderRefund.revoke' ) !== true ){
+				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				$refund_model      = model( 'OrderRefund' );
 				$order_goods_model = model( 'OrderGoods' );
@@ -239,7 +239,7 @@ class Orderrefund extends Server
 						return $this->send( Code::error, [], '撤销失败' );
 					}
 					// 更改订单状态 解锁 子订单解锁
-					$order_goods_res = $order_goods_model->editOrderGoods( [
+					$order_goods_res = \App\Model\OrderGoods::editOrderGoods( [
 						'lock_state' => 1,
 						'id'         => $refund['order_goods_id'],
 					], [

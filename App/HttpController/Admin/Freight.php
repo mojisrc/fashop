@@ -32,8 +32,8 @@ class Freight extends Admin
 	 */
 	public function add()
 	{
-		if( $this->validate( $this->post, 'Admin/Freight.add' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Freight.add' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$model      = model( 'Freight' );
 			$freight_id = \App\Model\Page::addFreight( [
@@ -58,8 +58,8 @@ class Freight extends Admin
 	 */
 	public function edit()
 	{
-		if( $this->validate( $this->post, 'Admin/Freight.edit' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Freight.edit' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			\App\Model\Freight::editFreight( ['id' => $this->post['id']], [
 				'name'  => $this->post['name'],
@@ -100,8 +100,8 @@ class Freight extends Admin
 	 */
 	public function del()
 	{
-		if( $this->validate( $this->post, 'Admin/Freight.del' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Freight.del' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			\App\Model\Freight::delFreight( ['id' => $this->post['id']] );
 			$this->send( Code::success );

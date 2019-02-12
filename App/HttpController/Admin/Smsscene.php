@@ -40,8 +40,8 @@ class Smsscene extends Admin
 	 */
 	public function edit()
 	{
-		if( $this->validate( $this->post, 'Admin/SmsScene.edit' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/SmsScene.edit' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$result = \App\Model\SmsScene::editSmsScene( ['sign' => $this->post['sign']], [
 				'name'                 => $this->post['name'],
@@ -64,8 +64,8 @@ class Smsscene extends Admin
 	 */
 	public function info()
 	{
-		if( $this->validate( $this->get, 'Admin/SmsScene.info' ) !== true ){
-			 $this->send( Code::error, $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Admin/SmsScene.info' ) !== true ){
+			 $this->send( Code::error, $this->getValidator()->getError() );
 		} else{
 			$info = \App\Model\SmsScene::getSmsSceneInfo( ['sign' => $this->get['sign']] );
 			 $this->send( Code::success, ['info' => $info] );

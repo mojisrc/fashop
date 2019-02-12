@@ -54,8 +54,8 @@ class Member extends Admin
 	 */
 	public function add()
 	{
-		if( $this->validate( $this->post, 'Admin/Member.add' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Member.add' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$data = [
 				'is_member' => 1,
@@ -80,8 +80,8 @@ class Member extends Admin
 	 */
 	public function edit()
 	{
-		if( $this->validate( $this->post, 'Admin/Member.edit' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Member.edit' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$data = [];
 			if( isset( $this->post['avatar'] ) ){
@@ -105,8 +105,8 @@ class Member extends Admin
 	 */
 	public function info()
 	{
-		if( $this->validate( $this->get, 'Admin/Member.info' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Admin/Member.info' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$field = [
 				'id',
@@ -154,8 +154,8 @@ class Member extends Admin
 	 */
 	public function del()
 	{
-		if( $this->validate( $this->post, 'Admin/Member.del' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Member.del' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			\App\Model\User::softDelUser( ['id' => $this->post['id']] );
 			$this->send( Code::success );
@@ -172,8 +172,8 @@ class Member extends Admin
 	{
 		$user             = $this->getRequestUser();
 		$this->post['id'] = $user['id'];
-		if( $this->validate( $this->post, 'Admin/Member.selfPassword' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Member.selfPassword' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			\App\Model\User::editUser( ['id' => $user['id']], ['password' => UserLogic::encryptPassword( $this->post['password'] )] );
 			$this->send( Code::success );
@@ -192,9 +192,9 @@ class Member extends Admin
 	{
 		$loginLogic = new \App\Logic\Admin\Login();
 
-		if( $this->validate( $this->post, 'Admin/Login.pcPassword' ) !== true ){
+		if( $this->validator( $this->post, 'Admin/Login.pcPassword' ) !== true ){
 			session( 'verify_code', null );
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$result = $loginLogic->pcPasswordLogin( $this->post['username'] );
 			session( 'verify_code', null );
@@ -260,8 +260,8 @@ class Member extends Admin
 	 */
 	public function selfEdit()
 	{
-		if( $this->validate( $this->post, 'Admin/Member.selfEdit' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Member.selfEdit' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$user = $this->getRequestUser();
 			$data = [];

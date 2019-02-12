@@ -21,7 +21,6 @@ class Upload extends Server
 {
 	/**
 	 * 添加图片
-	 * @datetime 2017-05-02T16:03:25+0800
 	 * @param string $type file | base64
 	 * @param mixed  $image
 	 */
@@ -38,7 +37,7 @@ class Upload extends Server
 					}
 					$this->send( Code::success, $images );
 				} else{
-					$this->send( Code::param_error, [], $this->getValidate()->getError() );
+					$this->send( Code::param_error, [], $this->getValidator()->getError() );
 				}
 			} catch( \Exception $e ){
 				$this->send( Code::error, [], $e->getMessage() );

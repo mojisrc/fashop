@@ -21,7 +21,6 @@ class Invoice extends Server
 	 * 买家设置默认发票
 	 * @method GET
 	 * @param int $id 发票id
-	 * @datetime 2017-05-19T10:48:06+0800
 	 */
 	public function setDefault()
 	{
@@ -31,12 +30,11 @@ class Invoice extends Server
 			try{
 				$user          = $this->getRequestUser();
 				$get           = $this->get;
-				$invoice_model = model( 'Invoice' );
 				// 更改其他为非默认
-				$invoice_model->editInvoice( ['user_id' => $this->user['id']], ['is_default' => 0] );
+				\App\Model\Invoice::editInvoice( ['user_id' => $this->user['id']], ['is_default' => 0] );
 
 				// 设置默认
-				$invoice_model->editInvoice( ['user_id' => $this->user['id'], 'id' => $get['id']], ['is_default' => 1] );
+				\App\Model\Invoice::editInvoice( ['user_id' => $this->user['id'], 'id' => $get['id']], ['is_default' => 1] );
 
 				$this->send( Code::success, [] );
 
@@ -56,7 +54,7 @@ class Invoice extends Server
 	{
 		$this->checkLogin();
 		$invoice_model = model( 'Invoice' );
-		$info          = $invoice_model->getDefaultInvoiceInfo( ['user_id' => $this->user['id']] );
+		$info          = \App\Model\Invoice::getDefaultInvoiceInfo( ['user_id' => $this->user['id']] );
 		return $this->faJson( ['data' => $info ? $info : null], 0 );
 	}
 
@@ -71,7 +69,7 @@ class Invoice extends Server
 		$this->checkLogin();
 		$invoice_model = model( 'Invoice' );
 		$get           = $this->get;
-		$info          = $invoice_model->getInvoiceInfo( ['id' => $get['id']] );
+		$info          = \App\Model\Invoice::getInvoiceInfo( ['id' => $get['id']] );
 		return $this->faJson( ['data' => $info ? $info : null], 0 );
 	}
 
@@ -87,7 +85,7 @@ class Invoice extends Server
 		$invoice_model = model( 'Invoice' );
 		$page_class    = new Page( $count, ($get['rows'] > 0 && config( 'db_setting.api_max_rows' ) >= $get['rows']) ? $get['rows'] : config( 'db_setting.api_default_rows' ) );
 		$page          = $page_class->currentPage.','.$page_class->listRows;
-		$list          = $invoice_model->getInvoiceList( ['user_id' => $this->user['id']], '*', 'id desc', $page );
+		$list          = \App\Model\Invoice::getInvoiceList( ['user_id' => $this->user['id']], '*', 'id desc', $page );
 		return $this->faJson( ['list' => $list ? $list : []], 0 );
 	}
 
@@ -112,8 +110,6 @@ class Invoice extends Server
 	 */
 	public function add()
 	{
-		$this->checkLogin();
-		$invoice_model   = model( 'Invoice' );
 		$post            = $this->post;
 		$post['user_id'] = $this->user['id'];
 		if( $post['title_select_type'] == 1 ){
@@ -127,7 +123,7 @@ class Invoice extends Server
 			}
 		}
 
-		$insert_id = $invoice_model->addInvoice( $post );
+		$insert_id = \App\Model\Invoice::addInvoice( $post );
 		if( $insert_id ){
 			$data['id']    = $insert_id;
 			$data['state'] = true;
@@ -160,7 +156,6 @@ class Invoice extends Server
 	public function edit()
 	{
 		$this->checkLogin();
-		$invoice_model = model( 'Invoice' );
 		$post          = $this->post;
 
 		if( $post['title_select_type'] == 1 ){
@@ -176,7 +171,7 @@ class Invoice extends Server
 		}
 
 		$data        = $post;
-		$save_result = $invoice_model->editInvoice( ['id' => $post['id'], 'user_id' => $this->user['id']], $data );
+		$save_result = \App\Model\Invoice::editInvoice( ['id' => $post['id'], 'user_id' => $this->user['id']], $data );
 		if( $save_result ){
 			$data['state'] = true;
 			return $this->faJson( ['data' => $data], 0 );
@@ -194,9 +189,8 @@ class Invoice extends Server
 	public function del()
 	{
 		$post          = $this->post;
-		$invoice_model = model( 'Invoice' );
 		if( !empty( $post['id'] ) && intval( $post['id'] ) > 0 ){
-			$invoice_model->delInvoice( ['id' => intval( $post['id'] ), 'user_id' => $this->user['id']] );
+			\App\Model\Invoice::delInvoice( ['id' => intval( $post['id'] ), 'user_id' => $this->user['id']] );
 			return $this->faJson( [], 0 );
 		}
 	}

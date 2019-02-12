@@ -2,7 +2,7 @@
 
 namespace EasySwoole;
 
-use EasySwoole\Core\Component\Di;
+
 use EasySwoole\Core\Component\SysConst;
 use EasySwoole\Core\Http\Request;
 use EasySwoole\Core\Http\Response;

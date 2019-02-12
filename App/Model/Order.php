@@ -88,7 +88,7 @@ class Order extends Model
 	 */
 	public function getOrderExtendInfo( $condition = [], $field = '*' )
 	{
-		$info = model( 'OrderExtend' )->where( $condition )->find();
+		$info = \App\Model\OrderExtend::where( $condition )->find();
 		return $info;
 	}
 
@@ -326,7 +326,7 @@ class Order extends Model
 	 */
 	public function getOrderGoodsInfo( $condition = [], $fields = '*', $order = 'id asc' )
 	{
-		$data = model( 'OrderGoods' )->where( $condition )->field( $fields )->order( $order )->find();
+		$data = \App\Model\OrderGoods::where( $condition )->field( $fields )->order( $order )->find();
 		return $data;
 	}
 
@@ -337,7 +337,7 @@ class Order extends Model
 	 */
 	public function updateOrderGoodsInfo( $condition = [], $update_data )
 	{
-		return model( 'OrderGoods' )->where( $condition )->edit( $update_data );
+		return \App\Model\OrderGoods::where( $condition )->edit( $update_data );
 	}
 
 	/**
@@ -351,7 +351,7 @@ class Order extends Model
 	 */
 	public function getOrderGoodsList( $condition = [], $fields = '*', $order = 'id desc', $page = '1,1000', $group = null, $key = null )
 	{
-		$list = model( 'OrderGoods' )->field( $fields )->where( $condition )->order( $order )->group( $group )->page( $page )->select()->toArray();
+		$list = \App\Model\OrderGoods::field( $fields )->where( $condition )->order( $order )->group( $group )->page( $page )->select()->toArray();
 		return $this->array_under_reset( $list, $key );
 	}
 
@@ -363,7 +363,7 @@ class Order extends Model
 	 */
 	public function getOrderExtendList( $condition = [], $fields = '*', $page = '1,200' )
 	{
-		return model( 'OrderExtend' )->field( $fields )->where( $condition )->page( $page )->select()->toArray();
+		return \App\Model\OrderExtend::field( $fields )->where( $condition )->page( $page )->select()->toArray();
 	}
 
 	/**
@@ -397,7 +397,7 @@ class Order extends Model
 	 */
 	public function addOrderExtend( $data )
 	{
-		return model( 'OrderExtend' )->insertGetId( $data );
+		return \App\Model\OrderExtend::insertGetId( $data );
 	}
 
 	/**
@@ -407,7 +407,7 @@ class Order extends Model
 	 */
 	public function addOrderGoods( $data )
 	{
-		return model( 'OrderGoods' )->addMulti( $data );
+		return \App\Model\OrderGoods::addMulti( $data );
 	}
 
 	/**
@@ -439,7 +439,7 @@ class Order extends Model
 	 */
 	public function editOrderExtend( $condition, $data )
 	{
-		return model( 'OrderExtend' )->where( $condition )->edit( $data );
+		return \App\Model\OrderExtend::where( $condition )->edit( $data );
 	}
 
 	/**
@@ -611,7 +611,6 @@ class Order extends Model
 	 * @param $username
 	 * @param $extend_msg
 	 * @return bool
-	 * @throws \ezswoole\exception\PDOException
 	 */
 	public function userChangeState( $state_type, $order_info, $user_id, $username, $extend_msg ) : bool
 	{
@@ -762,7 +761,7 @@ class Order extends Model
 			}
 
 			// 更改订单状态 解锁 子订单解锁
-			$order_goods_res = $order_goods_model->editOrderGoods( [
+			$order_goods_res = \App\Model\OrderGoods::editOrderGoods( [
 				'lock_state' => 1,
 				'order_id'   => $order_id,
 			], [

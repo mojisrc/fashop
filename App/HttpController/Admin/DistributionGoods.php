@@ -124,7 +124,7 @@ class DistributionGoods extends Admin
             $goods_condition['is_on_sale'] = 1;
             $goods_condition['stock']      = ['gt', 0]; //查询库存大于0
             $goods_condition['id']         = $post['goods_id'];
-            $goods_info                    = model('Goods')->getGoodsInfo($goods_condition, '*');
+            $goods_info                    = \App\Model\Goods::getGoodsInfo($goods_condition, '*');
             if (!$goods_info) {
                 return $this->send(Code::param_error, [], '商品信息不存在');
             }

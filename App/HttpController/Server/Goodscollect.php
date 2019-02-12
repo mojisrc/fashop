@@ -27,8 +27,8 @@ class Goodscollect extends Server
 		if( $this->verifyResourceRequest() !== true ){
 			$this->send( Code::user_access_token_error );
 		} else{
-			if( $this->validate( $this->post, 'Server/GoodsCollect.add' ) !== true ){
-				$this->send( Code::param_error, [], $this->getValidate()->getError() );
+			if( $this->validator( $this->post, 'Server/GoodsCollect.add' ) !== true ){
+				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				$user = $this->getRequestUser();
 				\App\Model\GoodsCollect::delGoodsCollect( ['user_id' => $user['id'], 'goods_id' => $this->post['goods_id']] );
@@ -56,8 +56,8 @@ class Goodscollect extends Server
 		if( $this->verifyResourceRequest() !== true ){
 			$this->send( Code::user_access_token_error );
 		} else{
-			if( $this->validate( $this->post, 'Server/GoodsCollect.del' ) !== true ){
-				$this->send( Code::param_error, [], $this->getValidate()->getError() );
+			if( $this->validator( $this->post, 'Server/GoodsCollect.del' ) !== true ){
+				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				$user = $this->getRequestUser();
 				\App\Model\GoodsCollect::delGoodsCollect( ['user_id' => $user['id'], 'goods_id' => $this->post['goods_id']] );
@@ -76,8 +76,8 @@ class Goodscollect extends Server
 		if( $this->verifyResourceRequest() !== true ){
 			$this->send( Code::user_access_token_error );
 		} else{
-			if( $this->validate( $this->post, 'Server/GoodsCollect.state' ) !== true ){
-				$this->send( Code::param_error, [], $this->getValidate()->getError() );
+			if( $this->validator( $this->post, 'Server/GoodsCollect.state' ) !== true ){
+				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				$user = $this->getRequestUser();
 				$info = \App\Model\GoodsCollect::getGoodsCollectInfo( ['user_id' => $user['id']], ['goods_id' => $this->post['goods_id']] );

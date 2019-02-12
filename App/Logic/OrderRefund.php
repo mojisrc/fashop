@@ -140,7 +140,7 @@ class OrderRefund
 
                 }
                 // 拒绝 ：恢复 商品的锁定状态，判断是否还需要锁定订单
-                $order_goods_res = $order_goods_model->editOrderGoods([
+                $order_goods_res = \App\Model\OrderGoods::editOrderGoods([
                                                                           'id'         => $refund['order_goods_id'],
                                                                           'lock_state' => 1,
                                                                       ], [
@@ -200,7 +200,7 @@ class OrderRefund
 
                 }
                 // 同意 ： 设置 refund_handle_state = 30 是因为我们v1版本采用用户自行去支付平台退款的方式，这儿的退款同意，仅为标记作用
-                $order_goods_res = $order_goods_model->editOrderGoods([
+                $order_goods_res = \App\Model\OrderGoods::editOrderGoods([
                                                                           'lock_state' => 1,
                                                                           'id'         => $refund['order_goods_id'],
                                                                       ], [
@@ -212,8 +212,8 @@ class OrderRefund
                     throw new \Exception('退款订单商品的状态错误');
                 }
                 // 查询所有的子订单都是退款同意的，设置订单为all_agree_refound
-                $order_goods_ids    = $order_goods_model->where(['order_id' => $refund['order_id']])->column('id');
-                $refund_goods_count = $order_goods_model->where([
+                $order_goods_ids    = \App\Model\OrderGoods::where(['order_id' => $refund['order_id']])->column('id');
+                $refund_goods_count = \App\Model\OrderGoods::where([
                                                                     'id'                  => ['in', $order_goods_ids],
                                                                     'order_id'            => $refund['order_id'],
                                                                     'refund_handle_state' => self::agree,

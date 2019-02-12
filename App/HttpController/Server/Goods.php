@@ -56,8 +56,8 @@ class Goods extends Server
 	public function info()
 	{
 		if( isset( $this->get['id'] ) ){
-			if( $this->validate( $this->get, 'Goods.info' ) !== true ){
-				$this->send( Code::param_error, [], $this->getValidate()->getError() );
+			if( $this->validator( $this->get, 'Goods.info' ) !== true ){
+				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				$goods_info         = \App\Model\Goods::getGoodsInfo( ['id' => $this->get['id']] );
 				$goods_info['skus'] = \App\Model\GoodsSku::getGoodsSkuList( ['goods_id' => $this->get['id']], '*', 'id desc', '1,10000' );
@@ -71,8 +71,8 @@ class Goods extends Server
 	private function bySku()
 	{
 		// 根据sku查商品
-		if( $this->validate( $this->get, 'Goods.sku' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Goods.sku' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$goods_info = \App\Model\Goods::alias( 'goods' )->join( 'goods_sku', 'goods.id = goods_sku.goods_id', 'LEFT' )->where( [
 				'goods_sku.id' => $this->get['goods_sku_id'],
@@ -153,7 +153,6 @@ class Goods extends Server
 		if( intval( $param['goods_id'] <= 0 ) ){
 			$this->send( Code::param_error, [], '参数错误' );
 		} else{
-			$goods_evaluate_model           = model( 'GoodsEvaluate' );
 			$condition['evaluate.goods_id'] = $param['goods_id'];
 
 			if( isset( $param['type'] ) ){

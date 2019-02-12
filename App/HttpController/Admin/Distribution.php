@@ -66,7 +66,7 @@ class Distribution extends Admin
         }
         $list = $orderLogic->list();
         if ($list) {
-            $list = model('Order')->distributionPromotionDesc($list);
+            $list = \App\Model\Order::distributionPromotionDesc($list);
         }
 
         $this->send(Code::success, [

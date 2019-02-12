@@ -456,12 +456,12 @@ class Register
             $user_assets_model  = model('UserAssets');
             $user_open_model    = model('UserOpen');
 
-            $user_profile_id = $user_profile_model->insertUserProfile($profile_data);
+            $user_profile_id = \App\Model\UserProfile::insertUserProfile($profile_data);
             if ($user_profile_id < 0) {
                 return null;
             }
 
-            $user_assets_id = $user_assets_model->insertUserAssets($assets_data);
+            $user_assets_id = \App\Model\UserAssets::insertUserAssets($assets_data);
             if ($user_assets_id < 0) {
                 return null;
             }

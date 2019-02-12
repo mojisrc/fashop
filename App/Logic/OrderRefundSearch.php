@@ -396,7 +396,7 @@ class OrderRefundSearch
             return $this->make;
         } else {
             $this->buildCondition();
-            $model = model('OrderRefund');
+            $model = new \App\Model\OrderRefund();
             return $model;
         }
     }

@@ -61,11 +61,10 @@ class Goodsevaluate extends Server
             }
 
             $user                 = $this->getRequestUser();
-            $condition['user_id'] = ['in', model('User')->getUserAllIds($user['id'])];
-            $order_goods_model    = model( 'OrderGoods' );
-            $count                = $order_goods_model->getOrderGoodsCount( $condition );
+            $condition['user_id'] = ['in', \App\Model\User::getUserAllIds($user['id'])];
+            $count                = \App\Model\OrderGoods::getOrderGoodsCount( $condition );
 
-            $list                 = $order_goods_model->getOrderGoodsList( $condition, '*', 'id desc', $this->getPageLimit() );
+            $list                 = \App\Model\OrderGoods::getOrderGoodsList( $condition, '*', 'id desc', $this->getPageLimit() );
             $this->send( Code::success, [
                 'total_number' => $count,
                 'list'         => $list,
@@ -91,10 +90,7 @@ class Goodsevaluate extends Server
                 $user                                 = $this->getRequestUser();
                 $condition                            = [];
                 $condition['evaluate.order_goods_id'] = intval( $get['order_goods_id'] );
-                $condition['evaluate.user_id']        = ['in', model('User')->getUserAllIds($user['id'])];
-
-                $goods_evaluate_model = model( 'GoodsEvaluate' );
-
+                $condition['evaluate.user_id']        = ['in', \App\Model\User::getUserAllIds($user['id'])];
                 $data = \App\Model\GoodsEvaluate::alias( 'evaluate' )->join( 'order', 'evaluate.order_id = order.id', 'LEFT' )->join( 'order_goods goods', 'evaluate.order_goods_id = goods.id' )->join( 'user', 'evaluate.user_id = user.id', 'LEFT' )->join( 'user_profile', 'user_profile.user_id = user.id', 'LEFT' )->where( $condition )->field( 'evaluate.*,goods.goods_spec,user.phone,user_profile.nickname,user_profile.avatar' )->find();
 
                 $this->send( Code::success, ['info' => $data] );
@@ -119,8 +115,8 @@ class Goodsevaluate extends Server
         if( $this->verifyResourceRequest() !== true ){
             $this->send( Code::user_access_token_error );
         } else{
-            if( $this->validate( $this->post, 'Server/GoodsEvaluate.add' ) !== true ){
-                $this->send( Code::param_error, [], $this->getValidate()->getError() );
+            if( $this->validator( $this->post, 'Server/GoodsEvaluate.add' ) !== true ){
+                $this->send( Code::param_error, [], $this->getValidator()->getError() );
             }else{
                 try{
                     $user                  = $this->getRequestUser();
@@ -152,8 +148,8 @@ class Goodsevaluate extends Server
         if( $this->verifyResourceRequest() !== true ){
             $this->send( Code::user_access_token_error );
         } else{
-            if( $this->validate( $this->post, 'Server/GoodsEvaluate.append' ) !== true ){
-                $this->send( Code::param_error, [], $this->getValidate()->getError() );
+            if( $this->validator( $this->post, 'Server/GoodsEvaluate.append' ) !== true ){
+                $this->send( Code::param_error, [], $this->getValidator()->getError() );
             }else{
                 try{
                     $user                  = $this->getRequestUser();

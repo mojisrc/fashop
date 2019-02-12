@@ -37,8 +37,8 @@ class GroupBuy extends Server
             $this->send(Code::user_access_token_error);
         } else {
             $post = $this->post;
-            if ($this->validate($post, 'Server/GroupBuy.calculate') !== true) {
-                $this->send(Code::param_error, [], $this->getValidate()->getError());
+            if ($this->validator($post, 'Server/GroupBuy.calculate') !== true) {
+                $this->send(Code::param_error, [], $this->getValidator()->getError());
             } else {
                 try {
                     $user = $this->getRequestUser();
@@ -94,8 +94,8 @@ class GroupBuy extends Server
             $this->send(Code::user_access_token_error);
         } else {
             $post = $this->post;
-            if ($this->validate($post, 'Server/GroupBuy.create') !== true) {
-                $this->send(Code::param_error, [], $this->getValidate()->getError());
+            if ($this->validator($post, 'Server/GroupBuy.create') !== true) {
+                $this->send(Code::param_error, [], $this->getValidator()->getError());
             } else {
                 try {
                     $user = $this->getRequestUser();

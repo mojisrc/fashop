@@ -50,8 +50,8 @@ class Goodsspec extends Admin
 	 */
 	public function add()
 	{
-		if( $this->validate( $this->post, 'Admin/GoodsSpec.add' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/GoodsSpec.add' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$result = \App\Model\GoodsSpec::addGoodsSpec( $this->post );
 			if( $result ){
@@ -71,8 +71,8 @@ class Goodsspec extends Admin
 	 */
 	public function edit()
 	{
-		if( $this->validate( $this->post, 'Admin/GoodsSpec.add' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/GoodsSpec.add' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$condition['id'] = $this->post['id'];
 			$result          = \App\Model\GoodsSpec::editGoodsSpec( ['id' => $this->post['id']], $this->post );
@@ -91,8 +91,8 @@ class Goodsspec extends Admin
 	 */
 	public function del()
 	{
-		if( $this->validate( $this->post, 'Admin/GoodsSpec.del' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/GoodsSpec.del' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$condition       = [];
 			$condition['id'] = $this->post['id'];

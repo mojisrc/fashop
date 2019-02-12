@@ -14,7 +14,7 @@
 namespace App\Cron;
 
 use EasySwoole\Config;
-use EasySwoole\Core\Component\Di;
+
 use EasySwoole\Core\Component\Logger;
 use ezswoole\Db;
 use EasySwoole\Core\Swoole\Task\TaskManager;

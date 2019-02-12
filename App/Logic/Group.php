@@ -64,7 +64,7 @@ class Group
     {
         //过滤商品字段 goods_skus goods_sku表信息，sku_list goods表sku_list字段
         $sku_ids    = array_column($this->goods_skus, 'id');
-        $goods_skus = model('GoodsSku')->getGoodsSkuList(['id' => ['in', $sku_ids]], 'id,price,stock,code,spec,weight', 'id asc', [1,100]);
+        $goods_skus = \App\Model\GoodsSku::getGoodsSkuList(['id' => ['in', $sku_ids]], 'id,price,stock,code,spec,weight', 'id asc', [1,100]);
         if (count($sku_ids) != count($goods_skus)) {
             return false;
         }

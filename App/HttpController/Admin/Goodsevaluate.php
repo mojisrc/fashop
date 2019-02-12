@@ -93,8 +93,8 @@ class Goodsevaluate extends Admin
 	 */
 	public function reply()
 	{
-		if( $this->validate( $this->post, 'Admin/Evaluation.reply' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Evaluation.reply' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			try{
 				$condition['id']      = $this->post['id'];
@@ -130,8 +130,8 @@ class Goodsevaluate extends Admin
 	 */
 	public function display()
 	{
-		if( $this->validate( $this->post, 'Admin/Evaluation.display' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Evaluation.display' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			try{
 				$condition['id']      = $this->post['id'];

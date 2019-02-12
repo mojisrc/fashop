@@ -344,13 +344,13 @@ class Binding
         try{
             $user_assets_model  = model('UserAssets');
 
-            $user_assets_info = $user_assets_model->getUserAssetsInfo(['id'=>$user_id], '', '*');
+            $user_assets_info = \App\Model\UserAssets::getUserAssetsInfo(['id'=>$user_id], '', '*');
             if(!$user_assets_info){
                 \App\Model\User::rollback();
                 return null;
             }
 
-            $master_user_assets_info = $user_assets_model->getUserAssetsInfo(['id'=>$master_user_id], '', '*');
+            $master_user_assets_info = \App\Model\UserAssets::getUserAssetsInfo(['id'=>$master_user_id], '', '*');
             if(!$master_user_assets_info){
                 \App\Model\User::rollback();
                 return null;
@@ -363,13 +363,13 @@ class Binding
             $master_user_assets_update['points']  = $master_user_assets_info['points'] + $user_assets_info['points'];
             $master_user_assets_update['balance'] = $master_user_assets_info['balance'] + $user_assets_info['balance'];
 
-            $user_assets_result = $user_assets_model->updateUserAssets(['id'=>$user_id],$user_assets_update);
+            $user_assets_result = \App\Model\UserAssets::updateUserAssets(['id'=>$user_id],$user_assets_update);
             if(!$user_assets_result){
                 \App\Model\User::rollback();
                 return null;
             }
 
-            $master_user_assets_result = $user_assets_model->updateUserAssets(['id'=>$master_user_id],$master_user_assets_update);
+            $master_user_assets_result = \App\Model\UserAssets::updateUserAssets(['id'=>$master_user_id],$master_user_assets_update);
             if(!$master_user_assets_result){
                 \App\Model\User::rollback();
                 return null;

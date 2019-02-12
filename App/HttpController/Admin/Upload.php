@@ -38,7 +38,7 @@ class Upload extends Admin
 					}
 					$this->send( Code::success, $images );
 				} else{
-					$this->send( Code::param_error, [], $this->getValidate()->getError() );
+					$this->send( Code::param_error, [], $this->getValidator()->getError() );
 				}
 			} catch( \Exception $e ){
 				$this->send( Code::error, [], $e->getMessage() );

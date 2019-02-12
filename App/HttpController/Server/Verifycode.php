@@ -34,8 +34,8 @@ class Verifycode extends Server
 		// todo 验证发送频率
 		// 获得发验证码的token 从拿到到请求如果小于3秒则为机器
 		// 限制一个手机号码最多能获得验证码的最大额度
-		if( $this->validate( $this->post, 'VerifyCode.add' ) !== true ){
-			return $this->send( Code::error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'VerifyCode.add' ) !== true ){
+			return $this->send( Code::error, [], $this->getValidator()->getError() );
 		}
 		try{
 			// 发送验证码

@@ -23,8 +23,6 @@ class Voucher extends Server {
 	 * @method GET
 	 */
 	public function getVoucherTemplateList() {
-		$get  = $this->get;
-		$list = array();
 		$d    = model('VoucherTemplate');
 		$list = $d->alias('template')
 			->where(array('template.end_date' => array('gt', time()), 'template.state' => 1))

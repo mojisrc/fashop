@@ -50,7 +50,6 @@ class Goods extends Model
 	 * @param string $order
 	 * @param array  $page
 	 * @return array|bool|false|null
-	 * @throws \EasySwoole\Mysqli\Exceptions\OrderByFail
 	 */
 	public function getGoodsList( $condition, $field = '*', $order = 'id desc', $page = [1, 10] )
 	{

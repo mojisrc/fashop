@@ -242,8 +242,8 @@ class Pdrecharge extends Server {
 		if( $this->verifyResourceRequest() !== true ){
 			$this->send( Code::user_access_token_error );
 		} else{
-			if( $this->validate( $this->post, 'Server/Pdrecharge.pdCashAdd' ) !== true ){
-				$this->send( Code::param_error, [], $this->getValidate()->getError() );
+			if( $this->validator( $this->post, 'Server/Pdrecharge.pdCashAdd' ) !== true ){
+				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 
 			}else{
 				$pd_model                     = model('PdRecharge');

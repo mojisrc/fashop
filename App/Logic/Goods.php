@@ -633,8 +633,8 @@ class Goods
         $goods_model       = model('Goods');
         \App\Model\Goods::startTrans();
         try {
-            model('Goods')->softDelGoods(['id' => ['in', $ids]]);
-            model('GoodsSku')->softDelGoodsSku(['goods_id' => ['in', $ids]]);
+            \App\Model\Goods::softDelGoods(['id' => ['in', $ids]]);
+            \App\Model\GoodsSku::softDelGoodsSku(['goods_id' => ['in', $ids]]);
             model('GoodsCategoryIds')->softDelGoodsCategoryIds(['goods_id' => ['in', $ids]]);
             \App\Model\Goods::commit();
             return true;
@@ -653,7 +653,7 @@ class Goods
      */
     public function offSale(array $ids)
     {
-        $goods_return = model('Goods')->editGoods(['id' => ['in', $ids,],], ['is_on_sale' => self::offSale]);
+        $goods_return = \App\Model\Goods::editGoods(['id' => ['in', $ids,],], ['is_on_sale' => self::offSale]);
         if ($goods_return) {
             return true;
         } else {
@@ -669,7 +669,7 @@ class Goods
      */
     public function onSale(array $ids)
     {
-        $goods_return = model('Goods')->editGoods(['id' => ['in', $ids,],], ['is_on_sale' => self::onSale]);
+        $goods_return = \App\Model\Goods::editGoods(['id' => ['in', $ids,],], ['is_on_sale' => self::onSale]);
         if ($goods_return) {
             return true;
         } else {

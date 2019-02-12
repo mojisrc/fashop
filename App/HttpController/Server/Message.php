@@ -92,15 +92,12 @@ class Message extends Server
 			} else{
 
 				try{
-					$user    = $this->getRequestUser();
-					$user_id = $user['id'];
-					$count   = 0;
-					$list    = [];
-
-					$type = $get['type_id'];
-
+					$user         = $this->getRequestUser();
+					$user_id      = $user['id'];
+					$count        = 0;
+					$list         = [];
+					$type         = $get['type_id'];
 					$where_string = "message_state.to_user_id=$user_id AND message_state.del_state=0 AND message_state.del_time=0 AND message.type_id=$type";
-
 					switch( $type ){
 					case 1:
 

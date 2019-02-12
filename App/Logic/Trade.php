@@ -130,7 +130,7 @@ class Trade
 	 */
 	public function editOrderCancel( $order_id, $log_data )
 	{
-		$goods_list = model( 'OrderGoods' )->getOrderGoodsList( ['order_id' => $order_id], 'order_id,goods_num,goods_sku_id,goods_id', 'id desc', '1,10000' );
+		$goods_list = \App\Model\OrderGoods::getOrderGoodsList( ['order_id' => $order_id], 'order_id,goods_num,goods_sku_id,goods_id', 'id desc', '1,10000' );
 		if( !empty( $goods_list ) && is_array( $goods_list ) ){
 			$GoodsSkuModel = model( 'GoodsSku' );
 			foreach( $goods_list as $goods_info ){
@@ -204,7 +204,6 @@ class Trade
 	 */
 	public function editOrderFinish( $order_id, $log_data = [] )
 	{
-		$order_model     = model( 'Order' );
 		$order           = \App\Model\Order::getOrderInfo( ['id' => $order_id], '', 'id,user_id,user_name,id,sn,amount,payment_code,state' );
 		$order_shipped   = $this->getOrderState( 'order_shipped' ); //订单状态30:已发货
 		$order_completed = $this->getOrderState( 'order_completed' ); //订单状态40:已收货

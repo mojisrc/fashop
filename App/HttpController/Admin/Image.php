@@ -61,8 +61,8 @@ class Image extends Admin
 	 */
 	public function wechat()
 	{
-		if( $this->validate( $this->get, 'Admin/Image.wechat' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Admin/Image.wechat' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$list = $this->wechat->material->list( 'image', $this->get->offset, $this->get->count );
 			return $this->send( Code::success, $list );
@@ -78,8 +78,8 @@ class Image extends Admin
 	 */
 	public function add()
 	{
-		if( $this->validate( $this->get, 'Admin/Image.add' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Admin/Image.add' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			try{
 				$images = ImageClass::getInstance()->create( $this->post->image )->crop()->getImages();
@@ -101,7 +101,7 @@ class Image extends Admin
 					}
 					$this->send( Code::success, $images );
 				} else{
-					$this->send( Code::param_error, [], $this->getValidate()->getError() );
+					$this->send( Code::param_error, [], $this->getValidator()->getError() );
 				}
 			} catch( \Exception $e ){
 				$this->send( Code::error, [], $e->getMessage() );
@@ -115,8 +115,8 @@ class Image extends Admin
 	 */
 	public function del()
 	{
-		if( $this->validate( $this->post, 'Admin/Image.del' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Image.del' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			\App\Model\Image::delImage( ['id' => $this->post['id']] );
 			$this->send( Code::success );

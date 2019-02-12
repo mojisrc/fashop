@@ -172,7 +172,7 @@ class GoodsSku
                     throw new \Exception("goods sku update all fail");
                 }
 
-                $goods_state = model('Goods')->editGoods(['id' => $this->goodsId], ['sku_list' => $filter_update_skus['sku_list'], 'stock' => array_sum(array_column($filter_update_skus['sku_list'], 'stock'))]);
+                $goods_state = \App\Model\Goods::editGoods(['id' => $this->goodsId], ['sku_list' => $filter_update_skus['sku_list'], 'stock' => array_sum(array_column($filter_update_skus['sku_list'], 'stock'))]);
                 if (!$goods_state) {
                     throw new \Exception("sku_list update fail");
                 }
@@ -399,7 +399,7 @@ class GoodsSku
      */
     public function syncGoodsCommonByGoods($id)
     {
-        $list = model('Goods')->where(['id' => $id])->field('stock,visit_count,share_count,sale_num,evaluate_good_star,evaluate_count')->select();
+        $list = \App\Model\Goods::where(['id' => $id])->field('stock,visit_count,share_count,sale_num,evaluate_good_star,evaluate_count')->select();
         $list = $list;
         $data = [
             'stock'              => 0,

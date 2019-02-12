@@ -12,7 +12,7 @@
  */
 namespace App\Logic;
 use ezswoole\Model;
-use EasySwoole\Core\Component\Di;
+
 
 class Voucher extends Model {
 	/**

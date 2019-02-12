@@ -114,8 +114,8 @@ class Buy extends Server
 			return $this->send( Code::user_access_token_error );
 		} else
 
-			if( $this->validate( $this->post, 'Server/Buy.pay' ) !== true ){
-				return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+			if( $this->validator( $this->post, 'Server/Buy.pay' ) !== true ){
+				return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				try{
 					$user    = $this->getRequestUser();
@@ -123,12 +123,12 @@ class Buy extends Server
 					if( !$payment ){
 						return $this->send( Code::error, [], '系统不支持选定的支付方式' );
 					} else{
-						$pay_info    = \App\Model\OrderPay::getOrderPayInfo( [
+						$pay_info   = \App\Model\OrderPay::getOrderPayInfo( [
 							'pay_sn'    => $this->post['pay_sn'],
 							'user_id'   => $user['id'],
 							'pay_state' => 0,
 						] );
-						$order_info  = \App\Model\Order::getOrderInfo( [
+						$order_info = \App\Model\Order::getOrderInfo( [
 							'pay_sn' => $this->post['pay_sn'],
 							'state'  => \App\Logic\Order::state_new,
 						], '', 'id,pay_sn,amount,revise_amount' );

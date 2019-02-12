@@ -219,7 +219,7 @@ class GoodsEvaluate
 		$order_goods_model    = model( 'OrderGoods' );
 		$goods_evaluate_model = model( 'GoodsEvaluate' );
 		// 获取订单商品
-		$order_goods_info = $order_goods_model->getOrderGoodsInfo( [
+		$order_goods_info = \App\Model\OrderGoods::getOrderGoodsInfo( [
 			'id'      => $this->getOrderGoodsId(),
 			'user_id' => $this->getUserId(),
 		] );
@@ -266,13 +266,13 @@ class GoodsEvaluate
 				'is_anonymous'   => $this->getisAnonymous() ? 1 : 0,
 				'user_id'        => $this->getUserId(),
 			] );
-			$edit_state = $order_goods_model->editOrderGoods( ['id' => $order_goods_info['id']], [
+			$edit_state = \App\Model\OrderGoods::editOrderGoods( ['id' => $order_goods_info['id']], [
 				'evaluate_state' => 1,
 				'evaluate_time'  => time(),
 			] );
 
 			$order_state = 1;
-            $no_evaluate_order_goods_id = $order_goods_model->getOrderGoodsId( ['order_id'=>$order_info['id'],'evaluate_state'=>0,'id'=>['neq',$order_goods_info['id']]] );
+            $no_evaluate_order_goods_id = \App\Model\OrderGoods::getOrderGoodsId( ['order_id'=>$order_info['id'],'evaluate_state'=>0,'id'=>['neq',$order_goods_info['id']]] );
             if( !($no_evaluate_order_goods_id >0) ){
                 $order_state = \App\Model\Order::editOrder( ['id'=>$order_info['id']], ['evaluate_state'=>1] );
             }
@@ -344,7 +344,7 @@ class GoodsEvaluate
 				'additional_time'    => time(),
 			] );
 
-			$order_goods_state = model( 'OrderGoods' )->editOrderGoods( ['id' => $order_goods_info['id']], [
+			$order_goods_state = \App\Model\OrderGoods::editOrderGoods( ['id' => $order_goods_info['id']], [
 				'evaluate_state' => 2,
 			] );
 			$log_state         = \App\Model\Order::addOrderLog( [

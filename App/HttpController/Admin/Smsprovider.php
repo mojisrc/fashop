@@ -44,8 +44,8 @@ class Smsprovider extends Admin
 	public function edit()
 	{
 		if( isset( $this->post['status'] ) ){
-			if( $this->validate( $this->post, 'Admin/SmsProvider.status' ) !== true ){
-				$this->send( Code::param_error, [], $this->getValidate()->getError() );
+			if( $this->validator( $this->post, 'Admin/SmsProvider.status' ) !== true ){
+				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				\App\Model\SmsProvider::editSmsProvider( ['type' => $this->post['type']], [
 					'status' => $this->post['status'] ? 1 : 0,
@@ -53,8 +53,8 @@ class Smsprovider extends Admin
 				$this->send( Code::success );
 			}
 		} else{
-			if( $this->validate( $this->post, 'Admin/SmsProvider.edit' ) ){
-				$this->send( Code::param_error, [], $this->getValidate()->getError() );
+			if( $this->validator( $this->post, 'Admin/SmsProvider.edit' ) ){
+				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				\App\Model\SmsProvider::editSmsProvider( ['type' => $this->post['type']], [
 					'config' => $this->post['config'],
@@ -70,8 +70,8 @@ class Smsprovider extends Admin
 	 */
 	public function info()
 	{
-		if( $this->validate( $this->get, 'Admin/SmsProvider.info' ) !== true ){
-			$this->send( Code::param_error, $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Admin/SmsProvider.info' ) !== true ){
+			$this->send( Code::param_error, $this->getValidator()->getError() );
 		} else{
 			$info = \App\Model\SmsProvider::getSmsProviderInfo( ['type' => $this->get['type']] );
 			$this->send( Code::success, ['info' => $info] );

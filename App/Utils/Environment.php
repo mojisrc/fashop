@@ -13,7 +13,7 @@
 
 namespace App\Utils;
 
-use EasySwoole\Core\Component\Di;
+
 use EasySwoole\Core\Component\SysConst;
 use EasySwoole\Config;
 

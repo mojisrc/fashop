@@ -62,8 +62,8 @@ class Shipper extends Admin
 	 */
 	public function add()
 	{
-		if( $this->validate( $this->post, 'Admin/Shipper.add' ) !== true ){
-			return $this->send( Code::error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Shipper.add' ) !== true ){
+			return $this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
 			try{
 				$db         = Db::name( 'Area' );
@@ -102,8 +102,8 @@ class Shipper extends Admin
 	 */
 	public function edit()
 	{
-		if( $this->validate( $this->post, 'Admin/Shipper.edit' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Shipper.edit' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			try{
 				$condition['id'] = $this->post['id'];
@@ -135,8 +135,8 @@ class Shipper extends Admin
 	 */
 	public function del()
 	{
-		if( $this->validate( $this->post, 'Admin/Shipper.del' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Shipper.del' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$condition       = [];
 			$condition['id'] = $this->post['id'];
@@ -160,8 +160,8 @@ class Shipper extends Admin
 	 */
 	public function setDefault()
 	{
-		if( $this->validate( $this->post, 'Admin/Shipper.setDefault' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Shipper.setDefault' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$condition       = [];
 			$condition['id'] = $this->post['id'];
@@ -186,8 +186,8 @@ class Shipper extends Admin
 	 */
 	public function setRefundDefault()
 	{
-		if( $this->validate( $this->post, 'Admin/Shipper.setRefundDefault' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Shipper.setRefundDefault' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$condition       = [];
 			$condition['id'] = $this->post['id'];

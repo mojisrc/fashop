@@ -53,8 +53,8 @@ class Orderrefund extends Admin
 	 */
 	public function info()
 	{
-		if( $this->validate( $this->get, 'Admin/OrderRefund.info' ) !== true ){
-			$this->send( Code::error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Admin/OrderRefund.info' ) !== true ){
+			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
 			$row               = \App\Model\OrderRefund::getOrderRefundInfo( ['id' => $this->get['id']] );
 			$row['state_desc'] = \App\Model\OrderRefund::getOrderRefundDesc( $row );
@@ -73,8 +73,8 @@ class Orderrefund extends Admin
 	 */
 	public function handle()
 	{
-		if( $this->validate( $this->post, 'Admin/OrderRefund.handle' ) !== true ){
-			$this->send( Code::error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/OrderRefund.handle' ) !== true ){
+			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
 			if( !in_array( $this->post['handle_state'], [RefundLogic::refuse, RefundLogic::agree] ) ){
 				$this->send( Code::param_error, [], '未知handle_state' );
@@ -107,8 +107,8 @@ class Orderrefund extends Admin
 	 */
 	public function receive()
 	{
-		if( $this->validate( $this->post, 'Admin/OrderRefund.receive' ) !== true ){
-			$this->send( Code::error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/OrderRefund.receive' ) !== true ){
+			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
 			$condition                = [];
 			$condition['id']          = $this->post['id'];
@@ -145,7 +145,7 @@ class Orderrefund extends Admin
 	{
 		\App\Model\OrderRefund::startTrans();
 
-		$order_goods_res = model( 'OrderGoods' )->editOrderGoods( ['id' => $data['order_goods_id']], ['refund_handle_state' => 30] );
+		$order_goods_res = \App\Model\OrderGoods::editOrderGoods( ['id' => $data['order_goods_id']], ['refund_handle_state' => 30] );
 		if( !$order_goods_res ){
 			\App\Model\OrderRefund::rollback();
 			return $this->send( Code::error, [], '退款失败' );
@@ -186,8 +186,8 @@ class Orderrefund extends Admin
 	 */
 	public function refund()
 	{
-		if( $this->validate( $this->post, 'Admin/OrderRefund.refund' ) !== true ){
-			$this->send( Code::error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/OrderRefund.refund' ) !== true ){
+			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
 			$condition['id']           = $this->post['id'];
 			$condition['handle_state'] = 20;

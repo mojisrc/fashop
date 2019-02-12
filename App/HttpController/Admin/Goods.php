@@ -57,8 +57,8 @@ class Goods extends Admin
 	{
 		// todo 把sort排序后加入到goods sku表里
 		// todo 运费默认0
-		if( $this->validate( $this->post, 'Admin/Goods.add' ) !== true ){
-			$this->send( Code::error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Goods.add' ) !== true ){
+			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
 			$goodsLogic = new \App\Logic\Goods( $this->post );
 			$state      = $goodsLogic->add();
@@ -83,8 +83,8 @@ class Goods extends Admin
 	 */
 	public function edit()
 	{
-		if( $this->validate( $this->post, 'Admin/Goods.edit' ) !== true ){
-			return $this->send( Code::error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Goods.edit' ) !== true ){
+			return $this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
 			$goodsLogic = new \App\Logic\Goods( $this->post );
 			$state      = $goodsLogic->edit();
@@ -103,8 +103,8 @@ class Goods extends Admin
 	 */
 	public function info()
 	{
-		if( $this->validate( $this->get, 'Admin/Goods.info' ) !== true ){
-			$this->send( Code::error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Admin/Goods.info' ) !== true ){
+			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
 			$info = \App\Model\Goods::getGoodsInfo( ['id' => $this->get['id']], '*' );
 			// 获得商品的规格
@@ -119,8 +119,8 @@ class Goods extends Admin
 	 */
 	public function del()
 	{
-		if( $this->validate( $this->post, 'Admin/Goods.del' ) !== true ){
-			$this->send( Code::error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Goods.del' ) !== true ){
+			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
 			$goodsLogic = new \App\Logic\Goods();
 			$result     = $goodsLogic->del( $this->post['ids'] );
@@ -139,8 +139,8 @@ class Goods extends Admin
 	 */
 	public function offSale()
 	{
-		if( $this->validate( $this->post, 'Admin/Goods.offSale' ) !== true ){
-			$this->send( Code::error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Goods.offSale' ) !== true ){
+			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
 			$goodsLogic = new \App\Logic\Goods();
 			$result     = $goodsLogic->offSale( $this->post['ids'] );
@@ -159,8 +159,8 @@ class Goods extends Admin
 	 */
 	public function onSale()
 	{
-		if( $this->validate( $this->post, 'Admin/Goods.onSale' ) !== true ){
-			$this->send( Code::error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Goods.onSale' ) !== true ){
+			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
 			$goodsLogic = new \App\Logic\Goods();
 			$result     = $goodsLogic->onSale( $this->post['ids'] );

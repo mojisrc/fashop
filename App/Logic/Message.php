@@ -13,7 +13,7 @@
 namespace App\Logic;
 use ezswoole\Exception;
 use ezswoole\Model;
-use EasySwoole\Core\Component\Di;
+
 
 class Message extends Model {
 	/**

@@ -101,13 +101,11 @@ abstract class AccessTokenAbstract extends Controller
 	 */
 	final protected function getUserInfo( $user_id )
 	{
-		$user_profile_model   = model( 'UserProfile' );
-		$user_assets_model    = model( 'UserAssets' );
 		$data                 = [];
 		$condition            = [];
 		$condition['user_id'] = $user_id;
-		$data['profile']      = $user_profile_model->getUserProfileInfo( $condition );
-		$data['assets']       = $user_assets_model->getUserAssetsInfo( $condition );
+		$data['profile']      = \App\Model\UserProfile::getUserProfileInfo( $condition );
+		$data['assets']       = \App\Model\UserAssets::getUserAssetsInfo( $condition );
 		return $data;
 	}
 }

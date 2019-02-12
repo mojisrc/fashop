@@ -14,16 +14,9 @@
  * @since      File available since Release v1.1
  */
 namespace App\HttpController\Server;
-use ezswoole\Controller;
 
 class Refundoperation extends Server {
-	/**
-	 * 构造函数
-	 * @author 孙泉
-	 */
-	public function __construct() {
 
-	}
 
 	/* *
 		 * 功能：即时到账批量退款有密接口接入页

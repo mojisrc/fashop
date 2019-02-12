@@ -186,7 +186,7 @@ class OrderGoods extends Model
 	 * 修改多条数据
 	 * @param   $update
 	 */
-	public function updateAllOrderGoods( $update = [] )
+	public function editMultiOrderGoods( $update = [] )
 	{
 		return $this->editMulti( $update );
 	}

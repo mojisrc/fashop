@@ -77,8 +77,8 @@ class Wechat extends Admin
 	 */
 	public function menuCreate()
 	{
-		if( $this->validate( $this->post, 'Admin/Wechat/Menu.create' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat/Menu.create' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$result = $this->wechat->menu->create( $this->post['buttons'] );
 			return $this->send( Code::success, $result );
@@ -116,8 +116,8 @@ class Wechat extends Admin
 	 */
 	public function broadcastUserSearch()
 	{
-		if( $this->validate( $this->post, 'Admin/Wechat/Broadcast.userSearch' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat/Broadcast.userSearch' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$db = \ezswoole\Db::name( 'User' );
 			$db->alias( 'user' );
@@ -208,8 +208,8 @@ class Wechat extends Admin
 	 */
 	public function broadcastSurplus()
 	{
-		if( $this->validate( $this->get, 'Admin/Wechat/Broadcast.surplus' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Admin/Wechat/Broadcast.surplus' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$conf = model( 'Wechat' )->getWechatInfo( ['id' => 1], 'app_key,app_secret,level' );
 			if( $conf['app_key'] && $conf['app_secret'] && in_array( $conf['level'], [1, 2, 3, 4] ) ){
@@ -250,8 +250,8 @@ class Wechat extends Admin
 	 */
 	public function broadcastCreate()
 	{
-		if( $this->validate( $this->post, 'Admin/Wechat/Broadcast.create' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat/Broadcast.create' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$conf = model( 'Wechat' )->getWechatInfo( ['id' => 1], 'app_key,app_secret,level' );
 			if( $conf['app_key'] && $conf['app_secret'] && in_array( $conf['level'], [1, 2, 3, 4] ) ){
@@ -316,8 +316,8 @@ class Wechat extends Admin
 	 */
 	public function broadcastRecordsDel()
 	{
-		if( $this->validate( $this->post, 'Admin/Wechat/Broadcast.del' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat/Broadcast.del' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			model( 'WechatBroadcast' )->delWechatBroadcast( ['id' => $this->post['id']] );
 			$this->send( Code::success );
@@ -332,8 +332,8 @@ class Wechat extends Admin
 	 */
 	public function userGet()
 	{
-		if( $this->validate( $this->get, 'Admin/Wechat/User.get' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Admin/Wechat/User.get' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$info = $this->wechat->user->get( $this->get['openid'] );
 			$this->send( Code::success, $info );
@@ -347,8 +347,8 @@ class Wechat extends Admin
 	 */
 	public function userSelect()
 	{
-		if( $this->validate( $this->post, 'Admin/Wechat/User.select' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat/User.select' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$list = $this->wechat->user->select( $this->post['openids'] );
 			$this->send( Code::success, $list );
@@ -378,8 +378,8 @@ class Wechat extends Admin
 	 */
 	public function userRemark()
 	{
-		if( $this->validate( $this->post, 'Admin/Wechat/User.remark' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat/User.remark' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$result = $this->wechat->user->remark( $this->post['openid'], $this->post['remark'] );
 			$this->send( Code::success, $result );
@@ -393,8 +393,8 @@ class Wechat extends Admin
 	 */
 	public function userBlock()
 	{
-		if( $this->validate( $this->post, 'Admin/Wechat/User.block' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat/User.block' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$result = $this->wechat->user->block( $this->post['openids'] );
 			$this->send( Code::success, $result );
@@ -408,8 +408,8 @@ class Wechat extends Admin
 	 */
 	public function userUnblock()
 	{
-		if( $this->validate( $this->post, 'Admin/Wechat/User.unblock' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat/User.unblock' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$result = $this->wechat->user->unblock( $this->post['openids'] );
 			$this->send( Code::success, $result );
@@ -441,8 +441,8 @@ class Wechat extends Admin
 	 */
 	public function materialUploadImage()
 	{
-		if( $this->validate( $this->request->file(), 'Admin/Wechat/Material.uploadImage' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->request->file(), 'Admin/Wechat/Material.uploadImage' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$media          = $this->request->file( 'media' );
 			$timeRand       = time().rand( 100, 999 );
@@ -472,8 +472,8 @@ class Wechat extends Admin
 	 */
 	public function materialUploadVoice()
 	{
-		if( $this->validate( $this->request->file(), 'Admin/Wechat/Material.uploadVoice' ) !== true ){
-			 $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->request->file(), 'Admin/Wechat/Material.uploadVoice' ) !== true ){
+			 $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$media          = $this->request->file( 'media' );
 			$timeRand       = time().rand( 100, 999 );
@@ -510,8 +510,8 @@ class Wechat extends Admin
 			'description' => $this->post['description'],
 			'media'       => $this->request->file( 'media' ),
 		];
-		if( $this->validate( $data, 'Admin/Wechat/Material.uploadVideo' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $data, 'Admin/Wechat/Material.uploadVideo' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$media          = $data['media'];
 			$timeRand       = time().rand( 100, 999 );
@@ -542,8 +542,8 @@ class Wechat extends Admin
 	 */
 	public function materialUploadThumb( )
 	{
-		if( $this->validate( $this->request->file(), 'Admin/Wechat/Material.uploadThumb' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->request->file(), 'Admin/Wechat/Material.uploadThumb' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$media          = $this->request->file( 'media' );
 			$timeRand       = time().rand( 100, 999 );
@@ -572,8 +572,8 @@ class Wechat extends Admin
 	 */
 	public function materialUploadArticle()
 	{
-		if( $this->validate( $this->post, 'Admin/Wechat/Material.uploadArticle' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat/Material.uploadArticle' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$result = $this->wechat->material->uploadArticle( $this->post['media'] );
 			if( !$result || isset($result['errcode'])){
@@ -593,8 +593,8 @@ class Wechat extends Admin
 	 */
 	public function materialUpdateArticle()
 	{
-		if( $this->validate( $this->post, 'Admin/Wechat/Material.updateArticle' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat/Material.updateArticle' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$result = $this->wechat->material->updateArticle( $this->post['media_id'] ,$this->post['article'],isset($this->post['index']) ? (int) $this->post['index'] : 0);
 			if( !$result || isset($result['errcode'])){
@@ -613,8 +613,8 @@ class Wechat extends Admin
 	 */
 	public function materialUploadArticleImage()
 	{
-		if( $this->validate( $this->request->file(), 'Admin/Wechat/Material.uploadArticleImage' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->request->file(), 'Admin/Wechat/Material.uploadArticleImage' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$media          = $this->request->file( 'media' );
 			$timeRand       = time().rand( 100, 999 );
@@ -643,8 +643,8 @@ class Wechat extends Admin
 	 */
 	public function materialGet()
 	{
-		if( $this->validate( $this->get, 'Admin/Wechat/Material.get' ) !== true ){
-			 $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Admin/Wechat/Material.get' ) !== true ){
+			 $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$info = $this->wechat->material->get( $this->get['media_id'] );
 			 $this->send( Code::success, $info );
@@ -660,8 +660,8 @@ class Wechat extends Admin
 	 */
 	public function materialList()
 	{
-		if( $this->validate( $this->get, 'Admin/Wechat/Material.list' ) !== true ){
-			 $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Admin/Wechat/Material.list' ) !== true ){
+			 $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$list = $this->wechat->material->list( $this->get['type'], $this->get['offset'], $this->get['count'] );
 			 $this->send( Code::success, $list );
@@ -685,8 +685,8 @@ class Wechat extends Admin
 	 */
 	public function materialDelete()
 	{
-		if( $this->validate( $this->post, 'Admin/Wechat/Material.delete' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat/Material.delete' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$this->wechat->material->delete( $this->post['media_id'] );
 			return $this->send( Code::success );
@@ -701,8 +701,8 @@ class Wechat extends Admin
 	public function localNewsAdd()
 	{
 		$this->post['type'] = 'news';
-		if( $this->validate( $this->post, 'Admin/Wechat/LocalMaterial.add' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat/LocalMaterial.add' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$mediaData = [];
 			foreach( $this->post['media'] as $key => $item ){
@@ -730,8 +730,8 @@ class Wechat extends Admin
 	public function localNewsEdit()
 	{
 		$this->post['type'] = 'news';
-		if( $this->validate( $this->post, 'Admin/Wechat/LocalMaterial.edit' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat/LocalMaterial.edit' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$mediaData = [];
 			foreach( $this->post['media'] as $key => $item ){
@@ -756,8 +756,8 @@ class Wechat extends Admin
 	 */
 	public function localNewsDel()
 	{
-		if( $this->validate( $this->post, 'Admin/Wechat/LocalMaterial.del' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat/LocalMaterial.del' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			model( 'Material' )->delMaterial( ['id' => $this->post['id'], 'type' => 'news'] );
 			$this->send( Code::success );
@@ -789,8 +789,8 @@ class Wechat extends Admin
 	 */
 	public function localNewsInfo()
 	{
-		if( $this->validate( $this->get, 'Admin/Wechat/LocalMaterial.info' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Admin/Wechat/LocalMaterial.info' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$condition['type'] = 'news';
 			$condition['id']   = $this->get['id'];
@@ -823,8 +823,8 @@ class Wechat extends Admin
 	 */
 	public function userTagCreate()
 	{
-		if( $this->validate( $this->post, 'Admin/Wechat/UserTag.create' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat/UserTag.create' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$result = $this->wechat->userTag->create( $this->post['name'] );
 			$this->send( Code::success, $result );
@@ -841,8 +841,8 @@ class Wechat extends Admin
 	 */
 	public function userTagUpdate()
 	{
-		if( $this->validate( $this->post, 'Admin/Wechat/UserTag.edit' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat/UserTag.edit' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$result = $this->wechat->userTag->update( $this->post['id'], $this->post['name'] );
 			$this->send( Code::success, $result );
@@ -859,8 +859,8 @@ class Wechat extends Admin
 	 */
 	public function userTagDelete()
 	{
-		if( $this->validate( $this->post, 'Admin/Wechat/UserTag.delete' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat/UserTag.delete' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$result = $this->wechat->userTag->delete( $this->post['id'] );
 			$this->send( Code::success, $result );
@@ -876,8 +876,8 @@ class Wechat extends Admin
 	 */
 	public function userTagsByOpenid()
 	{
-		if( $this->validate( $this->post, 'Admin/Wechat/UserTag.userTagsByOpenid' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat/UserTag.userTagsByOpenid' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$result = $this->wechat->userTag->userTags( $this->post['openid'] );
 			if( $result ){
@@ -897,8 +897,8 @@ class Wechat extends Admin
 	 */
 	public function userTagUsersOfTag()
 	{
-		if( $this->validate( $this->get, 'Admin/Wechat/UserTag.userTagUsersOfTag' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Admin/Wechat/UserTag.userTagUsersOfTag' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			if( isset( $this->get['next_openid'] ) ){
 				$list = $this->wechat->userTag->usersOfTag( $this->get['id'], $this->get['next_openid'] );
@@ -918,8 +918,8 @@ class Wechat extends Admin
 	 */
 	public function userTagTagUsers()
 	{
-		if( $this->validate( $this->post, 'Admin/Wechat/UserTag.userTagTagUsers' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat/UserTag.userTagTagUsers' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$result = $this->wechat->userTag->tagUsers( $this->post['openids'], $this->post['id'] );
 			if( $result ){
@@ -939,8 +939,8 @@ class Wechat extends Admin
 	 */
 	public function userTagUntagUsers()
 	{
-		if( $this->validate( $this->post, 'Admin/Wechat/UserTag.userTagTagUsers' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat/UserTag.userTagTagUsers' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$result = $this->wechat->userTag->untagUsers( $this->post['openids'], $this->post['id'] );
 			if( $result ){
@@ -965,8 +965,8 @@ class Wechat extends Admin
 	 */
 	public function confSet()
 	{
-		if( $this->validate( $this->post, 'Admin/Wechat.confSet' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat.confSet' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$data = [];
 			if( isset( $this->post['name'] ) ){
@@ -1034,8 +1034,8 @@ class Wechat extends Admin
 	 */
 	public function autoReplySubscribeSet()
 	{
-		if( $this->validate( $this->post, 'Admin/Wechat/AutoReplySubscribe.set' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat/AutoReplySubscribe.set' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$data['auto_reply_subscribe_replay_content'] = $this->post['reply_content'];
 			model( 'Wechat' )->editWechat( ['id' => 1], $data );
@@ -1071,8 +1071,8 @@ class Wechat extends Admin
 	 */
 	public function autoReplyStatusSet()
 	{
-		if( $this->validate( $this->post, 'Admin/Wechat/AutoReplyStatus.set' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat/AutoReplyStatus.set' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			model( 'Wechat' )->editWechat( ['id' => 1], ['auto_reply_status' => $this->post['status'] ? 1 : 0] );
 			$this->send( Code::success );
@@ -1109,8 +1109,8 @@ class Wechat extends Admin
 	 */
 	public function autoReplyKeywordsAdd()
 	{
-		if( $this->validate( $this->post, 'Admin/Wechat/AutoReplyKeywords.add' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat/AutoReplyKeywords.add' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			foreach( $this->post['keywords'] as $item ){
 				$keys[] = $item['key'];
@@ -1171,8 +1171,8 @@ class Wechat extends Admin
 	 */
 	public function autoReplyKeywordsEdit()
 	{
-		if( $this->validate( $this->post, 'Admin/Wechat/AutoReplyKeywords.edit' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat/AutoReplyKeywords.edit' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 
 			foreach( $this->post['keywords'] as $item ){
@@ -1234,8 +1234,8 @@ class Wechat extends Admin
 	 */
 	public function autoReplyKeywordsDel()
 	{
-		if( $this->validate( $this->post, 'Admin/Wechat/AutoReplyKeywords.del' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Wechat/AutoReplyKeywords.del' ) !== true ){
+			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 
 			$autoReplyModel = model( 'WechatAutoReply' );
@@ -1274,8 +1274,8 @@ class Wechat extends Admin
 	 */
 	public function autoReplyKeywordsInfo()
 	{
-		if( $this->validate( $this->get, 'Admin/Wechat/AutoReplyKeywords.info' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Admin/Wechat/AutoReplyKeywords.info' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 
 			$autoReplyModel = model( 'WechatAutoReply' );

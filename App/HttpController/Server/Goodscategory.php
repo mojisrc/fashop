@@ -32,8 +32,8 @@ class Goodscategory extends Server
 	 */
 	public function info()
 	{
-		if( $this->validate( $this->get, 'Server/GoodsCategory.info' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Server/GoodsCategory.info' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$info                 = \App\Model\GoodsCategory::getGoodsCategoryInfo( ['id' => $this->get['id']], '*' );
 			if( !$info ){

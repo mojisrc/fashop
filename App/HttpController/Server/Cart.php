@@ -54,8 +54,8 @@ class Cart extends Server
 			$this->send( Code::user_access_token_error );
 		} else{
 			$user = $this->getRequestUser();
-			if( $this->validate( $this->post, 'Server/Cart.add' ) !== true ){
-				$this->send( Code::param_error, [], $this->getValidate()->getError() );
+			if( $this->validator( $this->post, 'Server/Cart.add' ) !== true ){
+				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				$quantity = $this->post['quantity'];
 
@@ -105,8 +105,8 @@ class Cart extends Server
 		if( $this->verifyResourceRequest() !== true ){
 			$this->send( Code::user_access_token_error );
 		} else{
-			if( $this->validate( $this->post, 'Server/Cart.edit' ) !== true ){
-				$this->send( Code::param_error, [], $this->getValidate()->getError() );
+			if( $this->validator( $this->post, 'Server/Cart.edit' ) !== true ){
+				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				$user         = $this->getRequestUser();
 				$goods_sku_id = $this->post['goods_sku_id'];
@@ -156,8 +156,8 @@ class Cart extends Server
 		} else{
 			$user                  = $this->getRequestUser();
 			$this->post['user_id'] = $user['id'];
-			if( $this->validate( $this->post, 'Server/Cart.del' ) !== true ){
-				$this->send( Code::param_error, [], $this->getValidate()->getError() );
+			if( $this->validator( $this->post, 'Server/Cart.del' ) !== true ){
+				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				\App\Model\Cart::delCart( [
 					'goods_sku_id' => ['in', $this->post['goods_sku_ids']],
@@ -205,8 +205,8 @@ class Cart extends Server
 		if( $this->verifyResourceRequest() !== true ){
 			$this->send( Code::user_access_token_error );
 		} else{
-			if( $this->validate( $this->get, 'Server/Cart.exist' ) !== true ){
-				$this->send( Code::param_error, [], $this->getValidate()->getError() );
+			if( $this->validator( $this->get, 'Server/Cart.exist' ) !== true ){
+				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				$user      = $this->getRequestUser();
 				$cart_info = \App\Model\Cart::getCartInfo( [
@@ -263,8 +263,8 @@ class Cart extends Server
 		} else{
 			$user                  = $this->getRequestUser();
 			$this->post['user_id'] = $user['id'];
-			if( $this->validate( $this->post, 'Server/Cart.check' ) !== true ){
-				$this->send( Code::param_error, [], $this->getValidate()->getError() );
+			if( $this->validator( $this->post, 'Server/Cart.check' ) !== true ){
+				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 
 				$condition                 = [];
@@ -274,7 +274,6 @@ class Cart extends Server
 				if( !$result ){
 					return $this->send( Code::error, [], '编辑失败' );
 				}
-
 				$this->send( Code::success );
 			}
 		}

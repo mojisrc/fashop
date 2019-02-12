@@ -27,8 +27,6 @@ class Group extends Server
     public function list()
     {
         $param                   = $this->get;
-        $group_model             = model('Group');
-        $group_goods_model       = model('GroupGoods');
         $condition               = [];
         $time                    = time();
         $condition['start_time'] = ['elt', $time];
@@ -82,22 +80,22 @@ class Group extends Server
     {
         $get = $this->get;
 
-        if ($this->validate($get, 'Server/Group.info') !== true) {
-            $this->send(Code::param_error, [], $this->getValidate()->getError());
+        if ($this->validator($get, 'Server/Group.info') !== true) {
+            $this->send(Code::param_error, [], $this->getValidator()->getError());
         } else {
             $time                    = time();
             $condition['start_time'] = ['elt', $time];
             $condition['end_time']   = ['egt', $time];
             $condition['is_show']    = 1;
             $condition['goods_id']   = $get['goods_id'];
-            $group_data              = model('Group')->getGroupInfo($condition, '', '*');
+            $group_data              = \App\Model\Group::getGroupInfo($condition, '', '*');
             if (!$group_data) {
                 return $this->send(Code::error, [], '参数错误');
             }
 
             $goods_id            = $get['goods_id'];
-            $goods_info          = model('Goods')->getGoodsInfo(['id' => $goods_id]);
-            $goods_info['skus']  = model('GoodsSku')->getGoodsSkuList(['goods_id' => $goods_id], '*', 'id desc', [1,100]);
+            $goods_info          = \App\Model\Goods::getGoodsInfo(['id' => $goods_id]);
+            $goods_info['skus']  = \App\Model\GoodsSku::getGoodsSkuList(['goods_id' => $goods_id], '*', 'id desc', [1,100]);
             $goods_info['group'] = $group_data;
 
             $this->send(Code::success, ['info' => $goods_info]);
@@ -115,12 +113,12 @@ class Group extends Server
     {
         $get = $this->get;
 
-        if ($this->validate($get, 'Server/Group.skuInfo') !== true) {
-            $this->send(Code::param_error, [], $this->getValidate()->getError());
+        if ($this->validator($get, 'Server/Group.skuInfo') !== true) {
+            $this->send(Code::param_error, [], $this->getValidator()->getError());
         } else {
             $group_id            = $get['group_id'];
             $goods_id            = $get['goods_id'];
-            $group_goods['skus'] = model('GroupGoods')->getGroupGoodsList(['group_id' => $group_id, 'goods_id' => $goods_id], '', 'goods_sku_id,group_price,captain_price', 'goods_sku_id desc', [1,100]);
+            $group_goods['skus'] = \App\Model\GroupGoods::getGroupGoodsList(['group_id' => $group_id, 'goods_id' => $goods_id], '', 'goods_sku_id,group_price,captain_price', 'goods_sku_id desc', [1,100]);
 
             $this->send(Code::success, ['info' => $group_goods]);
         }
@@ -135,8 +133,8 @@ class Group extends Server
     public function groupingSearch()
     {
         $get = $this->get;
-        if ($this->validate($get, 'Server/Group.groupingSearch') !== true) {
-            $this->send(Code::param_error, [], $this->getValidate()->getError());
+        if ($this->validator($get, 'Server/Group.groupingSearch') !== true) {
+            $this->send(Code::param_error, [], $this->getValidator()->getError());
         } else {
             $goods_id                          = $get['goods_id'];
             $condition['order.goods_type']     = 2; //拼团
@@ -172,8 +170,8 @@ class Group extends Server
     public function groupingInfo()
     {
         $get = $this->get;
-        if ($this->validate($get, 'Server/Group.groupingInfo') !== true) {
-            $this->send(Code::param_error, [], $this->getValidate()->getError());
+        if ($this->validator($get, 'Server/Group.groupingInfo') !== true) {
+            $this->send(Code::param_error, [], $this->getValidator()->getError());
         } else {
             $order_id = $get['order_id'];
             $goods_id = $get['goods_id'];
@@ -183,8 +181,7 @@ class Group extends Server
             $condition['order.group_identity'] = 1; //团长
             $condition['order.group_state']    = 1; //正在进行 未满团
 
-            $order_goods_model = model('OrderGoods');
-            $order_goods_id    = $order_goods_model->getOrderGoodsId(['order_id' => $order_id, 'goods_id' => $goods_id]);
+            $order_goods_id    = \App\Model\OrderGoods::getOrderGoodsId(['order_id' => $order_id, 'goods_id' => $goods_id]);
             if (!$order_goods_id) {
                 return $this->send(Code::error, [], '没有该订单');
 
@@ -216,8 +213,8 @@ class Group extends Server
     public function shareGroupingInfo()
     {
         $get = $this->get;
-        if ($this->validate($get, 'Server/Group.shareGroupingInfo') !== true) {
-            $this->send(Code::param_error, [], $this->getValidate()->getError());
+        if ($this->validator($get, 'Server/Group.shareGroupingInfo') !== true) {
+            $this->send(Code::param_error, [], $this->getValidator()->getError());
         } else {
             $order_id                          = $get['order_id'];
             $goods_id                          = $get['goods_id'];
@@ -226,9 +223,7 @@ class Group extends Server
             $condition['order.goods_type']     = 2; //拼团
             $condition['order.group_identity'] = 1; //团长
             $condition['order.group_state']    = ['in', '1,2']; //1正在进行中(待开团) 2拼团成功
-
-            $order_goods_model                 = model('OrderGoods');
-            $order_goods_id                    = $order_goods_model->getOrderGoodsId(['order_id' => $order_id, 'goods_id' => $goods_id]);
+            $order_goods_id                    = \App\Model\OrderGoods::getOrderGoodsId(['order_id' => $order_id, 'goods_id' => $goods_id]);
             if (!$order_goods_id) {
                 return $this->send(Code::error, [], '没有该订单');
 
@@ -261,8 +256,8 @@ class Group extends Server
     {
         $get = $this->get;
 
-        if ($this->validate($get, 'Server/Group.allowOpenGroup') !== true) {
-            $this->send(Code::param_error, [], $this->getValidate()->getError());
+        if ($this->validator($get, 'Server/Group.allowOpenGroup') !== true) {
+            $this->send(Code::param_error, [], $this->getValidator()->getError());
         } else {
             $time                    = time();
             $condition['start_time'] = ['elt', $time];
@@ -272,7 +267,7 @@ class Group extends Server
             if($get['group_id']){
                 $condition['id']   = $get['group_id'];
             }
-            $group_data              = model('Group')->getGroupInfo($condition, '', '*');
+            $group_data              = \App\Model\Group::getGroupInfo($condition, '', '*');
             if (!$group_data) {
                 $this->send(Code::success, ['info' => ['state' => 0]]);
             }else{
@@ -293,8 +288,8 @@ class Group extends Server
     {
         $get = $this->get;
 
-        if ($this->validate($get, 'Server/Group.allowJoinGroup') !== true) {
-            $this->send(Code::param_error, [], $this->getValidate()->getError());
+        if ($this->validator($get, 'Server/Group.allowJoinGroup') !== true) {
+            $this->send(Code::param_error, [], $this->getValidator()->getError());
         } else {
             $time                    = time();
             $condition['start_time'] = ['elt', $time];
@@ -304,7 +299,7 @@ class Group extends Server
             if($get['group_id']){
                 $condition['id']   = $get['group_id'];
             }
-            $group_data              = model('Group')->getGroupInfo($condition, '', '*');
+            $group_data              = \App\Model\Group::getGroupInfo($condition, '', '*');
             if (!$group_data) {
                 $this->send(Code::success, ['info' => ['state' => 0]]);
             }else{

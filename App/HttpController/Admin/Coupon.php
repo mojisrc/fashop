@@ -398,7 +398,7 @@ class Coupon extends Admin
 			//查询优惠券商品ids
             $goods_ids = $coupon_goods_model->getCouponGoodsColumn(array('coupon_id'=>$get['coupon_id']), 'goods_id');
             if($goods_ids){
-				$online_goods_ids = model('Goods')->getGoodsColumn(array('in'=>$goods_ids,'is_on_sale'=>1), 'id');
+				$online_goods_ids = \App\Model\Goods::getGoodsColumn(array('in'=>$goods_ids,'is_on_sale'=>1), 'id');
             }
 
             //交集 coupon_goods表和goods表的商品交集

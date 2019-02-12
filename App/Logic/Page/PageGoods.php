@@ -82,7 +82,6 @@ class PageGoods
         //拼团商品
         if (isset($goods_group_key) && is_array($goods_group_key)) {
 
-            $group_goods_model             = model('GroupGoods');
             $condition                     = [];
             $map                           = [];
             $time                          = time();

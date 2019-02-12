@@ -56,8 +56,8 @@ class User extends Admin
 	 */
 	public function add()
 	{
-		if( $this->validate( $this->post, 'Admin/User.add' ) !== true ){
-			$this->send( Code::error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/User.add' ) !== true ){
+			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
 			$user_model            = model( "User" );
 			$data['name']          = $this->post['name'];
@@ -83,8 +83,8 @@ class User extends Admin
 	{
 		// $user_model = model( 'User' );
 
-		// if( $this->validate( $this->post, 'Admin/User.del' ) !== true ){
-		// 	$this->send( Code::error, [], $this->getValidate()->getError() );
+		// if( $this->validator( $this->post, 'Admin/User.del' ) !== true ){
+		// 	$this->send( Code::error, [], $this->getValidator()->getError() );
 		// } else{
 		// 	$condition['id'] = ['in', $this->post['ids']];
 
@@ -115,8 +115,8 @@ class User extends Admin
 	 */
 	public function info()
 	{
-		if( $this->validate( $this->get, 'Admin/User.info' ) !== true ){
-			$this->send( Code::error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Admin/User.info' ) !== true ){
+			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
 			$condition            = [];
 			$condition['user.id'] = $this->get['id'];
@@ -133,8 +133,8 @@ class User extends Admin
 	 */
 	public function statistics()
 	{
-		if( $this->validate( $this->get, 'Admin/User.info' ) !== true ){
-			$this->send( Code::error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Admin/User.info' ) !== true ){
+			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
 			$user_id           = $this->get['id'];
 			$table_prefix      = config( 'database.prefix' );
@@ -164,7 +164,7 @@ class User extends Admin
 
             $field = "id,$refund_times_string AS refund_times,$refund_total_string AS refund_total,$buy_times_string AS buy_times,$cost_average_string AS cost_average,$cost_total_string AS cost_total";
 
-            $user                 = model('User')->getUserInfo(['id' => $user_id], $field);
+            $user                 = \App\Model\User::getUserInfo(['id' => $user_id], $field);
             $user['refund_times'] = intval($user['refund_times'])>0 ? intval($user['refund_times']) : 0;
             $user['refund_total'] = $user['refund_total']>0 ? $user['refund_total'] : 0;
             $user['buy_times']    = intval($user['buy_times'])>0 ? intval($user['buy_times']) : 0;
@@ -183,11 +183,11 @@ class User extends Admin
 	 */
 	public function order()
 	{
-		if( $this->validate( $this->get, 'Admin/User.info' ) !== true ){
-			$this->send( Code::error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Admin/User.info' ) !== true ){
+			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
 
-			$condition['user_id']  = ['in', model('User')->getUserAllIds($this->get['id'])];
+			$condition['user_id']  = ['in', \App\Model\User::getUserAllIds($this->get['id'])];
 			$count                 = \App\Model\Order::where( $condition )->count();
 			$order_list            = \App\Model\Order::getOrderList( $condition, '', "*", "id desc", $this->getPageLimit(), [
 				'order_goods',
@@ -208,11 +208,11 @@ class User extends Admin
 	 */
 	public function address()
 	{
-		if( $this->validate( $this->get, 'Admin/User.info' ) !== true ){
-			$this->send( Code::error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->get, 'Admin/User.info' ) !== true ){
+			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
 			$address_model        = model( 'Address' );
-			$condition['user_id'] = ['in', model('User')->getUserAllIds($this->get['id'])];
+			$condition['user_id'] = ['in', \App\Model\User::getUserAllIds($this->get['id'])];
 			$count                = \App\Model\Address::where( $condition )->count();
 			$list                 = \App\Model\Address::getAddressList( $condition, '*', 'id desc', $this->getPageLimit() );
 			$this->send( Code::success, [
@@ -234,8 +234,8 @@ class User extends Admin
 	public function edit()
 	{
 
-		if( $this->validate( $this->post, 'Admin/User.edit' ) !== true ){
-			$this->send( Code::error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/User.edit' ) !== true ){
+			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
 			$condition       = [];
 			$condition['id'] = $this->post['id'];

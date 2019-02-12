@@ -34,8 +34,8 @@ class Shop extends Admin
 	 */
 	public function setBaseInfo()
 	{
-		if( $this->validate( $this->post, 'Admin/Shop.setBaseInfo' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Shop.setBaseInfo' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$data = [];
 			if( isset( $this->post['logo'] ) ){
@@ -65,8 +65,8 @@ class Shop extends Admin
 	 */
 	public function setColorScheme()
 	{
-		if( $this->validate( $this->post, 'Admin/Shop.setColorScheme' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Shop.setColorScheme' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			\App\Model\Shop::editShop( ['id' => 1], ['color_scheme' => $this->post['color_scheme']] );
 			$this->send( Code::success, [] );
@@ -80,8 +80,8 @@ class Shop extends Admin
 	 */
 	public function setPortalTemplate()
 	{
-		if( $this->validate( $this->post, 'Admin/Shop.setPortalTemplate' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Shop.setPortalTemplate' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			\App\Model\Shop::editShop( ['id' => 1], ['portal_template_id' => $this->post['portal_template_id']] );
 			$this->send( Code::success, [] );
@@ -111,8 +111,8 @@ class Shop extends Admin
 	 */
 	public function setGoodsCategoryStyle()
 	{
-		if( $this->validate( $this->post, 'Admin/Shop.setGoodsCategoryStyle' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Shop.setGoodsCategoryStyle' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			\App\Model\Shop::editShop( ['id' => 1], ['goods_category_style' => $this->post['goods_category_style']] );
 			$this->send( Code::success );
@@ -128,8 +128,8 @@ class Shop extends Admin
 	 */
 	public function setOrderExpires()
 	{
-		if( $this->validate( $this->post, 'Admin/Shop.setOrderExpires' ) !== true ){
-			$this->send( Code::param_error, [], $this->getValidate()->getError() );
+		if( $this->validator( $this->post, 'Admin/Shop.setOrderExpires' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			\App\Model\Shop::editShop( ['id' => 1], [
 				'order_auto_close_expires'         => $this->post['order_auto_close_expires'],
