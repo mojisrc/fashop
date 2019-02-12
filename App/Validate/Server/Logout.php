@@ -13,7 +13,7 @@
 
 namespace App\Validate\Server;
 
-use ezswoole\Validate;
+use ezswoole\Validator;
 use ezswoole\Db;
 use App\Logic\Server\Login as LoginLogic;
 

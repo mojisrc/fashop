@@ -13,7 +13,7 @@
 
 namespace App\Validate\Server;
 
-use ezswoole\Validate;
+use ezswoole\Validator;
 use App\Utils\Code;
 
 class Address extends Validate

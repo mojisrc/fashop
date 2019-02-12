@@ -161,7 +161,7 @@ class Distribution extends Admin
     public function recruitEdit()
     {
         $post  = $this->post;
-        $error = $this->validate($post, 'Admin/DistributionRecruit.edit');
+        $error = $this->validator($post, 'Admin/DistributionRecruit.edit');
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {
@@ -200,7 +200,7 @@ class Distribution extends Admin
         $post           = $this->post;
         //测试参数
         $post['config'] = [['key' => 'invite_reward', 'value' => ['state' => 0]], ['key' => 'distributor_recruit', 'value' => ['state' => 1]]];
-        $error          = $this->validate($post, 'Admin/DistributionConfig.edit');
+        $error          = $this->validator($post, 'Admin/DistributionConfig.edit');
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {

@@ -27,11 +27,6 @@ class Image extends Admin
 {
 	protected $wechat;
 
-	protected function _initialize()
-	{
-		//		$this->wechat = new WechatFactory();//此版本不支持
-	}
-
 	/**
 	 * 应用图片列表
 	 * @method GET

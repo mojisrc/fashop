@@ -77,7 +77,6 @@ class GoodsSku
     /** todo spec id 验证int
      * @return bool
      * @throws \Exception
-     * @author 韩文博
      */
     public function add(): bool
     {
@@ -123,7 +122,6 @@ class GoodsSku
      * todo spec id 验证int
      * @return bool
      * @throws \Exception
-     * @author 韩文博
      */
     public function edit(): bool
     {
@@ -131,7 +129,7 @@ class GoodsSku
         $update_ids  = [];
         $update_skus = [];
         $add_skus    = [];
-        $exist_skus  = $this->getModel()->getGoodsSkuList(['goods_id' => $this->goodsId], '*', 'id desc', '1,1000');
+        $exist_skus  = $this->getModel()->getGoodsSkuList(['goods_id' => $this->goodsId], '*', 'id desc', [1,1000]);
         if ($exist_skus) {
             $exist_skus = array_column($exist_skus, null, 'spec_value_sign');
         }
@@ -274,7 +272,6 @@ class GoodsSku
     /**
      * 获取商品收藏排行
      * TODO
-     * @author 韩文博
      * @param int $limit 数量
      * @return array    商品信息
      */
@@ -293,7 +290,6 @@ class GoodsSku
     /**
      * 计算商品库存
      * TODO
-     * @author 韩文博
      * @param array $goods_list
      * @return array|boolean
      */

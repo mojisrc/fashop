@@ -32,14 +32,13 @@ class Setting extends Admin
 	public function info()
 	{
 		$get   = $this->get;
-		$error = $this->validate( $get, 'Admin/Setting.info' );
+		$error = $this->validator( $get, 'Admin/Setting.info' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
-			$setting_model    = model( 'Setting' );
 			$condition        = [];
 			$condition['key'] = $get['key'];
-			$info             = $setting_model->getSettingInfo( $condition );
+			$info             = \App\Model\Setting::getSettingInfo( $condition );
 			return $this->send( Code::success, ['info' => $info] );
 		}
 	}
@@ -56,13 +55,11 @@ class Setting extends Admin
 	public function add()
 	{
 		$post  = $this->post;
-		$error = $this->validate( $post, 'Admin/Setting.add' );
+		$error = $this->validator( $post, 'Admin/Setting.add' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
-			$setting_model = model( 'Setting' );
-
-			$setting_data = $setting_model->getSettingInfo( ['key' => $post['key']] );
+			$setting_data = \App\Model\Setting::getSettingInfo( ['key' => $post['key']] );
 			if( $setting_data ){
 				return $this->send( Code::param_error, [], '已经存在该配置' );
 			} else{
@@ -70,7 +67,7 @@ class Setting extends Admin
 				$data['key']    = $post['key'];
 				$data['config'] = $post['config'];
 				$data['status'] = $post['status'];
-				$result         = $setting_model->insert( $data );
+				$result         = \App\Model\Setting::addSetting( $data );
 				if( !$result ){
 					return $this->send( Code::error );
 				}
@@ -92,27 +89,26 @@ class Setting extends Admin
 	public function edit()
 	{
 		$post  = $this->post;
-		$error = $this->validate( $post, 'Admin/Setting.edit' );
+		$error = $this->validator( $post, 'Admin/Setting.edit' );
 		if( $error !== true ){
-			return $this->send( Code::error, [], $error );
+			$this->send( Code::error, [], $error );
 		} else{
-			$setting_model = model( 'Setting' );
-
-			$setting_data = $setting_model->getSettingInfo( ['key' => $post['key']] );
+			$setting_data = \App\Model\Setting::getSettingInfo( ['key' => $post['key']] );
 			if( !$setting_data ){
-				return $this->send( Code::param_error, [], '配置不存在' );
+				$this->send( Code::param_error, [], '配置不存在' );
 			} else{
 				$data           = [];
 				$data['config'] = $post['config'];
 				$data['status'] = $post['status'];
 
-				$result = $setting_model->editSetting( [
+				$result = \App\Model\Setting::editSetting( [
 					'key' => $post['key'],
 				], $data );
 				if( !$result ){
-					return $this->send( Code::error );
+					$this->send( Code::error );
+				} else{
+					$this->send( Code::success );
 				}
-				return $this->send( Code::success );
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\HttpController\Admin;
+use App\Utils\Code;
 /**
  * 意见反馈类别
  */
@@ -17,12 +18,11 @@ class Useradvicetype extends Admin
 	 */
 	public function index()
 	{
-		$user_advice_type_model = model( 'UserAdviceType' );
 		$condition              = [];
-		$count = $user_advice_type_model->where( $condition )->count();
+		$count = \App\Model\UserAdviceType::where( $condition )->count();
 		$field = '*';
 		$order = 'id asc';
-		$list  = $user_advice_type_model->getUserAdviceTypeList( $condition, $field, $order, $order, $this->getPageLimit() );
+		$list  = \App\Model\UserAdviceType::getUserAdviceTypeList( $condition, $field, $order, $order, $this->getPageLimit() );
 		return $this->send( Code::success, [
 			'total_number' => $count,
 			'list'         => $list,
@@ -43,7 +43,7 @@ class Useradvicetype extends Admin
 
 			$user_advice_type_model = model( 'UserAdviceType' );
 			$data                   = $post;
-			$user_advice_type_id    = $user_advice_type_model->addUserAdviceType( $data );
+			$user_advice_type_id    = \App\Model\UserAdviceType::addUserAdviceType( $data );
 			if( $user_advice_type_id ){
 				return $this->send( Code::success );
 			} else{
@@ -72,7 +72,7 @@ class Useradvicetype extends Admin
 
 			$user_advice_type_model = model( 'UserAdviceType' );
 			$data                   = $post;
-			$user_advice_type_id    = $user_advice_type_model->editUserAdviceType( $data, $condition );
+			$user_advice_type_id    = \App\Model\UserAdviceType::editUserAdviceType( $data, $condition );
 			if( $user_advice_type_id ){
 				return $this->send( Code::success );
 			} else{
@@ -93,8 +93,7 @@ class Useradvicetype extends Admin
 			exit( $this->send( '参数错误' ) );
 		}
 
-		$user_advice_type_model = model( 'UserAdviceType' );
-		$row                    = $user_advice_type_model->getUserAdviceTypeInfo( $condition, $field = '*' );
+		$row                    = \App\Model\UserAdviceType::getUserAdviceTypeInfo( $condition, $field = '*' );
 
 		$result         = [];
 		$result['info'] = $row;

@@ -32,7 +32,7 @@ class Express extends Admin
 	public function add()
 	{
 		$post  = $this->post;
-		$error = $this->validate( $post, 'Admin/Express.add' );
+		$error = $this->validator( $post, 'Admin/Express.add' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
@@ -57,7 +57,7 @@ class Express extends Admin
 	 */
 	public function edit()
 	{
-		$error = $this->validate( $this->post, 'Admin/Express.edit' );
+		$error = $this->validator( $this->post, 'Admin/Express.edit' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
@@ -144,7 +144,7 @@ class Express extends Admin
 	public function del()
 	{
 		$post  = $this->post;
-		$error = $this->validate( $post, 'Admin/Express.del' );
+		$error = $this->validator( $post, 'Admin/Express.del' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
@@ -159,7 +159,7 @@ class Express extends Admin
 			if( $row['is_system'] == 1 ){
 				return $this->send( Code::param_error, [], '系统数据，不可删除' );
 			}
-			$result = \App\Model\Express::softDelExpress( $condition );
+			$result = \App\Model\Express::delExpress( $condition );
 			if( !$result ){
 				return $this->send( Code::error );
 			}

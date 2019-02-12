@@ -35,8 +35,7 @@ class Freight extends Admin
 		if( $this->validator( $this->post, 'Admin/Freight.add' ) !== true ){
 			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			$model      = model( 'Freight' );
-			$freight_id = \App\Model\Page::addFreight( [
+			$freight_id = \App\Model\Freight::addFreight( [
 				'name'     => $this->post['name'],
 				'pay_type' => $this->post['pay_type'],
 				'areas'    => $this->post['areas'],
@@ -76,7 +75,7 @@ class Freight extends Admin
 	 */
 	public function list()
 	{
-		$list          = \App\Model\Freight::getFreightList( [], 'id,name,pay_type,create_time,update_time,areas', 'id desc', $this->getPageLimit() );
+		$list          = \App\Model\Freight::getFreightList( [], 'id,name,pay_type,create_time,update_time,areas', 'id desc', $this->getFreightLimit() );
 		$this->send( Code::success, [
 			'list'         => $list,
 			'total_number' => \App\Model\Freight::count(),

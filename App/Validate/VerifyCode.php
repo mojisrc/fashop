@@ -13,7 +13,7 @@
 
 namespace App\Validate;
 
-use ezswoole\Validate;
+use ezswoole\Validator;
 use App\Logic\VerifyCode as VerifyCodeLogic;
 use ezswoole\Db;
 use App\Utils\Ip;

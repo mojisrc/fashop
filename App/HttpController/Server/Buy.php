@@ -12,6 +12,7 @@
  */
 
 namespace App\HttpController\Server;
+
 use App\Logic\Pay\Notice\Facade as PayNoticeFacade;
 use App\Utils\Code;
 use ezswoole\Log;
@@ -24,7 +25,6 @@ class Buy extends Server
 	 * @method POST
 	 * @param array $cart_ids   购物车id集合
 	 * @param int   $address_id 地址id
-	 * @author 韩文博
 	 */
 	public function calculate()
 	{
@@ -64,7 +64,6 @@ class Buy extends Server
 	 * @param int    $address_id 收货地址id
 	 * @param array  $cart_ids   购物车id集合
 	 * @param string $message    买家留言
-	 * @author 韩文博
 	 *
 	 */
 	public function create()
@@ -188,7 +187,6 @@ class Buy extends Server
 	/**
 	 * 微信异步通知处理
 	 * @method GET+post
-	 * @author 韩文博
 	 *
 	 */
 	public function wechatNotify()
@@ -243,7 +241,6 @@ class Buy extends Server
 	/**
 	 * 微信app异步通知处理
 	 * @method GET+post
-	 * @author 韩文博
 	 *
 	 */
 	public function wechatAppNotify()
@@ -271,7 +268,6 @@ class Buy extends Server
 	/**
 	 * 支付宝app异步通知处理
 	 * @method GET+post
-	 * @author 韩文博
 	 */
 	public function alipayAppNotify()
 	{
@@ -299,7 +295,6 @@ class Buy extends Server
 	 * @param array  $config
 	 * @param string $payment_channel 支付渠道
 	 * @return array
-	 * @author 韩文博
 	 */
 	private function getWechatPayConfig( array $config, string $payment_channel ) : array
 	{
@@ -336,7 +331,6 @@ class Buy extends Server
 	 * @param array  $config
 	 * @param string $payment_channel 支付渠道
 	 * @return array
-	 * @author 韩文博
 	 */
 	private function getAliPayConfig( array $config, string $payment_channel ) : array
 	{
@@ -358,16 +352,16 @@ class Buy extends Server
 			'return_url'     => '',
 			'ali_public_key' => $config['alipay_public_key'], //加密方式： **RSA2**
 			'private_key'    => $config['merchant_private_key'],
-			'log'            => [ // optional
-			                      'file'     => EASYSWOOLE_ROOT.'/Runtime/Log/alipay.log',
-			                      'level'    => 'debug', // 建议生产环境等级调整为 info，开发环境为 debug
-			                      'type'     => 'single', // optional, 可选 daily.
-			                      'max_file' => 30, // optional, 当 type 为 daily 时有效，默认 30 天
+			'log'            => [
+				'file'     => EASYSWOOLE_ROOT.'/Runtime/Log/alipay.log',
+				'level'    => 'debug', // 建议生产环境等级调整为 info，开发环境为 debug
+				'type'     => 'single', // optional, 可选 daily.
+				'max_file' => 30, // optional, 当 type 为 daily 时有效，默认 30 天
 			],
-			'http'           => [ // optional
-			                      'timeout'         => 5.0,
-			                      'connect_timeout' => 5.0,
-			                      // 更多配置项请参考 [Guzzle](https://guzzle-cn.readthedocs.io/zh_CN/latest/request-options.html)
+			'http'           => [
+				'timeout'         => 5.0,
+				'connect_timeout' => 5.0,
+				// 更多配置项请参考 [Guzzle](https://guzzle-cn.readthedocs.io/zh_CN/latest/request-options.html)
 			],
 			// 'mode' => 'dev', // optional,设置此参数，将进入沙箱模式
 		];

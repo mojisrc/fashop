@@ -157,7 +157,7 @@ class Member extends Admin
 		if( $this->validator( $this->post, 'Admin/Member.del' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			\App\Model\User::softDelUser( ['id' => $this->post['id']] );
+			\App\Model\User::delUser( ['id' => $this->post['id']] );
 			$this->send( Code::success );
 		}
 	}
@@ -193,11 +193,11 @@ class Member extends Admin
 		$loginLogic = new \App\Logic\Admin\Login();
 
 		if( $this->validator( $this->post, 'Admin/Login.pcPassword' ) !== true ){
-			session( 'verify_code', null );
+//			session( 'verify_code', null );
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$result = $loginLogic->pcPasswordLogin( $this->post['username'] );
-			session( 'verify_code', null );
+//			session( 'verify_code', null );
 			if( !empty( $result ) ){
 				$this->send( Code::success, $result );
 			} else{

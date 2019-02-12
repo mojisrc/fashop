@@ -2,7 +2,7 @@
 
 namespace App\Validate\Admin\Wechat;
 
-use ezswoole\Validate;
+use ezswoole\Validator;
 
 /**
  * 微信验证

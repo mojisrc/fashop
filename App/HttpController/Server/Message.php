@@ -128,7 +128,7 @@ class Message extends Server
 				$user         = $this->getRequestUser();
 				$user_id      = $user['id'];
 				$where_string = "message_state.read_state=0 AND message_state.to_user_id=$user_id AND message_state.del_state=0 AND message_state.del_time=0 AND message.type_id=1";
-				$count        = \App\Model\Message::alias( 'message' )->join( '__MESSAGE_STATE__ message_state', 'message.id = message_state.message_id', 'LEFT' )->where( $where_string )->count();
+				$count        = \App\Model\Message::join( '__MESSAGE_STATE__ message_state', 'message.id = message_state.message_id', 'LEFT' )->where( $where_string )->count();
 
 				$this->send( Code::success, [
 					'total_number' => $count,

@@ -189,7 +189,7 @@ class Cart
 	public function getCartList( $user_id, $condition = [] )
 	{
 		$condition['user_id'] = $user_id;
-		$cart_list            = $this->model->getCartList( $condition, '*', 'id desc', '1,1000' );
+		$cart_list            = $this->model->getCartList( $condition, '*', 'id desc', [1,1000] );
 		$this->goodsNum       = count( $cart_list );
 		$cart_all_price       = 0;
 		if( is_array( $cart_list ) ){

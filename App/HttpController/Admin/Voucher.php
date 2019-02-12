@@ -96,7 +96,7 @@ class Voucher extends Admin {
 		if ($this->post) {
 			$post = $this->post;
 
-			$result = $this->validate($post, 'Admin/VoucherTemplate.add');
+			$result = $this->validator($post, 'Admin/VoucherTemplate.add');
 			if (true !== $result) {
 				return $this->send($result);
 			}
@@ -140,7 +140,7 @@ class Voucher extends Admin {
 			$model = model('VoucherTemplate');
 			$post  = $this->post;
 
-			$result = $this->validate($post, 'Admin/VoucherTemplate.add');
+			$result = $this->validator($post, 'Admin/VoucherTemplate.add');
 			if (true !== $result) {
 				return $this->send($result);
 			}

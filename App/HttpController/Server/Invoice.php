@@ -109,11 +109,11 @@ class Invoice extends Server
 		$post['user_id'] = $this->user['id'];
 		if( $post['title_select_type'] == 1 ){
 			$post['title'] = '个人';
-			if( true !== $validate_result = $this->validate( $post, 'Invoice.title_select_type_1_add' ) ){
+			if( true !== $validate_result = $this->validator( $post, 'Invoice.title_select_type_1_add' ) ){
 				return $this->faJson( ['errmsg' => $validate_result], - 1 );
 			}
 		} else{
-			if( true !== $validate_result = $this->validate( $post, 'Invoice.title_select_type_2_add' ) ){
+			if( true !== $validate_result = $this->validator( $post, 'Invoice.title_select_type_2_add' ) ){
 				return $this->faJson( ['errmsg' => $validate_result], - 1 );
 			}
 		}
@@ -155,12 +155,12 @@ class Invoice extends Server
 
 		if( $post['title_select_type'] == 1 ){
 			$post['title'] = '个人';
-			if( true !== $validate_result = $this->validate( $post, 'Invoice.title_select_type_1_edit' ) ){
+			if( true !== $validate_result = $this->validator( $post, 'Invoice.title_select_type_1_edit' ) ){
 				return $this->faJson( ['errmsg' => $validate_result], - 1 );
 			}
 		} else{
 			$post['title'] = '公司';
-			if( true !== $validate_result = $this->validate( $post, 'Invoice.title_select_type_2_edit' ) ){
+			if( true !== $validate_result = $this->validator( $post, 'Invoice.title_select_type_2_edit' ) ){
 				return $this->faJson( ['errmsg' => $validate_result], - 1 );
 			}
 		}

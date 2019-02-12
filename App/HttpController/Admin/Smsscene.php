@@ -23,7 +23,7 @@ class Smsscene extends Admin
 	public function list()
 	{
 		$model = model( 'SmsScene' );
-		$list  = \App\Model\Page::getSmsSceneList( [], '*', 'id asc', '1,1000' );
+		$list  = \App\Model\Page::getSmsSceneList( [], '*', 'id asc', [1,1000] );
 		return $this->send( Code::success, [
 			'list' => $list,
 		] );

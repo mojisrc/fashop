@@ -89,7 +89,7 @@ class DistributionGoods extends Admin
     public function info()
     {
         $get   = $this->get;
-        $error = $this->validate($get, 'Admin/DistributionGoods.info');
+        $error = $this->validator($get, 'Admin/DistributionGoods.info');
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {
@@ -116,7 +116,7 @@ class DistributionGoods extends Admin
     public function edit()
     {
         $post  = $this->post;
-        $error = $this->validate($post, 'Admin/DistributionGoods.edit');
+        $error = $this->validator($post, 'Admin/DistributionGoods.edit');
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {

@@ -71,7 +71,7 @@ class Coupon extends Admin
 	public function info()
 	{
 		$get  = $this->get;
-		$error = $this->validate( $get, 'Admin/Coupon.info' );
+		$error = $this->validator( $get, 'Admin/Coupon.info' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
@@ -104,7 +104,7 @@ class Coupon extends Admin
 	public function add()
 	{
 		$post  = $this->post;
-		$error = $this->validate( $post, 'Admin/Coupon.add' );
+		$error = $this->validator( $post, 'Admin/Coupon.add' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
@@ -184,7 +184,7 @@ class Coupon extends Admin
 	public function edit()
 	{
 		$post  = $this->post;
-		$error = $this->validate( $post, 'Admin/Coupon.edit' );
+		$error = $this->validator( $post, 'Admin/Coupon.edit' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
@@ -257,7 +257,7 @@ class Coupon extends Admin
 	public function del()
 	{
 		$post  = $this->post;
-		$error = $this->validate( $post, 'Admin/Coupon.del' );
+		$error = $this->validator( $post, 'Admin/Coupon.del' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
@@ -315,7 +315,7 @@ class Coupon extends Admin
 	{
 
 		$get  = $this->get;
-		$error = $this->validate( $get, 'Admin/Coupon.selectableGoods' );
+		$error = $this->validator( $get, 'Admin/Coupon.selectableGoods' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
@@ -372,7 +372,7 @@ class Coupon extends Admin
 	{
 
 		$get  = $this->get;
-		$error = $this->validate( $get, 'Admin/Coupon.selectedGoods' );
+		$error = $this->validator( $get, 'Admin/Coupon.selectedGoods' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
@@ -433,7 +433,7 @@ class Coupon extends Admin
 	{
 
 		$post  = $this->post;
-		$error = $this->validate( $post, 'Admin/Coupon.choiceGoods' );
+		$error = $this->validator( $post, 'Admin/Coupon.choiceGoods' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
@@ -485,7 +485,7 @@ class Coupon extends Admin
     {
 
         $get  = $this->get;
-        $error = $this->validate( $get, 'Admin/Coupon.goodsSkuList' );
+        $error = $this->validator( $get, 'Admin/Coupon.goodsSkuList' );
         if( $error !== true ){
             return $this->send( Code::error, [], $error );
         } else{
@@ -539,7 +539,7 @@ class Coupon extends Admin
 
 		$post  = $this->post;
 
-		$error = $this->validate( $post, 'Admin/Coupon.editGoodsSku' );
+		$error = $this->validator( $post, 'Admin/Coupon.editGoodsSku' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 

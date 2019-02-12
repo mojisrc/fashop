@@ -1,6 +1,6 @@
 <?php
 namespace App\Validate;
-use ezswoole\Validate;
+use ezswoole\Validator;
 
 class Driver extends Validate {
 	protected $rule = [

@@ -14,7 +14,7 @@
 namespace App\HttpController\Admin;
 
 use App\Utils\Code;
-use ezswoole\Validate;
+use ezswoole\Validator;
 
 /**
  * 店铺
@@ -95,7 +95,7 @@ class Shop extends Admin
 	public function info()
 	{
 		$shop     = \App\Model\Shop::getShopInfo( ['id' => 1] );
-		$validate = new Validate();
+		$validate = new Validator();
 		if( $validate->is( $shop['host'], 'url' ) === true ){
 			$shop['portal_url'] = rtrim( $shop['host'], '/' )."/mobile";
 		} else{

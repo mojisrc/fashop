@@ -1,7 +1,7 @@
 <?php
 namespace App\Validate;
 
-use ezswoole\Validate;
+use ezswoole\Validator;
 
 /**
  * 商品分类验证

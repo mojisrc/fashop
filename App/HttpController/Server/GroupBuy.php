@@ -85,7 +85,6 @@ class GroupBuy extends Server
      * @param int  order_id     订单id 参与别人的团时使用 ，他人的团的订单id
      * @param int  address_id   地址id
      * @param string $message 买家留言
-     * @author 韩文博
      *
      */
     public function create()

@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 
-use \EasySwoole\Core\Utility\File;
+use \EasySwoole\Utility\File;
 use EasySwoole\Core\Core;
 use EasySwoole\Config as Conf;
 
@@ -42,7 +42,7 @@ Class Command
 		case 'build':
 			$buildResult = Command::build();
 			if($buildResult && isset($argv[2]) && strstr($argv[2],'fashop-v')){
-			    $copyResult = \EasySwoole\Core\Utility\File::copyDir('dist',$argv[2]);
+			    $copyResult = \EasySwoole\Utility\File::copyDir('dist',$argv[2]);
 			    if($copyResult===true){
 				    shell_exec( "tar -zcvf {$argv[2]}.tar.gz ./{$argv[2]} && rm -rf ./{$argv[2]}" );
 				    echo "\e[32m./$argv[2].tar.gz 版本创建完毕\n\e[0m";
@@ -63,11 +63,11 @@ Class Command
 	{
 		$dist = './dist';
 		if( !is_dir( $dist ) ){
-			File::createDir( $dist );
+			File::createDirectory( $dist );
 		} else{
 			File::clearDir( $dist );
 		}
-		File::createDir( $dist.'/Upload' );
+		File::createDirectory( $dist.'/Upload' );
 		$paths = [
 			[
 				'path'       => './a',
@@ -132,7 +132,7 @@ Class Command
 				File::copyDir( $path['path'], $path['targetPath'] );
 			} else{
 				$aimDir = dirname( $path['targetPath'] );
-				File::createDir( $aimDir );
+				File::createDirectory( $aimDir );
 				File::copyFile( $path['path'], $path['targetPath'] );
 			}
 		}

@@ -52,7 +52,7 @@ class DistributorLevel extends Admin
     public function info()
     {
         $get   = $this->get;
-        $error = $this->validate($get, 'Admin/DistributorLevel.info');
+        $error = $this->validator($get, 'Admin/DistributorLevel.info');
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {
@@ -81,7 +81,7 @@ class DistributorLevel extends Admin
     public function add()
     {
         $post  = $this->post;
-        $error = $this->validate($post, 'Admin/DistributorLevel.add');
+        $error = $this->validator($post, 'Admin/DistributorLevel.add');
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {
@@ -125,7 +125,7 @@ class DistributorLevel extends Admin
     public function edit()
     {
         $post  = $this->post;
-        $error = $this->validate($post, 'Admin/DistributorLevel.edit');
+        $error = $this->validator($post, 'Admin/DistributorLevel.edit');
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {
@@ -167,7 +167,7 @@ class DistributorLevel extends Admin
     public function del()
     {
         $post  = $this->post;
-        $error = $this->validate($post, 'Admin/DistributorLevel.del');
+        $error = $this->validator($post, 'Admin/DistributorLevel.del');
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {

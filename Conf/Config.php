@@ -4,7 +4,7 @@ namespace EasySwoole;
 
 use EasySwoole\Core\AbstractInterface\Singleton;
 use EasySwoole\Core\Component\Spl\SplArray;
-use EasySwoole\Core\Utility\File;
+use EasySwoole\Utility\File;
 
 class Config
 {

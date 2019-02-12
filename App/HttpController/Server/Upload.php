@@ -15,7 +15,6 @@ namespace App\HttpController\Server;
 
 use ezswoole\utils\image\Image;
 use App\Utils\Code;
-use \EasySwoole\Core\Http\Message\UploadFile;
 
 class Upload extends Server
 {

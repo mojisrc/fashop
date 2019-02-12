@@ -105,7 +105,7 @@ class Distributor extends Admin
     public function info()
     {
         $get   = $this->get;
-        $error = $this->validate($get, 'Admin/Distributor.info');
+        $error = $this->validator($get, 'Admin/Distributor.info');
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {
@@ -127,7 +127,7 @@ class Distributor extends Admin
     public function edit()
     {
         $post  = $this->post;
-        $error = $this->validate($post, 'Admin/Distributor.edit');
+        $error = $this->validator($post, 'Admin/Distributor.edit');
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {
@@ -163,7 +163,7 @@ class Distributor extends Admin
     public function retreat()
     {
         $post  = $this->post;
-        $error = $this->validate($post, 'Admin/Distributor.retreat');
+        $error = $this->validator($post, 'Admin/Distributor.retreat');
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {
@@ -208,7 +208,7 @@ class Distributor extends Admin
     public function review()
     {
         $post  = $this->post;
-        $error = $this->validate($post, 'Admin/Distributor.review');
+        $error = $this->validator($post, 'Admin/Distributor.review');
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {

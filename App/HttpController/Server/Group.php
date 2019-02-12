@@ -144,7 +144,7 @@ class Group extends Server
             $table_order_goods                 = $prefix . "order_goods";
             $condition_string                  = "order.id in (SELECT order_id FROM $table_order_goods WHERE order_id=order.id AND goods_id=$goods_id)";
             $orderLogic                        = new OrderLogic($condition, $condition_string);
-            $orderLogic->page('1,1000');
+            $orderLogic->page([1,1000]);
             $orderLogic->extend(['user']);
             $field = 'order.*';
             $orderLogic->field($field);
@@ -281,8 +281,7 @@ class Group extends Server
      * @method GET
      * @param int $group_id 拼团活动id
      * @param int $goods_id 拼团活动商品id
-     * @author 孙泉
-     * @return state 1可以参团  0不可以参团
+     * @return int $state 1可以参团  0不可以参团
      */
     public function allowJoinGroup()
     {

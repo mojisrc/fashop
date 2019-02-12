@@ -14,7 +14,7 @@
 namespace App\HttpController\Admin;
 
 use App\Utils\Code;
-use ezswoole\Validate;
+use ezswoole\Validator;
 
 /**
  * 满减优惠
@@ -71,7 +71,7 @@ class Fullcut extends Admin
 	public function info()
 	{
 		$get   = $this->get;
-		$error = $this->validate( $get, 'Admin/Fullcut.info' );
+		$error = $this->validator( $get, 'Admin/Fullcut.info' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
@@ -115,7 +115,7 @@ class Fullcut extends Admin
 		// );
 
 		$post  = $this->post;
-		$error = $this->validate( $post, 'Admin/Fullcut.add' );
+		$error = $this->validator( $post, 'Admin/Fullcut.add' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
@@ -152,7 +152,7 @@ class Fullcut extends Admin
 	public function edit()
 	{
 		$post  = $this->post;
-		$error = $this->validate( $post, 'Admin/Fullcut.edit' );
+		$error = $this->validator( $post, 'Admin/Fullcut.edit' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
@@ -188,7 +188,7 @@ class Fullcut extends Admin
 	public function del()
 	{
 		$post  = $this->post;
-		$error = $this->validate( $post, 'Admin/Fullcut.del' );
+		$error = $this->validator( $post, 'Admin/Fullcut.del' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
@@ -243,7 +243,7 @@ class Fullcut extends Admin
 	{
 
 		$get   = $this->get;
-		$error = $this->validate( $get, 'Admin/Fullcut.selectableGoods' );
+		$error = $this->validator( $get, 'Admin/Fullcut.selectableGoods' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
@@ -297,7 +297,7 @@ class Fullcut extends Admin
 	{
 
 		$get   = $this->get;
-		$error = $this->validate( $get, 'Admin/Fullcut.selectedGoods' );
+		$error = $this->validator( $get, 'Admin/Fullcut.selectedGoods' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
@@ -319,7 +319,7 @@ class Fullcut extends Admin
 			//查询活动商品ids
 			$goods_ids = \App\Model\FullcutGoods::getFullcutGoodsColumn( ['fullcut_id' => $get['fullcut_id']], 'goods_id' );
 			if( $goods_ids ){
-				$online_goods_ids = model( 'Goods' )->getGoodsColumn( ['in' => $goods_ids, 'is_on_sale' => 1], 'id' );
+				$online_goods_ids = \App\Model\Goods::getGoodsColumn( ['in' => $goods_ids, 'is_on_sale' => 1], 'id' );
 			}
 
 			//交集 fullcut_goods表和goods表的商品交集
@@ -354,13 +354,13 @@ class Fullcut extends Admin
 	{
 
 		$post  = $this->post;
-		$error = $this->validate( $post, 'Admin/Fullcut.choiceGoods' );
+		$error = $this->validator( $post, 'Admin/Fullcut.choiceGoods' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
 
 			//查询活动
-			$fullcut_data = \App\Model\Fullcut::getFullcutInfo( ['id' => $get['fullcut_id']], '*' );
+			$fullcut_data = \App\Model\Fullcut::getFullcutInfo( ['id' => $post['fullcut_id']], '*' );
 			if( !$fullcut_data ){
 				return $this->send( Code::param_error );
 			}
@@ -403,7 +403,7 @@ class Fullcut extends Admin
 	{
 
 		$get   = $this->get;
-		$error = $this->validate( $get, 'Admin/Fullcut.goodsSkuList' );
+		$error = $this->validator( $get, 'Admin/Fullcut.goodsSkuList' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
@@ -453,7 +453,7 @@ class Fullcut extends Admin
 
 		$post = $this->post;
 
-		$error = $this->validate( $post, 'Admin/Fullcut.editGoodsSku' );
+		$error = $this->validator( $post, 'Admin/Fullcut.editGoodsSku' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 
@@ -552,7 +552,6 @@ class Fullcut extends Admin
 					}
 
 				} else{
-					$result = [];
 					$result = \App\Model\FullcutGoods::insertAllFullcutGoods( $post_goods_sku );
 					if( !$result ){
 						\App\Model\FullcutGoods::rollback();// 回滚事务

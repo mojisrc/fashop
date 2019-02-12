@@ -77,7 +77,7 @@ class Group extends Admin
 	public function info()
 	{
 		$get   = $this->get;
-		$error = $this->validate( $get, 'Admin/Group.info' );
+		$error = $this->validator( $get, 'Admin/Group.info' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
@@ -116,7 +116,7 @@ class Group extends Admin
 	public function add()
 	{
 		$post  = $this->post;
-		$error = $this->validate( $post, 'Admin/Group.add' );
+		$error = $this->validator( $post, 'Admin/Group.add' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
@@ -126,7 +126,7 @@ class Group extends Admin
 			}
 
 			$goods_id   = $post['group_goods'][0]['goods_id'];
-			$goods_info = model( 'Goods' )->getGoodsInfo( ['is_on_sale' => 1, 'id' => $goods_id] );
+			$goods_info = \App\Model\Goods::getGoodsInfo( ['is_on_sale' => 1, 'id' => $goods_id] );
 			if( !$goods_info ){
 				return $this->send( Code::param_error, [], '商品信息错误' );
 			}
@@ -237,7 +237,7 @@ class Group extends Admin
 	public function edit()
 	{
 		$post  = $this->post;
-		$error = $this->validate( $post, 'Admin/Group.edit' );
+		$error = $this->validator( $post, 'Admin/Group.edit' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
@@ -275,7 +275,7 @@ class Group extends Admin
 
 			if( time() >= $group_data['start_time'] && time() <= $group_data['end_time'] ){
 				//进行中
-				$error = $this->validate( $post, 'Admin/Group.editStart' );
+				$error = $this->validator( $post, 'Admin/Group.editStart' );
 				if( $error !== true ){
 					return $this->send( Code::error, [], $error );
 				}
@@ -288,7 +288,7 @@ class Group extends Admin
 				}
 			} elseif( time() < $group_data['start_time'] ){
 				//未开始
-				$error = $this->validate( $post, 'Admin/Group.editUnstart' );
+				$error = $this->validator( $post, 'Admin/Group.editUnstart' );
 				if( $error !== true ){
 					return $this->send( Code::error, [], $error );
 				}
@@ -433,7 +433,7 @@ class Group extends Admin
 	{
 
 		$get   = $this->get;
-		$error = $this->validate( $get, 'Admin/Group.goodsSkuList' );
+		$error = $this->validator( $get, 'Admin/Group.goodsSkuList' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
@@ -475,7 +475,7 @@ class Group extends Admin
 	public function showSet()
 	{
 		$post  = $this->post;
-		$error = $this->validate( $post, 'Admin/Group.info' );
+		$error = $this->validator( $post, 'Admin/Group.info' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
@@ -510,7 +510,7 @@ class Group extends Admin
 	public function del()
 	{
 		$post  = $this->post;
-		$error = $this->validate( $post, 'Admin/Group.del' );
+		$error = $this->validator( $post, 'Admin/Group.del' );
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{

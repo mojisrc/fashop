@@ -1,6 +1,9 @@
 <?php
 
 namespace App\HttpController\Admin;
+
+use App\Utils\Code;
+
 /**
  * 会员级别
  */
@@ -17,16 +20,15 @@ class Userlevel extends Admin
 	 */
 	public function index()
 	{
-		$get              = $this->get;
-		$user_level_model = model( 'UserLevel' );
-		$condition        = [];
+		$get       = $this->get;
+		$condition = [];
 		$get['keywords'] ? $condition['title'] = ['like', '%'.$get['keywords'].'%'] : null;
 
 		//分页
-		$count = $user_level_model->where( $condition )->count();
+		$count = \App\Model\UserLevel::where( $condition )->count();
 		$field = '*';
 		$order = 'id asc';
-		$list  = $user_level_model->getUserLevelList( $condition, $field, $order, $this->getPageLimit() );
+		$list  = \App\Model\UserLevel::getUserLevelList( $condition, $field, $order, $this->getPageLimit() );
 		return $this->send( Code::success, [
 			'total_number' => $count,
 			'list'         => $list,
@@ -44,10 +46,8 @@ class Userlevel extends Admin
 			if( !trim( $post['title'] ) ){
 				return $this->send( Code::param_error, [], '请输入名称' );
 			}
-
-			$user_level_model = model( 'UserLevel' );
-			$data             = $post;
-			$user_level_id    = $user_level_model->addUserLevel( $data );
+			$data          = $post;
+			$user_level_id = \App\Model\UserLevel::addUserLevel( $data );
 			if( $user_level_id ){
 				//记录行为
 				// action_log('update_user_level', 'user_level', $user_level_id, $this->user['id']);
@@ -74,9 +74,8 @@ class Userlevel extends Admin
 				return $this->send( Code::param_error );
 			}
 
-			$user_level_model = model( 'UserLevel' );
-			$data             = $post;
-			$user_level_id    = $user_level_model->editUserLevel( $data, $condition );
+			$data          = $post;
+			$user_level_id = \App\Model\UserLevel::editUserLevel( $data, $condition );
 			if( $user_level_id ){
 				//记录行为
 				// action_log('update_user_level', 'user_level', $user_level_id, $this->user['id']);
@@ -98,11 +97,7 @@ class Userlevel extends Admin
 		if( !$condition ){
 			return $this->send( Code::param_error );
 		}
-
-		$user_level_model = model( 'UserLevel' );
-		$row              = $user_level_model->getUserLevelInfo( $condition, $field = '*' );
-
-		$result         = [];
+		$row            = \App\Model\UserLevel::getUserLevelInfo( $condition, $field = '*' );
 		$result['info'] = $row;
 		return $this->send( Code::success, $result );
 	}
@@ -115,9 +110,9 @@ class Userlevel extends Admin
 	{
 		$post = $this->post;
 		$ids  = $post['ids'];
-		$res  = db( 'UserLevel' )->where( [
-				'id' => is_array( $ids ) ? ['in', implode( ',', $ids )] : $ids,
-			] )->delete();
+		$res  = \App\Model\UserLevel::where( [
+			'id' => is_array( $ids ) ? ['in', implode( ',', $ids )] : $ids,
+		] )->delete();
 		if( $res ){
 			return $this->send( Code::success );
 		} else{

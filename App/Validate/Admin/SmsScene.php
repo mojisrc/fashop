@@ -14,7 +14,7 @@
 namespace App\Validate\Admin;
 
 
-use ezswoole\Validate;
+use ezswoole\Validator;
 
 class SmsScene extends Validate
 {

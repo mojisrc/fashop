@@ -14,7 +14,7 @@
 namespace App\Logic\Server;
 
 use App\Logic\User as UserLogic;
-use ezswoole\Validate;
+use ezswoole\Validator;
 use ezswoole\Db;
 use App\Utils\Code;
 use App\Utils\Exception;
@@ -150,7 +150,6 @@ class Untie
      * @method GET
      * @return array|null
      * @throws \App\Utils\Exception
-     * @author 韩文博
      */
     public function untie() : ? array
     {
@@ -171,7 +170,6 @@ class Untie
     /**
      * @return mixed
      * @throws \App\Utils\Exception
-     * @author 韩文博
      */
     private function phone()
     {
@@ -221,7 +219,6 @@ class Untie
 
     /**
      * @throws \App\Utils\Exception
-     * @author 韩文博
      */
     private function wechat()
     {

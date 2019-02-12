@@ -31,6 +31,10 @@ class GoodsSpecValue extends Model
 		return $this->addMulti( $data );
 	}
 
+	public function delGoodsSpecValue($condition){
+		return $this->where($condition)->del();
+	}
+
 	/**
 	 * @param array  $condition
 	 * @param string $field

@@ -22,7 +22,7 @@ class Goodscategory extends Admin
     {
         $condition = [];
         $order = 'sort asc';
-        $list  = \App\Model\GoodsCategory::getGoodsCategoryList($condition, '*', $order, '1,1000');
+        $list  = \App\Model\GoodsCategory::getGoodsCategoryList($condition, '*', $order, [1,1000]);
         return $this->send(Code::success, [
             'list' => isset($this->get['tree']) ? \App\Utils\Tree::listToTree($list, 'id', 'pid', '_child', 0) : $list,
         ]);
@@ -95,7 +95,6 @@ class Goodscategory extends Admin
      * 商品分类详情
      * @method GET
      * @param  int $id ID
-     * @author 韩文博
      */
     public function info()
     {

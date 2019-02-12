@@ -315,7 +315,7 @@ class Order extends Server
 				$list                  = \App\Model\Order::getOrderGoodsList( [
 					'order_id' => $this->get['id'],
 					'user_id'  => ['in', \App\Model\User::getUserAllIds( $user['id'] )],
-				], '*', 'id asc', '1,1000' );
+				], '*', 'id asc', [1,1000] );
 				$this->send( Code::success, ['list' => $list] );
 			}
 		}
@@ -350,7 +350,7 @@ class Order extends Server
 	 * @method GET
 	 * @param int $id 订单id
 	 * @author 孙泉
-	 * @return group_identity 1 团长 2 团员
+	 * @return int $group_identity 1 团长 2 团员
 	 */
 	public function groupInfo()
 	{

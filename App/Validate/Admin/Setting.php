@@ -13,7 +13,7 @@
 
 namespace App\Validate\Admin;
 
-use ezswoole\Validate;
+use ezswoole\Validator;
 
 class Setting extends Validate
 {

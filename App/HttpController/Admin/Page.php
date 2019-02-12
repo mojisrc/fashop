@@ -17,7 +17,7 @@ namespace App\HttpController\Admin;
 use App\Utils\Code;
 use Hashids\Hashids;
 use ezswoole\Db;
-use ezswoole\Validate;
+use ezswoole\Validator;
 use App\Logic\Page\BodyFormat as PageBodyFormat;
 use App\Logic\Page\PageGoods as PageGoodsLogic;
 
@@ -54,7 +54,7 @@ class Page extends Admin
 
 			if( isset( $this->get['mobile'] ) ){
 				$shop     = Db::name( 'Shop' )->where( ['id' => 1] )->field( 'host,salt' )->find();
-				$validate = new Validate();
+				$validate = new Validator();
 				if( $validate->is( $shop['host'], 'url' ) === true ){
 					$host = rtrim( $shop['host'], '/' );
 				} else{

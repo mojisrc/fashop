@@ -14,7 +14,7 @@
 namespace App\Logic\Server;
 
 use App\Logic\User as UserLogic;
-use ezswoole\Validate;
+use ezswoole\Validator;
 use ezswoole\Db;
 use App\Utils\Code;
 use App\Utils\Exception;
@@ -149,7 +149,6 @@ class Binding
      * @method GET
      * @return array|null
      * @throws \App\Utils\Exception
-     * @author 韩文博
      */
     public function binding() : ? array
     {
@@ -170,7 +169,6 @@ class Binding
     /**
      * @return mixed
      * @throws \App\Utils\Exception
-     * @author 韩文博
      */
     private function phone()
     {
@@ -241,7 +239,6 @@ class Binding
 
     /**
      * @throws \App\Utils\Exception
-     * @author 韩文博
      */
     private function wechat()
     {
@@ -337,7 +334,6 @@ class Binding
      * @param user_id 附属用户id
      * @param master_user_id 主用户id
      * @throws \App\Utils\Exception
-     * @author 韩文博
      */
     private function assetsMerge($user_id, $master_user_id)
     {

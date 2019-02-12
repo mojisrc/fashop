@@ -39,7 +39,7 @@ class OrderRefundSearch
     private $field = '*';
 
     /**
-     * @var string
+     * @var array
      */
     private $page;
     /**
@@ -366,7 +366,7 @@ class OrderRefundSearch
     }
 
 
-    public function page(string $page): OrderRefundSearch
+    public function page(array $page): OrderRefundSearch
     {
         $this->page = $page;
         return $this;

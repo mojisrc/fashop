@@ -73,7 +73,7 @@ class Auth extends Admin
 			if( !empty( $user_ids ) ){
 				$condition['id'] = ['in', $user_ids];
 				$userModel       = model( 'User' );
-				$list            = $userModel->getUserList( $condition, 'id,nickname,phone,name,avatar,email,sex', 'id asc','1,1000');
+				$list            = $userModel->getUserList( $condition, 'id,nickname,phone,name,avatar,email,sex', 'id asc',[1,1000]);
 			}
 			return $this->send( Code::success, [
 				'list'         => $list,

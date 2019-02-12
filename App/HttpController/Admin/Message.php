@@ -57,11 +57,11 @@ class Message extends Admin {
 			}
 		}
 
-		$count      = \App\Model\Page::where($condition)->count();
-		$page_class = new Page($count, 10);
-		$page       = $this->getPageLimit()
+		$count      = \App\Model\Message::where($condition)->count();
+		$page_class = new Message($count, 10);
+		$page       = $this->getMessageLimit()
 ;
-		$list       = \App\Model\Page::getMessageList($condition, '*', 'id desc', $page);
+		$list       = \App\Model\Message::getMessageList($condition, '*', 'id desc', $page);
 		$this->assign('type_id', $type[$state_type]);
 		$this->assign('page', $page_class->show());
 		$this->assign('list', $list);
@@ -75,7 +75,7 @@ class Message extends Admin {
 	public function add() {
 		if ($this->post) {
 			$post            = $this->post;
-			$validate_result = $this->validate($post, 'Admin/Message.add');
+			$validate_result = $this->validator($post, 'Admin/Message.add');
 			if ($validate_result !== true) {
 				return $this->send($validate_result);
 			}
@@ -148,7 +148,7 @@ class Message extends Admin {
 	 * @datetime 2017-06-14T12:38:04+0800
 	 */
 	public function messageTypeIndex() {
-		$list = \App\Model\MessageType::getMessageTypeList([], '*', 'id desc', '1,1000');
+		$list = \App\Model\MessageType::getMessageTypeList([], '*', 'id desc', [1,1000]);
 		$this->assign('list', $list);
 		return $this->send();
 	}
@@ -202,8 +202,8 @@ class Message extends Admin {
 			// 文章
 			$model              = model('Info');
 			$condition['title'] = ['like', '%' . $get['keywords'] . '%'];
-			$count         = \App\Model\Page::where($condition)->count();
-			$list               = \App\Model\Page::getInfoList($condition, 'id,title,`desc` as description', 'id desc', $this->getPageLimit());
+			$count         = \App\Model\Message::where($condition)->count();
+			$list               = \App\Model\Message::getInfoList($condition, 'id,title,`desc` as description', 'id desc', $this->getMessageLimit());
 
 			break;
 		default:

@@ -15,7 +15,7 @@ namespace App\Logic\Server;
 use App\Logic\User as UserLogic;
 use App\Utils\Code;
 use ezswoole\utils\RandomKey;
-use ezswoole\Validate;
+use ezswoole\Validator;
 
 class Register
 {
@@ -142,7 +142,6 @@ class Register
      * @method GET
      * @return array|null
      * @throws \App\Utils\Exception
-     * @author 韩文博
      */
     public function register(): ? array
     {
@@ -167,7 +166,6 @@ class Register
      * TODO wechat_openid没有处理
      * @return mixed
      * @throws \App\Utils\Exception
-     * @author 韩文博
      */
     private function byPassword()
     {
@@ -230,7 +228,6 @@ class Register
     /**
      * 公众号和开放平台共用 根据$register_type区分开来
      * @throws \App\Utils\Exception
-     * @author 韩文博
      */
     private function byWechatOpenid()
     {
@@ -338,7 +335,7 @@ class Register
 
     private function getAccountRegisterType($username): string
     {
-        $validate = new Validate();
+        $validate = new Validator();
         if ($validate->is($username, 'phone') === true) {
             return 'phone';
         }
@@ -349,7 +346,6 @@ class Register
 
     /**
      * @throws \App\Utils\Exception
-     * @author 韩文博
      */
     private function byWechatMini()
     {
@@ -447,7 +443,6 @@ class Register
     /**
      * 插入用户相关的信息
      * @throws \App\Utils\Exception
-     * @author 韩文博
      */
     private function insertUserInfo($user_id, $profile_data = [], $assets_data = [], $open_data = [])
     {

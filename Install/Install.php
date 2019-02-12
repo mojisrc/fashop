@@ -13,8 +13,8 @@
 
 namespace Install;
 
-use ezswoole\Validate;
-use EasySwoole\Core\Utility\File;
+use ezswoole\Validator;
+use EasySwoole\Utility\File;
 use ezswoole\utils\RandomKey;
 use ezswoole\Log;
 
@@ -247,7 +247,7 @@ class Install
 	 */
 	public function checkAdminAccount( string $username, string $password, string $repassword )
 	{
-		$validate = new Validate();
+		$validate = new Validator();
 		if( $validate->is( $username, 'alphaDash' ) !== true ){
 			return '账号只能是字母、数字和下划线_及破折号-';
 		}

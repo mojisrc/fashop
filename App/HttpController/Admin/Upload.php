@@ -15,7 +15,7 @@ namespace App\HttpController\Admin;
 
 use ezswoole\utils\image\Image;
 use App\Utils\Code;
-use EasySwoole\Core\Utility\File;
+use EasySwoole\Utility\File;
 
 class Upload extends Admin
 {
@@ -63,7 +63,7 @@ class Upload extends Admin
 					$timeRand    = time().rand( 100, 999 );
 					$cert_path   = "Upload/cert/";
 					$upload_path = ROOT_PATH.$cert_path;
-					File::createDir( $upload_path );
+					File::createDirectory( $upload_path );
 					$targetPathName = $upload_path.$timeRand."-".$cert['name'];
 					$moveResult     = File::copyFile( $cert['tmp_name'], $targetPathName );
 					if( $moveResult !== true ){

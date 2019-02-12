@@ -182,7 +182,7 @@ class Goods extends Admin
     {
 
         $get   = $this->get;
-        $error = $this->validate($get, 'Admin/Goods.skuList');
+        $error = $this->validator($get, 'Admin/Goods.skuList');
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {

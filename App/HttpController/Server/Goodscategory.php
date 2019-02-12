@@ -17,8 +17,7 @@ class Goodscategory extends Server
 	public function list()
 	{
 		$condition            = [];
-		$order                = 'sort asc';
-		$list                 = \App\Model\GoodsCategory::getGoodsCategoryList( $condition, 'id,name,pid,icon,banner', $order, '1,1000' );
+		$list                 = \App\Model\GoodsCategory::getGoodsCategoryList( $condition, 'id,name,pid,icon,banner', 'sort asc', [1,1000] );
 		$list                 = \App\Utils\Tree::listToTree( $list, 'id', 'pid', '_child', 0 );
 		$this->send( Code::success, [
 			'list' => $list,

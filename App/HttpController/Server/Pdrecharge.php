@@ -35,7 +35,7 @@ class Pdrecharge extends Server {
 	/**
 	 * 充值添加
 	 * @method POST
-	 * @param $amount 充值金额
+	 * @param int $amount 充值金额
 	 */
 	public function pdrAdd() {
 		if( $this->verifyResourceRequest() !== true ){

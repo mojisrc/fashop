@@ -15,7 +15,7 @@ namespace App\HttpController\Admin;
 
 use App\Utils\Code;
 use App\Logic\Wechat\Factory as WechatFactory;
-use EasySwoole\Core\Utility\File;
+use EasySwoole\Utility\File;
 
 /**
  * 微信管理
@@ -446,7 +446,7 @@ class Wechat extends Admin
 		} else{
 			$media          = $this->request->file( 'media' );
 			$timeRand       = time().rand( 100, 999 );
-			File::createDir(TEMP_PATH."Wechat/Material");
+			File::createDirectory(TEMP_PATH."Wechat/Material");
 			$targetPathName = TEMP_PATH."Wechat/Material/".$timeRand.$media['name'];
 			$moveResult     = File::copyFile( $media['tmp_name'], $targetPathName );
 			if( $moveResult !== true ){
@@ -477,7 +477,7 @@ class Wechat extends Admin
 		} else{
 			$media          = $this->request->file( 'media' );
 			$timeRand       = time().rand( 100, 999 );
-			File::createDir(TEMP_PATH."Wechat/Material");
+			File::createDirectory(TEMP_PATH."Wechat/Material");
 			$targetPathName = TEMP_PATH."Wechat/Material/".$timeRand.$media['name'];
 			$moveResult     = File::copyFile( $media['tmp_name'], $targetPathName );
 			if( $moveResult !== true ){
@@ -515,7 +515,7 @@ class Wechat extends Admin
 		} else{
 			$media          = $data['media'];
 			$timeRand       = time().rand( 100, 999 );
-			File::createDir(TEMP_PATH."Wechat/Material");
+			File::createDirectory(TEMP_PATH."Wechat/Material");
 			$targetPathName = TEMP_PATH."Wechat/Material/".$timeRand.$media['name'];
 			$moveResult     = File::copyFile( $media['tmp_name'], $targetPathName );
 			if( $moveResult !== true ){
@@ -547,7 +547,7 @@ class Wechat extends Admin
 		} else{
 			$media          = $this->request->file( 'media' );
 			$timeRand       = time().rand( 100, 999 );
-			File::createDir(TEMP_PATH."Wechat/Material");
+			File::createDirectory(TEMP_PATH."Wechat/Material");
 			$targetPathName = TEMP_PATH."Wechat/Material/".$timeRand.$media['name'];
 			$moveResult     = File::copyFile( $media['tmp_name'], $targetPathName );
 			if( $moveResult !== true ){
@@ -618,7 +618,7 @@ class Wechat extends Admin
 		} else{
 			$media          = $this->request->file( 'media' );
 			$timeRand       = time().rand( 100, 999 );
-			File::createDir(TEMP_PATH."Wechat/Material");
+			File::createDirectory(TEMP_PATH."Wechat/Material");
 			$targetPathName = TEMP_PATH."Wechat/Material/".$timeRand.$media['name'];
 			$moveResult     = File::copyFile( $media['tmp_name'], $targetPathName );
 			if( $moveResult !== true ){

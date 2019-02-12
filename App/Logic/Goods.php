@@ -625,7 +625,6 @@ class Goods
 
     /**
      * 批量删除
-     * @author 韩文博
      * @param array $ids 商品id集合
      */
     public function del($ids): bool
@@ -647,9 +646,7 @@ class Goods
 
     /**
      * 下架
-     * @author 韩文博
      * @param array $ids 商品id集合
-     * @author 韩文博
      */
     public function offSale(array $ids)
     {
@@ -665,7 +662,6 @@ class Goods
      * 上架
      * @param array $ids
      * @return bool
-     * @author 韩文博
      */
     public function onSale(array $ids)
     {
@@ -681,7 +677,6 @@ class Goods
      * 筛选商品是否为拼团商品 是则过滤字段
      * @param array $skus
      * @return bool
-     * @author 韩文博
      */
     public function filter()
     {

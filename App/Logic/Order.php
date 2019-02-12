@@ -100,7 +100,7 @@ class Order extends Logic
 	 */
 	private $createTime;
 	/**
-	 * @var string
+	 * @var array
 	 */
 	private $page;
 	/**
@@ -328,7 +328,7 @@ class Order extends Logic
 		return $this;
 	}
 
-	public function page( string $page ) : Order
+	public function page( array $page ) : Order
 	{
 		$this->page = $page;
 		return $this;

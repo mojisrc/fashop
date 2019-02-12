@@ -59,7 +59,6 @@ class User extends Admin
 		if( $this->validator( $this->post, 'Admin/User.add' ) !== true ){
 			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
-			$user_model            = model( "User" );
 			$data['name']          = $this->post['name'];
 			$data['username']      = $this->post['phone'];
 			$data['password']      = \App\Logic\User::encryptPassword( $this->post['password'] );
@@ -121,7 +120,7 @@ class User extends Admin
 			$condition            = [];
 			$condition['user.id'] = $this->get['id'];
 			$field                = 'user.id,username,phone,email,state,create_time,user_profile.name,nickname,avatar,sex,birthday,qq';
-			$user                 = model( 'UserProfile' )->getUserProfileMoreInfo($condition, '', $field);
+			$user                 = \App\Model\UserProfile::getUserProfileMoreInfo($condition, '', $field);
 			$this->send( Code::success, ['info' => $user] );
 		}
 	}
@@ -211,7 +210,6 @@ class User extends Admin
 		if( $this->validator( $this->get, 'Admin/User.info' ) !== true ){
 			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
-			$address_model        = model( 'Address' );
 			$condition['user_id'] = ['in', \App\Model\User::getUserAllIds($this->get['id'])];
 			$count                = \App\Model\Address::where( $condition )->count();
 			$list                 = \App\Model\Address::getAddressList( $condition, '*', 'id desc', $this->getPageLimit() );

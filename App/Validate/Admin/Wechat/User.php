@@ -12,7 +12,7 @@
  */
 
 namespace App\Validate\Admin\Wechat;
-use ezswoole\Validate;
+use ezswoole\Validator;
 
 class User extends Validate
 {

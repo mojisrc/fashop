@@ -14,7 +14,6 @@
 namespace App\HttpController\Server;
 
 use App\Utils\Code;
-use EasySwoole\Core\Swoole\Task\TaskManager;
 use Overtrue\EasySms\EasySms;
 
 class Verifycode extends Server

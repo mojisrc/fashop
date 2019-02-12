@@ -1,6 +1,7 @@
 <?php
 
 namespace App\HttpController\Admin;
+use App\Utils\Code;
 /**
  * 退款\退款退货原因控制器
  */
@@ -9,7 +10,7 @@ class Orderrefundreason extends Admin
 	/**
 	 * 退款\退款退货原因列表
 	 * @method GET
-	 * @param type  1未收到货 2已收到货
+	 * @param int type  1未收到货 2已收到货
 	 * @param int page 页数
 	 * @param int rows 条数
 	 */

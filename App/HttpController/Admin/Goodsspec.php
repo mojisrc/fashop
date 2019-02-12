@@ -29,7 +29,7 @@ class Goodsspec extends Admin
 	 */
 	public function list()
 	{
-		$_list      = \App\Model\GoodsSpec::getGoodsSpecList( [], 'id,name', 'id asc', '1,1000' );
+		$_list      = \App\Model\GoodsSpec::getGoodsSpecList( [], 'id,name', 'id asc', [1,1000] );
 		$value_list = \App\Model\GoodsSpecValue::getGoodsSpecValueList( [], 'id,name,spec_id', 'spec_id asc', '1,100000' );
 		foreach( $_list as $key => $item ){
 			$list[$item['id']]           = $item;

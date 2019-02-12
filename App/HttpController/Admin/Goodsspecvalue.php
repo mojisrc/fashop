@@ -74,8 +74,7 @@ class Goodsspecvalue extends Admin
 		} else{
 			$condition       = [];
 			$condition['id'] = $this->post['id'];
-			$goods_spec_value_model = model( 'GoodsSpecValue' );
-			$row                    = $goods_spec_value_model->getGoodsSpecValueInfo( $condition, '*' );
+			$row                    = \App\Model\GoodsSpecValue::getGoodsSpecValueInfo( $condition, '*' );
 			if( !$row ){
 				$this->send( Code::param_error );
 			} else{
@@ -84,7 +83,7 @@ class Goodsspecvalue extends Admin
 				//     return $this->send( Code::param_error, [], '系统数据，不可删除' );
 				// }
 
-				$result = $goods_spec_value_model->softDelGoodsSpecValue( $condition );
+				$result = \App\Model\GoodsSpecValue::delGoodsSpecValue( $condition );
 				if( !$result ){
 					$this->send( Code::error );
 				} else{

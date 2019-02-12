@@ -1,6 +1,6 @@
 <?php
 namespace App\Validate;
-use ezswoole\Validate;
+use ezswoole\Validator;
 
 class Node extends Validate {
 	//编辑的时候unique规则会自动排除主键的，再复杂的情况就自己在验证器里面添加一个方法进行验证

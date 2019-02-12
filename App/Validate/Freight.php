@@ -2,7 +2,7 @@
 
 namespace App\Validate;
 
-use ezswoole\Validate;
+use ezswoole\Validator;
 
 
 /**

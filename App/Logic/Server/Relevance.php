@@ -137,7 +137,6 @@ class Relevance
      * @method GET
      * @return array|null
      * @throws \App\Utils\Exception
-     * @author 韩文博
      */
     public function untie() : ? array
     {
@@ -306,7 +305,7 @@ class Relevance
 
 	private function getAccountRegisterType( $username ) : string
 	{
-		$validate = new Validate();
+		$validate = new Validator();
 		if( $validate->is( $username, 'phone' ) === true ){
 			return 'phone';
 		}
@@ -394,7 +393,6 @@ class Relevance
     /**
 	 * 插入用户相关的信息
      * @throws \App\Utils\Exception
-     * @author 韩文博
      */
     private function insertUserInfo($user_id, $profile_data = [], $assets_data = [], $open_data = [])
     {

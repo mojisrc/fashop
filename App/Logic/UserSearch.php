@@ -51,7 +51,7 @@ class UserSearch
 	 */
 	private $condition;
 	/**
-	 * @var string
+	 * @var array
 	 */
 	private $page;
 	/**
@@ -300,7 +300,7 @@ class UserSearch
 		$this->lastCostTime = $lastCostTime;
 	}
 
-	public function page(string $page) : void
+	public function page(array $page) : void
     {
         $this->page = $page;
     }

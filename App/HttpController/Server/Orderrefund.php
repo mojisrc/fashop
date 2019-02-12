@@ -29,7 +29,7 @@ class Orderrefund extends Server
 		} else{
 			$list = \App\Model\OrderRefundReason::getOrderRefundReasonList( [
 				'type' => $this->get['refund_type'],
-			], '*', 'id asc', '1,1000' );
+			], '*', 'id asc', [1,1000] );
 			$this->send( Code::success, [
 				'list' => $list,
 			] );

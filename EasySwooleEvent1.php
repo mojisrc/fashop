@@ -11,7 +11,7 @@ use EasySwoole\Core\Swoole\ServerManager;
 use EasySwoole\Core\AbstractInterface\EventInterface;
 use EasySwoole\Core\Swoole\EventHelper;
 use \ezswoole\App;
-use EasySwoole\Core\Utility\File;
+use EasySwoole\Utility\File;
 
 class EasySwooleEvent implements EventInterface
 {

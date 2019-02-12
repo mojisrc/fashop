@@ -19,15 +19,22 @@ class Setting extends Model
 {
 	protected $jsonFields = ['config'];
 
+	public function addSetting( array $data )
+	{
+		return $this->add( $data );
+	}
+
 	public function getSettingInfo( $condition = [], $field = '*' )
 	{
 		$info = $this->where( $condition )->field( $field )->find();
 		return $info;
 	}
+
 	public function editSetting( $condition = [], $data = [] )
 	{
 		return $this->where( $condition )->edit( $data );
 	}
+
 	public function delSetting( array $condition = [] )
 	{
 		return $this->where( $condition )->del();

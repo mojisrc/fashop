@@ -349,7 +349,7 @@ class Order extends Model
 	 * @param string $group
 	 * @param string $key
 	 */
-	public function getOrderGoodsList( $condition = [], $fields = '*', $order = 'id desc', $page = '1,1000', $group = null, $key = null )
+	public function getOrderGoodsList( $condition = [], $fields = '*', $order = 'id desc', $page = [1,1000], $group = null, $key = null )
 	{
 		$list = \App\Model\OrderGoods::field( $fields )->where( $condition )->order( $order )->group( $group )->page( $page )->select()->toArray();
 		return $this->array_under_reset( $list, $key );
