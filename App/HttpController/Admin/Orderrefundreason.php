@@ -15,19 +15,17 @@ class Orderrefundreason extends Admin
 	 */
 	public function index()
 	{
-		$order_refund_reason_model = model( 'OrderRefundReason' );
-		$table_prefix              = config( 'database.prefix' );
-		$condition                 = [];
-		$get                       = $this->get;
+		$condition = [];
+		$get       = $this->get;
 
 		if( $get['type'] != '' )
 			$condition['type'] = $get['type']; //1未收到货 1已收到货
 
 		//分页
-		$count = $order_refund_reason_model->where( $condition )->count();
+		$count = \App\Model\OrderRefundReason::where( $condition )->count();
 		$field = '*';
 		$order = 'id desc';
-		$list  = $order_refund_reason_model->getOrderRefundReasonList( $condition, $field, $order, $this->getPageLimit() );
+		$list  = \App\Model\OrderRefundReason::getOrderRefundReasonList( $condition, $field, $order, $this->getPageLimit() );
 
 		$result                 = [];
 		$result['total_number'] = $count;
@@ -52,9 +50,8 @@ class Orderrefundreason extends Admin
 				return $this->send( Code::error );
 
 			}
-			$order_refund_reason_model = model( 'OrderRefundReason' );
-			$insert                    = $post;
-			$id                        = $order_refund_reason_model->insertOrderRefundReason( $insert );
+			$insert = $post;
+			$id     = \App\Model\OrderRefundReason::insertOrderRefundReason( $insert );
 			if( !$id ){
 				return $this->send( Code::error );
 
@@ -77,11 +74,10 @@ class Orderrefundreason extends Admin
 		if( !$get['id'] ){
 			return $this->send( Code::error );
 		}
-		$condition                 = [];
-		$condition['id']           = $get['id'];
-		$field                     = '*';
-		$order_refund_reason_model = model( 'OrderRefundReason' );
-		$row                       = $order_refund_reason_model->getOrderRefundReasonInfo( $condition, $field );
+		$condition       = [];
+		$condition['id'] = $get['id'];
+		$field           = '*';
+		$row             = \App\Model\OrderRefundReason::getOrderRefundReasonInfo( $condition, $field );
 
 
 		$result         = [];
@@ -111,12 +107,11 @@ class Orderrefundreason extends Admin
 			if( !$post['type'] ){
 				return $this->send( Code::error );
 			}
-			$order_refund_reason_model = model( 'OrderRefundReason' );
-			$condition['id']           = $post['id'];
-			$update                    = $post;
+			$condition['id'] = $post['id'];
+			$update          = $post;
 			unset( $update['id'] );
 
-			$result = $order_refund_reason_model->editOrderRefundReason( $update, $condition );
+			$result = \App\Model\OrderRefundReason::editOrderRefundReason( $update, $condition );
 			if( !$result ){
 				return $this->send( Code::error );
 
@@ -139,16 +134,14 @@ class Orderrefundreason extends Admin
 			return $this->send( Code::param_error );
 		}
 
-		$order_refund_reason_model = model( 'OrderRefundReason' );
-		$condition                 = [];
-		$condition['id']           = $post['id'];
+		$condition       = [];
+		$condition['id'] = $post['id'];
 
-		$result = $order_refund_reason_model->delOrderRefundReason( $condition );
+		$result = \App\Model\OrderRefundReason::delOrderRefundReason( $condition );
 		if( !$result ){
 			return $this->send( Code::error );
 
 		}
-
 		//记录行为
 		action_log( 'update_order_refund_reason', 'order_refund_reason', $post['id'], $this->user['id'] );
 		return $this->send( Code::success );

@@ -49,7 +49,7 @@ class Version extends Server {
 		$platform = strtolower($get['platform']);
 		$model    = model('Version');
 
-		$find = $model->getVersionInfo([
+		$find = \App\Model\Page::getVersionInfo([
 			'platform' => $platform,
 			'version'  => $get['version'],
 		]);

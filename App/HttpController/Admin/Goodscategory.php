@@ -20,15 +20,9 @@ class Goodscategory extends Admin
      */
     public function list()
     {
-        $db_prefix            = config('database.prefix');
-        $table_goods_common   = $db_prefix . 'goods';
-        $table_goods_category = $db_prefix . 'goods_category';
-        $goods_category_model = model('GoodsCategory');
-
         $condition = [];
-//		$field     = "*,(SELECT count(*) FROM $table_goods_common WHERE category_ids LIKE CONCAT('%\"',$table_goods_category.id,'\"%')) as goods_number";
         $order = 'sort asc';
-        $list  = $goods_category_model->getGoodsCategoryList($condition, '*', $order, '1,1000');
+        $list  = \App\Model\GoodsCategory::getGoodsCategoryList($condition, '*', $order, '1,1000');
         return $this->send(Code::success, [
             'list' => isset($this->get['tree']) ? \App\Utils\Tree::listToTree($list, 'id', 'pid', '_child', 0) : $list,
         ]);
@@ -47,16 +41,15 @@ class Goodscategory extends Admin
         if ($this->validate($this->post, 'Admin/GoodsCategory.add') !== true) {
             return $this->send(Code::param_error, [], $this->getValidate()->getError());
         } else {
-            $goods_category_model = model('GoodsCategory');
             $pid                  = $this->post['pid'];
             $prefix               = config('database.prefix');
             $table_goods_category = $prefix . "goods_category";
-            $grandpa_info         = $goods_category_model->query("SELECT pid FROM $table_goods_category WHERE id=(SELECT pid FROM $table_goods_category WHERE id=$pid AND delete_time IS NULL) AND delete_time IS NULL");
+            $grandpa_info         = \App\Model\GoodsCategory::query("SELECT pid FROM $table_goods_category WHERE id=(SELECT pid FROM $table_goods_category WHERE id=$pid AND delete_time IS NULL) AND delete_time IS NULL");
             if ($grandpa_info && $grandpa_info[0]['pid'] > 0) {
                 return $this->send(Code::error, [], '至多三级分类');
             }
 
-            $result = $goods_category_model->addGoodsCategory($this->post);
+            $result = \App\Model\GoodsCategory::addGoodsCategory($this->post);
             if ($result) {
                 return $this->send(Code::success);
             } else {
@@ -85,12 +78,11 @@ class Goodscategory extends Admin
             if (isset($this->post['icon'])) {
                 $data['icon'] = $this->post['icon'];
             }
-            $goods_category_model = model('GoodsCategory');
             $id                   = $this->post['id'];
             $prefix               = config('database.prefix');
             $table_goods_category = $prefix . "goods_category";
 
-            $grandpa_info = $goods_category_model->query("SELECT pid FROM $table_goods_category WHERE id=(SELECT pid FROM $table_goods_category WHERE id=(SELECT pid FROM $table_goods_category WHERE id=$id AND delete_time IS NULL) AND delete_time IS NULL) AND delete_time IS NULL");
+            $grandpa_info = \App\Model\GoodsCategory::query("SELECT pid FROM $table_goods_category WHERE id=(SELECT pid FROM $table_goods_category WHERE id=(SELECT pid FROM $table_goods_category WHERE id=$id AND delete_time IS NULL) AND delete_time IS NULL) AND delete_time IS NULL");
             if ($grandpa_info && $grandpa_info[0]['pid'] > 0) {
                 return $this->send(Code::error, [], '至多三级分类');
             }
@@ -110,8 +102,7 @@ class Goodscategory extends Admin
         if ($this->validate($this->get, 'Admin/GoodsCategory.info') !== true) {
             $this->send(Code::param_error, [], $this->getValidate()->getError());
         } else {
-            $goods_category_model = model('GoodsCategory');
-            $info                 = $goods_category_model->getGoodsCategoryInfo(['id' => $this->get['id']], '*');
+            $info                 = \App\Model\GoodsCategory::getGoodsCategoryInfo(['id' => $this->get['id']], '*');
             if (!$info) {
                 $this->send(Code::param_error, []);
             } else {
@@ -134,17 +125,15 @@ class Goodscategory extends Admin
 
             $condition       = [];
             $condition['id'] = $this->post['id'];
-
-            $goods_category_model = model('GoodsCategory');
-            $row                  = $goods_category_model->getGoodsCategoryInfo($condition, '*');
+            $row                  = \App\Model\GoodsCategory::getGoodsCategoryInfo($condition, '*');
             if (!$row) {
                 return $this->send(Code::param_error, []);
             } else {
-                $sub_info = $goods_category_model->getGoodsCategoryInfo(['pid' => $row['id']], '*');
+                $sub_info = \App\Model\GoodsCategory::getGoodsCategoryInfo(['pid' => $row['id']], '*');
                 if ($sub_info) {
                     return $this->send(Code::param_error, [], '存在子级分类，不可删除');
                 }
-                $result = $goods_category_model->softDelGoodsCategory($condition);
+                $result = \App\Model\GoodsCategory::softDelGoodsCategory($condition);
                 if (!$result) {
                     return $this->send(Code::error);
                 } else {

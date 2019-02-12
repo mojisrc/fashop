@@ -47,10 +47,10 @@ class Verifycode extends Server
 					'bindPhone',
 				] )
 			){
-				$sms_scene = model( 'SmsScene' )->getSmsSceneInfo( ['id' => 1] );
+				$sms_scene = \App\Model\SmsScene::getSmsSceneInfo( ['id' => 1] );
 				// 目前只有阿里云
 				if( $sms_scene['provider_type'] == 'aliyun' ){
-					$sms_provider = model( 'SmsProvider' )->getSmsProviderInfo( ['status' => 1] );
+					$sms_provider = \App\Model\SmsProvider::getSmsProviderInfo( ['status' => 1] );
 					if( $sms_provider ){
 						$post = $this->post;
 //						TaskManager::async( function() use ( $post, $sms_provider, $sms_scene ){
@@ -88,7 +88,7 @@ class Verifycode extends Server
 									],
 								], ['aliyun'] );
 								$now_time = time();
-								model( 'VerifyCode' )->addVerifyCode( [
+								\App\Model\VerifyCode::addVerifyCode( [
 									'receiver'     => $post['receiver'],
 									'code'         => $code,
 									'channel_type' => $post['channel_type'],

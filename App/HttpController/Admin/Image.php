@@ -46,10 +46,9 @@ class Image extends Admin
 				[$this->get['create_time']],
 			];
 		}
-		$model = model( 'Image' );
-		$list  = $model->getImageList( $condition, '*', 'create_time desc', $this->getPageLimit() );
+		$list = \App\Model\Image::getImageList( $condition, '*', 'create_time desc', $this->getPageLimit() );
 		return $this->send( Code::success, [
-			'total_number' => $model->where( $condition )->count(),
+			'total_number' => \App\Model\Page::where( $condition )->count(),
 			'list'         => $list ? $list : [],
 		] );
 	}
@@ -95,7 +94,7 @@ class Image extends Admin
 						if( isset( $this->post['name'] ) ){
 							$data['name'] = $this->post['name'];
 						}
-						model( 'Image' )->addImage( $data );
+						\App\Model\Image::addImage( $data );
 					}
 					foreach( $images as $key => $image ){
 						$images[$key]['path'] = $host.$image['path'];
@@ -119,7 +118,7 @@ class Image extends Admin
 		if( $this->validate( $this->post, 'Admin/Image.del' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidate()->getError() );
 		} else{
-			model( 'Image' )->delImage( ['id' => $this->post['id']] );
+			\App\Model\Image::delImage( ['id' => $this->post['id']] );
 			$this->send( Code::success );
 		}
 	}
@@ -134,29 +133,26 @@ class Image extends Admin
 		// todo v1 版本不需要
 	}
 
-    /**
-     * 商品图列表
-     * @method GET
-     * @param string $keywords
-     * @author 韩文博
-     */
-    public function goodsImageList()
-    {
-        $condition                           = [];
-        $condition['goods_image.is_default'] = 1;
-        if (isset($this->get['keywords'])) {
-            $condition['goods.title'] = ['like', '%' . $this->get['keywords'] . '%'];
-        }
+	/**
+	 * 商品图列表
+	 * @method GET
+	 * @param string $keywords
+	 */
+	public function goodsImageList()
+	{
+		$condition['goods_image.is_default'] = 1;
+		if( isset( $this->get['keywords'] ) ){
+			$condition['goods.title'] = ['like', '%'.$this->get['keywords'].'%'];
+		}
 
-        $goods_image_model = model('GoodsImage');
-        $field             = 'goods_image.id,goods_image.goods_id,goods_image.img,goods.title';
-        $count             = $goods_image_model->getGoodsImageMoreCount($condition, '', 'goods_image.id');
-        $list              = $goods_image_model->getGoodsImageMoreList($condition, '', $field, 'goods_image.goods_id', $this->getPageLimit(), 'goods_image.id');;
+		$field = 'goods_image.id,goods_image.goods_id,goods_image.img,goods.title';
+		$count = \App\Model\GoodsImage::getGoodsImageMoreCount( $condition, '', 'goods_image.id' );
+		$list  = \App\Model\GoodsImage::getGoodsImageMoreList( $condition, '', $field, 'goods_image.goods_id', $this->getPageLimit(), 'goods_image.id' );;
 
-        return $this->send(Code::success, [
-            'total_number' => $count,
-            'list'         => $list
-        ]);
-    }
+		return $this->send( Code::success, [
+			'total_number' => $count,
+			'list'         => $list,
+		] );
+	}
 
 }

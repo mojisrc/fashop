@@ -27,11 +27,11 @@ class GoodsSpec extends Model
 		$model               = model( 'GoodsSpec' );
 		$condition           = [];
 		$condition['status'] = ['neq', - 1];
-		$count               = $model->where( $condition )->count();
+		$count               = \App\Model\Page::where( $condition )->count();
 		$Page                = new Page( $count, isset( $get['rows'] ) ? $get['rows'] : 10 );
 		$page                = $Page->currentPage.','.$Page->listRows;
 		1;
-		$list = $model->specList( $condition, '*', 'id desc', $page );
+		$list = \App\Model\Page::specList( $condition, '*', 'id desc', $page );
 		$data = ['list' => $list, 'page' => $Page->show(), 'total' => $count];
 		return $data;
 	}
@@ -45,7 +45,7 @@ class GoodsSpec extends Model
 	{
 		$model                  = model( 'GoodsSpec' );
 		$post['category_title'] = $post['category_id'] ? model( 'GoodsCategory' )->where( ['id' => $post['category_id']] )->value( 'title' ) : '';
-		$spec_id                = $model->addGoodsSpec( $post );
+		$spec_id                = \App\Model\Page::addGoodsSpec( $post );
 		//添加商品类型成功后，开始添加分类下的属性
 		if( $spec_id && is_array( $post['attribute']['sort'] ) ){
 			foreach( $post['attribute']['sort'] as $key => $value ){
@@ -54,7 +54,7 @@ class GoodsSpec extends Model
 				$attribute[$key]['spec_id'] = $spec_id;
 			}
 			//添加到规格的值表
-			return model( 'GoodsSpecValue' )->addMultiGoodsSpecValue( $attribute );
+			return \App\Model\GoodsSpecValue::addMultiGoodsSpecValue( $attribute );
 		}
 		return $spec_id;
 	}
@@ -68,7 +68,7 @@ class GoodsSpec extends Model
 	public function getGoodsSpecInfo( $get )
 	{
 		$model = model( 'GoodsSpec' );
-		$data  = $model->getSpecInfo( $get['id'] );
+		$data  = \App\Model\Page::getSpecInfo( $get['id'] );
 		return $data;
 	}
 
@@ -79,7 +79,7 @@ class GoodsSpec extends Model
 	public function editGoodsSpec( $post )
 	{
 		$model  = model( 'GoodsSpec' );
-		$result = $model->updateSpec( $post );
+		$result = \App\Model\Page::updateSpec( $post );
 		return $result;
 	}
 
@@ -93,7 +93,7 @@ class GoodsSpec extends Model
 		$model      = model( 'GoodsSpec' );
 		$ids        = $post['ids'];
 		$data['id'] = is_array( $ids ) ? ['in', implode( ',', $ids )] : $ids;
-		$result     = $model->where( $data )->setField( 'status', - 1 );
+		$result     = \App\Model\Page::where( $data )->setField( 'status', - 1 );
 		return $result;
 	}
 }

@@ -24,7 +24,7 @@ class Login
 	public function pcPasswordLogin( string $username ) : ? array
 	{
 		$condition['username']  = $username;
-		$user = model( 'User' )->getUserInfo( $condition, 'id' );
+		$user = \App\Model\User::getUserInfo( $condition, 'id' );
 		if( $user ){
 			$accessTokenLogic = new \App\Logic\AccessToken();
 			return $accessTokenLogic->createAccessToken( $user['id'], time() );

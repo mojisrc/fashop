@@ -22,10 +22,10 @@ class Order
 	 */
 	static function autoCloseUnpay() : void
 	{
-		$config                   = model( 'Shop' )->getShopInfo( ['id' => 1] );
+		$config                   = \App\Model\Shop::getShopInfo( ['id' => 1] );
 		$condition['state']       = \App\Logic\Order::state_new;
 		$condition['create_time'] = ['lt', time() - $config['order_auto_close_expires']];
-		$order_list               = model( 'Order' )->getOrderList( $condition, '', 'id,user_id,create_time,state', 'id desc', '1,10000' );
+		$order_list               = \App\Model\Order::getOrderList( $condition, '', 'id,user_id,create_time,state', 'id desc', '1,10000' );
 		if( !empty( $order_list ) ){
 			$now_time = time();
 			$tradeLogic  = new \App\Logic\Trade();
@@ -43,11 +43,11 @@ class Order
 	// 自动收货，完成订单
 	static function autoReceive() : void
 	{
-		$config                   = model( 'Shop' )->getShopInfo( ['id' => 1] );
+		$config                   = \App\Model\Shop::getShopInfo( ['id' => 1] );
 		$condition['state']       = \App\Logic\Order::state_send;
 		$condition['lock_state'] =  0;
 		$condition['delay_time'] = ['lt', time() - $config['order_auto_confirm_expires']];
-		$order_list               = model( 'Order' )->getOrderList( $condition, '', 'id,user_id,create_time,state', 'id desc', '1,10000' );
+		$order_list               = \App\Model\Order::getOrderList( $condition, '', 'id,user_id,create_time,state', 'id desc', '1,10000' );
 		if( !empty( $order_list ) ){
 			$now_time = time();
 			$tradeLogic  = new \App\Logic\Trade();

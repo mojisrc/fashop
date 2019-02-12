@@ -284,7 +284,7 @@ class GoodsSku
     //		$hot_collect_list = S( $prefix );
     //		if( empty( $hot_collect_list ) ){
     //			$goods_model      = model( 'Goods' );
-    //			$hot_collect_list = $goods_model->getGoodsOnlineList( [], '*', 0, 'collect desc', $limit );
+    //			$hot_collect_list = \App\Model\Goods::getGoodsOnlineList( [], '*', 0, 'collect desc', $limit );
     //			S( $prefix, $hot_collect_list );
     //		}
     //		return $hot_collect_list;

@@ -147,10 +147,10 @@ class Trade
 			$orderData          = [];
 			$orderData['state'] = \App\Logic\Order::state_cancel;
 			$order_model        = model( 'Order' );
-			$state              = $order_model->editOrder( ['id' => $order_id], $orderData ); //更新订单
+			$state              = \App\Model\Order::editOrder( ['id' => $order_id], $orderData ); //更新订单
 			if( $state ){
 				$log_data['order_state'] = $orderData['state'];
-				$state                   = $order_model->addOrderLog( $log_data );
+				$state                   = \App\Model\Order::addOrderLog( $log_data );
 			}
 			return $state;
 		}
@@ -205,7 +205,7 @@ class Trade
 	public function editOrderFinish( $order_id, $log_data = [] )
 	{
 		$order_model     = model( 'Order' );
-		$order           = $order_model->getOrderInfo( ['id' => $order_id], '', 'id,user_id,user_name,id,sn,amount,payment_code,state' );
+		$order           = \App\Model\Order::getOrderInfo( ['id' => $order_id], '', 'id,user_id,user_name,id,sn,amount,payment_code,state' );
 		$order_shipped   = $this->getOrderState( 'order_shipped' ); //订单状态30:已发货
 		$order_completed = $this->getOrderState( 'order_completed' ); //订单状态40:已收货
 		if( $order['state'] == $order_shipped ){
@@ -219,10 +219,10 @@ class Trade
 			$order_data                  = [];
 			$order_data['finnshed_time'] = time();
 			$order_data['state']         = $order_completed;
-			$state                       = $order_model->editOrder( ['id' => $order_id], $order_data ); //更新订单状态为已收货
+			$state                       = \App\Model\Order::editOrder( ['id' => $order_id], $order_data ); //更新订单状态为已收货
 			$log_data['order_state']     = $order_completed;
 			if( $state ){
-				$state = $order_model->addOrderLog( $log_data );
+				$state = \App\Model\Order::addOrderLog( $log_data );
 			}
 			// 订单处理记录信息
 			return $state;

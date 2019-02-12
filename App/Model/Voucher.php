@@ -53,7 +53,7 @@ class Voucher extends Model
 		$condition['end_date']   = ['gt', time()];
 		$condition['state']      = 1;
 		$condition['limit']      = ['elt', $goods_total];
-		$list                    = $this->getVoucherList( $condition, '*', 'id desc', '1,100' );
+		$list                    = $this->getVoucherList( $condition, '*', 'id desc', [1,100] );
 		foreach( $list as $key => $coupon ){
 			$list[$key]['desc'] = sprintf( '面额%s元 有效期至 %s', $coupon['price'], date( 'Y-m-d', $coupon['end_date'] ) );
 		}

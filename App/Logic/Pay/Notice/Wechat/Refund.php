@@ -33,7 +33,7 @@ class Refund extends Notice
 			if( isset( $this->data->refund_id ) || isset( $this->data->refund_fee ) ){
 				// 1、商户需要验证该通知数据中的out_trade_no是否为商户系统中创建的订单号；
 				$order_model = model( 'Audition' );
-				$this->order = $order_model->where( [
+				$this->order = \App\Model\Order::where( [
 					'out_trade_no' => $this->data->out_trade_no,
 					'trade_no'     => $this->data->transaction_id,
 				] )->find();
@@ -59,7 +59,7 @@ class Refund extends Notice
 		if( $this->check() === true ){
 			$order_model = model( 'Audition' );
 			
-			$result      = $order_model->editAudition( ['id' => $this->order['id']], [
+			$result      = \App\Model\Order::editAudition( ['id' => $this->order['id']], [
 				'refund_state' => 1,
 				'refund_time'  => strtotime( $this->data->success_time ),
 				'refund_fee'   => $this->data->refund_fee,

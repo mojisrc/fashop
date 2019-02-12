@@ -566,7 +566,7 @@ class Buy
     public function createOrder(): \App\Logic\Server\Buy\CreateOrderResult
     {
         $order_model = model('Order');
-        $order_model->startTrans();
+        \App\Model\Order::startTrans();
 
         try {
             $group       = $this->getGroup();
@@ -597,14 +597,14 @@ class Buy
 
             $user         = $this->getUserInfo();
             $pay_sn       = $this->makePaySn($this->getUserId());
-            $order_pay_id = $order_model->addOrderPay([
+            $order_pay_id = \App\Model\Order::addOrderPay([
                                                           'pay_sn'    => $pay_sn,
                                                           'user_id'   => $this->getUserId(),
                                                           'pay_state' => 0
 
                                                       ]);
             if (!$order_pay_id) {
-                $order_model->rollback();
+                \App\Model\Order::rollback();
                 throw new \Exception('订单支付记录保存失败');
             }
             $address = $this->getAddressInfo();
@@ -641,9 +641,9 @@ class Buy
                 'group_end_time'       => $group_end_time,
                 'goods_group_amount'   => $calculateResult->getGoodsGroupAmount(),
             ];
-            $order_id = $order_model->addOrder($order);
+            $order_id = \App\Model\Order::addOrder($order);
             if (!$order_id) {
-                $order_model->rollback();
+                \App\Model\Order::rollback();
                 throw new \Exception('订单保存失败');
             } else {
                 $this->setOrderId($order_id);
@@ -661,9 +661,9 @@ class Buy
                     $order_update_data['group_men_num']   = $order['group_men_num'];
                     break;
             }
-            $order_update_result = $order_model->editOrder($order_update_condition, $order_update_data);
+            $order_update_result = \App\Model\Order::editOrder($order_update_condition, $order_update_data);
             if (!$order_update_result) {
-                $order_model->rollback();
+                \App\Model\Order::rollback();
                 throw new \Exception('订单拓展保存失败');
             }
 
@@ -685,7 +685,7 @@ class Buy
             ];
             $state        = model('OrderExtend')->insertOrderExtend($order_extend);
             if (!$state) {
-                $order_model->rollback();
+                \App\Model\Order::rollback();
                 throw new \Exception('订单拓展保存失败');
             }
             $order_goods[] = [
@@ -711,7 +711,7 @@ class Buy
             // 订单商品创建
             $order_goods_insert = model('OrderGoods')->addOrderGoods($order_goods);
             if (!$order_goods_insert) {
-                $order_model->rollback();
+                \App\Model\Order::rollback();
                 throw new \Exception('订单商品保存失败');
             }
             // 订单日志记录
@@ -723,10 +723,10 @@ class Buy
                                            ]);
             // 更新商品库存
             $this->updateGoodsStorageNum();
-            $order_model->commit();
+            \App\Model\Order::commit();
             return new \App\Logic\Server\Buy\CreateOrderResult(['order_id' => $order_id, 'pay_sn' => $pay_sn]);
         } catch (\Exception $e) {
-            $order_model->rollback();
+            \App\Model\Order::rollback();
             \ezswoole\Log::write($this->errMsg);
         }
     }

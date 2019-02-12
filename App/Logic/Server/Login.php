@@ -201,7 +201,7 @@ class Login
 			$condition['username'] = $username;
 		}
 
-		$user = model( 'User' )->getUserInfo( $condition, 'id' );
+		$user = \App\Model\User::getUserInfo( $condition, 'id' );
 		if( $user ){
 			return $this->createAccessToken( $user['id'] );
 		} else{

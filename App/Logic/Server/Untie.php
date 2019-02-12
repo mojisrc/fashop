@@ -187,7 +187,7 @@ class Untie
                 throw new \App\Utils\Exception( "param error", Code::param_error );
             }
 
-            $user_phone       = $user_model->getUserValue(['id' => $user_id], 'phone');
+            $user_phone       = \App\Model\User::getUserValue(['id' => $user_id], 'phone');
             if(!$user_phone){
                 throw new \App\Utils\Exception( "param error", Code::param_error );
             }
@@ -201,14 +201,14 @@ class Untie
 
             $user_result = $user_open_model->editUser(['id'=>$user_id], ['phone'=>null] );
             if(!$user_result ){
-                $user_model->rollback();
+                \App\Model\User::rollback();
                 return null;
             }
 
             //第三方被更改
             $open_batch_result = $user_open_model->editMultiUserOpen($open_batch_updata);
             if(!$open_batch_result ){
-                $user_model->rollback();
+                \App\Model\User::rollback();
                 return null;
             }
 
@@ -238,22 +238,22 @@ class Untie
                 throw new \App\Utils\Exception( "param error", Code::param_error );
             }
 
-            $user_phone       = $user_model->getUserValue(['id' => $user_id], 'phone');
+            $user_phone       = \App\Model\User::getUserValue(['id' => $user_id], 'phone');
             $other_open_info  = $user_open_model->getUserOpenInfo(['user_id' => $user_id, 'id' => ['neq', $open_info['id']]], '', '*');
             if(!$user_phone && !$other_open_info){
                 throw new \App\Utils\Exception( "param error", Code::param_error );
             }
 
             //占位行被恢复
-            $user_result = $user_model->editUser(['id'=>$open_info['origin_user_id']], ['state'=>1,'is_discard'=>0] );
+            $user_result = \App\Model\User::editUser(['id'=>$open_info['origin_user_id']], ['state'=>1,'is_discard'=>0] );
             if(!$user_result ){
-                $user_model->rollback();
+                \App\Model\User::rollback();
                 return null;
             }
             //第三方被更改
             $user_open_result  = $user_open_model->editUserOpen(['id'=>$open_info['id']], ['user_id'=>$open_info['origin_user_id'],'state'=>0]);
             if(!$user_open_result ){
-                $user_model->rollback();
+                \App\Model\User::rollback();
                 return null;
             }
 

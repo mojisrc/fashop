@@ -36,11 +36,10 @@ class Express extends Admin
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
-			$express_model = model( 'Express' );
-			$express_id    = $express_model->addExpress( $post );
+			$express_id    = \App\Model\Express::addExpress( $post );
 			if( $express_id ){
 				if( $this->post['is_commonly_use'] === 1 ){
-					$express_model->editExpress( ['id' => ['neq', $express_id]], ['is_commonly_use' => 0] );
+					\App\Model\Express::editExpress( ['id' => ['neq', $express_id]], ['is_commonly_use' => 0] );
 				}
 				return $this->send( Code::success );
 			} else{
@@ -62,10 +61,9 @@ class Express extends Admin
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
-			$express_model = model( 'Express' );
-			$express_model->editExpress( ['id' => $this->post['id']], $this->post );
+			\App\Model\Express::editExpress( ['id' => $this->post['id']], $this->post );
 			if( $this->post['is_commonly_use'] === 1 ){
-				$express_model->editExpress( ['id' => ['neq', $this->post['id']]], ['is_commonly_use' => 0] );
+				\App\Model\Express::editExpress( ['id' => ['neq', $this->post['id']]], ['is_commonly_use' => 0] );
 			}
 			return $this->send( Code::success, [], '修改成功' );
 		}
@@ -81,15 +79,13 @@ class Express extends Admin
         if( $this->validate( $this->post, 'Admin/Express.set' ) !== true ){
             return $this->send( Code::param_error, [], $this->getValidate()->getError() );
         } else{
-            $express_model = model( 'Express' );
-            $find          = $express_model->getExpressInfo( ['id' => $this->post['id']], 'id' );
+            $find          = \App\Model\Express::getExpressInfo( ['id' => $this->post['id']], 'id' );
             if( !$find ){
                 return $this->send( Code::param_error );
             } else{
-                $express_model = model( 'Express' );
-                $result        = $express_model->editExpress( ['id' => $this->post['id']], ['is_commonly_use' => 1] );
+                $result        = \App\Model\Express::editExpress( ['id' => $this->post['id']], ['is_commonly_use' => 1] );
                 if( $result ){
-                    $express_model->editExpress( ['id' => ['neq', $this->post['id']]], ['is_commonly_use' => 0] );
+                    \App\Model\Express::editExpress( ['id' => ['neq', $this->post['id']]], ['is_commonly_use' => 0] );
                     return $this->send( Code::success );
                 } else{
                     return $this->send( Code::error );
@@ -121,9 +117,8 @@ class Express extends Admin
 			break;
 			}
 		}
-		$express_model = model( "Express" );
-		$count         = $express_model->getExpressCount( $condition );
-		$list          = $express_model->getExpressList( $condition, '*', 'is_commonly_use desc,id desc', $this->getPageLimit() );
+		$count         = \App\Model\Express::getExpressCount( $condition );
+		$list          = \App\Model\Express::getExpressList( $condition, '*', 'is_commonly_use desc,id desc', $this->getPageLimit() );
 		$this->send( Code::success, [
 			'total_number' => $count,
 			'list'         => $list,
@@ -137,8 +132,7 @@ class Express extends Admin
 	 */
 	public function info()
 	{
-		$page_model = model( 'Express' );
-		$info       = $page_model->getExpressInfo( ['id' => $this->get['id']] );
+		$info       = \App\Model\Express::getExpressInfo( ['id' => $this->get['id']] );
 		$this->send( Code::success, ['info' => $info] );
 	}
 
@@ -157,8 +151,7 @@ class Express extends Admin
 			$condition       = [];
 			$condition['id'] = $post['id'];
 
-			$express_model = model( 'Express' );
-			$row           = $express_model->getExpressInfo( $condition, '*' );
+			$row           = \App\Model\Express::getExpressInfo( $condition, '*' );
 			if( !$row ){
 				return $this->send( Code::param_error );
 			}
@@ -166,7 +159,7 @@ class Express extends Admin
 			if( $row['is_system'] == 1 ){
 				return $this->send( Code::param_error, [], '系统数据，不可删除' );
 			}
-			$result = $express_model->softDelExpress( $condition );
+			$result = \App\Model\Express::softDelExpress( $condition );
 			if( !$result ){
 				return $this->send( Code::error );
 			}

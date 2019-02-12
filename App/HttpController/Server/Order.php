@@ -77,7 +77,7 @@ class Order extends Server
 			$result['state_refund']     = 0;
 
 			$user = $this->getRequestUser();
-			$orderLogic->users( 'id', model( 'User' )->getUserAllIds( $user['id'] ) );
+			$orderLogic->users( 'id', \App\Model\User::getUserAllIds( $user['id'] ) );
 
 			$result['state_new'] = $orderLogic->stateType( 'state_new' )->count();
 
@@ -85,9 +85,9 @@ class Order extends Server
 
 			$result['state_success'] = $orderLogic->stateType( 'state_success' )->count();
 
-			$result['state_unevaluate'] = model( 'OrderGoods' )->getOrderGoodsCount( ['user_id' => ['in', model( 'User' )->getUserAllIds( $user['id'] )], 'evaluate_state' => 0, "(SElECT state FROM $table_order where id =$table_order_goods.order_id)" => 40] );
+			$result['state_unevaluate'] = model( 'OrderGoods' )->getOrderGoodsCount( ['user_id' => ['in', \App\Model\User::getUserAllIds( $user['id'] )], 'evaluate_state' => 0, "(SElECT state FROM $table_order where id =$table_order_goods.order_id)" => 40] );
 
-			$result['state_refund'] = model( 'OrderRefund' )->getOrderRefundCount( ['user_id' => ['in', model( 'User' )->getUserAllIds( $user['id'] )], 'handle_state' => 0] );
+			$result['state_refund'] = model( 'OrderRefund' )->getOrderRefundCount( ['user_id' => ['in', \App\Model\User::getUserAllIds( $user['id'] )], 'handle_state' => 0] );
 
 			return $this->send( Code::success, $result );
 		} catch( \Exception $e ){
@@ -133,7 +133,7 @@ class Order extends Server
 					$orderLogic->stateType( $param['state_type'] );
 				}
 
-				$orderLogic->users( 'id', model( 'User' )->getUserAllIds( $user['id'] ) );
+				$orderLogic->users( 'id', \App\Model\User::getUserAllIds( $user['id'] ) );
 
 				if( isset( $param['is_print'] ) ){
 					$orderLogic->print( $param['is_print'] );
@@ -154,21 +154,21 @@ class Order extends Server
 				$order_model = model( 'Order' );
 				foreach( $list as $key => $order_info ){
 					//显示取消订单
-					$list[$key]['if_cancel'] = $order_model->getOrderOperateState( 'user_cancel', $order_info );
+					$list[$key]['if_cancel'] = \App\Model\Order::getOrderOperateState( 'user_cancel', $order_info );
 					//显示是否需能支付（todo 计算后台过期时间）
-					$list[$key]['if_pay'] = $order_model->getOrderOperateState( 'user_pay', $order_info );
+					$list[$key]['if_pay'] = \App\Model\Order::getOrderOperateState( 'user_pay', $order_info );
 					//显示退款取消订单
-					$list[$key]['if_refund_cancel'] = $order_model->getOrderOperateState( 'refund_cancel', $order_info );
+					$list[$key]['if_refund_cancel'] = \App\Model\Order::getOrderOperateState( 'refund_cancel', $order_info );
 					//显示投诉
-					$list[$key]['if_complain'] = $order_model->getOrderOperateState( 'complain', $order_info );
+					$list[$key]['if_complain'] = \App\Model\Order::getOrderOperateState( 'complain', $order_info );
 					//显示收货
-					$list[$key]['if_receive'] = $order_model->getOrderOperateState( 'receive', $order_info );
+					$list[$key]['if_receive'] = \App\Model\Order::getOrderOperateState( 'receive', $order_info );
 					//显示锁定中
-					$list[$key]['if_lock'] = $order_model->getOrderOperateState( 'lock', $order_info );
+					$list[$key]['if_lock'] = \App\Model\Order::getOrderOperateState( 'lock', $order_info );
 					//显示物流跟踪
-					$list[$key]['if_deliver'] = $order_model->getOrderOperateState( 'deliver', $order_info );
+					$list[$key]['if_deliver'] = \App\Model\Order::getOrderOperateState( 'deliver', $order_info );
 					//显示评价
-					$list[$key]['if_evaluate'] = $order_model->getOrderOperateState( 'evaluate', $order_info );
+					$list[$key]['if_evaluate'] = \App\Model\Order::getOrderOperateState( 'evaluate', $order_info );
 
 				}
 				$this->send( Code::success, [
@@ -200,10 +200,9 @@ class Order extends Server
 				/**
 				 * @var $order_model \App\Model\Order
 				 */
-				$order_model          = model( 'Order' );
 				$condition['id']      = $order_id;
-				$condition['user_id'] = ['in', model( 'User' )->getUserAllIds( $user['id'] )];
-				$order_info           = $order_model->getOrderInfo( $condition, '', '*', [
+				$condition['user_id'] = ['in', \App\Model\User::getUserAllIds( $user['id'] )];
+				$order_info           = \App\Model\Order::getOrderInfo( $condition, '', '*', [
 					'order_extend',
 					'order_goods',
 				] );
@@ -211,26 +210,25 @@ class Order extends Server
 					$this->send( Code::error, [], '没有该订单' );
 				} else{
 					//显示取消订单
-					$order_info['if_cancel'] = $order_model->getOrderOperateState( 'user_cancel', $order_info );
+					$order_info['if_cancel'] = \App\Model\Order::getOrderOperateState( 'user_cancel', $order_info );
 					//显示是否需能支付（todo 计算后台过期时间）
-					$order_info['if_pay'] = $order_model->getOrderOperateState( 'user_pay', $order_info );
+					$order_info['if_pay'] = \App\Model\Order::getOrderOperateState( 'user_pay', $order_info );
 					//显示退款取消订单
-					$order_info['if_refund_cancel'] = $order_model->getOrderOperateState( 'refund_cancel', $order_info );
+					$order_info['if_refund_cancel'] = \App\Model\Order::getOrderOperateState( 'refund_cancel', $order_info );
 					//显示投诉
-					$order_info['if_complain'] = $order_model->getOrderOperateState( 'complain', $order_info );
+					$order_info['if_complain'] = \App\Model\Order::getOrderOperateState( 'complain', $order_info );
 					//显示收货
-					$order_info['if_receive'] = $order_model->getOrderOperateState( 'receive', $order_info );
+					$order_info['if_receive'] = \App\Model\Order::getOrderOperateState( 'receive', $order_info );
 					//显示锁定中
-					$order_info['if_lock'] = $order_model->getOrderOperateState( 'lock', $order_info );
+					$order_info['if_lock'] = \App\Model\Order::getOrderOperateState( 'lock', $order_info );
 					//显示物流跟踪
-					$order_info['if_deliver'] = $order_model->getOrderOperateState( 'deliver', $order_info );
+					$order_info['if_deliver'] = \App\Model\Order::getOrderOperateState( 'deliver', $order_info );
 					//显示评价
-					$order_info['if_evaluate'] = $order_model->getOrderOperateState( 'evaluate', $order_info );
+					$order_info['if_evaluate'] = \App\Model\Order::getOrderOperateState( 'evaluate', $order_info );
 
-					$log_list     = model( 'OrderLog' )->getOrderLogList( ['order_id' => $order_id] );
-					$refund_model = model( 'OrderRefund' );
-					$return_list  = $refund_model->getOrderRefundList( ['order_id' => $order_id, 'refund_type' => 2] );
-					$refund_list  = $refund_model->getOrderRefundList( ['order_id' => $order_id, 'refund_type' => 1] );
+					$log_list    = \App\Model\OrderLog::getOrderLogList( ['order_id' => $order_id] );
+					$return_list = \App\Model\OrderRefund::getOrderRefundList( ['order_id' => $order_id, 'refund_type' => 2] );
+					$refund_list = \App\Model\OrderRefund::getOrderRefundList( ['order_id' => $order_id, 'refund_type' => 1] );
 					$this->send( Code::success, [
 						'info'        => $order_info,
 						'order_log'   => $log_list,
@@ -257,12 +255,11 @@ class Order extends Server
 				$this->send( Code::param_error, [], $this->getValidate()->getError() );
 			} else{
 				$user                 = $this->getRequestUser();
-				$order_model          = model( 'Order' );
 				$condition['id']      = $this->post['id'];
-				$condition['user_id'] = ['in', model( 'User' )->getUserAllIds( $user['id'] )];
-				$order_info           = $order_model->getOrderInfo( $condition );
+				$condition['user_id'] = ['in', \App\Model\User::getUserAllIds( $user['id'] )];
+				$order_info           = \App\Model\Order::getOrderInfo( $condition );
 				$extend_msg           = isset( $this->post['state_remark'] ) ? $this->post['state_remark'] : null;
-				$result               = $order_model->userChangeState( 'order_cancel', $order_info, $user['id'], $user['username'], $extend_msg );
+				$result               = \App\Model\Order::userChangeState( 'order_cancel', $order_info, $user['id'], $user['username'], $extend_msg );
 				if( $result === true ){
 					$this->send( Code::success );
 				} else{
@@ -286,12 +283,11 @@ class Order extends Server
 				$this->send( Code::param_error, [], $this->getValidate()->getError() );
 			} else{
 				$user                 = $this->getRequestUser();
-				$order_model          = model( 'Order' );
 				$condition['id']      = $this->post['id'];
-				$condition['user_id'] = ['in', model( 'User' )->getUserAllIds( $user['id'] )];
-				$order_info           = $order_model->getOrderInfo( $condition );
+				$condition['user_id'] = ['in', \App\Model\User::getUserAllIds( $user['id'] )];
+				$order_info           = \App\Model\Order::getOrderInfo( $condition );
 				$extend_msg           = isset( $this->post['state_remark'] ) ? $this->post['state_remark'] : null;
-				$result               = $order_model->userChangeState( 'order_receive', $order_info, $user['id'], $user['username'], $extend_msg );
+				$result               = \App\Model\Order::userChangeState( 'order_receive', $order_info, $user['id'], $user['username'], $extend_msg );
 				if( $result === true ){
 					$this->send( Code::success );
 				} else{
@@ -317,9 +313,9 @@ class Order extends Server
 			} else{
 				$user                  = $this->getRequestUser();
 				$condition['order_id'] = $this->get['id'];
-				$list                  = model( 'Order' )->getOrderGoodsList( [
+				$list                  = \App\Model\Order::getOrderGoodsList( [
 					'order_id' => $this->get['id'],
-					'user_id'  => ['in', model( 'User' )->getUserAllIds( $user['id'] )],
+					'user_id'  => ['in', \App\Model\User::getUserAllIds( $user['id'] )],
 				], '*', 'id asc', '1,1000' );
 				$this->send( Code::success, ['list' => $list] );
 			}
@@ -343,8 +339,8 @@ class Order extends Server
 			} else{
 				$user                 = $this->getRequestUser();
 				$condition['id']      = $this->get['id'];
-				$condition['user_id'] = ['in', model( 'User' )->getUserAllIds( $user['id'] )];
-				$result['info']       = model( 'Order' )->getOrderGoodsInfo( $condition );
+				$condition['user_id'] = ['in', \App\Model\User::getUserAllIds( $user['id'] )];
+				$result['info']       = \App\Model\Order::getOrderGoodsInfo( $condition );
 				$this->send( Code::success, $result );
 			}
 		}
@@ -369,12 +365,11 @@ class Order extends Server
 			} else{
 				$order_id                = $get['id'];
 				$user                    = $this->getRequestUser();
-				$order_model             = model( 'Order' );
 				$condition['id']         = $order_id;
 				$condition['state']      = ['egt', 20];
 				$condition['goods_type'] = 2;
-				$condition['user_id']    = ['in', model( 'User' )->getUserAllIds( $user['id'] )];
-				$order_info              = $order_model->getOrderInfo( $condition );
+				$condition['user_id']    = ['in', \App\Model\User::getUserAllIds( $user['id'] )];
+				$order_info              = \App\Model\Order::getOrderInfo( $condition );
 				if( !$order_info ){
 					return $this->send( Code::param_error, [], '参数错误' );
 				} else{
@@ -382,7 +377,7 @@ class Order extends Server
 					$table_order        = $prefix."order";
 					$table_user_profile = $prefix."user_profile";
 					$field              = 'group_identity,user_id'.",(SELECT avatar FROM $table_user_profile WHERE user_id=$table_order.user_id) AS user_avatar";
-					$group_list         = $order_model->getOrderCommonList( ['group_sign' => $order_info['group_sign']], '', $field, 'group_identity asc', '' );
+					$group_list         = \App\Model\Order::getOrderCommonList( ['group_sign' => $order_info['group_sign']], '', $field, 'group_identity asc', '' );
 					$this->send( Code::success, [
 						'list' => $group_list,
 					] );
@@ -397,7 +392,6 @@ class Order extends Server
 	 */
 	public function antoSetOrderGroup()
 	{
-		$order_model                  = model( 'Order' );
 		$condition['state']           = 20;              //已付款
 		$condition['group_end_time']  = ['lt', time()];  //拼团时限已过期
 		$condition['group_state']     = 1;               //正在进行中(待开团)
@@ -406,12 +400,12 @@ class Order extends Server
 		$condition['group_fail_time'] = 0;               //拼团失败时间
 		$condition_string             = 'group_men_num<group_people_num';
 		$group                        = 'group_sign';
-		$list                         = $order_model->getOrderCommonList( $condition, $condition_string, '*', 'id desc', '', $group );
+		$list                         = \App\Model\Order::getOrderCommonList( $condition, $condition_string, '*', 'id desc', '', $group );
 		if( $list ){
 			$group_sign_arr = array_column( $list, 'group_sign' );
 			if( $group_sign_arr && is_array( $group_sign_arr ) ){
 				//未付款的已经被关闭的跟团的拼团订单 也会更改他的拼团状态为失败
-				$result = $order_model->editOrder( ['group_sign' => ['in', $group_sign_arr]], ['group_state' => 3, 'group_fail_time' => time()] );
+				$result = \App\Model\Order::editOrder( ['group_sign' => ['in', $group_sign_arr]], ['group_state' => 3, 'group_fail_time' => time()] );
 				if( !$result ){
 					return $this->send( Code::param_error, [], '更改拼团订单状态失败' );
 				} else{
@@ -440,21 +434,19 @@ class Order extends Server
 			} else{
 				$order_id             = $get['id'];
 				$user                 = $this->getRequestUser();
-				$order_model          = model( 'Order' );
 				$condition['id']      = $order_id;
 				$condition['state']   = ['egt', 30];
-				$condition['user_id'] = ['in', model( 'User' )->getUserAllIds( $user['id'] )];
-				$order_info           = $order_model->getOrderInfo( $condition );
+				$condition['user_id'] = ['in', \App\Model\User::getUserAllIds( $user['id'] )];
+				$order_info           = \App\Model\Order::getOrderInfo( $condition );
 				if( !$order_info ){
 					return $this->send( Code::param_error, [], '参数错误' );
 				} else{
-					$order_extend_model = model( 'OrderExtend' );
-					$extend_info        = $order_extend_model->getOrderExtendInfo( ['id' => $order_info['id']], '', '*' );
+					$extend_info = \App\Model\OrderExtend::getOrderExtendInfo( ['id' => $order_info['id']], '', '*' );
 					if( !$extend_info ){
 						return $this->send( Code::param_error, [], '参数错误' );
 					} else{
 						if( isset( $extend_info['tracking_no'] ) && intval( $extend_info['shipper_id'] ) > 0 && intval( $extend_info['express_id'] ) > 0 ){
-							$kuaidi100_code = model( 'Express' )->getExpressValue( ['id' => $extend_info['express_id']], $field = 'kuaidi100_code' );
+							$kuaidi100_code = \App\Model\Express::getExpressValue( ['id' => $extend_info['express_id']], $field = 'kuaidi100_code' );
 							if( $kuaidi100_code ){
 								$info['url'] = 'https://m.kuaidi100.com/index_all.html?type='.$kuaidi100_code.'&postid='.$extend_info['tracking_no'];
 							} else{
@@ -490,7 +482,7 @@ class Order extends Server
 // 			$order_model          = model( 'Order' );
 // 			$condition['id']      = $this->get['id'];
 // 			$condition['user_id'] = $this->user['id'];
-// 			$order_info           = $order_model->getOrderInfo( $condition, '', '*', ['order_extend', 'order_goods'] );
+// 			$order_info           = \App\Model\Order::getOrderInfo( $condition, '', '*', ['order_extend', 'order_goods'] );
 // 			if(
 // 				empty( $order_info ) || !in_array( $order_info['state'], [
 // 					OrderLogic::state_send,

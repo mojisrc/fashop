@@ -62,7 +62,7 @@ class Voucher extends Server {
 		$template_id = $get['template_id'];
 		$model       = model('Voucher');
 		// 判断是否有该模板，是否已经超过了领取次数
-		$template = $model->getUserTemplateVoucher($template_id, $this->user['id']);
+		$template = \App\Model\Page::getUserTemplateVoucher($template_id, $this->user['id']);
 		if (empty($template)) {
 			return $this->faJson(['errmsg' => '没有该优惠券'], -1);
 		}
@@ -77,7 +77,7 @@ class Voucher extends Server {
 
 		// 添加到优惠券表 get_code
 		$data = array(
-			'code'        => $model->getCode(),
+			'code'        => \App\Model\Page::getCode(),
 			'template_id' => $template['id'],
 			'title'       => $template['title'],
 			'desc'        => $template['desc'],
@@ -89,7 +89,7 @@ class Voucher extends Server {
 			'owner_id'    => $this->user['id'],
 			'owner_name'  => $this->user['nickname'],
 		);
-		$result = $model->addVoucher($data);
+		$result = \App\Model\Page::addVoucher($data);
 		if ($result) {
 			return $this->faJson(array(), 0);
 		} else {
@@ -109,7 +109,7 @@ class Voucher extends Server {
 		$condition['owner_id'] = $this->user['id'];
 
 		// 设置过期优惠券
-		$model->checkExpired();
+		\App\Model\Page::checkExpired();
 		if (isset($get['state'])) {
 			switch ($get['state']) {
 			case 1:
@@ -126,9 +126,9 @@ class Voucher extends Server {
 			}
 		}
 
-		$count      = $model->where($condition)->count();
+		$count      = \App\Model\Page::where($condition)->count();
 		$page_class = new Page($count, $get['rows'] ? $get['rows'] : config('db_setting.api_default_rows'));
-		$list       = $model->getVoucherList($condition, '*', 'state asc ,id desc', $page_class->currentPage . ',' . $page_class->listRows);
+		$list       = \App\Model\Page::getVoucherList($condition, '*', 'state asc ,id desc', $page_class->currentPage . ',' . $page_class->listRows);
 		return $this->faJson(['page_data' => $page_class->httpShow(), 'list' => $list], 0);
 	}
 }

@@ -48,7 +48,7 @@ class Shipper extends Admin
 	public function info()
 	{
 		$page_model = model( 'Shipper' );
-		$info       = $page_model->getShipperInfo( ['id' => $this->get['id']] );
+		$info       = \App\Model\Page::getShipperInfo( ['id' => $this->get['id']] );
 		$this->send( Code::success, ['info' => $info] );
 	}
 

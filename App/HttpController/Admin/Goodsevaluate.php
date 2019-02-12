@@ -33,13 +33,13 @@ class Goodsevaluate extends Admin
 	 */
 	public function list()
 	{
-        $table_prefix         = config('database.prefix');
-        $table_user           = $table_prefix . 'user';
-        $table_user_profile   = $table_prefix . 'user_profile';
+		$table_prefix       = config( 'database.prefix' );
+		$table_user         = $table_prefix.'user';
+		$table_user_profile = $table_prefix.'user_profile';
 
-        $param                = !empty($this->post) ? $this->post : $this->get;
-        $goods_evaluate_model = model('GoodsEvaluate');
-		$condition = [];
+		$param                = !empty( $this->post ) ? $this->post : $this->get;
+		$goods_evaluate_model = model( 'GoodsEvaluate' );
+		$condition            = [];
 		if( isset( $param['keywords_type'] ) && isset( $param['keywords'] ) ){
 			switch( $param['keywords_type'] ){
 			case 'goods_name':
@@ -77,8 +77,8 @@ class Goodsevaluate extends Admin
 			break;
 			}
 		}
-		$count = $goods_evaluate_model->alias( 'evaluate' )->join( 'order order', 'evaluate.order_id = order.id', 'LEFT' )->group( 'evaluate.id' )->where( $condition )->count();
-		$list  = $goods_evaluate_model->alias( 'evaluate' )->join( 'order order', 'evaluate.order_id = order.id', 'LEFT' )->join( 'order_goods goods', 'evaluate.order_goods_id = goods.id' )->join( 'user user', 'evaluate.user_id = user.id', 'LEFT' )->join( '__USER_PROFILE__ user_profile', 'user.id = user_profile.user_id', 'LEFT' )->where( $condition )->field( 'evaluate.id,score,evaluate.goods_img,evaluate.content,evaluate.create_time,evaluate.images,additional_content,additional_images,additional_time,reply_time,reply_content,reply_time2,reply_content2,display,top,goods.goods_spec,goods.goods_title,user.phone,user_profile.nickname,user_profile.avatar' )->order( 'evaluate.id desc' )->page( $this->getPageLimit() )->group( 'evaluate.id' )->select();
+		$count = \App\Model\GoodsEvaluate::alias( 'evaluate' )->join( 'order order', 'evaluate.order_id = order.id', 'LEFT' )->group( 'evaluate.id' )->where( $condition )->count();
+		$list  = \App\Model\GoodsEvaluate::alias( 'evaluate' )->join( 'order order', 'evaluate.order_id = order.id', 'LEFT' )->join( 'order_goods goods', 'evaluate.order_goods_id = goods.id' )->join( 'user user', 'evaluate.user_id = user.id', 'LEFT' )->join( '__USER_PROFILE__ user_profile', 'user.id = user_profile.user_id', 'LEFT' )->where( $condition )->field( 'evaluate.id,score,evaluate.goods_img,evaluate.content,evaluate.create_time,evaluate.images,additional_content,additional_images,additional_time,reply_time,reply_content,reply_time2,reply_content2,display,top,goods.goods_spec,goods.goods_title,user.phone,user_profile.nickname,user_profile.avatar' )->order( 'evaluate.id desc' )->page( $this->getPageLimit() )->group( 'evaluate.id' )->select();
 		$this->send( Code::success, [
 			'total_number' => $count,
 			'list'         => $list,
@@ -97,9 +97,8 @@ class Goodsevaluate extends Admin
 			$this->send( Code::param_error, [], $this->getValidate()->getError() );
 		} else{
 			try{
-				$goods_evaluate_model = model( 'GoodsEvaluate' );
 				$condition['id']      = $this->post['id'];
-				$row                  = $goods_evaluate_model->getGoodsEvaluateInfo( $condition, '*' );
+				$row                  = \App\Model\GoodsEvaluate::getGoodsEvaluateInfo( $condition, '*' );
 				if( $row['content'] != '' && $row['reply_content'] == '' ){
 					if( isset( $this->post['reply_content'] ) && $this->post['reply_content'] != '' ){
 						$data['reply_content'] = $this->post['reply_content'];
@@ -111,7 +110,7 @@ class Goodsevaluate extends Admin
 						$data['reply_time2']    = time();
 					}
 				}
-				$result = $goods_evaluate_model->editGoodsEvaluate( $condition, $data );
+				$result = \App\Model\GoodsEvaluate::editGoodsEvaluate( $condition, $data );
 				if( $result ){
 					$this->send( Code::success );
 				} else{
@@ -135,15 +134,14 @@ class Goodsevaluate extends Admin
 			$this->send( Code::param_error, [], $this->getValidate()->getError() );
 		} else{
 			try{
-				$goods_evaluate_model = model( 'GoodsEvaluate' );
 				$condition['id']      = $this->post['id'];
-				$row                  = $goods_evaluate_model->getGoodsEvaluateInfo( $condition, '*' );
+				$row                  = \App\Model\GoodsEvaluate::getGoodsEvaluateInfo( $condition, '*' );
 				if( $row['display'] === 1 ){
 					$data['display'] = 0;
 				} else{
 					$data['display'] = 1;
 				}
-				$result = $goods_evaluate_model->editGoodsEvaluate( $condition, $data );
+				$result = \App\Model\GoodsEvaluate::editGoodsEvaluate( $condition, $data );
 				if( $result ){
 					$this->send( Code::success );
 				} else{

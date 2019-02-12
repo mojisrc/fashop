@@ -51,9 +51,9 @@ class AutoReply
 	public function getReplyContentList() : ? array
 	{
 		$model = model( 'WechatAutoReplyKeywords' );
-		$find  = $model->getWechatAutoReplyKeywordsInfo( ['key' => $this->getKey(), 'match_mode' => 'equal'] );
+		$find  = \App\Model\Page::getWechatAutoReplyKeywordsInfo( ['key' => $this->getKey(), 'match_mode' => 'equal'] );
 		if( !$find ){
-			$find = $model->getWechatAutoReplyKeywordsInfo( [
+			$find = \App\Model\Page::getWechatAutoReplyKeywordsInfo( [
 				'key'        => ['like', "%{$this->getKey()}%"],
 				'match_mode' => 'contain',
 			] );
@@ -72,7 +72,7 @@ class AutoReply
 	}
 	public function getSubscribeReplyContent()
 	{
-		$shop = model( 'Shop' )->getShopInfo(['id'=>1,'auto_reply_status'=>1],'auto_reply_subscribe_replay_content');
+		$shop = \App\Model\Shop::getShopInfo(['id'=>1,'auto_reply_status'=>1],'auto_reply_subscribe_replay_content');
 		if( $shop ){
 			return $shop['auto_reply_subscribe_replay_content'];
 		}else{

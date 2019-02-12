@@ -104,7 +104,7 @@ class Goods extends Model
 			foreach( $goods_list as $value ){
 				$goods_array[] = $value['id'];
 			}
-			$stock       = model( 'Goods' )->getGoodsList( [
+			$stock       = \App\Model\Goods::getGoodsList( [
 				'goods_id' => ['in', $goods_array,],
 			], 'stock,goods_id,id', '', '', '1,10000' );
 			$stock_array = [];

@@ -41,7 +41,7 @@ class AccessToken
 			if( empty( $jwt ) || !isset( $jwt['jti'] ) ){
 				return false;
 			}
-			$find = model( 'AccessToken' )->getAccessTokenInfo( [
+			$find = \App\Model\AccessToken::getAccessTokenInfo( [
 				'jti'        => $jwt['jti'],
 				'sub'        => $jwt['sub'],
 				'exp'        => ['egt', $jwt['exp']],
@@ -88,7 +88,7 @@ class AccessToken
 	public function createAccessToken( int $user_id, int $start_time ) : ? array
 	{
 
-		$jti = model( 'AccessToken' )->addAccessToken( [
+		$jti = \App\Model\AccessToken::addAccessToken( [
 			'sub' => $user_id,
 			'iat' => $start_time,
 			'exp' => $start_time + $this->config['expire_interval'],
@@ -124,7 +124,7 @@ class AccessToken
 
 		if( $refresh_access_token ){
 			// 修改之前秘钥id的过期时间
-			$state = model( 'AccessToken' )->editAccessToken( ['jti' => $access_token_data['jti']], [
+			$state = \App\Model\AccessToken::editAccessToken( ['jti' => $access_token_data['jti']], [
 				'exp' => $start_time + $this->config['expire_interval'],
 			] );
 			if( $state ){

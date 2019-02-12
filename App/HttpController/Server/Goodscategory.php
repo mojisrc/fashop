@@ -17,10 +17,9 @@ class Goodscategory extends Server
 	 */
 	public function list()
 	{
-		$goods_category_model = model( 'GoodsCategory' );
 		$condition            = [];
 		$order                = 'sort asc';
-		$list                 = $goods_category_model->getGoodsCategoryList( $condition, 'id,name,pid,icon,banner', $order, '1,1000' );
+		$list                 = \App\Model\GoodsCategory::getGoodsCategoryList( $condition, 'id,name,pid,icon,banner', $order, '1,1000' );
 		$list                 = \App\Utils\Tree::listToTree( $list, 'id', 'pid', '_child', 0 );
 		$this->send( Code::success, [
 			'list' => $list,
@@ -36,8 +35,7 @@ class Goodscategory extends Server
 		if( $this->validate( $this->get, 'Server/GoodsCategory.info' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidate()->getError() );
 		} else{
-			$goods_category_model = model( 'GoodsCategory' );
-			$info                 = $goods_category_model->getGoodsCategoryInfo( ['id' => $this->get['id']], '*' );
+			$info                 = \App\Model\GoodsCategory::getGoodsCategoryInfo( ['id' => $this->get['id']], '*' );
 			if( !$info ){
 				$this->send( Code::param_error, [] );
 			} else{

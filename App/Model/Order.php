@@ -40,7 +40,7 @@ class Order extends Model
 
 		//返回买家信息
 		if( in_array( 'user', $extend ) ){
-			$order_info['extend_user'] = model( 'User' )->getUserInfo( ['id' => $order_info['user_id']] );
+			$order_info['extend_user'] = \App\Model\User::getUserInfo( ['id' => $order_info['user_id']] );
 		}
 
 		//追加返回商品信息
@@ -98,7 +98,7 @@ class Order extends Model
 	 */
 	public function getOrderPayInfo( $condition = [] )
 	{
-		$info = model( 'OrderPay' )->where( $condition )->find();
+		$info = \App\Model\OrderPay::where( $condition )->find();
 		return $info;
 	}
 
@@ -158,7 +158,7 @@ class Order extends Model
 			}
 			// todo 简化
 			//->field('id') ->key
-			$user_list = model( 'User' )->where( ['id' => ['in', $user_id_array]] )->select();
+			$user_list = \App\Model\User::where( ['id' => ['in', $user_id_array]] )->select();
 			$user_list = $this->array_under_reset( $user_list, 'id' );
 			foreach( $order_list as $order_id => $order ){
 				$order_list[$order_id]['extend_user'] = $user_list[$order['user_id']];
@@ -373,9 +373,9 @@ class Order extends Model
 	 */
 	public function addOrderPay( $data )
 	{
-		$result = model( 'OrderPay' )->allowField( true )->save( $data );
+		$result = \App\Model\OrderPay::allowField( true )->save( $data );
 		if( $result ){
-			return model( 'OrderPay' )->getLastInsID();
+			return \App\Model\OrderPay::getLastInsID();
 		}
 		return $result;
 	}
@@ -417,7 +417,7 @@ class Order extends Model
 	{
 		$data['role']        = str_replace( ['buyer', 'seller', 'system'], ['买家', '商家', '系统'], $data['role'] );
 		$data['create_time'] = time();
-		return model( 'OrderLog' )->insertGetId( $data );
+		return \App\Model\OrderLog::insertGetId( $data );
 	}
 
 	/**
@@ -450,7 +450,7 @@ class Order extends Model
 	 */
 	public function editOrderPay( $data, $condition )
 	{
-		return model( 'OrderPay' )->where( $condition )->edit( $data );
+		return \App\Model\OrderPay::where( $condition )->edit( $data );
 	}
 
 
@@ -464,7 +464,7 @@ class Order extends Model
 	 */
 	public function getOrderLogList( $condition )
 	{
-		$list = model( 'OrderLog' )->where( $condition )->select();
+		$list = \App\Model\OrderLog::where( $condition )->select();
 		return $list;
 	}
 
@@ -665,12 +665,12 @@ class Order extends Model
 
 				$data['stock']    = ['exp', 'stock+'.$goods['goods_num']];
 				$data['sale_num'] = ['exp', 'sale_num-'.$goods['goods_num']];
-				$update           = $goods_model->editGoods( ['id' => $goods['goods_id']], $data );
+				$update           = \App\Model\Goods::editGoods( ['id' => $goods['goods_id']], $data );
 
 				// 主表更新
 				$common_data['stock']    = ['exp', 'stock+'.$goods['goods_num']];
 				$common_data['sale_num'] = ['exp', 'sale_num-'.$goods['goods_num']];
-				$update                  = $goods_sku_model->editGoodsSku( ['id' => $goods['goods_common_id']], $common_data );
+				$update                  = \App\Model\GoodsSku::editGoodsSku( ['id' => $goods['goods_common_id']], $common_data );
 				if( !$update ){
 					throw new \Exception( '保存失败' );
 				}
@@ -746,11 +746,11 @@ class Order extends Model
 		$refund_model      = model( 'OrderRefund' );
 		$order_goods_model = model( 'OrderGoods' );
 
-		$refund = $refund_model->getOrderRefundInfo( ['order_id' => $order_id, 'is_close' => 0] );
+		$refund = \App\Model\OrderRefund::getOrderRefundInfo( ['order_id' => $order_id, 'is_close' => 0] );
 
 		//查询收货订单是否存在退款记录 存在则关闭
 		if( $refund ){
-			$refund_res = $refund_model->editOrderRefund( ['order_id' => $order_id], [
+			$refund_res = \App\Model\OrderRefund::editOrderRefund( ['order_id' => $order_id], [
 				'handle_time'    => time(),
 				'handle_message' => '因您确认收货，本次申请关闭',
 				'is_close'       => 1,   //此退款关闭

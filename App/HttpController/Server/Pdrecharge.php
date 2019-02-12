@@ -74,7 +74,7 @@ class Pdrecharge extends Server {
 						$log_data['amount']     = $data['amount'];
 						$log_data['admin_name'] = 'admin';
 						$log_data['state']      = 0;
-						$pd_log_model->changePd('recharge', $log_data);
+						\App\Model\PdLog::changePd('recharge', $log_data);
 
 						$pd_model->commit();
 
@@ -250,7 +250,7 @@ class Pdrecharge extends Server {
 				$pd_log_model                 = model('PdLog');
 				$pd_cash_model                = model('PdCash');
 				$user                         = $this->getRequestUser();
-				$user['available_predeposit'] = model( 'User' )->getUserValue( ['id' => $user['id']], 'available_predeposit' );
+				$user['available_predeposit'] = \App\Model\User::getUserValue( ['id' => $user['id']], 'available_predeposit' );
 
 				$post                         = $this->post;
 				$amount                       = abs(floatval($post['amount']));
@@ -287,7 +287,7 @@ class Pdrecharge extends Server {
 						$log_data['amount']     = $amount;
 						$log_data['admin_name'] = 'admin';
 						$log_data['state']      = 0;
-						$pd_log_model->changePd('cash_apply', $log_data);
+						\App\Model\PdLog::changePd('cash_apply', $log_data);
 
 						$pd_model->commit();
 						$this->send( Code::success, [] );

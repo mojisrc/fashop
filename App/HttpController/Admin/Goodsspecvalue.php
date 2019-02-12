@@ -35,7 +35,7 @@ class Goodsspecvalue extends Admin
 		} else{
 			$condition            = [];
 			$condition['spec_id'] = $this->get['spec_id'];
-			$list                 = model( 'GoodsSpecValue' )->getGoodsSpecValueList( $condition, 'id,name', 'id desc', '1,10000' );
+			$list                 = \App\Model\GoodsSpecValue::getGoodsSpecValueList( $condition, 'id,name', 'id desc', '1,10000' );
 			$this->send( Code::success, [
 				'list' => $list,
 			] );
@@ -53,7 +53,7 @@ class Goodsspecvalue extends Admin
 		if( $this->validate( $this->post, 'Admin/GoodsSpecValue.add' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidate()->getError() );
 		} else{
-			$result = model( 'GoodsSpecValue' )->addGoodsSpecValue( $this->post );
+			$result = \App\Model\GoodsSpecValue::addGoodsSpecValue( $this->post );
 			if( $result ){
 				$this->send( Code::success );
 			} else{

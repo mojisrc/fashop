@@ -37,8 +37,8 @@ class Auth extends Admin
 	public function groupList()
 	{
 		$model                  = model( 'AuthGroup' );
-		$result['list']         = $model->getAuthGroupList( [], '*', 'id desc', $this->getPageLimit() );
-		$result['total_number'] = $model->count();
+		$result['list']         = \App\Model\Page::getAuthGroupList( [], '*', 'id desc', $this->getPageLimit() );
+		$result['total_number'] = \App\Model\Page::count();
 		return $this->send( Code::success, $result );
 	}
 
@@ -53,7 +53,7 @@ class Auth extends Admin
 		if( $this->validate( $this->get, 'Admin/AuthGroup.groupInfo' ) !== true ){
 			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
 		} else{
-			$info = model( 'AuthGroup' )->getAuthGroupInfo( ['id' => $this->get['id']] );
+			$info = \App\Model\AuthGroup::getAuthGroupInfo( ['id' => $this->get['id']] );
 			return $this->send( Code::success, ['info' => $info] );
 		}
 	}
@@ -94,8 +94,8 @@ class Auth extends Admin
 		} else{
 			$post  = $this->post;
 			$model = model( 'AuthGroupAccess' );
-			$model->delAuthGroupAccess( ['group_id' => $this->post['id']] );
-			$model->addMultiAuthGroupAccess( collect( $this->post['member_ids'] )->map( function( $uid ) use ( $post ){
+			\App\Model\Page::delAuthGroupAccess( ['group_id' => $this->post['id']] );
+			\App\Model\Page::addMultiAuthGroupAccess( collect( $this->post['member_ids'] )->map( function( $uid ) use ( $post ){
 				return [
 					'uid'      => $uid,
 					'group_id' => $post['id'],
@@ -115,7 +115,7 @@ class Auth extends Admin
 		if( $this->validate( $this->post, 'Admin/AuthGroup.add' ) !== true ){
 			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
 		} else{
-			model( 'AuthGroup' )->addAuthGroup( $this->post );
+			\App\Model\AuthGroup::addAuthGroup( $this->post );
 			return $this->send();
 		}
 	}
@@ -131,7 +131,7 @@ class Auth extends Admin
 		if( $this->validate( $this->post, 'Admin/AuthGroup.edit' ) !== true ){
 			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
 		} else{
-			model( 'AuthGroup' )->editAuthGroup( ['id' => $this->post['id']], $this->post );
+			\App\Model\AuthGroup::editAuthGroup( ['id' => $this->post['id']], $this->post );
 			return $this->send();
 		}
 	}
@@ -146,7 +146,7 @@ class Auth extends Admin
 		if( $this->validate( $this->post, 'Admin/AuthGroup.del' ) !== true ){
 			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
 		} else{
-			model( 'AuthGroup' )->delAuthGroup( ['id' => $this->post['id']] );
+			\App\Model\AuthGroup::delAuthGroup( ['id' => $this->post['id']] );
 			model( 'AuthGroupAccess' )->delAuthGroupAccess( ['group_id' => $this->post['id']] );
 			return $this->send();
 		}
@@ -158,7 +158,7 @@ class Auth extends Admin
 	 */
 	public function ruleTree()
 	{
-		$list = model( 'AuthRule' )->getAuthRuleList( [], 'id,sign,title,status,type,pid,is_system,sort,is_display', 'sort asc', '1,5000' );
+		$list = \App\Model\AuthRule::getAuthRuleList( [], 'id,sign,title,status,type,pid,is_system,sort,is_display', 'sort asc', '1,5000' );
 		$tree = \App\Utils\Tree::listToTree( $list, 'id', 'pid', '_child' );
 		return $this->send( Code::success, ['tree' => $tree] );
 	}
@@ -173,7 +173,7 @@ class Auth extends Admin
 		if( $this->validate( $this->get, 'Admin/AuthRule.info' ) !== true ){
 			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
 		} else{
-			$info = model( 'AuthRule' )->getAuthRuleInfo( ['id' => $this->get['id']] );
+			$info = \App\Model\AuthRule::getAuthRuleInfo( ['id' => $this->get['id']] );
 			return $this->send( Code::success, ['data' => ['info' => $info]] );
 		}
 	}
@@ -191,7 +191,7 @@ class Auth extends Admin
 		if( $this->validate( $this->post, 'Admin/AuthRule.add' ) !== true ){
 			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
 		} else{
-			model( 'AuthRule' )->addAuthRule( $this->post );
+			\App\Model\AuthRule::addAuthRule( $this->post );
 			return $this->send();
 		}
 	}
@@ -210,7 +210,7 @@ class Auth extends Admin
 		if( $this->validate( $this->post, 'Admin/AuthRule.edit' ) !== true ){
 			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
 		} else{
-			model( 'AuthRule' )->editAuthRule( ['id' => $this->post['id']], $this->post );
+			\App\Model\AuthRule::editAuthRule( ['id' => $this->post['id']], $this->post );
 			return $this->send();
 		}
 	}
@@ -226,10 +226,10 @@ class Auth extends Admin
 			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
 		} else{
 			$model        = model( 'AuthRule' );
-			$exsist_child = $model->where( ['pid' => $this->post['id']] )->column( 'id' );
+			$exsist_child = \App\Model\Page::where( ['pid' => $this->post['id']] )->column( 'id' );
 			if( $exsist_child )
 				return $this->send( Code::error, [], '存在子项不可删除' );
-			if( $model->delAuthRule( ['id' => $this->post['id'], 'is_system' => 0] ) ){
+			if( \App\Model\Page::delAuthRule( ['id' => $this->post['id'], 'is_system' => 0] ) ){
 				return $this->send();
 			} else{
 				return $this->send( Code::error, [], '系统节点不可删除或者不存在该节点' );

@@ -49,9 +49,8 @@ class Page extends Admin
 			if( isset( $this->get['type'] ) ){
 				$condition['type'] = $this->get['type'];
 			}
-			$model = model( 'Page' );
-			$count = $model->where( $condition )->count();
-			$list  = $model->getPageList( $condition, '*', 'id desc', $this->getPageLimit() );
+			$count = \App\Model\Page::where( $condition )->count();
+			$list  = \App\Model\Page::getPageList( $condition, '*', 'id desc', $this->getPageLimit() );
 
 			if( isset( $this->get['mobile'] ) ){
 				$shop     = Db::name( 'Shop' )->where( ['id' => 1] )->field( 'host,salt' )->find();
@@ -91,8 +90,7 @@ class Page extends Admin
 			$this->send( Code::param_error, [], $this->getValidate()->getError() );
 		} else{
 			try{
-				$page_model = model( 'Page' );
-				$data       = [];
+				$data = [];
 				if( isset( $this->post['description'] ) ){
 					$data['description'] = $this->post['description'];
 				}
@@ -100,7 +98,7 @@ class Page extends Admin
 					$data['clone_from_id'] = $this->post['clone_from_id'];
 				}
 				$PageBodyFormat = new PageBodyFormat();
-				$page_model->addPage( [
+				\App\Model\Page::addPage( [
 					'name'             => $this->post['name'],
 					'description'      => $this->post['description'],
 					'background_color' => $this->post['background_color'],
@@ -137,7 +135,7 @@ class Page extends Admin
 					$data['description'] = $this->post['description'];
 				}
 				$PageBodyFormat = new PageBodyFormat();
-				$page_model->editPage( ['id' => $this->post['id']], [
+				\App\Model\Page::editPage( ['id' => $this->post['id']], [
 					'name'             => $this->post['name'],
 					'description'      => $this->post['description'],
 					'background_color' => $this->post['background_color'],
@@ -154,10 +152,9 @@ class Page extends Admin
 
 	public function info()
 	{
-        $page_model     = model('Page');
-        $info           = $page_model->getPageInfo(['id' => $this->get['id']]);
-        $pageGoodsLogic = new PageGoodsLogic();
-        $info['body']   = $pageGoodsLogic->filterGoods($info['body']);
+		$info           = \App\Model\Page::getPageInfo( ['id' => $this->get['id']] );
+		$pageGoodsLogic = new PageGoodsLogic();
+		$info['body']   = $pageGoodsLogic->filterGoods( $info['body'] );
 		$this->send( Code::success, ['info' => $info] );
 	}
 
@@ -171,11 +168,9 @@ class Page extends Admin
 		if( $this->validate( $this->post, 'Admin/Page.setPortal' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidate()->getError() );
 		} else{
-
-			$page_model = model( 'Page' );
-			$info       = $page_model->getPageInfo( ['id' => $this->post['id']], 'module' );
-			$page_model->editPage( ['module' => $info['module']], ['is_portal' => 0] );
-			$page_model->editPage( ['id' => $this->post['id']], ['is_portal' => 1] );
+			$info = \App\Model\Page::getPageInfo( ['id' => $this->post['id']], 'module' );
+			\App\Model\Page::editPage( ['module' => $info['module']], ['is_portal' => 0] );
+			\App\Model\Page::editPage( ['id' => $this->post['id']], ['is_portal' => 1] );
 			$this->send( Code::success );
 		}
 	}

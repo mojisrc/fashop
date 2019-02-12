@@ -179,9 +179,9 @@ class Relevance
             $condition['username'] = $username;
         }
         $user_model = model('User');
-        $user_model->startTrans();
+        \App\Model\User::startTrans();
 
-        $user       = $user_model->getUserInfo($condition, 'id');
+        $user       = \App\Model\User::getUserInfo($condition, 'id');
         if( $user ){
             throw new \App\Utils\Exception( "user account exist", Code::user_account_exist );
         }
@@ -201,7 +201,7 @@ class Relevance
 
         $user_id = $userModel->addUser( $data );
 		if( !($user_id > 0) ){
-            $user_model->rollback();
+            \App\Model\User::rollback();
             return null;
 		}
 
@@ -215,10 +215,10 @@ class Relevance
         $user_id = $this->insertUserInfo($user_id, $profile_data, $assets_data, []);
 
         if($user_id > 0){
-            $user_model->commit();
+            \App\Model\User::commit();
             return ['id' => $user_id];
         }else{
-            $user_model->rollback();
+            \App\Model\User::rollback();
             return null;
         }
 	}
@@ -244,12 +244,12 @@ class Relevance
                 $data['username'] = "wechat_{$wechat_openid}_" . RandomKey::randMd5(8);
 
                 $user_model       = model('User');
-                $user_model->startTrans();
+                \App\Model\User::startTrans();
 
-                $user_id          = $user_model->addUser($data);
+                $user_id          = \App\Model\User::addUser($data);
 
                 if( !($user_id > 0) ){
-                    $user_model->rollback();
+                    \App\Model\User::rollback();
                     return null;
                 }
                 $profile_data     			 = [];
@@ -292,10 +292,10 @@ class Relevance
 
                 $user_id = $this->insertUserInfo($user_id, $profile_data, $assets_data, $open_data);
                 if($user_id > 0){
-                    $user_model->commit();
+                    \App\Model\User::commit();
                     return ['id' => $user_id];
                 }else{
-                    $user_model->rollback();
+                    \App\Model\User::rollback();
                     return null;
                 }
 			}
@@ -335,13 +335,13 @@ class Relevance
 					throw new \App\Utils\Exception( "wechatmini openid exist", Code::user_wechat_openid_exist );
                 } else{
                     $user_model 	  = model('User');
-                    $user_model->startTrans();
+                    \App\Model\User::startTrans();
 
                     $data['username'] = "wechat_{$mini_user['openId']}_" . RandomKey::randMd5(8);
-                    $user_id          = $user_model->addUser($data);
+                    $user_id          = \App\Model\User::addUser($data);
 
                     if( !($user_id > 0) ){
-                        $user_model->rollback();
+                        \App\Model\User::rollback();
                         return null;
                     }
 
@@ -375,10 +375,10 @@ class Relevance
 
                     $user_id = $this->insertUserInfo($user_id, $profile_data, $assets_data, $open_data);
                     if($user_id > 0){
-                        $user_model->commit();
+                        \App\Model\User::commit();
                         return ['id' => $user_id];
 					}else{
-                        $user_model->rollback();
+                        \App\Model\User::rollback();
                         return null;
                     }
 				}
@@ -406,20 +406,20 @@ class Relevance
 
 			$user_profile_id = $user_profile_model->insertUserProfile($profile_data);
 			if($user_profile_id < 0){
-				$user_model->rollback();
+				\App\Model\User::rollback();
 				return null;
 			}
 
 			$user_assets_id = $user_assets_model->insertUserAssets($assets_data);
 			if($user_assets_id < 0){
-				$user_model->rollback();
+				\App\Model\User::rollback();
 				return null;
 			}
 
 			if(isset($open_data)){
                 $user_open_id = $user_open_model->addUserOpen($open_data);
                 if($user_open_id < 0){
-                    $user_model->rollback();
+                    \App\Model\User::rollback();
                     return null;
                 }
 
@@ -428,12 +428,12 @@ class Relevance
                 $alias_data['alias_user_id'] = $user_id;
                 $user_alias_id               = $user_alias_model->insertUserAlias($alias_data);
                 if($user_alias_id < 0){
-                    $user_model->rollback();
+                    \App\Model\User::rollback();
                     return null;
                 }
             }
         } catch( \Exception $e ){
-            $user_model->rollback();
+            \App\Model\User::rollback();
             throw new $e;
         }
     }

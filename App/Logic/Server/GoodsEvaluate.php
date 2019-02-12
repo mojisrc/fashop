@@ -228,19 +228,19 @@ class GoodsEvaluate
         }
 		$this->setOrderId($order_goods_info['order_id']);
 		//获取订单信息
-		$order_info = $order_model->getOrderInfo( [
+		$order_info = \App\Model\Order::getOrderInfo( [
 			'id'      => $this->getOrderId(),
 			'user_id' => $this->getUserId(),
 		] );
 
-		$order_info['evaluate_goods_able'] = $order_model->getOrderOperateState( 'evaluate_goods', $order_info );
+		$order_info['evaluate_goods_able'] = \App\Model\Order::getOrderOperateState( 'evaluate_goods', $order_info );
 		// 验证是否可评价
 		if( empty( $order_info ) || !$order_info['evaluate_goods_able'] ){
 			throw new \Exception( "不能存在该订单" );
 		}
 
 		// 判断是否已经评价过了
-		$evaluate_find = $goods_evaluate_model->where( 'order_goods_id', '=', $this->getOrderGoodsId() )->find();
+		$evaluate_find = \App\Model\GoodsEvaluate::where( 'order_goods_id', '=', $this->getOrderGoodsId() )->find();
 		if( $evaluate_find ){
 			throw new \Exception( "已经评价了" );
 		}
@@ -249,9 +249,9 @@ class GoodsEvaluate
 		if( $evaluate_score <= 0 || $evaluate_score > 5 ){
 			$evaluate_score = 5;
 		}
-		$goods_evaluate_model->startTrans();
+		\App\Model\GoodsEvaluate::startTrans();
 		try{
-			$add_state  = $goods_evaluate_model->addGoodsEvaluate( [
+			$add_state  = \App\Model\GoodsEvaluate::addGoodsEvaluate( [
 				'order_id'       => $this->getOrderId(),
 				'order_no'       => $order_info['sn'],
 				'goods_id'       => $order_goods_info['goods_id'],
@@ -274,19 +274,19 @@ class GoodsEvaluate
 			$order_state = 1;
             $no_evaluate_order_goods_id = $order_goods_model->getOrderGoodsId( ['order_id'=>$order_info['id'],'evaluate_state'=>0,'id'=>['neq',$order_goods_info['id']]] );
             if( !($no_evaluate_order_goods_id >0) ){
-                $order_state = $order_model->editOrder( ['id'=>$order_info['id']], ['evaluate_state'=>1] );
+                $order_state = \App\Model\Order::editOrder( ['id'=>$order_info['id']], ['evaluate_state'=>1] );
             }
 
-			$log_state  = model( 'OrderLog' )->addOrderLog( [
+			$log_state  = \App\Model\OrderLog::addOrderLog( [
 				'order_id' => $this->getOrderId(),
 				'role'     => '买家',
 				'msg'      => '买家评价了',
 			] );
 			if( $add_state && $edit_state && $log_state && $order_state){
-				$goods_evaluate_model->commit();
+				\App\Model\GoodsEvaluate::commit();
 				return true;
 			} else{
-				$goods_evaluate_model->rollback();
+				\App\Model\GoodsEvaluate::rollback();
 				return false;
 			}
 		} catch( \Exception $e ){
@@ -321,7 +321,7 @@ class GoodsEvaluate
 		$goods_evaluate_model = model( 'GoodsEvaluate' );
 
 		//获取订单信息
-        $order_goods_info = $order_model->getOrderGoodsInfo( [
+        $order_goods_info = \App\Model\Order::getOrderGoodsInfo( [
 			'id'             => $this->getOrderGoodsId(),
 			'user_id'        => $this->getUserId(),
 			'evaluate_state' => 1,
@@ -331,14 +331,14 @@ class GoodsEvaluate
 			throw new \Exception( "订单不存在该商品" );
 		}
 		// 判断是否已经评价过了
-		$evaluate_find = $goods_evaluate_model->where( ['order_goods_id' => $this->getOrderGoodsId()] )->find();
+		$evaluate_find = \App\Model\GoodsEvaluate::where( ['order_goods_id' => $this->getOrderGoodsId()] )->find();
 		if( !$evaluate_find ){
 			throw new \Exception( "评价信息错误" );
 		}
 
-		$goods_evaluate_model->startTrans();
+		\App\Model\GoodsEvaluate::startTrans();
 		try{
-			$edit_state = $goods_evaluate_model->editGoodsEvaluate( ['id' => $evaluate_find['id']], [
+			$edit_state = \App\Model\GoodsEvaluate::editGoodsEvaluate( ['id' => $evaluate_find['id']], [
 				'additional_images'  => $this->getImages(),
 				'additional_content' => $this->getContent(),
 				'additional_time'    => time(),
@@ -347,16 +347,16 @@ class GoodsEvaluate
 			$order_goods_state = model( 'OrderGoods' )->editOrderGoods( ['id' => $order_goods_info['id']], [
 				'evaluate_state' => 2,
 			] );
-			$log_state         = model( 'Order' )->addOrderLog( [
+			$log_state         = \App\Model\Order::addOrderLog( [
 				'order_id' => $order_goods_info['order_id'],
 				'role'     => '买家',
 				'msg'      => '买家追加评价了',
 			] );
 			if( $edit_state && $order_goods_state && $log_state ){
-				$goods_evaluate_model->commit();
+				\App\Model\GoodsEvaluate::commit();
 				return true;
 			} else{
-				$goods_evaluate_model->rollback();
+				\App\Model\GoodsEvaluate::rollback();
 				return false;
 			}
 		} catch( \Exception $e ){

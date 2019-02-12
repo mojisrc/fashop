@@ -95,7 +95,7 @@ class Goodsevaluate extends Server
 
                 $goods_evaluate_model = model( 'GoodsEvaluate' );
 
-                $data = $goods_evaluate_model->alias( 'evaluate' )->join( 'order', 'evaluate.order_id = order.id', 'LEFT' )->join( 'order_goods goods', 'evaluate.order_goods_id = goods.id' )->join( 'user', 'evaluate.user_id = user.id', 'LEFT' )->join( 'user_profile', 'user_profile.user_id = user.id', 'LEFT' )->where( $condition )->field( 'evaluate.*,goods.goods_spec,user.phone,user_profile.nickname,user_profile.avatar' )->find();
+                $data = \App\Model\GoodsEvaluate::alias( 'evaluate' )->join( 'order', 'evaluate.order_id = order.id', 'LEFT' )->join( 'order_goods goods', 'evaluate.order_goods_id = goods.id' )->join( 'user', 'evaluate.user_id = user.id', 'LEFT' )->join( 'user_profile', 'user_profile.user_id = user.id', 'LEFT' )->where( $condition )->field( 'evaluate.*,goods.goods_spec,user.phone,user_profile.nickname,user_profile.avatar' )->find();
 
                 $this->send( Code::success, ['info' => $data] );
 
@@ -186,8 +186,8 @@ class Goodsevaluate extends Server
     //          $user                 = $this->getRequestUser();
     //          $goods_evaluate_model = model( 'GoodsEvaluate' );
     //          $condition['user_id'] = $user['id'];
-    //          $count                = $goods_evaluate_model->where( $condition )->count();
-    //          $list                 = $goods_evaluate_model->getGoodsEvaluateList( $condition, '*', 'id desc', $this->getPageLimit() );
+    //          $count                = \App\Model\GoodsEvaluate::where( $condition )->count();
+    //          $list                 = \App\Model\GoodsEvaluate::getGoodsEvaluateList( $condition, '*', 'id desc', $this->getPageLimit() );
     //          $this->send( Code::success, [
     //              'total_number' => $count,
     //              'list'         => $list,

@@ -20,7 +20,7 @@ class Shop extends Server
 	public function info()
 	{
 		$field = 'name,logo,contact_number,description,color_scheme,portal_template_id,wechat_platform_qr,goods_category_style,host,order_auto_close_expires,order_auto_confirm_expires,order_auto_close_refound_expires';
-		$info  = model( 'Shop' )->getShopInfo( ['id' => 1], $field );
+		$info  = \App\Model\Shop::getShopInfo( ['id' => 1], $field );
 		$this->send( Code::success, ['info' => $info] );
 	}
 }

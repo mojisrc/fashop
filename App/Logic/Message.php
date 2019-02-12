@@ -29,7 +29,7 @@ class Message extends Model {
 	 */
 	function addMessage(int $to_user_id, string $title, string $body, string $relation_model, int $relation_model_id, int $type_id) {
 		$model      = model('Message');
-		$message_id = $model->addMessage([
+		$message_id = \App\Model\Page::addMessage([
 			'title'             => $title,
 			'body'              => $body,
 			'relation_model'    => $relation_model,

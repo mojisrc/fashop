@@ -233,7 +233,7 @@ class Cart
 			'freight.areas as goods_freight_areas',
 		];
 		$field       = implode( ",", $field_array );
-		$list        = $model->alias( 'cart' )->join( 'goods_sku', 'goods_sku.id = cart.goods_sku_id', "LEFT" )->join( 'goods', 'goods_sku.goods_id = goods.id', "LEFT" )->join( 'freight', 'goods.freight_id = freight.id', "LEFT" )->field( $field )->where( $condition )->group( 'goods_sku_id' )->select();
+		$list        = \App\Model\Page::alias( 'cart' )->join( 'goods_sku', 'goods_sku.id = cart.goods_sku_id', "LEFT" )->join( 'goods', 'goods_sku.goods_id = goods.id', "LEFT" )->join( 'freight', 'goods.freight_id = freight.id', "LEFT" )->field( $field )->where( $condition )->group( 'goods_sku_id' )->select();
 
 		if( $list ){
 			$list = $list->toArray();
@@ -271,7 +271,7 @@ class Cart
 			'freight.areas as goods_freight_areas',
 		];
 		$field       = implode( ",", $field_array );
-		$info        = $model->alias( 'cart' )->join( 'goods_sku', 'goods_sku.id = cart.goods_sku_id', "LEFT" )->join( 'goods', 'goods_sku.goods_id = goods.id', "LEFT" )->join( 'freight', 'goods.freight_id = freight.id', "LEFT" )->field( $field )->where( $condition )->find();
+		$info        = \App\Model\Page::alias( 'cart' )->join( 'goods_sku', 'goods_sku.id = cart.goods_sku_id', "LEFT" )->join( 'goods', 'goods_sku.goods_id = goods.id', "LEFT" )->join( 'freight', 'goods.freight_id = freight.id', "LEFT" )->field( $field )->where( $condition )->find();
 
 		if( $info ){
 			$info = $info->toArray();
@@ -332,7 +332,7 @@ class Cart
 	public function getGoodsOnlineInfo( $goods_sku_id, $quantity )
 	{
 		//取目前在售商品
-		$goods_info = model( 'Goods' )->getGoodsOnlineInfo( ['id' => $goods_sku_id] );
+		$goods_info = \App\Model\Goods::getGoodsOnlineInfo( ['id' => $goods_sku_id] );
 
 		if( empty( $goods_info ) ){
 			return null;
@@ -393,7 +393,7 @@ class Cart
 			$goods_sku_id_array[] = $cart_info['goods_sku_id'];
 		}
 		$goods_model        = model( 'Goods' );
-		$goods_online_list  = $goods_model->getGoodsOnlineList( ['id' => ['in', $goods_sku_id_array]] );
+		$goods_online_list  = \App\Model\Goods::getGoodsOnlineList( ['id' => ['in', $goods_sku_id_array]] );
 		$goods_online_array = [];
 		foreach( $goods_online_list as $goods ){
 			$goods_online_array[$goods['id']] = $goods;

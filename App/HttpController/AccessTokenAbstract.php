@@ -36,7 +36,7 @@ abstract class AccessTokenAbstract extends Controller
 			$access_token_data = $this->getRequestAccessTokenData();
 			$condition         = [];
 			$condition['id']   = $access_token_data['sub'];
-			$user              = model( 'User' )->getUserExcludeInfo( $condition, '', 'password' );
+			$user              = \App\Model\User::getUserExcludeInfo( $condition, '', 'password' );
 			if( !empty( $user ) ){
 				$user_auxiliary = $this->getUserInfo( $user['id'] );
 

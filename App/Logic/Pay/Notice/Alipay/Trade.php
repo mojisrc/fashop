@@ -33,7 +33,7 @@ class Trade extends Notice
                 // 1、商户需要验证该通知数据中的out_trade_no是否为商户系统中创建的订单号；
                 // 2、判断total_amount是否确实为该订单的实际金额（即商户订单创建时的金额）；
                 $order_model = model('Order');
-                $this->order = $order_model->getOrderCommonInfo([
+                $this->order = \App\Model\Order::getOrderCommonInfo([
                                                                     'pay_sn'       => $this->data->out_trade_no,
                                                                     'payment_time' => 0,
                                                                 ], '', '*');

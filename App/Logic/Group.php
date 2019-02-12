@@ -37,7 +37,7 @@ class Group
         $group_goods_model     = model('GroupGoods');
         $condition             = [];
         $condition['goods_id'] = $this->goods_id;
-        $group_ids             = $group_goods_model->getGroupGoodsColumn($condition, '', 'group_id');
+        $group_ids             = \App\Model\GroupGoods::getGroupGoodsColumn($condition, '', 'group_id');
 
         if (!$group_ids) {
             return false;
@@ -47,7 +47,7 @@ class Group
             $map['id']              = ['in', $nonredundant_group_ids];
             $map['end_time']        = ['lt', time()];
             $map['is_show']         = 0;
-            $group_count            = $group_model->getGroupCount($map);
+            $group_count            = \App\Model\Group::getGroupCount($map);
             if ($group_count == count($nonredundant_group_ids)) { //所有查出来的拼团都是无效的
                 return false;
             }
@@ -64,7 +64,7 @@ class Group
     {
         //过滤商品字段 goods_skus goods_sku表信息，sku_list goods表sku_list字段
         $sku_ids    = array_column($this->goods_skus, 'id');
-        $goods_skus = model('GoodsSku')->getGoodsSkuList(['id' => ['in', $sku_ids]], 'id,price,stock,code,spec,weight', 'id asc', '1,100');
+        $goods_skus = model('GoodsSku')->getGoodsSkuList(['id' => ['in', $sku_ids]], 'id,price,stock,code,spec,weight', 'id asc', [1,100]);
         if (count($sku_ids) != count($goods_skus)) {
             return false;
         }

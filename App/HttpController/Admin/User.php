@@ -65,7 +65,7 @@ class User extends Admin
 			$data['password']      = \App\Logic\User::encryptPassword( $this->post['password'] );
 			$data['phone']         = $this->post['phone'];
 			$data['create_time']   = time();
-			$result                = $user_model->addUser( $data );
+			$result                = \App\Model\User::addUser( $data );
 			if( !$result ){
 				$this->send( Code::error );
 			} else{
@@ -88,21 +88,21 @@ class User extends Admin
 		// } else{
 		// 	$condition['id'] = ['in', $this->post['ids']];
 
-		// 	$user_model->startTrans();
+		// 	\App\Model\User::startTrans();
 
-		// 	$result = $user_model->editUser( $condition, ['is_disable' => 1] );//禁用 默认0否 1是
+		// 	$result = \App\Model\User::editUser( $condition, ['is_disable' => 1] );//禁用 默认0否 1是
 		// 	if( !$result ){
-		// 		$user_model->rollback();
+		// 		\App\Model\User::rollback();
 		// 		return $this->send( Code::error );
 		// 	}
 
-		// 	$result2 = $user_model->softDelUser( $condition );
+		// 	$result2 = \App\Model\User::softDelUser( $condition );
 		// 	if( !$result2 ){
-		// 		$user_model->rollback();
+		// 		\App\Model\User::rollback();
 		// 		return $this->send( Code::error );
 		// 	}
 
-		// 	$user_model->commit();
+		// 	\App\Model\User::commit();
 		$this->send( Code::success );
 		// }
 	}
@@ -188,8 +188,8 @@ class User extends Admin
 		} else{
 
 			$condition['user_id']  = ['in', model('User')->getUserAllIds($this->get['id'])];
-			$count                 = model( 'Order' )->where( $condition )->count();
-			$order_list            = model( 'Order' )->getOrderList( $condition, '', "*", "id desc", $this->getPageLimit(), [
+			$count                 = \App\Model\Order::where( $condition )->count();
+			$order_list            = \App\Model\Order::getOrderList( $condition, '', "*", "id desc", $this->getPageLimit(), [
 				'order_goods',
 				'order_extend',
 				'user',
@@ -213,8 +213,8 @@ class User extends Admin
 		} else{
 			$address_model        = model( 'Address' );
 			$condition['user_id'] = ['in', model('User')->getUserAllIds($this->get['id'])];
-			$count                = $address_model->where( $condition )->count();
-			$list                 = $address_model->getAddressList( $condition, '*', 'id desc', $this->getPageLimit() );
+			$count                = \App\Model\Address::where( $condition )->count();
+			$list                 = \App\Model\Address::getAddressList( $condition, '*', 'id desc', $this->getPageLimit() );
 			$this->send( Code::success, [
 				'total_number' => $count,
 				'list'         => $list,
@@ -257,7 +257,7 @@ class User extends Admin
 				$this->send( Code::param_error );
 			} else{
 				$updata['password'] = \App\Logic\User::encryptPassword( $this->post['password'] );
-				model( 'User' )->editUser( $condition, $updata );
+				\App\Model\User::editUser( $condition, $updata );
 				$this->send( Code::success );
 			}
 		}

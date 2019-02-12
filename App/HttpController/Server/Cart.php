@@ -57,19 +57,17 @@ class Cart extends Server
 			if( $this->validate( $this->post, 'Server/Cart.add' ) !== true ){
 				$this->send( Code::param_error, [], $this->getValidate()->getError() );
 			} else{
-				$cart_model = model( 'Cart' );
-				$quantity   = $this->post['quantity'];
+				$quantity = $this->post['quantity'];
 
-				$find = $cart_model->getCartInfo( [
+				$find = \App\Model\Cart::getCartInfo( [
 					'goods_sku_id' => $this->post['goods_sku_id'],
-					'user_id'      => ['eq',$user['id']],
+					'user_id'      => ['eq', $user['id']],
 				] );
 				if( !empty( $find ) ){
 					return $this->send( Code::param_error, [], '购物车已存在，不可重复添加' );
 				}
 
-				$goods_sku_model = model( 'GoodsSku' );
-				$goods_sku_info  = $goods_sku_model->getGoodsSkuOnlineInfo( ['goods_sku.id' => $this->post['goods_sku_id']], 'goods_sku.*,goods.img as img,goods.title as title' );
+				$goods_sku_info = \App\Model\GoodsSku::getGoodsSkuOnlineInfo( ['goods_sku.id' => $this->post['goods_sku_id']], 'goods_sku.*,goods.img as img,goods.title as title' );
 				if( empty( $goods_sku_info ) ){
 					return $this->send( Code::param_error, [], '产品不存在' );
 				}
@@ -83,8 +81,8 @@ class Cart extends Server
 				if( intval( $goods_sku_info['stock'] ) < $quantity ){
 					return $this->send( Code::error, [], '库存不足' );
 				}
-//				$goods_sku_info['user_id'] = $user['id'];
-				$cart_model->addCart( [
+				//				$goods_sku_info['user_id'] = $user['id'];
+				\App\Model\Cart::addCart( [
 					'user_id'      => $user['id'],
 					'goods_sku_id' => $goods_sku_info['id'],
 					'goods_num'    => $quantity,
@@ -110,12 +108,10 @@ class Cart extends Server
 			if( $this->validate( $this->post, 'Server/Cart.edit' ) !== true ){
 				$this->send( Code::param_error, [], $this->getValidate()->getError() );
 			} else{
-				$user            = $this->getRequestUser();
-				$goods_sku_id    = $this->post['goods_sku_id'];
-				$quantity        = $this->post['quantity'];
-				$cart_model      = model( 'Cart' );
-				$goods_sku_model = model( 'GoodsSku' );
-				$cart_info       = $cart_model->getCartInfo( [
+				$user         = $this->getRequestUser();
+				$goods_sku_id = $this->post['goods_sku_id'];
+				$quantity     = $this->post['quantity'];
+				$cart_info    = \App\Model\Cart::getCartInfo( [
 					'goods_sku_id' => $goods_sku_id,
 					'user_id'      => ['eq', $user['id']],
 				] );
@@ -123,7 +119,7 @@ class Cart extends Server
 					return $this->send( Code::cart_goods_not_exist );
 				}
 
-				$goods_sku_info = $goods_sku_model->getGoodsSkuOnlineInfo( ['goods_sku.id' => $goods_sku_id], 'goods_sku.*,goods.img as img,goods.title as title' );
+				$goods_sku_info = \App\Model\GoodsSku::getGoodsSkuOnlineInfo( ['goods_sku.id' => $goods_sku_id], 'goods_sku.*,goods.img as img,goods.title as title' );
 				if( empty( $goods_sku_info ) ){
 					return $this->send( Code::goods_offline );
 				}
@@ -134,11 +130,11 @@ class Cart extends Server
 				if( $goods_sku_info['stock'] < $quantity ){
 					if( $goods_sku_info['stock'] > 0 ){
 						// 更新下购物车数量
-						$cart_model->editCart( $condition, ['goods_num' => $goods_sku_info['stock']] );
+						\App\Model\Cart::editCart( $condition, ['goods_num' => $goods_sku_info['stock']] );
 					}
 					$this->send( Code::goods_stockout );
 				} else{
-					$cart_model->editCart( $condition, [
+					\App\Model\Cart::editCart( $condition, [
 						'goods_sku_id' => $goods_sku_info['id'],
 						'goods_num'    => $quantity,
 					] );
@@ -163,8 +159,7 @@ class Cart extends Server
 			if( $this->validate( $this->post, 'Server/Cart.del' ) !== true ){
 				$this->send( Code::param_error, [], $this->getValidate()->getError() );
 			} else{
-				$cart_model = model( 'Cart' );
-				$cart_model->delCart( [
+				\App\Model\Cart::delCart( [
 					'goods_sku_id' => ['in', $this->post['goods_sku_ids']],
 					'user_id'      => ['eq', $user['id']],
 				] );
@@ -214,7 +209,7 @@ class Cart extends Server
 				$this->send( Code::param_error, [], $this->getValidate()->getError() );
 			} else{
 				$user      = $this->getRequestUser();
-				$cart_info = model( 'Cart' )->getCartInfo( [
+				$cart_info = \App\Model\Cart::getCartInfo( [
 					'goods_sku_id' => $this->get['goods_sku_id'],
 					'user_id'      => ['eq', $user['id']],
 				], 'id' );
@@ -234,9 +229,8 @@ class Cart extends Server
 		if( $this->verifyResourceRequest() !== true ){
 			$this->send( Code::user_access_token_error );
 		} else{
-			$user       = $this->getRequestUser();
-			$cart_model = model( 'Cart' );
-			$cart_model->delCart( ['user_id' => ['eq', $user['id']]] );
+			$user = $this->getRequestUser();
+			\App\Model\Cart::delCart( ['user_id' => ['eq', $user['id']]] );
 			$this->send( Code::success );
 		}
 	}
@@ -250,9 +244,8 @@ class Cart extends Server
 		if( $this->verifyResourceRequest() !== true ){
 			$this->send( Code::user_access_token_error );
 		} else{
-			$user       = $this->getRequestUser();
-			$cart_model = model( 'Cart' );
-			$total      = $cart_model->where( ['user_id' => ['eq', $user['id']]] )->sum( 'goods_num' );
+			$user  = $this->getRequestUser();
+			$total = \App\Model\Cart::where( ['user_id' => ['eq', $user['id']]] )->sum( 'goods_num' );
 			$this->send( Code::success, ['total_num' => $total] );
 		}
 	}
@@ -274,12 +267,10 @@ class Cart extends Server
 				$this->send( Code::param_error, [], $this->getValidate()->getError() );
 			} else{
 
-				$cart_model                = model( 'Cart' );
 				$condition                 = [];
 				$condition['user_id']      = ['eq', $user['id']];
 				$condition['goods_sku_id'] = ['in', $this->post['goods_sku_ids']];
-
-				$result = $cart_model->editCart( $condition, ['is_check' => $this->post['is_check']] );
+				$result                    = \App\Model\Cart::editCart( $condition, ['is_check' => $this->post['is_check']] );
 				if( !$result ){
 					return $this->send( Code::error, [], '编辑失败' );
 				}

@@ -455,7 +455,7 @@ class Statistics extends Admin
      */
     private function allPositiveCount()
     {
-        $positive_count = model( 'GoodsEvaluate' )->where( 'score', 5 )->count();
+        $positive_count = \App\Model\GoodsEvaluate::where( 'score', 5 )->count();
         return $positive_count;
     }
 
@@ -464,7 +464,7 @@ class Statistics extends Admin
      */
     private function yesterdayPositiveCount()
     {
-        $yesterday_positive_count = model( 'GoodsEvaluate' )->where( 'score', 5 )->whereTime( 'create_time', 'yesterday' )->count();
+        $yesterday_positive_count = \App\Model\GoodsEvaluate::where( 'score', 5 )->whereTime( 'create_time', 'yesterday' )->count();
         return $yesterday_positive_count;
     }
 
@@ -473,7 +473,7 @@ class Statistics extends Admin
      */
     private function yesterdayModerateCount()
     {
-        $yesterday_moderate_count = model( 'GoodsEvaluate' )->where( 'score', '3,4' )->whereTime( 'create_time', 'yesterday' )->count();
+        $yesterday_moderate_count = \App\Model\GoodsEvaluate::where( 'score', '3,4' )->whereTime( 'create_time', 'yesterday' )->count();
         return $yesterday_moderate_count;
     }
 
@@ -482,7 +482,7 @@ class Statistics extends Admin
      */
     private function yesterdayNegativeCount()
     {
-        $yesterday_negative_count = model( 'GoodsEvaluate' )->where( 'score', '1,2' )->whereTime( 'create_time', 'yesterday' )->count();
+        $yesterday_negative_count = \App\Model\GoodsEvaluate::where( 'score', '1,2' )->whereTime( 'create_time', 'yesterday' )->count();
         return $yesterday_negative_count;
     }
 

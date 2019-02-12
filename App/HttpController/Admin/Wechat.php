@@ -220,13 +220,13 @@ class Wechat extends Admin
 					$beginThismonth         = mktime( 0, 0, 0, date( 'm', $send_time ), 1, date( 'Y', $send_time ) );
 					$endThismonth           = mktime( 23, 59, 59, date( 'm', $send_time ), date( 't', $send_time ), date( 'Y', $send_time ) );
 					$condition['send_time'] = ['between', [$beginThismonth, $endThismonth]];
-					$total_number           = $model->where( $condition )->count();
+					$total_number           = \App\Model\Page::where( $condition )->count();
 					$can_send_state         = $total_number >= 4 ? 0 : 1;
 				} else{
 					$beginToday = strtotime( date( 'Y-m-d ', $send_time )."00:00:00" );
 					$endToday   = strtotime( date( 'Y-m-d ', $send_time )."23:59:59" );;
 					$condition['send_time'] = ['between', [$beginToday, $endToday]];
-					$total_number           = $model->where( $condition )->count();
+					$total_number           = \App\Model\Page::where( $condition )->count();
 					$can_send_state         = $total_number > 0 ? 0 : 1;
 				}
 				$this->send( Code::success, [
@@ -262,13 +262,13 @@ class Wechat extends Admin
 					$beginThismonth         = mktime( 0, 0, 0, date( 'm', $send_time ), 1, date( 'Y', $send_time ) );
 					$endThismonth           = mktime( 23, 59, 59, date( 'm', $send_time ), date( 't' ), date( 'Y', $send_time ) );
 					$condition['send_time'] = ['between', [$beginThismonth, $endThismonth]];
-					$total_number           = $model->where( $condition )->count();
+					$total_number           = \App\Model\Page::where( $condition )->count();
 					$can_send_state         = $total_number >= 4 ? 0 : 1;
 				} else{
 					$beginToday = strtotime( date( 'Y-m-d ', $send_time )."00:00:00" );
 					$endToday   = strtotime( date( 'Y-m-d ', $send_time )."23:59:59" );;
 					$condition['send_time'] = ['between', [$beginToday, $endToday]];
-					$total_number           = $model->where( $condition )->count();
+					$total_number           = \App\Model\Page::where( $condition )->count();
 					$can_send_state         = $total_number > 0 ? 0 : 1;
 				}
 
@@ -301,8 +301,8 @@ class Wechat extends Admin
 			$condition['send_content_type'] = $this->get['send_content_type'];
 		}
 		$model = model( 'WechatBroadcast' );
-		$count = $model->where( $condition )->count();
-		$list  = $model->getWechatBroadcastList( $condition, '*', 'create_time desc', $this->getPageLimit() );
+		$count = \App\Model\Page::where( $condition )->count();
+		$list  = \App\Model\Page::getWechatBroadcastList( $condition, '*', 'create_time desc', $this->getPageLimit() );
 		$this->send( Code::success, [
 			'total_number' => $count,
 			'list'         => $list,
@@ -774,8 +774,8 @@ class Wechat extends Admin
 	{
 		$condition['type'] = 'news';
 		$model             = model( 'Material' );
-		$total_number      = $model->where( $condition )->count();
-		$list              = $model->getMaterialList( $condition, '*', 'create_time desc', $this->getPageLimit() );
+		$total_number      = \App\Model\Page::where( $condition )->count();
+		$list              = \App\Model\Page::getMaterialList( $condition, '*', 'create_time desc', $this->getPageLimit() );
 		$this->send( Code::success, [
 			'total_number' => $total_number,
 			'list'         => $list,
@@ -795,7 +795,7 @@ class Wechat extends Admin
 			$condition['type'] = 'news';
 			$condition['id']   = $this->get['id'];
 			$model             = model( 'Material' );
-			$info              = $model->getMaterialInfo( $condition, '*');
+			$info              = \App\Model\Page::getMaterialInfo( $condition, '*');
 			$this->send( Code::success, [
 				'info' => $info,
 			] );
@@ -1091,8 +1091,8 @@ class Wechat extends Admin
 			$condition['rule_name|keys'] = ['like', '%'.$this->get['keywords'].'%'];
 		}
 		$model        = model( 'WechatAutoReply' );
-		$total_number = $model->where( $condition )->count();
-		$list         = $model->getWechatAutoReplyList( $condition, '*', 'create_time desc', $this->getPageLimit() );
+		$total_number = \App\Model\Page::where( $condition )->count();
+		$list         = \App\Model\Page::getWechatAutoReplyList( $condition, '*', 'create_time desc', $this->getPageLimit() );
 		$this->send( Code::success, [
 			'total_number' => $total_number,
 			'list'         => $list,

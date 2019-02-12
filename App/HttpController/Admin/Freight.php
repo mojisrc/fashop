@@ -36,7 +36,7 @@ class Freight extends Admin
 			return $this->send( Code::param_error, [], $this->getValidate()->getError() );
 		} else{
 			$model      = model( 'Freight' );
-			$freight_id = $model->addFreight( [
+			$freight_id = \App\Model\Page::addFreight( [
 				'name'     => $this->post['name'],
 				'pay_type' => $this->post['pay_type'],
 				'areas'    => $this->post['areas'],
@@ -61,7 +61,7 @@ class Freight extends Admin
 		if( $this->validate( $this->post, 'Admin/Freight.edit' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidate()->getError() );
 		} else{
-			model( 'Freight' )->editFreight( ['id' => $this->post['id']], [
+			\App\Model\Freight::editFreight( ['id' => $this->post['id']], [
 				'name'  => $this->post['name'],
 				'areas' => $this->post['areas'],
 			] );
@@ -76,11 +76,10 @@ class Freight extends Admin
 	 */
 	public function list()
 	{
-		$freight_model = model( 'Freight' );
-		$list          = $freight_model->getFreightList( [], 'id,name,pay_type,create_time,update_time,areas', 'id desc', $this->getPageLimit() );
+		$list          = \App\Model\Freight::getFreightList( [], 'id,name,pay_type,create_time,update_time,areas', 'id desc', $this->getPageLimit() );
 		$this->send( Code::success, [
 			'list'         => $list,
-			'total_number' => $freight_model->count(),
+			'total_number' => \App\Model\Freight::count(),
 		] );
 	}
 
@@ -90,8 +89,7 @@ class Freight extends Admin
 	 */
 	public function info()
 	{
-		$model = model( 'Freight' );
-		$info  = $model->getFreightInfo( ['id' => $this->get['id']] );
+		$info  = \App\Model\Freight::getFreightInfo( ['id' => $this->get['id']] );
 		$this->send( Code::success, ['info' => $info] );
 	}
 
@@ -105,7 +103,7 @@ class Freight extends Admin
 		if( $this->validate( $this->post, 'Admin/Freight.del' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidate()->getError() );
 		} else{
-			model( 'Freight' )->softDelFreight( ['id' => $this->post['id']] );
+			\App\Model\Freight::delFreight( ['id' => $this->post['id']] );
 			$this->send( Code::success );
 		}
 	}

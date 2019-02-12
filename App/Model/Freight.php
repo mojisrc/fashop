@@ -53,6 +53,10 @@ class Freight extends Model
 		return $info;
 	}
 
+	public function delFreight(array $condition){
+		return $this->where($condition)->del();
+	}
+
 	/**
 	 * @param array  $condition
 	 * @param string $field

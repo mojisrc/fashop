@@ -452,7 +452,7 @@ class Coupon extends Admin
 				return $this->send( Code::param_error );
             }
 
-			$goods_sku_data = $goods_sku_model->getGoodsSkuList( array('goods_id'=>array('in',$post['goods_ids'])), 'id AS goods_sku_id,goods_id', 'goods_id asc,goods_sku_id asc', '' );
+			$goods_sku_data = \App\Model\GoodsSku::getGoodsSkuList( array('goods_id'=>array('in',$post['goods_ids'])), 'id AS goods_sku_id,goods_id', 'goods_id asc,goods_sku_id asc', '' );
 			if(!$goods_sku_data){
 				return $this->send( Code::param_error );
 

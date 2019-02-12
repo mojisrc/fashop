@@ -631,16 +631,16 @@ class Goods
     public function del($ids): bool
     {
         $goods_model       = model('Goods');
-        $goods_model->startTrans();
+        \App\Model\Goods::startTrans();
         try {
             model('Goods')->softDelGoods(['id' => ['in', $ids]]);
             model('GoodsSku')->softDelGoodsSku(['goods_id' => ['in', $ids]]);
             model('GoodsCategoryIds')->softDelGoodsCategoryIds(['goods_id' => ['in', $ids]]);
-            $goods_model->commit();
+            \App\Model\Goods::commit();
             return true;
         } catch (\Exception $e) {
             // 回滚事务
-            $goods_model->rollback();
+            \App\Model\Goods::rollback();
             return false;
         }
     }
@@ -689,7 +689,7 @@ class Goods
         $group_goods_model                 = model('GroupGoods');
         $condition                         = [];
         $condition['group_goods.goods_id'] = $this->id;
-        $group_goods                       = $group_goods_model->getGroupGoodsSkuMoreList($condition, '', 'group_goods.*,group.end_time,group.is_show', 'group_goods.id desc', '1,200', '');
+        $group_goods                       = \App\Model\GroupGoods::getGroupGoodsSkuMoreList($condition, '', 'group_goods.*,group.end_time,group.is_show', 'group_goods.id desc', '1,200', '');
         if (!group_goods) {
             return false;
         } else {

@@ -59,8 +59,8 @@ class Goods extends Server
 			if( $this->validate( $this->get, 'Goods.info' ) !== true ){
 				$this->send( Code::param_error, [], $this->getValidate()->getError() );
 			} else{
-				$goods_info         = model( 'Goods' )->getGoodsInfo( ['id' => $this->get['id']] );
-				$goods_info['skus'] = model( 'GoodsSku' )->getGoodsSkuList( ['goods_id' => $this->get['id']], '*', 'id desc', '1,10000' );
+				$goods_info         = \App\Model\Goods::getGoodsInfo( ['id' => $this->get['id']] );
+				$goods_info['skus'] = \App\Model\GoodsSku::getGoodsSkuList( ['goods_id' => $this->get['id']], '*', 'id desc', '1,10000' );
 				$this->send( Code::success, ['info' => $goods_info] );
 			}
 		} else{
@@ -74,11 +74,11 @@ class Goods extends Server
 		if( $this->validate( $this->get, 'Goods.sku' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidate()->getError() );
 		} else{
-			$goods_info = model( 'Goods' )->alias( 'goods' )->join( 'goods_sku', 'goods.id = goods_sku.goods_id', 'LEFT' )->where( [
+			$goods_info = \App\Model\Goods::alias( 'goods' )->join( 'goods_sku', 'goods.id = goods_sku.goods_id', 'LEFT' )->where( [
 				'goods_sku.id' => $this->get['goods_sku_id'],
 			] )->field( 'goods.*,goods_sku.id as goods_sku_id' )->find();
 
-			$goods_info['skus'] = model( 'GoodsSku' )->getGoodsSkuList( ['goods_id' => $goods_info['id']], '*', 'id desc', '1,10000' );
+			$goods_info['skus'] = \App\Model\GoodsSku::getGoodsSkuList( ['goods_id' => $goods_info['id']], '*', 'id desc', '1,10000' );
 			$this->send( Code::success, ['info' => $goods_info] );
 		}
 	}
@@ -92,8 +92,6 @@ class Goods extends Server
 	 * */
 	public function visitedRecord()
 	{
-		$goods_model = model( 'Goods' );
-
 		$fields = "id,goods_common_id,title,category_id,price,market_price,stock,img,freight,sale_num,color_id,evaluate_good_star,evaluate_count";
 		$order  = 'id desc';
 
@@ -105,7 +103,7 @@ class Goods extends Server
 
 		// 获得浏览商品的id数组
 		if( $user['id'] ){
-			$goods_ids = model( 'Visit' )->where( [
+			$goods_ids = \App\Model\Visit::where( [
 				'user_id' => $user['id'],
 				'model'   => 'goods',
 			] )->value( 'model_relation_id' );
@@ -116,9 +114,9 @@ class Goods extends Server
 
 		if( isset( $goods_ids ) ){
 			$condition['id'] = ['in', $goods_ids];
-			$count           = $goods_model->getGoodsOnlineCount( $condition );
+			$count           = \App\Model\Goods::getGoodsOnlineCount( $condition );
 
-			$goods_list = $goods_model->getGoodsOnlineList( $condition, $fields, $order, $this->getPageLimit() );
+			$goods_list = \App\Model\Goods::getGoodsOnlineList( $condition, $fields, $order, $this->getPageLimit() );
 
 		}
 
@@ -180,8 +178,8 @@ class Goods extends Server
 				$condition['evaluate.id'] = ['in', $this->get['ids']];
 			}
 
-			$count = $goods_evaluate_model->alias( 'evaluate' )->join( 'order order', 'evaluate.order_id = order.id', 'LEFT' )->group( 'evaluate.id' )->where( $condition )->count();
-			$list  = $goods_evaluate_model->alias( 'evaluate' )->join( 'order order', 'evaluate.order_id = order.id', 'LEFT' )->join( 'order_goods goods', 'evaluate.order_goods_id = goods.id' )->join( 'user user', 'evaluate.user_id = user.id', 'LEFT' )->join( 'user_profile user_profile', 'user.id = user_profile.user_id', 'LEFT' )->where( $condition )->field( 'evaluate.id,score,evaluate.goods_img,evaluate.content,evaluate.create_time,evaluate.images,additional_content,additional_images,additional_time,reply_content,reply_content2,display,top,goods.goods_spec,user.phone,user_profile.nickname,user_profile.avatar' )->order( 'evaluate.id desc' )->page( $this->getPageLimit() )->group( 'evaluate.id' )->select();
+			$count = \App\Model\GoodsEvaluate::alias( 'evaluate' )->join( 'order order', 'evaluate.order_id = order.id', 'LEFT' )->group( 'evaluate.id' )->where( $condition )->count();
+			$list  = \App\Model\GoodsEvaluate::alias( 'evaluate' )->join( 'order order', 'evaluate.order_id = order.id', 'LEFT' )->join( 'order_goods goods', 'evaluate.order_goods_id = goods.id' )->join( 'user user', 'evaluate.user_id = user.id', 'LEFT' )->join( 'user_profile user_profile', 'user.id = user_profile.user_id', 'LEFT' )->where( $condition )->field( 'evaluate.id,score,evaluate.goods_img,evaluate.content,evaluate.create_time,evaluate.images,additional_content,additional_images,additional_time,reply_content,reply_content2,display,top,goods.goods_spec,user.phone,user_profile.nickname,user_profile.avatar' )->order( 'evaluate.id desc' )->page( $this->getPageLimit() )->group( 'evaluate.id' )->select();
 			$this->send( Code::success, [
 				'total_number' => $count,
 				'list'         => $list,

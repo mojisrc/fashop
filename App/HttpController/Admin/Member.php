@@ -31,7 +31,6 @@ class Member extends Admin
 	 */
 	public function list()
 	{
-		$user_model             = model( 'User' );
 		$condition['is_member'] = ['eq', 1];
 		$field                  = [
 			'id',
@@ -42,7 +41,7 @@ class Member extends Admin
 			'email',
 			'sex',
 		];
-		$list                   = $user_model->getUserList( $condition, $field, 'id desc', $this->getPageLimit() );
+		$list                   = \App\Model\User::getUserList( $condition, $field, 'id desc', $this->getPageLimit() );
 		return $this->send( Code::success, ['list' => $list] );
 	}
 
@@ -66,7 +65,7 @@ class Member extends Admin
 			if( isset( $this->post['nickname'] ) ){
 				$data['nickname'] = $this->post['nickname'];
 			}
-			model( 'User' )->addUser( $data );
+			\App\Model\User::addUser( $data );
 			return $this->send();
 		}
 	}
@@ -94,8 +93,7 @@ class Member extends Admin
 			if( isset( $this->post['password'] ) ){
 				$data['password'] = UserLogic::encryptPassword( $this->post['password'] );
 			}
-			$user_model = model( 'User' );
-			$user_model->editUser( ['id' => $this->post['id']], $data );
+			\App\Model\User::editUser( ['id' => $this->post['id']], $data );
 			$this->send();
 		}
 	}
@@ -119,7 +117,7 @@ class Member extends Admin
 				'phone',
 				'sex',
 			];
-			$info  = model( 'User' )->getUserInfo( [
+			$info  = \App\Model\User::getUserInfo( [
 				'id' => $this->get['id'],
 			], $field );
 			$this->send( Code::success, ['info' => $info] );
@@ -133,7 +131,7 @@ class Member extends Admin
 	public function loginInfo()
 	{
 		$access_token_data = $this->getRequestAccessTokenData();
-		$last_info         = model( 'AccessToken' )->getAccessTokenInfo( [
+		$last_info         = \App\Model\AccessToken::getAccessTokenInfo( [
 			'sub' => $access_token_data['sub'],
 			'jti' => ['neq', $access_token_data['jti']],
 		], '*', 'create_time desc' );
@@ -159,7 +157,7 @@ class Member extends Admin
 		if( $this->validate( $this->post, 'Admin/Member.del' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidate()->getError() );
 		} else{
-			model( 'User' )->softDelUser( ['id' => $this->post['id']] );
+			\App\Model\User::softDelUser( ['id' => $this->post['id']] );
 			$this->send( Code::success );
 		}
 	}
@@ -177,8 +175,7 @@ class Member extends Admin
 		if( $this->validate( $this->post, 'Admin/Member.selfPassword' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidate()->getError() );
 		} else{
-			$user_model = model( 'User' );
-			$user_model->editUser( ['id' => $user['id']], ['password' => UserLogic::encryptPassword( $this->post['password'] )] );
+			\App\Model\User::editUser( ['id' => $user['id']], ['password' => UserLogic::encryptPassword( $this->post['password'] )] );
 			$this->send( Code::success );
 		}
 	}
@@ -239,12 +236,12 @@ class Member extends Admin
 		$group = [];
 		$rules = [];
 		if( $user['id'] == 1 ){
-			$rules = model( 'AuthRule' )->column( 'sign' );
+			$rules = \App\Model\AuthRule::column( 'sign' );
 		} else{
 			$group_id = \ezswoole\Db::name( 'AuthGroupAccess' )->where( ['uid' => $user['id']] )->value( 'group_id' );
 			if( $group_id > 0 ){
-				$group = model( 'AuthGroup' )->getAuthGroupInfo( ['id' => $group_id] );
-				$rules = model( 'AuthRule' )->where( ['id' => ['in', $group['rule_ids']]] )->column( 'sign' );
+				$group = \App\Model\AuthGroup::getAuthGroupInfo( ['id' => $group_id] );
+				$rules = \App\Model\AuthRule::where( ['id' => ['in', $group['rule_ids']]] )->column( 'sign' );
 			}
 		}
 		$rules = array_merge( $rules, \App\Logic\Admin\Auth::$noNeedAuthActionCheck );
@@ -274,8 +271,7 @@ class Member extends Admin
 			if( isset( $this->post['nickname'] ) ){
 				$data['nickname'] = $this->post['nickname'];
 			}
-			$user_model = model( 'User' );
-			$user_model->editUser( ['id' => $user['id']], $data );
+			\App\Model\User::editUser( ['id' => $user['id']], $data );
 			$this->send();
 		}
 	}
@@ -290,7 +286,7 @@ class Member extends Admin
 			$this->send( Code::user_access_token_error );
 		} else{
 			$jwt    = $this->getRequestAccessTokenData();
-			$result = model( 'AccessToken' )->editAccessToken( [
+			$result = \App\Model\AccessToken::editAccessToken( [
 				'jti' => $jwt['jti'],
 			], [
 				'is_logout'   => 1,

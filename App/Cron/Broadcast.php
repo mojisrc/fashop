@@ -37,7 +37,7 @@ class Broadcast
 	{
 		$wechat = new WechatFactory();
 		$model  = model( 'WechatBroadcast' );
-		$list   = $model->getWechatBroadcastList( [
+		$list   = \App\Model\Page::getWechatBroadcastList( [
 			'send_state'     => 0,
 			'send_time'      => ['elt', time()],
 			'condition_type' => 1,
@@ -60,9 +60,9 @@ class Broadcast
 				// todo 测试返回的是个啥
 				$result = $wechat->broadcast->sendMessage( $message, null );
 				if( $result ){
-					$model->editWechatBroadcast( ['id' => $item['id']], ['send_state' => 1] );
+					\App\Model\Page::editWechatBroadcast( ['id' => $item['id']], ['send_state' => 1] );
 				} else{
-					$model->editWechatBroadcast( ['id' => $item['id']], ['send_state' => 2] );
+					\App\Model\Page::editWechatBroadcast( ['id' => $item['id']], ['send_state' => 2] );
 				}
 			}
 		}

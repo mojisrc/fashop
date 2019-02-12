@@ -36,7 +36,7 @@ class Group extends Server
         $condition['is_show']    = 1;
 
         //查询正在进行的拼团
-        $group_list = $group_model->getGroupList($condition, '', '*', 'id desc', '', '');
+        $group_list = \App\Model\Group::getGroupList($condition, '', '*', 'id desc', '', '');
         if (!$group_list) {
             $this->send(Code::success, [
                 'total_number' => 0,
@@ -48,7 +48,7 @@ class Group extends Server
             $map                         = [];
             $map['group_goods.group_id'] = ['in', $group_ids];
 //            $map_str                     = 'group_goods.group_price<goods_sku.price';
-            $min_group_price = $group_goods_model->alias('group_goods')->join('__GOODS_SKU__ goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT')->where($map)->group('goods_id')->column('group_goods.goods_id,min(group_goods.group_price)');
+            $min_group_price = \App\Model\GroupGoods::alias('group_goods')->join('__GOODS_SKU__ goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT')->where($map)->group('goods_id')->column('group_goods.goods_id,min(group_goods.group_price)');
 
             $param['ids']  = $group_goods_ids;
             $param['page'] = $this->getPageLimit();
@@ -97,7 +97,7 @@ class Group extends Server
 
             $goods_id            = $get['goods_id'];
             $goods_info          = model('Goods')->getGoodsInfo(['id' => $goods_id]);
-            $goods_info['skus']  = model('GoodsSku')->getGoodsSkuList(['goods_id' => $goods_id], '*', 'id desc', '1,100');
+            $goods_info['skus']  = model('GoodsSku')->getGoodsSkuList(['goods_id' => $goods_id], '*', 'id desc', [1,100]);
             $goods_info['group'] = $group_data;
 
             $this->send(Code::success, ['info' => $goods_info]);
@@ -120,7 +120,7 @@ class Group extends Server
         } else {
             $group_id            = $get['group_id'];
             $goods_id            = $get['goods_id'];
-            $group_goods['skus'] = model('GroupGoods')->getGroupGoodsList(['group_id' => $group_id, 'goods_id' => $goods_id], '', 'goods_sku_id,group_price,captain_price', 'goods_sku_id desc', '1,100');
+            $group_goods['skus'] = model('GroupGoods')->getGroupGoodsList(['group_id' => $group_id, 'goods_id' => $goods_id], '', 'goods_sku_id,group_price,captain_price', 'goods_sku_id desc', [1,100]);
 
             $this->send(Code::success, ['info' => $group_goods]);
         }

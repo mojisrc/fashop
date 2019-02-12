@@ -29,7 +29,7 @@ class Smsprovider extends Admin
 	public function list()
 	{
 		$model = model( 'SmsProvider' );
-		$list  = $model->getSmsProviderList( [], '*', null, '1,1000' );
+		$list  = \App\Model\Page::getSmsProviderList( [], '*', null, '1,1000' );
 		return $this->send( Code::success, [
 			'list' => $list,
 		] );
@@ -47,7 +47,7 @@ class Smsprovider extends Admin
 			if( $this->validate( $this->post, 'Admin/SmsProvider.status' ) !== true ){
 				$this->send( Code::param_error, [], $this->getValidate()->getError() );
 			} else{
-				model( 'SmsProvider' )->editSmsProvider( ['type' => $this->post['type']], [
+				\App\Model\SmsProvider::editSmsProvider( ['type' => $this->post['type']], [
 					'status' => $this->post['status'] ? 1 : 0,
 				] );
 				$this->send( Code::success );
@@ -56,7 +56,7 @@ class Smsprovider extends Admin
 			if( $this->validate( $this->post, 'Admin/SmsProvider.edit' ) ){
 				$this->send( Code::param_error, [], $this->getValidate()->getError() );
 			} else{
-				model( 'SmsProvider' )->editSmsProvider( ['type' => $this->post['type']], [
+				\App\Model\SmsProvider::editSmsProvider( ['type' => $this->post['type']], [
 					'config' => $this->post['config'],
 				] );
 				$this->send( Code::success );
@@ -73,7 +73,7 @@ class Smsprovider extends Admin
 		if( $this->validate( $this->get, 'Admin/SmsProvider.info' ) !== true ){
 			$this->send( Code::param_error, $this->getValidate()->getError() );
 		} else{
-			$info = model( 'SmsProvider' )->getSmsProviderInfo( ['type' => $this->get['type']] );
+			$info = \App\Model\SmsProvider::getSmsProviderInfo( ['type' => $this->get['type']] );
 			$this->send( Code::success, ['info' => $info] );
 		}
 	}

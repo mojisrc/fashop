@@ -482,7 +482,7 @@ class GroupGoods extends Model
 	 * 添加多条数据
 	 * @param   $insert
 	 */
-	public function insertAllGroupGoods( $insert = [] )
+	public function addMultiGroupGoods( $insert = [] )
 	{
 		return $this->addMulti( $insert );
 	}
@@ -607,7 +607,7 @@ class GroupGoods extends Model
 		$goods_model = model( 'Goods' );
 		$goods_ids   = $this->getGroupGoodsColumn( $condition, '', 'goods_id' );
 		if( $goods_ids ){
-			$online_goods_ids = $goods_model->getGoodsColumn( ['id' => ['in', $goods_ids], 'is_on_sale' => 1], 'id' );
+			$online_goods_ids = \App\Model\Goods::getGoodsColumn( ['id' => ['in', $goods_ids], 'is_on_sale' => 1], 'id' );
 
 			//返回出现在第一个数组中但其他数组中没有的值 [将要删除的商品]
 			$difference_goods_del_ids = array_diff( $goods_ids, $online_goods_ids );
@@ -634,7 +634,7 @@ class GroupGoods extends Model
 		$goods_sku_ids   = $this->where( $condition)->column('goods_sku_id' );
 
 		if( $goods_sku_ids ){
-			$online_goods_sku_ids = $goods_sku_model->where( ['id' => ['in', $goods_sku_ids]])->column( 'id' );
+			$online_goods_sku_ids = \App\Model\GoodsSku::where( ['id' => ['in', $goods_sku_ids]])->column( 'id' );
 
 			//返回出现在第一个数组中但其他数组中没有的值 [将要删除的sku]
 			$difference_goods_sku_del_ids = array_diff( $goods_sku_ids, $online_goods_sku_ids );

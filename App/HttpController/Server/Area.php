@@ -53,7 +53,7 @@ class Area extends Server
 		} else{
 			$condition['level'] = 1;
 		}
-		$list = model( 'Area' )->getAreaList($condition, 'id,name,pid', 'id asc', '1,1000000' );
+		$list = \App\Model\Area::getAreaList($condition, 'id,name,pid', 'id asc', [1,1000000] );
 		$this->send( Code::success, [
 			'list' => isset($get['tree'])  ? \App\Utils\Tree::listToTree( $list ) : $list,
 		] );
@@ -74,11 +74,10 @@ class Area extends Server
 			$this->send( Code::param_error, [], $this->getValidate()->getError() );
 		} else{
 			try{
-				$db   = Db::name( 'Area' );
-				$area = $db->where( ['name' => $this->get['name']] )->field( 'id,pid,name' )->find();
+				$area = Db::name( 'Area' )->where( ['name' => $this->get['name']] )->field( 'id,pid,name' )->find();
 				if( $area ){
-					$city     = $db->where( ['id' => $area['pid']] )->field( 'id,pid,name' )->find();
-					$province = $db->where( ['id' => $city['pid']] )->field( 'id,pid,name' )->find();
+					$city     = Db::name( 'Area' )->where( ['id' => $area['pid']] )->field( 'id,pid,name' )->find();
+					$province = Db::name( 'Area' )->where( ['id' => $city['pid']] )->field( 'id,pid,name' )->find();
 					$this->send( Code::success, ['info' => [$province, $city, $area]] );
 				} else{
 					$this->send( Code::param_error );

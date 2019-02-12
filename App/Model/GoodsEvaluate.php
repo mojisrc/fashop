@@ -71,7 +71,7 @@ class GoodsEvaluate extends Model
 		$update                       = [];
 		$update['evaluate_good_star'] = $info['good_star'];
 		$update['evaluate_count']     = $info['all'];
-		$goods_model->editGoods( 'id='.$goods_id, $update );
+		\App\Model\Goods::editGoods( 'id='.$goods_id, $update );
 		return $info;
 	}
 

@@ -199,8 +199,8 @@ class User extends Server
         } else {
             $condition['phone'] = $this->post['phone'];
             $model              = model('User');
-            $user_info          = $model->getUserInfo($condition, "id");
-            $model->editUser([
+            $user_info          = \App\Model\Page::getUserInfo($condition, "id");
+            \App\Model\Page::editUser([
                                  'id' => $user_info['id'],
                              ], [
                                  'password' => UserLogic::encryptPassword($this->post['password']),
@@ -227,7 +227,7 @@ class User extends Server
                 $this->send(Code::error, [], $this->getValidate()->getError());
             } else {
                 $model  = model('User');
-                $result = $model->editUser([
+                $result = \App\Model\Page::editUser([
                                                'id'       => $user['id'],
                                                'password' => UserLogic::encryptPassword($this->post['oldpassword']),
                                            ], [

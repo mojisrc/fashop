@@ -141,7 +141,7 @@ class Refundoperation extends Server {
 			$data                 = array();
 			$data['handle_state'] = 30; //平台处理状态 默认0处理中(未处理) 10拒绝(驳回) 20同意 30成功(已完成)
 			$data['success_time'] = time(); //退款回调完成时间
-			$res                  = $refund_model->editOrderRefundReturn($condition, $data);
+			$res                  = \App\Model\OrderRefund::editOrderRefundReturn($condition, $data);
 			if (!$res) {
 				trace('回到执行失败', 'debug');
 				return $this->faJson(array('errmsg' => '操作失败'), -1);

@@ -186,9 +186,9 @@ class Binding
             $user_open_model  = model('UserOpen');
             $user_alias_model = model('UserAlias');
 
-            $user_model->startTrans();
+            \App\Model\User::startTrans();
 
-            $phone_user_id    = $user_model->getUserValue(['phone'=>$phone], 'id');
+            $phone_user_id    = \App\Model\User::getUserValue(['phone'=>$phone], 'id');
 
             if($phone_user_id){
                 //检查此手机号有没有绑定过其他第三方账号
@@ -197,22 +197,22 @@ class Binding
                     throw new \App\Utils\Exception( "user account exist", Code::user_account_exist );
                 }else{
                     //占位行被丢弃
-                    $user_result = $user_model->editUser(['id'=>$user_id], ['state'=>0,'is_discard'=>1] );
+                    $user_result = \App\Model\User::editUser(['id'=>$user_id], ['state'=>0,'is_discard'=>1] );
                     if(!$user_result ){
-                        $user_model->rollback();
+                        \App\Model\User::rollback();
                         return null;
                     }
                     //第三方被更改
                     $user_open_result  = $user_open_model->editUserOpen(['user_id'=>$user_id], ['user_id'=>$phone_user_id,'state'=>1]);
                     if(!$user_open_result ){
-                        $user_model->rollback();
+                        \App\Model\User::rollback();
                         return null;
                     }
 
                     //资产合并
                     $merger_result = $this->assetsMerge($user_id,$phone_user_id);
                     if(!$merger_result){
-                        $user_model->rollback();
+                        \App\Model\User::rollback();
                         return null;
                     }
                     $user_id = $phone_user_id;
@@ -224,14 +224,14 @@ class Binding
                 $data['phone']    = $phone;
                 $data['username'] = $phone;
                 $data['password'] = UserLogic::encryptPassword($this->getPassword());
-                $user_result      = $user_model->editUser($condition, $data );
+                $user_result      = \App\Model\User::editUser($condition, $data );
                 if(!$user_result ){
-                    $user_model->rollback();
+                    \App\Model\User::rollback();
                     return null;
                 }
             }
 
-            $user_model->commit();
+            \App\Model\User::commit();
             return $user_id;
 
         } catch( \Exception $e ){
@@ -261,9 +261,9 @@ class Binding
             $user_open_model  = model('UserOpen');
             $user_alias_model = model('UserAlias');
 
-            $user_model->startTrans();
+            \App\Model\User::startTrans();
 
-            $user_phone       = $user_model->getUserValue(['id'=>$user_id], 'phone');
+            $user_phone       = \App\Model\User::getUserValue(['id'=>$user_id], 'phone');
             $owner            = $user_phone ? 1 : 0;
             //如果没有unionid的话 此处会存在bug 因为同一个微信号会有多个微信用户 只能绑定其中的一个
             $condition_str = 'openid='.$wechat_openid.' OR app_openid='.$wechat_openid.' OR mini_openid='.$wechat_openid;
@@ -281,21 +281,21 @@ class Binding
                 }
 
                 //占位行被丢弃
-                $user_result = $user_model->editUser(['id'=>$open_data['user_id']], ['state'=>0,'is_discard'=>1] );
+                $user_result = \App\Model\User::editUser(['id'=>$open_data['user_id']], ['state'=>0,'is_discard'=>1] );
                 if(!$user_result ){
-                    $user_model->rollback();
+                    \App\Model\User::rollback();
                     return null;
                 }
                 //第三方被更改
                 $user_open_result  = $user_open_model->editUserOpen(['id'=>$open_data['id']], ['user_id'=>$user_id,'state'=>$owner]);
                 if(!$user_open_result ){
-                    $user_model->rollback();
+                    \App\Model\User::rollback();
                     return null;
                 }
                 //资产合并
                 $merger_result = $this->assetsMerge($open_data['user_id'],$user_id);
                 if(!$merger_result){
-                    $user_model->rollback();
+                    \App\Model\User::rollback();
                     return null;
                 }
 
@@ -320,7 +320,7 @@ class Binding
                 ];
                 $user_open_id = $user_open_model->addUserOpen($open_data);
                 if($user_open_id < 0){
-                    $user_model->rollback();
+                    \App\Model\User::rollback();
                     return null;
                 }
             }
@@ -346,13 +346,13 @@ class Binding
 
             $user_assets_info = $user_assets_model->getUserAssetsInfo(['id'=>$user_id], '', '*');
             if(!$user_assets_info){
-                $user_model->rollback();
+                \App\Model\User::rollback();
                 return null;
             }
 
             $master_user_assets_info = $user_assets_model->getUserAssetsInfo(['id'=>$master_user_id], '', '*');
             if(!$master_user_assets_info){
-                $user_model->rollback();
+                \App\Model\User::rollback();
                 return null;
             }
             $user_assets_update                   = [];
@@ -365,13 +365,13 @@ class Binding
 
             $user_assets_result = $user_assets_model->updateUserAssets(['id'=>$user_id],$user_assets_update);
             if(!$user_assets_result){
-                $user_model->rollback();
+                \App\Model\User::rollback();
                 return null;
             }
 
             $master_user_assets_result = $user_assets_model->updateUserAssets(['id'=>$master_user_id],$master_user_assets_update);
             if(!$master_user_assets_result){
-                $user_model->rollback();
+                \App\Model\User::rollback();
                 return null;
             }
 
@@ -379,14 +379,14 @@ class Binding
             if($card_ids){
                 $cart_result =model('Cart')->editCart( ['id'=>['in', $card_ids]], ['user_id'=>$master_user_id] );
                 if(!$cart_result){
-                    $user_model->rollback();
+                    \App\Model\User::rollback();
                     return null;
                 }
             }
             return true;
 
         } catch( \Exception $e ){
-            $user_model->rollback();
+            \App\Model\User::rollback();
             throw new $e;
         }
     }

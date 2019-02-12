@@ -30,7 +30,6 @@ class Message extends Admin {
 		} else {
 			$condition['is_group'] = 1;
 		}
-		$model = model('Message');
 		// 下单时间-起始时间 下单时间-结束时间
 		if ($get['start'] && $get['start'] != '' && $get['end'] && $get['end'] != '') {
 			$get['start']             = strtotime($get['start']);
@@ -58,11 +57,11 @@ class Message extends Admin {
 			}
 		}
 
-		$count      = $model->where($condition)->count();
+		$count      = \App\Model\Page::where($condition)->count();
 		$page_class = new Page($count, 10);
 		$page       = $this->getPageLimit()
 ;
-		$list       = $model->getMessageList($condition, '*', 'id desc', $page);
+		$list       = \App\Model\Page::getMessageList($condition, '*', 'id desc', $page);
 		$this->assign('type_id', $type[$state_type]);
 		$this->assign('page', $page_class->show());
 		$this->assign('list', $list);
@@ -80,30 +79,26 @@ class Message extends Admin {
 			if ($validate_result !== true) {
 				return $this->send($validate_result);
 			}
-			$relation_model    = '';
-			$relation_model_id = '';
 			if ($post['type_id'] > 1 && !$post['relation_model_id']) {
 				return $this->send('该消息类型，必须关联数据');
 			} else {
-				$relation_model = model('MessageType')->where(['id' => $post['type_id']])->value('model');
+				$relation_model = \App\Model\MessageType::where(['id' => $post['type_id']])->value('model');
 				if (!$relation_model) {
 					return $this->send('请填写关联表名');
 				}
 				$relation_model_id = $post['relation_model_id'];
 			}
 			$is_group         = $post['is_group'] ? 1 : 0;
-			$user_model       = model('User');
-			$message_model    = model('Message');
 			$post['user_ids'] = $post['user_ids'] ? array_unique($post['user_ids']) : array();
 
 			if ($is_group == 0 && empty($post['user_ids'])) {
 				return $this->send('请选择用户');
 			}
 
-			$message_model->startTrans();
+			\App\Model\Message::startTrans();
 
 			try {
-				$message_id = $message_model->addMessage([
+				$message_id = \App\Model\Message::addMessage([
 					'title'             => trim($post['title']),
 					'body'              => trim($post['body']),
 					'type_id'           => $post['type_id'],
@@ -114,7 +109,7 @@ class Message extends Admin {
 				]);
 
 				if ($message_id > 0) {
-					$user_ids = $is_group ? $user_model->column('id') : $post['user_ids'];
+					$user_ids = $is_group ? \App\Model\User::column('id') : $post['user_ids'];
 					$add_data = [];
 					foreach ($user_ids as $user_id) {
 						$add_data[] = [
@@ -127,22 +122,22 @@ class Message extends Admin {
 					$result = model('MessageState')->addMultiMessageState($add_data);
 
 					if ($result) {
-						$message_model->commit();
+						\App\Model\Message::commit();
 
 						return $this->send('发送成功');
 					} else {
-						$message_model->rollback();
+						\App\Model\Message::rollback();
 						return $this->send('发送失败');
 					}
 				} else {
 					return $this->send('发送失败');
 				}
 			} catch (\Exception $e) {
-				$message_model->rollback();
+				\App\Model\Message::rollback();
 				return $this->send($e->getMessage());
 			}
 		} else {
-			$type_list = model('MessageType')->getmessageTypelist(['status' => 1, 'id' => ['in', [2]]], '*', 'id asc', '1,100');
+			$type_list = \App\Model\MessageType::getmessageTypelist(['status' => 1, 'id' => ['in', [2]]], '*', 'id asc', [1,100]);
 			$this->assign('type_list', $type_list);
 			return $this->send();
 		}
@@ -153,7 +148,7 @@ class Message extends Admin {
 	 * @datetime 2017-06-14T12:38:04+0800
 	 */
 	public function messageTypeIndex() {
-		$list = model('MessageType')->getMessageTypeList([], '*', 'id desc', '1,1000');
+		$list = \App\Model\MessageType::getMessageTypeList([], '*', 'id desc', '1,1000');
 		$this->assign('list', $list);
 		return $this->send();
 	}
@@ -165,7 +160,7 @@ class Message extends Admin {
 	public function messageTypeAdd() {
 		if ($this->post) {
 			$post = $this->post;
-			model('MessageType')->addMessageType($post);
+			\App\Model\MessageType::addMessageType($post);
 			return $this->send('添加成功');
 		} else {
 			return $this->send();
@@ -179,12 +174,11 @@ class Message extends Admin {
 	public function messageTypeEdit() {
 		if ($this->post) {
 			$post = $this->post;
-			model('MessageType')->editMessageType(['id' => $post['id']], $post);
+			\App\Model\MessageType::editMessageType(['id' => $post['id']], $post);
 			return $this->send('修改成功');
 		} else {
 			$get = $this->get;
-			$row = model('MessageType')->getMessageTypeInfo(['id' => $get['id']]);
-			$this->assign('row', $row);
+			$row = \App\Model\MessageType::getMessageTypeInfo(['id' => $get['id']]);
 			return $this->send();
 		}
 	}
@@ -203,14 +197,13 @@ class Message extends Admin {
 	 */
 	public function getMessageRelationModelDataSearch() {
 		$get  = $this->get;
-		$rows = isset($get['rows']) ? $get['rows'] : 10;
 		switch ($get['type_id']) {
 		case 2:
 			// 文章
 			$model              = model('Info');
 			$condition['title'] = ['like', '%' . $get['keywords'] . '%'];
-			$count         = $model->where($condition)->count();
-			$list               = $model->getInfoList($condition, 'id,title,`desc` as description', 'id desc', $this->getPageLimit());
+			$count         = \App\Model\Page::where($condition)->count();
+			$list               = \App\Model\Page::getInfoList($condition, 'id,title,`desc` as description', 'id desc', $this->getPageLimit());
 
 			break;
 		default:

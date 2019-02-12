@@ -359,7 +359,7 @@ class Order extends Logic
 		} else{
 			$this->buildCondition();
 			$model = model( 'Order' );
-			$model->alias( $this->alias['order'] );
+			\App\Model\Page::alias( $this->alias['order'] );
 			return $model;
 		}
 	}
@@ -392,7 +392,7 @@ class Order extends Logic
 	{
 		$order_model     = model( 'Order' );
 		$order_pay_model = model( 'OrderPay' );
-		$order_model->startTrans();
+		\App\Model\Order::startTrans();
 		try{
 			// 修改支付状态
 			$order_pay_info = $order_pay_model->getOrderPayInfo( ['pay_sn' => $pay_sn, 'pay_state' => 0] );
@@ -403,13 +403,13 @@ class Order extends Logic
 				'pay_sn' => $pay_sn,
 				'state'  => self::state_new,
 			];
-			$order_info      = $order_model->getOrderInfo( $order_condition );
+			$order_info      = \App\Model\Order::getOrderInfo( $order_condition );
 			if( empty( $order_info ) ){
 				throw new \Exception( '订单不存在' );
 			}
 			$update = $order_pay_model->editOrderPay( ['pay_sn' => $pay_sn], ['pay_state' => 1] );
 			if( !$update ){
-				$order_model->rollback();
+				\App\Model\Order::rollback();
 				throw new \Exception( '更新订单支付状态失败' );
 			}
 			// 修改订单
@@ -424,44 +424,44 @@ class Order extends Logic
 			//判断是否为拼团订单
 			if( $order_info['goods_type'] == 2 ){
 				$group_state  = 2;
-				$grouping_num = $order_model->getOrderColumn( ['group_sign' => $order_info['group_sign'], 'state' => self::state_pay, 'group_state' => 2], 'id' );//已刨除自身
+				$grouping_num = \App\Model\Order::getOrderColumn( ['group_sign' => $order_info['group_sign'], 'state' => self::state_pay, 'group_state' => 2], 'id' );//已刨除自身
 				if( $order_info['group_people_num'] == $order_info['group_men_num'] && $order_info['group_men_num'] == (count( $grouping_num ) + 1) ){
 					$group_state = 3;
 				}
 				$order_update = array_merge( $order_update, ['group_state' => $group_state] );
 			}
 
-			$order_update_result = $order_model->editOrder( $order_condition, $order_update );
+			$order_update_result = \App\Model\Order::editOrder( $order_condition, $order_update );
 			if( !$order_update_result ){
-				$order_model->rollback();
+				\App\Model\Order::rollback();
 				throw new \Exception( '更新订单状态失败' );
 			}
 
 			//修改整团订单拼团状态为拼团成功 刨除自身(上步已更改)
 			if( isset( $group_state ) && $group_state == 3 ){
 				$order_update_result = [];
-				$order_update_result = $order_model->editOrder( ['group_sign' => $order_info['group_sign'], 'id' => ['neq', $order_info['id']]], ['group_state' => $group_state] );
+				$order_update_result = \App\Model\Order::editOrder( ['group_sign' => $order_info['group_sign'], 'id' => ['neq', $order_info['id']]], ['group_state' => $group_state] );
 				if( !$order_update_result ){
-					$order_model->rollback();
+					\App\Model\Order::rollback();
 					throw new \Exception( '更新整团拼团状态失败' );
 				}
 			}
 
 			//记录订单日志
-			$insert = model( 'OrderLog' )->addOrderLog( [
+			$insert = \App\Model\OrderLog::addOrderLog( [
 				'order_id'    => $order_info['id'],
 				'role'        => 'buyer',
 				'msg'         => "支付成功，支付平台交易号 : {$trade_no}",
 				'order_state' => self::state_pay,
 			] );
 			if( !$insert ){
-				$order_model->rollback();
+				\App\Model\Order::rollback();
 				throw new \Exception( '记录订单日志出现错误' );
 			}
-			$order_model->commit();
+			\App\Model\Order::commit();
 			return true;
 		} catch( \Exception $e ){
-			$order_model->rollback();
+			\App\Model\Order::rollback();
 			\ezswoole\Log::write( "第三方支付通知成功后，更改订单状态失败：".$e->getMessage() );
 			return false;
 		}

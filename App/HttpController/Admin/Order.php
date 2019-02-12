@@ -58,7 +58,7 @@ class Order extends Admin
 		if( isset( $param['user_ids'] ) && is_array( $param['user_ids'] ) ){
 			$user_ids = [];
 			foreach( $param['user_ids'] as $key => $value ){
-				$user_ids = array_merge( $user_ids, model( 'User' )->getUserAllIds( $value ) );
+				$user_ids = array_merge( $user_ids, \App\Model\User::getUserAllIds( $value ) );
 			}
 			$orderLogic->users( 'id', $user_ids );
 		}
@@ -115,7 +115,7 @@ class Order extends Admin
 		if( isset( $param['user_ids'] ) && is_array( $param['user_ids'] ) ){
 			$user_ids = [];
 			foreach( $param['user_ids'] as $key => $value ){
-				$user_ids = array_merge( $user_ids, model( 'User' )->getUserAllIds( $value ) );
+				$user_ids = array_merge( $user_ids, \App\Model\User::getUserAllIds( $value ) );
 			}
 			$orderLogic->users( 'id', $user_ids );
 		}
@@ -171,7 +171,7 @@ class Order extends Admin
 		} else{
 			$order_id        = $this->get['id'];
 			$condition['id'] = $order_id;
-			$order_info      = model( 'Order' )->getOrderInfo( $condition, '', '*', [
+			$order_info      = \App\Model\Order::getOrderInfo( $condition, '', '*', [
 				'order_extend',
 				'order_goods',
 				'user',
@@ -179,10 +179,10 @@ class Order extends Admin
 			if( empty( $order_info ) ){
 				$this->send( Code::error, [], '没有该订单' );
 			} else{
-				$log_list     = model( 'Order' )->getOrderLogList( ['order_id' => $order_id] );
+				$log_list     = \App\Model\Order::getOrderLogList( ['order_id' => $order_id] );
 				$refund_model = model( 'OrderRefund' );
-				$return_list  = $refund_model->getOrderRefundList( ['order_id' => $order_id, 'refund_type' => 2] );
-				$refund_list  = $refund_model->getOrderRefundList( ['order_id' => $order_id, 'refund_type' => 1] );
+				$return_list  = \App\Model\OrderRefund::getOrderRefundList( ['order_id' => $order_id, 'refund_type' => 2] );
+				$refund_list  = \App\Model\OrderRefund::getOrderRefundList( ['order_id' => $order_id, 'refund_type' => 1] );
 				$this->send( Code::success, [
 					'info'        => $order_info,
 					'order_log'   => $log_list,
@@ -207,7 +207,7 @@ class Order extends Admin
 			$condition['id']         = $order_id;
 			$condition['goods_type'] = 2;
 			$order_model             = model( 'Order' );
-			$order_info              = $order_model->getOrderInfo( $condition );
+			$order_info              = \App\Model\Order::getOrderInfo( $condition );
 			if( empty( $order_info ) ){
 				$this->send( Code::error, [], '没有该订单' );
 			} else{
@@ -245,7 +245,7 @@ class Order extends Admin
 		} else{
 			$order_id = $this->post['id'];
 
-			$order_info = model( 'Order' )->getOrderInfo( ['id' => $order_id], '', '*', [
+			$order_info = \App\Model\Order::getOrderInfo( ['id' => $order_id], '', '*', [
 				'order_extend',
 				'order_goods',
 			] );
@@ -264,7 +264,7 @@ class Order extends Admin
 
 			try{
 				$order_model = model( 'Order' );
-				$order_model->startTrans();
+				\App\Model\Order::startTrans();
 				$data                    = [];
 				$data['deliver_name']    = $this->post['deliver_name'];
 				$data['deliver_phone']   = $this->post['deliver_phone'];
@@ -284,7 +284,7 @@ class Order extends Admin
 				$data['tracking_time'] = $now_time;
 
 				$condition['id'] = $order_id;
-				$update          = $order_model->editOrderExtend( $condition, $data );
+				$update          = \App\Model\Order::editOrderExtend( $condition, $data );
 				if( !$update ){
 					throw new \Exception( '修改失败' );
 				}
@@ -292,14 +292,14 @@ class Order extends Admin
 				$data               = [];
 				$data['state']      = OrderLogic::state_send;
 				$data['delay_time'] = $now_time;
-				$update             = $order_model->editOrder( $condition, $data );
+				$update             = \App\Model\Order::editOrder( $condition, $data );
 				if( !$update ){
-					$order_model->rollback();
+					\App\Model\Order::rollback();
 					$this->send( Code::error, [], "订单状态修改失败" );
 				} else{
-					$order_model->commit();
+					\App\Model\Order::commit();
 					$user = $this->getRequestUser();
-					$order_model->addOrderLog( [
+					\App\Model\Order::addOrderLog( [
 						'user'     => $user['username'],
 						'order_id' => $order_id,
 						'role'     => 'seller',
@@ -309,7 +309,7 @@ class Order extends Admin
 				}
 
 			} catch( \Exception $e ){
-				$order_model->rollback();
+				\App\Model\Order::rollback();
 				$this->send( Code::error, [], $e->getMessage() );
 			}
 		}
@@ -328,7 +328,7 @@ class Order extends Admin
 		} else{
 			$express_model = model( 'Express' );
 
-			$kuaidi100_code = $express_model->getExpressValue( ['id' => $this->get['express_id']], 'kuaidi100_code' );
+			$kuaidi100_code = \App\Model\Express::getExpressValue( ['id' => $this->get['express_id']], 'kuaidi100_code' );
 
 			if( empty( $kuaidi100_code ) ){
 				$this->send( Code::param_error );
@@ -371,7 +371,7 @@ class Order extends Admin
 					$condition['state']        = 10;
 					$condition['payment_time'] = 0;
 					$condition['goods_type']   = 1;//目前只支持普通订单
-					$order_info                = $order_model->getOrderInfo( $condition );
+					$order_info                = \App\Model\Order::getOrderInfo( $condition );
 					if( empty( $order_info ) ){
 						return $this->send( Code::error, [], '没有可修改的订单' );
 					} else{
@@ -382,7 +382,7 @@ class Order extends Admin
 								}
 							}
 						}
-						$order_model->startTrans();
+						\App\Model\Order::startTrans();
 						$order_goods_update = [];
 						foreach( $post['revise_goods'] as $key => $value ){
 							$order_goods_update[$key]['id']                 = $value['id'];
@@ -397,13 +397,13 @@ class Order extends Admin
 						$order_update['revise_amount']      = array_sum( array_column( $order_goods_update, 'goods_revise_price' ) ) + $post['revise_freight_fee'];
 						$order_update['revise_freight_fee'] = $post['revise_freight_fee'];
 
-						$order_result = $order_model->editOrder( ['id' => $order_id], $order_update );
+						$order_result = \App\Model\Order::editOrder( ['id' => $order_id], $order_update );
 
 						if( !$order_goods_result || !$order_result ){
-							$order_model->rollback();
+							\App\Model\Order::rollback();
 							return $this->send( Code::error, [], '操作失败' );
 						} else{
-							$order_model->commit();
+							\App\Model\Order::commit();
 							return $this->send( Code::success );
 						}
 					}

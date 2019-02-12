@@ -93,7 +93,7 @@ class WechatUser
 					'update_time'    => $now_time,
 				];
 			}
-			model( 'User' )->addAllUser( $datas );
+			\App\Model\User::addAllUser( $datas );
 		}
 	}
 }

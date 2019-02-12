@@ -259,7 +259,7 @@ class OrderRefund
     public function create(): bool
     {
         $order_model = model('Order');
-        $order_goods = $order_model->getOrderGoodsInfo([
+        $order_goods = \App\Model\Order::getOrderGoodsInfo([
                                                            'id' => $this->getOrderGoodsId(),
 //                                                            'user_id' => $this->getUserId(),
                                                        ], '*');
@@ -280,7 +280,7 @@ class OrderRefund
             }
         }
 
-        $order = $order_model->getOrderInfo([
+        $order = \App\Model\Order::getOrderInfo([
                                                 'id' => $order_goods['order_id'],
 //                                                 'user_id' => $this->getUserId(),
                                             ]);
@@ -298,7 +298,7 @@ class OrderRefund
 
         $refund_model = model('OrderRefund');
         //判断是否已经正在处理或被处理过的订单
-        $refund = $refund_model->getOrderRefundInfo([
+        $refund = \App\Model\OrderRefund::getOrderRefundInfo([
                                                         'user_id'        => $order['user_id'],
                                                         'order_id'       => $order_goods['order_id'],
                                                         'order_goods_id' => $order_goods['id'],
@@ -337,21 +337,21 @@ class OrderRefund
         }
 
         try {
-            $refund_model->startTrans();
-            $refund_id              = $refund_model->addOrderRefund($refund_array, $order, $order_goods);
-            $refund_result          = $refund_model->editOrderRefund(['id' => $refund_id], ['refund_sn' => $refund_model->getOrderRefundSn($refund_id)]);
-            $edit_lock_result       = $refund_model->editOrderLock($order_goods['order_id'], 1);
-            $edit_goods_lock_result = $refund_model->editOrderGoodsLock($order_goods['id'], $refund_id);
+            \App\Model\OrderRefund::startTrans();
+            $refund_id              = \App\Model\OrderRefund::addOrderRefund($refund_array, $order, $order_goods);
+            $refund_result          = \App\Model\OrderRefund::editOrderRefund(['id' => $refund_id], ['refund_sn' => \App\Model\OrderRefund::getOrderRefundSn($refund_id)]);
+            $edit_lock_result       = \App\Model\OrderRefund::editOrderLock($order_goods['order_id'], 1);
+            $edit_goods_lock_result = \App\Model\OrderRefund::editOrderGoodsLock($order_goods['id'], $refund_id);
 
             if ($refund_id > 0 && $refund_result && $edit_lock_result && $edit_goods_lock_result) {
-                $refund_model->commit();
+                \App\Model\OrderRefund::commit();
                 return true;
             } else {
-                $refund_model->rollback();
+                \App\Model\OrderRefund::rollback();
                 return false;
             }
         } catch (\Exception $e) {
-            $refund_model->rollback();
+            \App\Model\OrderRefund::rollback();
             throw new \Exception($e->getMessage());
         }
     }

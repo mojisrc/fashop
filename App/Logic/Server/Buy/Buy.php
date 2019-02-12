@@ -389,7 +389,7 @@ class Buy
 
 		$this->setUserInfo( $data['user_info'] );
 
-		$address_info = model( 'Address' )->getAddressInfo( [
+		$address_info = \App\Model\Address::getAddressInfo( [
 			'id'      => $this->getAddressId(),
 			'user_id' => $this->getUserId(),
 		] );
@@ -452,20 +452,20 @@ class Buy
 	public function createOrder() : CreateOrderResult
 	{
 		$cart_model = $this->getCartModel();
-		$cart_model->startTrans();
+		\App\Model\Cart::startTrans();
 
 		try{
 			$order_model  = model( 'Order' );
 			$user         = $this->getUserInfo();
 			$pay_sn       = $this->makePaySn( $this->getUserId() );
-			$order_pay_id = $order_model->addOrderPay( [
+			$order_pay_id = \App\Model\Order::addOrderPay( [
 				'pay_sn'    => $pay_sn,
 				'user_id'   => $this->getUserId(),
 				'pay_state' => 0
 
 			] );
 			if( !$order_pay_id ){
-				$cart_model->rollback();
+				\App\Model\Cart::rollback();
 				throw new \Exception( '订单支付记录保存失败' );
 			}
 			$address         = $this->getAddressInfo();
@@ -481,7 +481,7 @@ class Buy
 			}
 
 			// 主表订单创建
-			$order_id = $order_model->addOrder( [
+			$order_id = \App\Model\Order::addOrder( [
 				'sn'                   => $this->makeOrderSn( $order_pay_id ),
                 'pay_sn'               => $pay_sn,
                 'user_id'              => $user['id'],
@@ -500,7 +500,7 @@ class Buy
 
               ] );
 			if( !$order_id ){
-				$cart_model->rollback();
+				\App\Model\Cart::rollback();
 				throw new \Exception( '订单保存失败' );
 			} else{
 				$this->setOrderId( $order_id );
@@ -522,7 +522,7 @@ class Buy
 				'reciver_area_id'     => $address->getAreaId(),
 			] );
 			if( !$state ){
-				$cart_model->rollback();
+				\App\Model\Cart::rollback();
 				throw new \Exception( '订单拓展保存失败' );
 			}
 			$cart_ids = [];
@@ -551,11 +551,11 @@ class Buy
 			// 订单商品创建
 			$order_goods_insert = model( 'OrderGoods' )->addMultiOrderGoods( $order_goods );
 			if( !$order_goods_insert ){
-				$cart_model->rollback();
+				\App\Model\Cart::rollback();
 				throw new \Exception( '订单商品保存失败' );
 			}
 			// 订单日志记录
-			model( 'OrderLog' )->addOrderLog( [
+			\App\Model\OrderLog::addOrderLog( [
 				'order_id'    => $this->getOrderId(),
 				'msg'         => '买家下单',
 				'role'        => 'buyer',
@@ -563,14 +563,14 @@ class Buy
 			] );
 			// 更新商品库存
 			$this->updateGoodsStorageNum();
-			$cart_model->commit();
-			$cart_model->delCart( [
+			\App\Model\Cart::commit();
+			\App\Model\Cart::delCart( [
 				'user_id' => $this->getUserId(),
 				'id'      => ['in', $cart_ids],
 			] );
 			return new CreateOrderResult( ['order_id' => $order_id, 'pay_sn' => $pay_sn] );
 		} catch( \Exception $e ){
-			$cart_model->rollback();
+			\App\Model\Cart::rollback();
 			\ezswoole\Log::write( $this->errMsg );
 		}
 	}
@@ -608,7 +608,7 @@ class Buy
 				'sale_num' => ['exp', 'sale_num+'.$sku_item->getGoodsNum()],
 			];
 		}
-		$state = model( 'GoodsSku' )->editMultiGoodsSku( $goods_sku_update_data );
+		$state = \App\Model\GoodsSku::editMultiGoodsSku( $goods_sku_update_data );
 
 		if( !$state ){
 			throw new \Exception( '更新库存GoodsSku失败' );
@@ -622,7 +622,7 @@ class Buy
 					'sale_num' => ['exp', 'sale_num+'.$goods_item['sale_num']],
 				];
 			}
-			$state = model( 'Goods' )->editMultiGoods( $goods_update_data );
+			$state = \App\Model\Goods::editMultiGoods( $goods_update_data );
 			if( !$state){
 				throw new \Exception( '更新Goods库存失败' );
 			}

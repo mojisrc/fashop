@@ -105,8 +105,8 @@ class Orderrefund extends Server
                 $condition['id'] = ['in', $this->get['ids']];
             }
 
-			$count       = $refund_model->where( $condition )->count();
-			$refund_list = $refund_model->getOrderRefundList( $condition, '*', 'id desc', $this->getPageLimit() );
+			$count       = \App\Model\OrderRefund::where( $condition )->count();
+			$refund_list = \App\Model\OrderRefund::getOrderRefundList( $condition, '*', 'id desc', $this->getPageLimit() );
 			$this->send( Code::success, [
 				'list'         => $refund_list ? $refund_list : [],
 				'total_number' => $count,
@@ -220,14 +220,14 @@ class Orderrefund extends Server
 				$refund_model      = model( 'OrderRefund' );
 				$order_goods_model = model( 'OrderGoods' );
 				$order_model       = model( 'Order' );
-				$refund            = $refund_model->getOrderRefundInfo( ['id' => $this->post['id']] );
+				$refund            = \App\Model\OrderRefund::getOrderRefundInfo( ['id' => $this->post['id']] );
 				// 只有未处理的可以撤销退款
 				if( $refund['handle_state'] != 0 ){
 					return $this->send( Code::error, [], '只有未处理的可以撤销退款' );
 				} else{
 					$order_id = $refund['order_id'];
-					$refund_model->startTrans();
-					$refund_res = $refund_model->editOrderRefund( ['id' => $this->post['id']], [
+					\App\Model\OrderRefund::startTrans();
+					$refund_res = \App\Model\OrderRefund::editOrderRefund( ['id' => $this->post['id']], [
 						'handle_time'    => time(),
 						'handle_message' => '用户撤销退款申请',
 						'is_close'       => 1,   //此退款关闭
@@ -235,7 +235,7 @@ class Orderrefund extends Server
 						'handle_state'   => 50,  //平台处理状态 默认0处理中(未处理) 10拒绝(驳回) 20同意 30成功(已完成) 50取消(用户主动撤销) 51取消(用户主动收货)
 					] );
 					if( !$refund_res ){
-						$refund_model->rollback();
+						\App\Model\OrderRefund::rollback();
 						return $this->send( Code::error, [], '撤销失败' );
 					}
 					// 更改订单状态 解锁 子订单解锁
@@ -250,10 +250,10 @@ class Orderrefund extends Server
 					] );
 
 					if( !$order_goods_res ){
-						$refund_model->rollback();
+						\App\Model\OrderRefund::rollback();
 						return $this->send( Code::error );
 					}
-					$have_lock = $refund_model->where( [
+					$have_lock = \App\Model\OrderRefund::where( [
 						'order_id'   => $order_id,
 						'order_lock' => 2,
 						'is_close'   => 0,
@@ -261,7 +261,7 @@ class Orderrefund extends Server
 					//该总订单下已锁定未关闭的退款记录
 					if( !$have_lock ){
 						//没有代表总订单可以解锁
-						$order_res = $order_model->editOrder( [
+						$order_res = \App\Model\Order::editOrder( [
 							'id'         => $order_id,
 							'lock_state' => ['egt', 1],
 						], [
@@ -270,11 +270,11 @@ class Orderrefund extends Server
 							'delay_time'   => time(),
 						] );
 						if( !$order_res ){
-							$refund_model->rollback();
+							\App\Model\OrderRefund::rollback();
 							return $this->send( Code::error );
 						}
 					}
-					$refund_model->commit();
+					\App\Model\OrderRefund::commit();
 					$this->send( Code::success );
 				}
 			}

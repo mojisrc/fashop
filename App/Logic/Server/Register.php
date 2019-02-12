@@ -184,9 +184,9 @@ class Register
             $condition['username'] = $username;
         }
         $user_model = model('User');
-        $user_model->startTrans();
+        \App\Model\User::startTrans();
 
-        $user = $user_model->getUserInfo($condition, 'id');
+        $user = \App\Model\User::getUserInfo($condition, 'id');
         if ($user) {
             throw new \App\Utils\Exception("user account exist", Code::user_account_exist);
         }
@@ -203,9 +203,9 @@ class Register
             }
         }
 
-        $user_id = $user_model->addUser($data);
+        $user_id = \App\Model\User::addUser($data);
         if (!($user_id > 0)) {
-            $user_model->rollback();
+            \App\Model\User::rollback();
             return null;
         }
 
@@ -219,10 +219,10 @@ class Register
         $user_id = $this->insertUserInfo($user_id, $profile_data, $assets_data, []);
 
         if ($user_id > 0) {
-            $user_model->commit();
+            \App\Model\User::commit();
             return ['id' => $user_id];
         } else {
-            $user_model->rollback();
+            \App\Model\User::rollback();
             return null;
         }
     }
@@ -259,26 +259,26 @@ class Register
                     $unionid_user_id = $user_open_model->getUserOpenValue(['unionid' => $unionid], '', 'user_id');
                 }
 
-                $user_model->startTrans();
+                \App\Model\User::startTrans();
 
                 if ($unionid_user_id > 0) {
                     //修改$unionid对应的用户
                     $update_open_result = $user_open_model->editUserOpen(['unionid' => $unionid], [$open_id_param => $wechat_openid]);
 
                     if (!$update_open_result) {
-                        $user_model->rollback();
+                        \App\Model\User::rollback();
                         return null;
                     }
-                    $user_model->commit();
+                    \App\Model\User::commit();
                     return ['id' => $unionid_user_id];
 
                 } else {
                     //创建用户
                     $data['username'] = "wechat_{$wechat_openid}_" . RandomKey::randMd5(8);
-                    $user_id          = $user_model->addUser($data);
+                    $user_id          = \App\Model\User::addUser($data);
 
                     if (!($user_id > 0)) {
-                        $user_model->rollback();
+                        \App\Model\User::rollback();
                         return null;
                     }
                     $profile_data            = [];
@@ -322,10 +322,10 @@ class Register
 
                     $user_id = $this->insertUserInfo($user_id, $profile_data, $assets_data, $open_data);
                     if ($user_id > 0) {
-                        $user_model->commit();
+                        \App\Model\User::commit();
                         return ['id' => $user_id];
                     } else {
-                        $user_model->rollback();
+                        \App\Model\User::rollback();
                         return null;
                     }
                 }
@@ -373,25 +373,25 @@ class Register
                         $unionid_user_id = $user_open_model->getUserOpenValue(['unionid' => $unionid], '', 'user_id');
                     }
 
-                    $user_model->startTrans();
+                    \App\Model\User::startTrans();
 
                     if ($unionid_user_id > 0) {
                         //修改$unionid对应的用户
                         $update_open_result = $user_open_model->editUserOpen(['unionid' => $unionid], ['mini_openid' => $mini_user['openId']]);
                         if (!$update_open_result) {
-                            $user_model->rollback();
+                            \App\Model\User::rollback();
                             return null;
                         }
-                        $user_model->commit();
+                        \App\Model\User::commit();
                         return ['id' => $unionid_user_id];
 
                     } else {
                         //创建用户
                         $data['username'] = "wechat_mini_{$mini_user['openId']}_" . RandomKey::randMd5(8);
-                        $user_id          = $user_model->addUser($data);
+                        $user_id          = \App\Model\User::addUser($data);
 
                         if (!($user_id > 0)) {
-                            $user_model->rollback();
+                            \App\Model\User::rollback();
                             return null;
                         }
 
@@ -426,10 +426,10 @@ class Register
 
                         $user_id = $this->insertUserInfo($user_id, $profile_data, $assets_data, $open_data);
                         if ($user_id > 0) {
-                            $user_model->commit();
+                            \App\Model\User::commit();
                             return ['id' => $user_id];
                         } else {
-                            $user_model->rollback();
+                            \App\Model\User::rollback();
                             return null;
                         }
                     }

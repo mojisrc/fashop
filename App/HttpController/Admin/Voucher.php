@@ -38,8 +38,8 @@ class Voucher extends Admin {
 		if (isset($get['end_date'])) {
 			$condition['start_date'] = array('elt', strtotime($get['end_date']));
 		}
-		$count      = $model->where($condition)->count();
-		$list       = $model->getVoucherList($condition, '*', 'id desc', $this->getPageLimit());
+		$count      = \App\Model\Page::where($condition)->count();
+		$list       = \App\Model\Page::getVoucherList($condition, '*', 'id desc', $this->getPageLimit());
 
 		return $this->send(Code::success,[
 			'total_number' => $count,
@@ -81,8 +81,8 @@ class Voucher extends Admin {
 		if ($get['end_date']) {
 			$condition['start_date'] = array('elt', strtotime($get['end_date']));
 		}
-		$count      = $model->where($condition)->count();
-		$list       = $model->getVoucherTemplateList($condition, '*', 'id desc', $this->getPageLimit());
+		$count      = \App\Model\Page::where($condition)->count();
+		$list       = \App\Model\Page::getVoucherTemplateList($condition, '*', 'id desc', $this->getPageLimit());
 		return $this->send(Code::success,[
 			'total_number' => $count,
 			'list' => $list,
@@ -119,7 +119,7 @@ class Voucher extends Admin {
 			$data['used']        = 0;
 			$data['create_time'] = time();
 			$data['each_limit']  = intval($post['each_limit']) > 0 ? intval($post['each_limit']) : 0;
-			$resutl              = $model->addVoucherTemplate($data);
+			$resutl              = \App\Model\Page::addVoucherTemplate($data);
 			if ($resutl) {
 				return $this->send( Code::success );
 
@@ -161,7 +161,7 @@ class Voucher extends Admin {
 			$data['total']      = intval($post['total']) > 0 ? intval($post['total']) : 0;
 			$data['each_limit'] = intval($post['each_limit']) > 0 ? intval($post['each_limit']) : 0;
 
-			$result = $model->editVoucherTemplate(array('id' => $post['id']), $data);
+			$result = \App\Model\Page::editVoucherTemplate(array('id' => $post['id']), $data);
 			if ($result) {
 				return $this->send( Code::success );
 			} else {
@@ -211,11 +211,11 @@ class Voucher extends Admin {
 		$condition['id']        = $id;
 		$condition['give_out']  = array('elt', '0'); //会员没领取过优惠券才可删除
 		$condition['is_system'] = 0;
-		$find                   = $model->getVoucherTemplateInfo($condition);
+		$find                   = \App\Model\Page::getVoucherTemplateInfo($condition);
 		if (empty($find)) {
 			return $this->send( Code::param_error );
 		}
-		$result = $model->delVoucherTemplate(array('id' => $find['id']));
+		$result = \App\Model\Page::delVoucherTemplate(array('id' => $find['id']));
 		if ($result) {
 			return $this->send( Code::success );
 		} else {
@@ -239,7 +239,7 @@ class Voucher extends Admin {
 			if ($post['user_ids'] && $template) {
 				$add_data = [];
 				foreach ($post['user_ids'] as $user_id) {
-					$nickname   = $user_model->where(['id' => $user_id])->value('nickname');
+					$nickname   = \App\Model\User::where(['id' => $user_id])->value('nickname');
 					$add_data[] = [
 						'code'        => $coupon_model->getCode($user_id),
 						'template_id' => $template['id'],
