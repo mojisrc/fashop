@@ -54,9 +54,8 @@ class Coupon extends Admin
 			}
 		}
 
-		$coupon_model   = model( "Coupon" );
-		$count          = $coupon_model->getCouponCount( $condition );
-		$list           = $coupon_model->getCouponList( $condition, '*', 'id desc', $this->getPageLimit() );
+		$count          = \App\Model\Coupon::getCouponCount( $condition );
+		$list           = \App\Model\Coupon::getCouponList( $condition, '*', 'id desc', $this->getPageLimit() );
 		return $this->send( Code::success, [
 			'total_number' => $count,
 			'list'         => $list,
@@ -79,7 +78,7 @@ class Coupon extends Admin
 			$condition 		 = [];
 			$condition['id'] = $get['id'];
 			$result          = [];
-			$result['info']  = model( 'Coupon' )->getCouponInfo($condition, '*');
+			$result['info']  = \App\Model\Coupon::getCouponInfo($condition, '*');
 			return $this->send( Code::success, $result );
 		}
 	}
@@ -154,7 +153,7 @@ class Coupon extends Admin
 
 			$post['create_time']= time();
 
-			$result = model( 'Coupon' )->insertCoupon( $post );
+			$result = \App\Model\Coupon::addCoupon( $post );
 			if( $result ){
 				return $this->send( Code::success );
 			} else{
@@ -238,7 +237,7 @@ class Coupon extends Admin
 
 			unset( $post['id'] );
 
-			$result = model( 'Coupon' )->updateCoupon( $condition, $post );
+			$result = \App\Model\Coupon::editCoupon( $condition, $post );
 
 			if( $result ){
 			return $this->send( Code::success, [], '修改成功' );
@@ -261,25 +260,21 @@ class Coupon extends Admin
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
-			$condition       = [];
 			$condition['id'] = $post['id'];
 
-			$coupon_model   = model( 'Coupon' );
-
-			$coupon_model->startTrans();// 启动事务
-
+			\App\Model\Coupon::startTrans();// 启动事务
 			//查询优惠券
-			$row             = $coupon_model->getCouponInfo( $condition, '*' );
+			$row             = \App\Model\Coupon::getCouponInfo( $condition, '*' );
 			if( !$row ){
-				$coupon_model->rollback();// 回滚事务
+				\App\Model\Coupon::rollback();// 回滚事务
 				return $this->send( Code::param_error );
 			}
 
 			//删除优惠券
-			$coupon_result = $coupon_model->delCoupon( $condition );
+			$coupon_result = \App\Model\Coupon::delCoupon( $condition );
 
 			if( !$coupon_result ){
-				$coupon_model->rollback();// 回滚事务
+				\App\Model\Coupon::rollback();// 回滚事务
 				return $this->send( Code::error );
 			}
 
@@ -287,17 +282,16 @@ class Coupon extends Admin
 			//级别 默认0全店 1商品级
 			if($row['level'] == 1){
 				//删除优惠券下商品
-				$coupon_goods_model = model('CouponGoods');
-				$coupon_goods_result = $coupon_goods_model->delCouponGoods( array('coupon_id'=>$post['id']) );
+				$coupon_goods_result = \App\Model\CouponGoods::delCouponGoods( array('coupon_id'=>$post['id']) );
 
 				if( !$coupon_goods_result ){
-					$coupon_model->rollback();// 回滚事务
+					\App\Model\Coupon::rollback();// 回滚事务
 					return $this->send( Code::error );
 				}
 			}
 
 
-		    $coupon_model->commit();// 提交事务
+		    \App\Model\Coupon::commit();// 提交事务
 
 			return $this->send( Code::success );
 		}
@@ -319,12 +313,8 @@ class Coupon extends Admin
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
-
-			$coupon_model 	  = model('Coupon');
-			$coupon_goods_model = model('CouponGoods');
-
 			//查询优惠券
-			$coupon_data        = $coupon_model->getCouponInfo( array('id'=>$get['coupon_id']), '*' );
+			$coupon_data        = \App\Model\Coupon::getCouponInfo( array('id'=>$get['coupon_id']), '*' );
 			if( !$coupon_data ){
 				return $this->send( Code::param_error );
 			}
@@ -348,7 +338,7 @@ class Coupon extends Admin
 			}
 
 			//查询优惠券商品ids
-            $goods_ids = $coupon_goods_model->getCouponGoodsColumn(array('coupon_id'=>$get['coupon_id']), 'goods_id');
+            $goods_ids = \App\Model\CouponGoods::getCouponGoodsColumn(array('coupon_id'=>$get['coupon_id']), 'goods_id');
             if($goods_ids){
             	$param['not_in_ids'] = $goods_ids;
             }
@@ -376,13 +366,8 @@ class Coupon extends Admin
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
-
-			$coupon_model 	  = model('Coupon');
-			$coupon_goods_model = model('CouponGoods');
-
-
 			//查询优惠券
-			$coupon_data        = $coupon_model->getCouponInfo( array('id'=>$get['coupon_id']), '*' );
+			$coupon_data        = \App\Model\Coupon::getCouponInfo( array('id'=>$get['coupon_id']), '*' );
 			if( !$coupon_data ){
 				return $this->send( Code::param_error );
 			}
@@ -396,7 +381,7 @@ class Coupon extends Admin
             }
 
 			//查询优惠券商品ids
-            $goods_ids = $coupon_goods_model->getCouponGoodsColumn(array('coupon_id'=>$get['coupon_id']), 'goods_id');
+            $goods_ids = \App\Model\CouponGoods::getCouponGoodsColumn(array('coupon_id'=>$get['coupon_id']), 'goods_id');
             if($goods_ids){
 				$online_goods_ids = \App\Model\Goods::getGoodsColumn(array('in'=>$goods_ids,'is_on_sale'=>1), 'id');
             }
@@ -405,7 +390,7 @@ class Coupon extends Admin
 			$intersection_goods_ids  = array_values(array_intersect($goods_ids,$online_goods_ids));
 
 			//删除优惠券下失效商品
-			$coupon_goods_result = $coupon_goods_model->delCouponGoods( array('coupon_id'=>$get['coupon_id'],'goods_id'=>array('not in',$intersection_goods_ids)) );
+			$coupon_goods_result = \App\Model\CouponGoods::delCouponGoods( array('coupon_id'=>$get['coupon_id'],'goods_id'=>array('not in',$intersection_goods_ids)) );
 			if( !$coupon_goods_result ){
 				return $this->send( Code::error );
 			}
@@ -442,7 +427,7 @@ class Coupon extends Admin
 			$coupon_goods_model = model('CouponGoods');
 
 			//查询优惠券
-			$coupon_data        = $coupon_model->getCouponInfo( array('id'=>$get['coupon_id']), '*' );
+			$coupon_data        = \App\Model\Coupon::getCouponInfo( array('id'=>$get['coupon_id']), '*' );
 			if( !$coupon_data ){
 				return $this->send( Code::param_error );
 			}
@@ -463,7 +448,7 @@ class Coupon extends Admin
 				$goods_sku_data[$key]['create_time'] = time();
 			}
 
-			$result = $coupon_goods_model->insertAllCouponGoods($goods_sku_data);
+			$result = \App\Model\CouponGoods::insertAllCouponGoods($goods_sku_data);
 
 			if( !$result ){
 				return $this->send( Code::error );
@@ -495,7 +480,7 @@ class Coupon extends Admin
 			$goods_sku_model 	  = model('GoodsSku');
 
             //查询优惠券
-            $coupon_data        = $coupon_model->getCouponInfo( array('id'=>$get['coupon_id']), '*' );
+            $coupon_data        = \App\Model\Coupon::getCouponInfo( array('id'=>$get['coupon_id']), '*' );
             if( !$coupon_data ){
                 return $this->send( Code::param_error );
             }
@@ -509,8 +494,8 @@ class Coupon extends Admin
             $condition['goods_sku.goods_id'] = $get['goods_id'];
 
             //查询该商品下所有sku和已设置的数据
-            $goods_sku_count = $coupon_goods_model->getGoodsSkuMoreCount($condition);
-			$goods_sku_list  = $coupon_goods_model->getGoodsSkuMoreList($condition, 'goods_sku.*,coupon_goods.coupon_id', 'goods_sku.id asc', '');
+            $goods_sku_count = \App\Model\CouponGoods::getGoodsSkuMoreCount($condition);
+			$goods_sku_list  = \App\Model\CouponGoods::getGoodsSkuMoreList($condition, 'goods_sku.*,coupon_goods.coupon_id', 'goods_sku.id asc', '');
 
             return $this->send( Code::success, [
                 'total_number' => $goods_sku_count,
@@ -544,10 +529,7 @@ class Coupon extends Admin
 			return $this->send( Code::error, [], $error );
 
 		} else{
-            $coupon_goods_model = model('CouponGoods');
-			$goods_sku_model 	  = model('GoodsSku');
-
-            $coupon_goods_model->startTrans();// 启动事务
+            \App\Model\CouponGoods::startTrans();// 启动事务
 
 			//为空代表删除所有goods_sku
 			if(empty($post['goods_sku'])){
@@ -557,9 +539,9 @@ class Coupon extends Admin
 				$condition['goods_id'] = $post['goods_id'];
 
 	            //删除优惠券下商品
-	            $coupon_goods_result = $coupon_goods_model->delCouponGoods( $condition );
+	            $coupon_goods_result = \App\Model\CouponGoods::delCouponGoods( $condition );
 	            if( !$coupon_goods_result ){
-	            	$coupon_goods_model->rollback();// 回滚事务
+	            	\App\Model\CouponGoods::rollback();// 回滚事务
 	                return $this->send( Code::error );
 	            }
 
@@ -574,7 +556,7 @@ class Coupon extends Admin
 				}
 
 				//查询优惠券商品sku ids
-	            $goods_sku_ids = $coupon_goods_model->getCouponGoodsColumn($condition, 'goods_sku_id');
+	            $goods_sku_ids = \App\Model\CouponGoods::getCouponGoodsColumn($condition, 'goods_sku_id');
 
 	            if($goods_sku_ids){
 
@@ -600,10 +582,9 @@ class Coupon extends Admin
 							}
 						}
 
-						$result = array();
-						$result = $coupon_goods_model->updateAllCouponGoods($coupon_goods_updata);
+						$result = \App\Model\CouponGoods::updateAllCouponGoods($coupon_goods_updata);
 						if( !$result ){
-							$coupon_goods_model->rollback();// 回滚事务
+							\App\Model\CouponGoods::rollback();// 回滚事务
 							return $this->send( Code::error );
 						}
 
@@ -619,10 +600,9 @@ class Coupon extends Admin
 							}
 						}
 
-						$result = array();
-						$result = $coupon_goods_model->insertAllCouponGoods($coupon_goods_insert_data);
+						$result = \App\Model\CouponGoods::insertAllCouponGoods($coupon_goods_insert_data);
 						if( !$result ){
-							$coupon_goods_model->rollback();// 回滚事务
+							\App\Model\CouponGoods::rollback();// 回滚事务
 							return $this->send( Code::error );
 						}
 					}
@@ -630,21 +610,19 @@ class Coupon extends Admin
 					//差集 [已删除的sku]
 					if($difference_goods_sku_del_ids){
 						$condition['goods_sku_id'] = array('in',$difference_goods_sku_del_ids);
-						$result = array();
-						$result = $coupon_goods_model->delCouponGoods($condition);
+						$result = \App\Model\CouponGoods::delCouponGoods($condition);
 
 						if( !$result ){
-							$coupon_goods_model->rollback();// 回滚事务
+							\App\Model\CouponGoods::rollback();// 回滚事务
 							return $this->send( Code::error );
 						}
 
 					}
 
 	            }else{
-	            	$result = array();
-					$result = $coupon_goods_model->insertAllCouponGoods($post_goods_sku);
+					$result = \App\Model\CouponGoods::insertAllCouponGoods($post_goods_sku);
 					if( !$result ){
-						$coupon_goods_model->rollback();// 回滚事务
+						\App\Model\CouponGoods::rollback();// 回滚事务
 						return $this->send( Code::error );
 					}
 
@@ -653,7 +631,7 @@ class Coupon extends Admin
 
 			}
 
-            $coupon_goods_model->commit();// 提交事务
+            \App\Model\CouponGoods::commit();// 提交事务
 			return $this->send( Code::success );
 
 		}

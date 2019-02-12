@@ -54,7 +54,7 @@ class Voucher extends Model {
 		}
 		// 判断用户领取的数量是否超过限制
 		$coupon_model      = model('Voucher');
-		$user_coupon_count = $coupon_model->getVoucherCount(['owner_id' => $owner_id]);
+		$user_coupon_count = \App\Model\Coupon::getVoucherCount(['owner_id' => $owner_id]);
 		if ($user_coupon_count >= $coupon_template_info['each_limit']) {
 			return throw new \Exception('已经超出该优惠券每人可领张数');
 		}
@@ -70,7 +70,7 @@ class Voucher extends Model {
 		$data['state']       = 1;
 		$data['owner_id']    = $owner_id;
 
-		$relation_model_id = $coupon_model->addVoucher($data);
+		$relation_model_id = \App\Model\Coupon::addVoucher($data);
 		// 添加消息通知，过滤外部字符变量
 		$fliter[0] = ['[title]', '[start_date]', '[end_date]'];
 		$fliter[1] = [$coupon_template_info['title'], date('Y-m-d H:i', $coupon_template_info['start_date']), date('Y-m-d H:i', $coupon_template_info['end_date'])];

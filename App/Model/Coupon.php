@@ -83,7 +83,7 @@ class Coupon extends Model
 	 * @param   $condition
 	 * @return
 	 */
-	public function updateCoupon( $condition = [], $update = [] )
+	public function editCoupon( $condition = [], $update = [] )
 	{
 		return $this->where( $condition )->edit( $update );
 	}
@@ -103,7 +103,7 @@ class Coupon extends Model
 	 *
 	 * @param array $insert 数据
 	 */
-	public function insertCoupon( array $data )
+	public function addCoupon( array $data )
 	{
 		return $this->add( $data );
 	}

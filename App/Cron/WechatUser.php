@@ -20,7 +20,7 @@ class WechatUser
 	// 添加微信用户
 	static function addUser()
 	{
-		$config = model( 'Wechat' )->getWechatInfo( ['id' => 1] );
+		$config = \App\Model\Wechat::getWechatInfo( ['id' => 1] );
 		if( isset( $config['app_id'] ) && !empty( $config['app_id'] ) ){
 			$wechat = new WechatFactory();
 			// 获得最后一个openid
@@ -67,7 +67,7 @@ class WechatUser
 	static function updateUserInfo()
 	{
 		// todo 批量异步执行，一步到位
-		$config = model( 'Wechat' )->getWechatInfo( ['id' => 1] );
+		$config = \App\Model\Wechat::getWechatInfo( ['id' => 1] );
 		$wechatUserModel  = model( 'WechatUser' );
 		$user_list = $wechatUserModel->getWechatUserList(['app_id' => $config['app_id']],'id,openid','');
 		// 获得

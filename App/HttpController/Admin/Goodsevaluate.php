@@ -38,7 +38,6 @@ class Goodsevaluate extends Admin
 		$table_user_profile = $table_prefix.'user_profile';
 
 		$param                = !empty( $this->post ) ? $this->post : $this->get;
-		$goods_evaluate_model = model( 'GoodsEvaluate' );
 		$condition            = [];
 		if( isset( $param['keywords_type'] ) && isset( $param['keywords'] ) ){
 			switch( $param['keywords_type'] ){

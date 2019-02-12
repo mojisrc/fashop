@@ -511,7 +511,6 @@ class Fullcut extends Admin
 							}
 						}
 
-						$result = [];
 						$result = \App\Model\FullcutGoods::editMultiFullcutGoods( $fullcut_goods_updata );
 						if( !$result ){
 							\App\Model\FullcutGoods::rollback();// 回滚事务
@@ -530,7 +529,6 @@ class Fullcut extends Admin
 							}
 						}
 
-						$result = [];
 						$result = \App\Model\FullcutGoods::insertAllFullcutGoods( $fullcut_goods_insert_data );
 						if( !$result ){
 							\App\Model\FullcutGoods::rollback();// 回滚事务
@@ -541,7 +539,6 @@ class Fullcut extends Admin
 					//差集 [已删除的sku]
 					if( $difference_goods_sku_del_ids ){
 						$condition['goods_sku_id'] = ['in', $difference_goods_sku_del_ids];
-						$result                    = [];
 						$result                    = \App\Model\FullcutGoods::delFullcutGoods( $condition );
 
 						if( !$result ){

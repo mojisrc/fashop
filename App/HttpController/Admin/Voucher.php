@@ -241,7 +241,7 @@ class Voucher extends Admin {
 				foreach ($post['user_ids'] as $user_id) {
 					$nickname   = \App\Model\User::where(['id' => $user_id])->value('nickname');
 					$add_data[] = [
-						'code'        => $coupon_model->getCode($user_id),
+						'code'        => \App\Model\Coupon::getCode($user_id),
 						'template_id' => $template['id'],
 						'title'       => $template['title'],
 						'desc'        => $template['desc'],
@@ -260,25 +260,25 @@ class Voucher extends Admin {
 				if ($user_count >= ($template['total'] - $template['give_out'])) {
 					return $this->send( Code::error, [], '本次发送已超出了能发放的总人数' );
 				}
-				$coupon_model->startTrans();
+				\App\Model\Coupon::startTrans();
 				try {
-					$state = $coupon_model->addVoucherAll($add_data);
+					$state = \App\Model\Coupon::addVoucherAll($add_data);
 					if (!$state) {
-						$coupon_model->rollback();
+						\App\Model\Coupon::rollback();
 						return $this->send( Code::error, [], '发送失败' );
 					}
 					// 修改优惠券模板信息
 					$state = $vocher_template_model->where(['id' => $template['id']])->setInc('give_out', $user_count);
 					if ($state) {
-						$coupon_model->commit();
+						\App\Model\Coupon::commit();
 						// todo 发送消息
 						return $this->send( Code::success, [], '成功发送出' . $user_count . '张优惠券' );
 					} else {
-						$coupon_model->rollback();
+						\App\Model\Coupon::rollback();
 						return $this->send( Code::error, [], '修改优惠券状态失败' );
 					}
 				} catch (\Exception $e) {
-					$coupon_model->rollback();
+					\App\Model\Coupon::rollback();
 					return $this->send($e->getMessage());
 				}
 			} else {

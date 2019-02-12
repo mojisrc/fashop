@@ -16,10 +16,7 @@ class Cashback extends Admin {
 	 */
 	public function index() {
 		$cashback_model = model('Cashback');
-		$table_prefix   = config('database.prefix');
 		$condition      = array();
-		$get            = $this->get;
-
 		//分页
 		$count      = $cashback_model->where($condition)->count();
 		$field      = '*';

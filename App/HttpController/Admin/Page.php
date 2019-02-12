@@ -129,7 +129,6 @@ class Page extends Admin
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			try{
-				$page_model = model( 'Page' );
 				$data       = [];
 				if( isset( $this->post['description'] ) ){
 					$data['description'] = $this->post['description'];

@@ -211,7 +211,7 @@ class Wechat extends Admin
 		if( $this->validator( $this->get, 'Admin/Wechat/Broadcast.surplus' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			$conf = model( 'Wechat' )->getWechatInfo( ['id' => 1], 'app_key,app_secret,level' );
+			$conf = \App\Model\Wechat::getWechatInfo( ['id' => 1], 'app_key,app_secret,level' );
 			if( $conf['app_key'] && $conf['app_secret'] && in_array( $conf['level'], [1, 2, 3, 4] ) ){
 				$model = model( 'WechatBroadcast' );
 				// 每月4次
@@ -220,13 +220,13 @@ class Wechat extends Admin
 					$beginThismonth         = mktime( 0, 0, 0, date( 'm', $send_time ), 1, date( 'Y', $send_time ) );
 					$endThismonth           = mktime( 23, 59, 59, date( 'm', $send_time ), date( 't', $send_time ), date( 'Y', $send_time ) );
 					$condition['send_time'] = ['between', [$beginThismonth, $endThismonth]];
-					$total_number           = \App\Model\Page::where( $condition )->count();
+					$total_number           = \App\Model\Material::where( $condition )->count();
 					$can_send_state         = $total_number >= 4 ? 0 : 1;
 				} else{
 					$beginToday = strtotime( date( 'Y-m-d ', $send_time )."00:00:00" );
 					$endToday   = strtotime( date( 'Y-m-d ', $send_time )."23:59:59" );;
 					$condition['send_time'] = ['between', [$beginToday, $endToday]];
-					$total_number           = \App\Model\Page::where( $condition )->count();
+					$total_number           = \App\Model\Material::where( $condition )->count();
 					$can_send_state         = $total_number > 0 ? 0 : 1;
 				}
 				$this->send( Code::success, [
@@ -253,7 +253,7 @@ class Wechat extends Admin
 		if( $this->validator( $this->post, 'Admin/Wechat/Broadcast.create' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			$conf = model( 'Wechat' )->getWechatInfo( ['id' => 1], 'app_key,app_secret,level' );
+			$conf = \App\Model\Wechat::getWechatInfo( ['id' => 1], 'app_key,app_secret,level' );
 			if( $conf['app_key'] && $conf['app_secret'] && in_array( $conf['level'], [1, 2, 3, 4] ) ){
 				$model = model( 'WechatBroadcast' );
 				// 每月4次
@@ -262,20 +262,20 @@ class Wechat extends Admin
 					$beginThismonth         = mktime( 0, 0, 0, date( 'm', $send_time ), 1, date( 'Y', $send_time ) );
 					$endThismonth           = mktime( 23, 59, 59, date( 'm', $send_time ), date( 't' ), date( 'Y', $send_time ) );
 					$condition['send_time'] = ['between', [$beginThismonth, $endThismonth]];
-					$total_number           = \App\Model\Page::where( $condition )->count();
+					$total_number           = \App\Model\Material::where( $condition )->count();
 					$can_send_state         = $total_number >= 4 ? 0 : 1;
 				} else{
 					$beginToday = strtotime( date( 'Y-m-d ', $send_time )."00:00:00" );
 					$endToday   = strtotime( date( 'Y-m-d ', $send_time )."23:59:59" );;
 					$condition['send_time'] = ['between', [$beginToday, $endToday]];
-					$total_number           = \App\Model\Page::where( $condition )->count();
+					$total_number           = \App\Model\Material::where( $condition )->count();
 					$can_send_state         = $total_number > 0 ? 0 : 1;
 				}
 
 				if( $can_send_state ){
 					$data                      = $this->post;
 					$data['send_content_type'] = $this->post['send_content']['type'];
-					model( 'WechatBroadcast' )->addWechatBroadcast( $data );
+					\App\Model\WechatBroadcast::addWechatBroadcast( $data );
 					$this->send( Code::success );
 				} else{
 					$this->send( Code::error, [], '已达到发送当月或当日的最大发送频率' );
@@ -300,9 +300,8 @@ class Wechat extends Admin
 		if( isset( $this->get['send_content_type'] ) ){
 			$condition['send_content_type'] = $this->get['send_content_type'];
 		}
-		$model = model( 'WechatBroadcast' );
-		$count = \App\Model\Page::where( $condition )->count();
-		$list  = \App\Model\Page::getWechatBroadcastList( $condition, '*', 'create_time desc', $this->getPageLimit() );
+		$count = \App\Model\Material::where( $condition )->count();
+		$list  = \App\Model\Material::getWechatBroadcastList( $condition, '*', 'create_time desc', $this->getMaterialLimit() );
 		$this->send( Code::success, [
 			'total_number' => $count,
 			'list'         => $list,
@@ -319,7 +318,7 @@ class Wechat extends Admin
 		if( $this->validator( $this->post, 'Admin/Wechat/Broadcast.del' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			model( 'WechatBroadcast' )->delWechatBroadcast( ['id' => $this->post['id']] );
+			\App\Model\WechatBroadcast::delWechatBroadcast( ['id' => $this->post['id']] );
 			$this->send( Code::success );
 		}
 	}
@@ -713,7 +712,7 @@ class Wechat extends Admin
 				$mediaData[$key]['link']['action'] = $item['link']['action'];
 				$mediaData[$key]['link']['param']  = $item['link']['param'] ? $item['link']['param'] : [];
 			}
-			model( 'Material' )->addMaterial( [
+			\App\Model\Material::addMaterial( [
 				'type'  => 'news',
 				'media' => $mediaData,
 			] );
@@ -742,7 +741,7 @@ class Wechat extends Admin
 				$mediaData[$key]['link']['action'] = $item['link']['action'];
 				$mediaData[$key]['link']['param']  = $item['link']['param'] ? $item['link']['param'] : [];
 			}
-			model( 'Material' )->editMaterial( ['id' => $this->post['id']], [
+			\App\Model\Material::editMaterial( ['id' => $this->post['id']], [
 				'type'  => 'news',
 				'media' => $mediaData,
 			] );
@@ -759,7 +758,7 @@ class Wechat extends Admin
 		if( $this->validator( $this->post, 'Admin/Wechat/LocalMaterial.del' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			model( 'Material' )->delMaterial( ['id' => $this->post['id'], 'type' => 'news'] );
+			\App\Model\Material::delMaterial( ['id' => $this->post['id'], 'type' => 'news'] );
 			$this->send( Code::success );
 		}
 	}
@@ -773,9 +772,8 @@ class Wechat extends Admin
 	public function localNews()
 	{
 		$condition['type'] = 'news';
-		$model             = model( 'Material' );
-		$total_number      = \App\Model\Page::where( $condition )->count();
-		$list              = \App\Model\Page::getMaterialList( $condition, '*', 'create_time desc', $this->getPageLimit() );
+		$total_number      = \App\Model\Material::where( $condition )->count();
+		$list              = \App\Model\Material::getMaterialList( $condition, '*', 'create_time desc', $this->getMaterialLimit() );
 		$this->send( Code::success, [
 			'total_number' => $total_number,
 			'list'         => $list,
@@ -794,8 +792,7 @@ class Wechat extends Admin
 		} else{
 			$condition['type'] = 'news';
 			$condition['id']   = $this->get['id'];
-			$model             = model( 'Material' );
-			$info              = \App\Model\Page::getMaterialInfo( $condition, '*');
+			$info              = \App\Model\Material::getMaterialInfo( $condition, '*');
 			$this->send( Code::success, [
 				'info' => $info,
 			] );
@@ -996,7 +993,7 @@ class Wechat extends Admin
 			if( isset( $this->post['app_secret'] ) ){
 				$data['app_secret'] = $this->post['app_secret'];
 			}
-			model( 'Wechat' )->editWechat( [
+			\App\Model\Wechat::editWechat( [
 				'id' => 1,
 			], $data );
 			$this->send( Code::success );
@@ -1009,7 +1006,7 @@ class Wechat extends Admin
 	 */
 	public function getConf()
 	{
-		$info = model( 'Wechat' )->getWechatInfo( ['id' => 1], 'name,description,account,original,level,app_id,mch_id,app_key,app_secret,headimg,qrcode' );
+		$info = \App\Model\Wechat::getWechatInfo( ['id' => 1], 'name,description,account,original,level,app_id,mch_id,app_key,app_secret,headimg,qrcode' );
 		$this->send( Code::success, $info );
 	}
 
@@ -1038,7 +1035,7 @@ class Wechat extends Admin
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$data['auto_reply_subscribe_replay_content'] = $this->post['reply_content'];
-			model( 'Wechat' )->editWechat( ['id' => 1], $data );
+			\App\Model\Wechat::editWechat( ['id' => 1], $data );
 			$this->send( Code::success );
 		}
 	}
@@ -1050,7 +1047,7 @@ class Wechat extends Admin
 	 */
 	public function autoReplySubscribeGet()
 	{
-		$info = model( 'Wechat' )->getWechatInfo( ['id' => 1], 'auto_reply_subscribe_replay_content' );
+		$info = \App\Model\Wechat::getWechatInfo( ['id' => 1], 'auto_reply_subscribe_replay_content' );
 		$this->send( Code::success, ['reply_ceontent' => $info['auto_reply_subscribe_replay_content']] );
 	}
 
@@ -1060,7 +1057,7 @@ class Wechat extends Admin
 	 */
 	public function autoReplyStatusGet()
 	{
-		$info = model( 'Wechat' )->getWechatInfo( ['id' => 1], 'auto_reply_status as status' );
+		$info = \App\Model\Wechat::getWechatInfo( ['id' => 1], 'auto_reply_status as status' );
 		$this->send( Code::success, $info );
 	}
 
@@ -1074,7 +1071,7 @@ class Wechat extends Admin
 		if( $this->validator( $this->post, 'Admin/Wechat/AutoReplyStatus.set' ) !== true ){
 			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			model( 'Wechat' )->editWechat( ['id' => 1], ['auto_reply_status' => $this->post['status'] ? 1 : 0] );
+			\App\Model\Wechat::editWechat( ['id' => 1], ['auto_reply_status' => $this->post['status'] ? 1 : 0] );
 			$this->send( Code::success );
 		}
 	}
@@ -1090,9 +1087,8 @@ class Wechat extends Admin
 		if( isset( $this->get['keywords'] ) ){
 			$condition['rule_name|keys'] = ['like', '%'.$this->get['keywords'].'%'];
 		}
-		$model        = model( 'WechatAutoReply' );
-		$total_number = \App\Model\Page::where( $condition )->count();
-		$list         = \App\Model\Page::getWechatAutoReplyList( $condition, '*', 'create_time desc', $this->getPageLimit() );
+		$total_number = \App\Model\WechatAutoReply::where( $condition )->count();
+		$list         = \App\Model\WechatAutoReply::getWechatAutoReplyList( $condition, '*', 'create_time desc', $this->getMaterialLimit() );
 		$this->send( Code::success, [
 			'total_number' => $total_number,
 			'list'         => $list,
@@ -1123,11 +1119,10 @@ class Wechat extends Admin
 				'keys'          => $keys,
 			];
 
-			$autoReplyModel = model( 'WechatAutoReply' );
 
-			$autoReplyModel->startTrans();
+			\App\Model\WechatAutoReply::startTrans();
 
-			$auto_reply_id = $autoReplyModel->addWechatAutoReply( $autoReplyData );
+			$auto_reply_id = \App\Model\WechatAutoReply::addWechatAutoReply( $autoReplyData );
 
 			if( $auto_reply_id ){
 				try{
@@ -1141,19 +1136,19 @@ class Wechat extends Admin
 					}
 					$state = $autoReplyKeywordsModel->addWechatAutoReplyKeywordsAll( $data );
 					if( $state ){
-						$autoReplyModel->commit();
+						\App\Model\WechatAutoReply::commit();
 						$this->send( Code::success );
 					} else{
-						$autoReplyModel->rollback();
+						\App\Model\WechatAutoReply::rollback();
 						$this->send( Code::error, [], '创建失败' );
 					}
 				} catch( \Exception $e ){
-					$autoReplyModel->rollback();
+					\App\Model\WechatAutoReply::rollback();
 					$this->send( Code::error, [], $e->getMessage() );
 				}
 
 			} else{
-				$autoReplyModel->rollback();
+				\App\Model\WechatAutoReply::rollback();
 				$this->send( Code::error, [], '创建失败' );
 			}
 
@@ -1186,11 +1181,10 @@ class Wechat extends Admin
 				'keys'          => $keys,
 			];
 
-			$autoReplyModel = model( 'WechatAutoReply' );
 
-			$autoReplyModel->startTrans();
+			\App\Model\WechatAutoReply::startTrans();
 
-			$state = $autoReplyModel->editWechatAutoReply( ['id' => $this->post['id']], $autoReplyData );
+			$state = \App\Model\WechatAutoReply::editWechatAutoReply( ['id' => $this->post['id']], $autoReplyData );
 
 			if( $state ){
 
@@ -1210,18 +1204,18 @@ class Wechat extends Admin
 					}
 					$state = $autoReplyKeywordsModel->addWechatAutoReplyKeywordsAll( $data );
 					if( $state ){
-						$autoReplyModel->commit();
+						\App\Model\WechatAutoReply::commit();
 						$this->send( Code::success );
 					} else{
-						$autoReplyModel->rollback();
+						\App\Model\WechatAutoReply::rollback();
 						$this->send( Code::error, [], '修改关键词失败' );
 					}
 				} catch( \Exception $e ){
-					$autoReplyModel->rollback();
+					\App\Model\WechatAutoReply::rollback();
 					$this->send( Code::error, [], $e->getMessage() );
 				}
 			} else{
-				$autoReplyModel->rollback();
+				\App\Model\WechatAutoReply::rollback();
 				$this->send( Code::error, [], '修改规则失败' );
 			}
 		}
@@ -1238,11 +1232,9 @@ class Wechat extends Admin
 			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 
-			$autoReplyModel = model( 'WechatAutoReply' );
+			\App\Model\WechatAutoReply::startTrans();
 
-			$autoReplyModel->startTrans();
-
-			$state = $autoReplyModel->delWechatAutoReply( ['id' => $this->post['id']] );
+			$state = \App\Model\WechatAutoReply::delWechatAutoReply( ['id' => $this->post['id']] );
 
 			if( $state ){
 
@@ -1253,15 +1245,15 @@ class Wechat extends Admin
 
 					$autoReplyKeywordsModel->delWechatAutoReplyKeywords( ['auto_reply_id' => $auto_reply_id] );
 
-					$autoReplyModel->commit();
+					\App\Model\WechatAutoReply::commit();
 					$this->send( Code::success );
 				} catch( \Exception $e ){
-					$autoReplyModel->rollback();
+					\App\Model\WechatAutoReply::rollback();
 					$this->send( Code::error, [], $e->getMessage() );
 				}
 
 			} else{
-				$autoReplyModel->rollback();
+				\App\Model\WechatAutoReply::rollback();
 				$this->send( Code::error, [], '修改规则失败' );
 			}
 		}
@@ -1278,9 +1270,8 @@ class Wechat extends Admin
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 
-			$autoReplyModel = model( 'WechatAutoReply' );
 
-			$info = $autoReplyModel->getWechatAutoReplyInfo( ['id' => $this->get['id']] );
+			$info = \App\Model\WechatAutoReply::getWechatAutoReplyInfo( ['id' => $this->get['id']] );
 
 			$autoReplyKeywordsModel = model( 'WechatAutoReplyKeywords' );
 

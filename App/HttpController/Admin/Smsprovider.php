@@ -28,8 +28,7 @@ class Smsprovider extends Admin
 	 */
 	public function list()
 	{
-		$model = model( 'SmsProvider' );
-		$list  = \App\Model\Page::getSmsProviderList( [], '*', null, [1,1000] );
+		$list  = \App\Model\SmsProvider::getSmsProviderList( [], '*', null, [1,1000] );
 		return $this->send( Code::success, [
 			'list' => $list,
 		] );

@@ -114,7 +114,7 @@ class CouponGoods extends Model
 	 * @param   $condition
 	 * @return
 	 */
-	public function updateCouponGoods( $condition = [], $update = [] )
+	public function editCouponGoods( $condition = [], $update = [] )
 	{
 		return $this->save( $update, $condition );
 	}
@@ -134,7 +134,7 @@ class CouponGoods extends Model
 	 *
 	 * @param array $insert 数据
 	 */
-	public function insertCouponGoods( $insert )
+	public function addCouponGoods( $insert )
 	{
 		return $this->add( $insert ) ;
 	}
