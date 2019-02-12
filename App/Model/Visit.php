@@ -39,67 +39,30 @@ class Visit extends Model
 		return $this->add( $data );
 	}
 
-	/**
-	 * 添加多条
-	 * @param array $data
-	 * @return boolean
-	 */
-	public function addVisitAll( $data )
-	{
-		return $this->addMulti( $data );
-	}
 
-	/**
-	 * 修改
-	 * @param    array $condition
-	 * @param    array $data
-	 * @return   boolean
-	 */
 	public function editVisit( $condition = [], $data = [] )
 	{
 		return $this->where( $condition )->edit( $data );
 	}
 
-	/**
-	 * 删除
-	 * @param    array $condition
-	 * @return   boolean
-	 */
+
 	public function delVisit( $condition = [] )
 	{
 		return $this->where( $condition )->del();
 	}
 
-	/**
-	 * 计算数量
-	 * @param array $condition 条件
-	 * @return int
-	 */
 	public function getVisitCount( $condition )
 	{
 		return $this->where( $condition )->count();
 	}
 
-	/**
-	 * 获取浏览记录单条数据
-	 * @param array  $condition 条件
-	 * @param string $field     字段
-	 * @return array | false
-	 */
+
 	public function getVisitInfo( $condition = [], $field = '*' )
 	{
 		$info = $this->where( $condition )->field( $field )->find();
 		return $info;
 	}
 
-	/**
-	 * 获得浏览记录列表
-	 * @param    array  $condition
-	 * @param    string $field
-	 * @param    string $order
-	 * @param    string $page
-	 * @return   array | false
-	 */
 	public function getVisitList( $condition = [], $field = '*', $order = 'id desc', $page = [1,10] )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();

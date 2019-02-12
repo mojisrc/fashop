@@ -10,12 +10,6 @@ class User extends Model
 	protected $softDelete = true;
 	protected $createTime = true;
 
-
-	/**
-	 * 添加用户
-	 * @param array $data 用户信息
-	 * @throws \Exception
-	 */
 	public function addUser( array $data )
 	{
 		$this->startTrans();
@@ -35,72 +29,28 @@ class User extends Model
 		}
 	}
 
-	/**
-	 * 添加多条
-	 * @datetime 2017-04-20 15:49:43
-	 * @param array $data
-	 * @return boolean
-	 */
-	public function addUserAll( $data )
-	{
-		return $this->addMulti( $data );
-	}
-
-	/**
-	 * 修改
-	 * @datetime 2017-04-20 15:49:43
-	 * @param    array $condition
-	 * @param    array $data
-	 * @return   boolean
-	 */
 	public function editUser( $condition = [], $data = [] )
 	{
 		return $this->where($condition)->edit($data);
 	}
 
-	/**
-	 * 删除
-	 * @datetime 2017-04-20 15:49:43
-	 * @param    array $condition
-	 * @return   boolean
-	 */
 	public function delUser( $condition = [] )
 	{
 		return $this->where( $condition )->del();
 	}
 
-	/**
-	 * 计算数量
-	 * @datetime 2017-04-20 15:49:43
-	 * @param array $condition 条件
-	 * @return int
-	 */
 	public function getUserCount( $condition )
 	{
 		return $this->where( $condition )->count();
 	}
 
 
-	/**
-	 * 用户列表
-	 * @param array  $condition
-	 * @param string $field
-	 * @param number $page
-	 * @param string $order
-	 */
 	public function getUserList( $condition = [], $field = '*', $order = 'id desc', $page = "1,10" )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $list;
 	}
 
-	/**
-	 * 获取单个用户信息
-	 * @param    array  $condition
-	 * @param    string $field
-	 * @param    array  $extends
-	 * @return   array
-	 */
 	public function getUserInfo( $condition = [], $field = '*', $extends = [] )
 	{
 		$result    = $this->field( $field )->where( $condition )->find();
@@ -137,37 +87,16 @@ class User extends Model
 	}
 
 
-	/**
-	 * 获得任意一个用户的一个字段值
-	 * @param array  $condition
-	 * @param string $field
-	 * @param number $page
-	 * @param string $order
-	 */
 	public function getUserValue( $condition, $field = '*' )
 	{
 		return $this->where( $condition )->value( $field );
 	}
 
 	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelUser( $condition )
-	{
-		$find = $this->where( $condition )->find();
-		if( $find ){
-			return $find->del();
-		} else{
-			return false;
-		}
-	}
-
-	/**
 	 * 修改多条数据
 	 * @param   $update
 	 */
-	public function updateAllUser( $update = [] )
+	public function editMultiUser( $update = [] )
 	{
 		return $this->editMulti( $update );
 	}

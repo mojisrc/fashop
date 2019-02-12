@@ -549,7 +549,7 @@ class Buy
 				];
 			}
 			// 订单商品创建
-			$order_goods_insert = model( 'OrderGoods' )->addOrderGoodsAll( $order_goods );
+			$order_goods_insert = model( 'OrderGoods' )->addMultiOrderGoods( $order_goods );
 			if( !$order_goods_insert ){
 				$cart_model->rollback();
 				throw new \Exception( '订单商品保存失败' );

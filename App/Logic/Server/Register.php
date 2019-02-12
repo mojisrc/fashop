@@ -263,7 +263,7 @@ class Register
 
                 if ($unionid_user_id > 0) {
                     //修改$unionid对应的用户
-                    $update_open_result = $user_open_model->updateUserOpen(['unionid' => $unionid], [$open_id_param => $wechat_openid]);
+                    $update_open_result = $user_open_model->editUserOpen(['unionid' => $unionid], [$open_id_param => $wechat_openid]);
 
                     if (!$update_open_result) {
                         $user_model->rollback();
@@ -377,7 +377,7 @@ class Register
 
                     if ($unionid_user_id > 0) {
                         //修改$unionid对应的用户
-                        $update_open_result = $user_open_model->updateUserOpen(['unionid' => $unionid], ['mini_openid' => $mini_user['openId']]);
+                        $update_open_result = $user_open_model->editUserOpen(['unionid' => $unionid], ['mini_openid' => $mini_user['openId']]);
                         if (!$update_open_result) {
                             $user_model->rollback();
                             return null;
@@ -467,7 +467,7 @@ class Register
             }
 
             if (isset($open_data)) {
-                $user_open_id = $user_open_model->insertUserOpen($open_data);
+                $user_open_id = $user_open_model->addUserOpen($open_data);
                 if ($user_open_id < 0) {
                     return null;
                 }

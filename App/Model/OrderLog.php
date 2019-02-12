@@ -20,8 +20,6 @@ class OrderLog extends Model
 {
 	protected $softDelete = true;
 	protected $createTime = true;
-
-
 	/**
 	 * 添加
 	 * @param  array $data
@@ -30,59 +28,6 @@ class OrderLog extends Model
 	public function addOrderLog( array $data )
 	{
 		return $this->add( $data );
-	}
-
-	/**
-	 * 添加多条
-	 * @param array $data
-	 * @return boolean
-	 */
-	public function addOrderLogAll( $data )
-	{
-		return $this->addMulti( $data );
-	}
-
-	/**
-	 * 修改
-	 * @param    array $condition
-	 * @param    array $data
-	 * @return   boolean
-	 */
-	public function editOrderLog( $condition = [], $data = [] )
-	{
-		return $this->where($condition)->edit($data);
-	}
-
-	/**
-	 * 删除
-	 * @param    array $condition
-	 * @return   boolean
-	 */
-	public function delOrderLog( $condition = [] )
-	{
-		return $this->where( $condition )->del();
-	}
-
-	/**
-	 * 计算数量
-	 * @param array $condition 条件
-	 * @return int
-	 */
-	public function getOrderLogCount( $condition )
-	{
-		return $this->where( $condition )->count();
-	}
-
-	/**
-	 * 获取订单日志单条数据
-	 * @param array  $condition 条件
-	 * @param string $field     字段
-	 * @return array | false
-	 */
-	public function getOrderLogInfo( $condition = [], $field = '*' )
-	{
-		$info = $this->where( $condition )->field( $field )->find();
-		return $info;
 	}
 
 	/**

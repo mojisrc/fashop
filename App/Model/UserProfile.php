@@ -455,7 +455,7 @@ class UserProfile extends Model
 	 */
 	public function insertUserProfile( $insert = [] )
 	{
-		return $this->save( $insert ) ? $this->id : false;
+		return $this->add( $insert ) ;
 	}
 
 	/**
@@ -483,7 +483,7 @@ class UserProfile extends Model
 	 * 修改多条数据
 	 * @param   $update
 	 */
-	public function updateAllUserProfile( $update = [] )
+	public function editMultiUserProfile( $update = [] )
 	{
 		return $this->editMulti( $update );
 	}

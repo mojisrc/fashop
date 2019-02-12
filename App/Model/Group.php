@@ -276,7 +276,7 @@ class Group extends Model
 	 */
 	public function insertGroup( $insert = [] )
 	{
-		return $this->save( $insert ) ? $this->id : false;
+		return $this->add( $insert ) ;
 	}
 
 	/**

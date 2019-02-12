@@ -83,7 +83,7 @@ class DistributionConfig extends Model
 	 */
 	public function insertDistributionConfig( $insert = [] )
 	{
-		return $this->save( $insert ) ? $this->id : false;
+		return $this->add( $insert ) ;
 	}
 
 	/**

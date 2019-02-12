@@ -37,9 +37,9 @@ class OrderGoods extends Model
 	 * @param array $data
 	 * @return boolean
 	 */
-	public function addOrderGoodsAll( $data )
+	public function addMultiOrderGoods( array $data )
 	{
-		return $this->saveAll( $data );
+		return $this->addMulti( $data );
 	}
 
 	/**

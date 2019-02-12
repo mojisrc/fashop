@@ -17,77 +17,29 @@ use ezswoole\Model;
 
 class UserWechat extends Model
 {
-	/**
-	 * 添加
-	 * @param  array $data
-	 * @return int pk
-	 */
+
 	public function addUserWechat( array $data )
 	{
 		return $this->add( $data );
 	}
 
-	/**
-	 * 添加多条
-	 * @param array $data
-	 * @return boolean
-	 */
-	public function addUserWechatAll( $data )
-	{
-		return $this->addMulti( $data );
-	}
-
-	/**
-	 * 修改
-	 * @param    array $condition
-	 * @param    array $data
-	 * @return   boolean
-	 */
 	public function editUserWechat( $condition = [], $data = [] )
 	{
 		return $this->where( $condition )->edit( $data );
 	}
 
-	/**
-	 * 删除
-	 * @param    array $condition
-	 * @return   boolean
-	 */
 	public function delUserWechat( $condition = [] )
 	{
 		return $this->where( $condition )->del();
 	}
 
-	/**
-	 * 计算数量
-	 * @param array $condition 条件
-	 * @return int
-	 */
-	public function getUserWechatCount( $condition )
-	{
-		return $this->where( $condition )->count();
-	}
 
-	/**
-	 * 获取用户微信表单条数据
-	 * @param array  $condition 条件
-	 * @param string $field     字段
-	 * @return array | false
-	 */
 	public function getUserWechatInfo( $condition = [], $field = '*' )
 	{
 		$info = $this->where( $condition )->field( $field )->find();
 		return $info;
 	}
 
-	/**
-	 * 获得用户微信表列表
-	 * @param    array  $condition
-	 * @param    string $field
-	 * @param    string $order
-	 * @param    string $page
-	 * @return   array | false
-	 */
 	public function getUserWechatList( $condition = [], $field = '*', $order = 'id desc', $page = [1,10] )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();

@@ -146,11 +146,10 @@ class Trade extends Model
 			$order_cancel         = $this->getOrderState( 'order_cancel' ); //订单状态0:已取消
 			$order_array          = [];
 			$order_array['state'] = $order_cancel;
-			$model_order          = model( 'Order' );
-			$state                = $model_order->editOrder( $order_array, ['id' => $order_id] ); //更新订单
+			$state                = Order::editOrder( $order_array, ['id' => $order_id] ); //更新订单
 			if( $state ){
 				$log_array['order_state'] = $order_array['state'];
-				$state                    = $model_order->addOrderLog( $log_array );
+				$state                    = Order::addOrderLog( $log_array );
 			}
 			return $state;
 		}
@@ -224,11 +223,10 @@ class Trade extends Model
 			$order_array                  = [];
 			$order_array['finnshed_time'] = time();
 			$order_array['state']         = $order_completed;
-			$model_order                  = model( 'Order' );
-			$state                        = $model_order->editOrder( $order_array, ['id' => $order_id] ); //更新订单状态为已收货
+			$state                        = Order::editOrder( $order_array, ['id' => $order_id] ); //更新订单状态为已收货
 			$log_array['order_state']     = $order_array['state'];
 			if( $state ){
-				$state = $model_order->addOrderLog( $log_array );
+				$state = Order::addOrderLog( $log_array );
 			}
 			// 订单处理记录信息
 			return $state;

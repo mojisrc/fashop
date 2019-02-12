@@ -41,7 +41,7 @@ class OrderRefundReason extends Model
 	 * @param   $condition
 	 * @return
 	 */
-	public function updateOrderRefundReason( $update, $condition )
+	public function editOrderRefundReason( $update, $condition )
 	{
 		return $this->where( $condition )->edit( $update );
 	}

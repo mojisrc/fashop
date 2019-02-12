@@ -21,79 +21,30 @@ class Upload extends Model
 	protected $softDelete = true;
 	protected $createTime = true;
 
-	/**
-	 * 添加
-	 * @param  array $data
-	 * @return int pk
-	 */
 	public function addUpload( $data = [] )
 	{
 		return $this->add( $data );
 	}
 
-	/**
-	 * 添加多条
-	 * @param array $data
-	 * @return boolean
-	 */
-	public function addUploadAll( $data )
-	{
-		return $this->addMulti( $data );
-	}
-
-	/**
-	 * 修改
-	 * @param    array $condition
-	 * @param    array $data
-	 * @return   boolean
-	 */
 	public function editUpload( $condition = [], $data = [] )
 	{
-		return $this->where($condition)->edit($data);
+		return $this->where( $condition )->edit( $data );
 	}
 
-	/**
-	 * 删除
-	 * @param    array $condition
-	 * @return   boolean
-	 */
+
 	public function delUpload( $condition = [] )
 	{
 		return $this->where( $condition )->del();
 	}
 
-	/**
-	 * 计算数量
-	 * @param array $condition 条件
-	 * @return int
-	 */
-	public function getUploadCount( $condition )
-	{
-		return $this->where( $condition )->count();
-	}
-
-	/**
-	 * 获取上传单条数据
-	 * @param array  $condition 条件
-	 * @param string $field     字段
-	 * @return array | false
-	 */
 	public function getUploadInfo( $condition = [], $field = '*' )
 	{
 		$info = $this->where( $condition )->field( $field )->find();
 		return $info;
 	}
 
-	/**
-	 * 获得上传列表
-	 * @param    array  $condition
-	 * @param    string $field
-	 * @param    string $group
-	 * @param    string $order
-	 * @param    string $page
-	 * @return   array | false
-	 */
-	public function getUploadList( $condition = [], $field = '*', $group = '', $order = 'id desc', $page = [1,10] )
+
+	public function getUploadList( $condition = [], $field = '*', $order = 'id desc', $page = [1, 10] )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $list;

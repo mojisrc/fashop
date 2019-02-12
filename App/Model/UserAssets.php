@@ -259,7 +259,7 @@ class UserAssets extends Model
 	 */
 	public function insertUserAssets( $insert = [] )
 	{
-		return $this->save( $insert ) ? $this->id : false;
+		return $this->add( $insert );
 	}
 
 	/**
@@ -287,7 +287,7 @@ class UserAssets extends Model
 	 * 修改多条数据
 	 * @param   $update
 	 */
-	public function updateAllUserAssets( $update = [] )
+	public function editMultiUserAssets( $update = [] )
 	{
 		return $this->editMulti( $update );
 	}

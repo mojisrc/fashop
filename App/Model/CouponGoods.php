@@ -136,7 +136,7 @@ class CouponGoods extends Model
 	 */
 	public function insertCouponGoods( $insert )
 	{
-		return $this->save( $insert ) ? $this->id : false;
+		return $this->add( $insert ) ;
 	}
 
 	/**

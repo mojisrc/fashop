@@ -31,9 +31,9 @@ class DistributorLevel extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getDistributorLevelList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
+	public function getDistributorLevelList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1, 20], $group = '' )
 	{
-		if( $page == '' ){
+		if( $page ){
 			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
 
 		} else{
@@ -134,16 +134,7 @@ class DistributorLevel extends Model
 	 */
 	public function insertDistributorLevel( $insert = [] )
 	{
-		return $this->save( $insert ) ? $this->id : false;
-	}
-
-	/**
-	 * 添加多条数据
-	 * @param   $insert
-	 */
-	public function insertAllDistributorLevel( $insert = [] )
-	{
-		return $this->addMulti( $insert );
+		return $this->add( $insert );
 	}
 
 	/**
@@ -155,17 +146,9 @@ class DistributorLevel extends Model
 	 */
 	public function updateDistributorLevel( $condition = [], $update = [] )
 	{
-		return $this->save( $update, $condition );
+		return $this->where( $condition )->edit( $update );
 	}
 
-	/**
-	 * 修改多条数据
-	 * @param   $update
-	 */
-	public function updateAllDistributorLevel( $update = [] )
-	{
-		return $this->editMulti( $update );
-	}
 
 	/**
 	 * 删除

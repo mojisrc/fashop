@@ -417,7 +417,7 @@ class Relevance
 			}
 
 			if(isset($open_data)){
-                $user_open_id = $user_open_model->insertUserOpen($open_data);
+                $user_open_id = $user_open_model->addUserOpen($open_data);
                 if($user_open_id < 0){
                     $user_model->rollback();
                     return null;

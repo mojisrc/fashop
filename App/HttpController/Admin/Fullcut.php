@@ -532,7 +532,7 @@ class Fullcut extends Admin
 						}
 
 						$result = array();
-						$result = $fullcut_goods_model->updateAllFullcutGoods($fullcut_goods_updata);
+						$result = $fullcut_goods_model->editMultiFullcutGoods($fullcut_goods_updata);
 						if( !$result ){
 							$fullcut_goods_model->rollback();// 回滚事务
 							return $this->send( Code::error );

@@ -259,7 +259,7 @@ class UserAlias extends Model
 	 */
 	public function insertUserAlias( $insert = [] )
 	{
-		return $this->save( $insert ) ? $this->id : false;
+		return $this->add( $insert ) ;
 	}
 
 	/**
@@ -287,7 +287,7 @@ class UserAlias extends Model
 	 * 修改多条数据
 	 * @param   $update
 	 */
-	public function updateAllUserAlias( $update = [] )
+	public function editMultiUserAlias( $update = [] )
 	{
 		return $this->editMulti( $update );
 	}

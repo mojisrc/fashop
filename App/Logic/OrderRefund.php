@@ -339,7 +339,7 @@ class OrderRefund
                     $updata['refund_no']    = $result->transaction_id;
                     $updata['handle_state'] = 30;
                     $updata['success_time'] = time();//退款回调完成时间
-                    $result                 = $refund_model->updateOrderRefund(['id' => $refund['id']], $updata);
+                    $result                 = $refund_model->editOrderRefund(['id' => $refund['id']], $updata);
                     if (!$result) {
                         throw new \Exception('退款失败');
                     }
@@ -386,7 +386,7 @@ class OrderRefund
                     $updata['refund_no']    = $result->trade_no;
                     $updata['handle_state'] = 30;
                     $updata['success_time'] = time();//退款回调完成时间
-                    $result                 = $refund_model->updateOrderRefund(['id' => $refund['id']], $updata);
+                    $result                 = $refund_model->editOrderRefund(['id' => $refund['id']], $updata);
                     if (!$result) {
                         throw new \Exception('退款失败');
                     }

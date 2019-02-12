@@ -116,7 +116,7 @@ class Orderrefundreason extends Admin
 			$update                    = $post;
 			unset( $update['id'] );
 
-			$result = $order_refund_reason_model->updateOrderRefundReason( $update, $condition );
+			$result = $order_refund_reason_model->editOrderRefundReason( $update, $condition );
 			if( !$result ){
 				return $this->send( Code::error );
 

@@ -19,15 +19,14 @@ use ezswoole\Model;
 class OrderRefund extends Model
 {
 	protected $softDelete = true;
-
-	protected $jsonFields = ['goods_spec','images','tracking_images','user_images'];
+	protected $jsonFields = ['goods_spec', 'images', 'tracking_images', 'user_images'];
 
 	/**
 	 * 增加退款\退款退货
 	 * @param
 	 * @return int
 	 */
-	public function addOrderRefund( $refund_array, $order = [], $goods = [] )
+	public function addOrderRefund( array $refund_array, array $order = [], array $goods = [] )
 	{
 		if( !empty( $order ) && is_array( $order ) ){
 			$refund_array['order_id']       = $order['id'];
@@ -51,7 +50,7 @@ class OrderRefund extends Model
 			$refund_array['goods_pay_price']   = ($goods['goods_revise_price'] > 0) ? $goods['goods_revise_price'] : $goods['goods_pay_price'];
 			$refund_array['goods_freight_fee'] = $goods['goods_freight_fee'];//订单子表没有修改的运费的字段
 		}
-		return $this->save( $refund_array ) ? $this->id : false;
+		return $this->add( $refund_array );
 	}
 
 	/**
@@ -68,7 +67,7 @@ class OrderRefund extends Model
 			$data                 = [];
 			$data['lock_state']   = ['exp', 'lock_state+1'];
 			$data['refund_state'] = $refund_state; //退款状态:0是无退款,1是部分退款,2是全部退款
-			$result               = model( 'Order' )->editOrder( $condition, $data );
+			$result               = Order::editOrder( $condition, $data );
 			return $result;
 		}
 		return false;
@@ -92,7 +91,7 @@ class OrderRefund extends Model
 			$data['lock_state']      = ['exp', 'lock_state-1'];
 			$data['delay_time']      = time();
 			$data['refund_state']    = $refund_state; //退款状态:0是无退款,1是部分退款,2是全部退款
-			$result                  = model( 'Order' )->editOrder( $condition, $data );
+			$result                  = Order::editOrder( $condition, $data );
 			return $result;
 		}
 		return false;
@@ -114,7 +113,7 @@ class OrderRefund extends Model
 			$data['lock_state']          = ['exp', 'lock_state+1'];
 			$data['refund_handle_state'] = 0; //退款平台处理状态 默认0处理中(未处理) 10拒绝(驳回) 20同意 30成功(已完成) 只有锁定时才管用
 			$data['refund_id']           = $refund_id;
-			$result                      = model( 'OrderGoods' )->editOrderGoods( $condition, $data );
+			$result                      = OrderGoods::editOrderGoods( $condition, $data );
 			return $result;
 		}
 		return false;
@@ -135,7 +134,7 @@ class OrderRefund extends Model
 			$condition['lock_state'] = ['egt', '1'];
 			$data                    = [];
 			$data['lock_state']      = ['exp', 'lock_state-1'];
-			$result                  = model( 'OrderGoods' )->editOrderGoods( $condition, $data );
+			$result                  = OrderGoods::editOrderGoods( $condition, $data );
 			return $result;
 		}
 		return false;
@@ -149,31 +148,20 @@ class OrderRefund extends Model
 	 * @param array $condition
 	 * @param boolean
 	 */
-	public function editOrderRefund( $condition, $data )
+	public function editOrderRefund( array $condition, array $data )
 	{
-		return !!$this->where($condition)->edit($data)->saveResult;
+		return $this->where( $condition )->edit( $data );
 	}
 
-	/**
-	 * 修改信息
-	 * @param   $update
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @return
-	 */
-	public function updateOrderRefund( $condition = [], $update = [] )
-	{
-		return $this->save( $update, $condition );
-	}
 
 	/**
 	 * 取退款记录
 	 *
 	 * @param
-	 * //类型:refund_type 1为退款,2为退货
+	 * 类型:refund_type 1为退款,2为退货
 	 * @return array
 	 */
-	public function getOrderRefundList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20] )
+	public function getOrderRefundList( $condition = [], $field = '*', $order = 'id desc', $page = [1, 20] )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $list;
@@ -272,10 +260,11 @@ class OrderRefund extends Model
 		return $order_list;
 	}
 
+
 	/**
-	 * 根据订单取商品的退款\退款退货状态
-	 * @param
-	 * @return array
+	 *  根据订单取商品的退款\退款退货状态
+	 * @param array $order_info
+	 * @return array|bool
 	 */
 	public function getOrderGoodsRefundInfo( $order_info = [] )
 	{
@@ -453,22 +442,13 @@ class OrderRefund extends Model
 		return $this->where( $condition )->count();
 	}
 
-	/**
-	 * 获得任意字段
-	 * @param array $condition
-	 * @param array $update_data
-	 */
-	public function getOrderRefundValue( $condition = [], $field )
-	{
-		return $this->where( $condition )->value( $field );
-	}
 
 	/**
 	 * 获取退款数据的文字描述
-	 * @param  data 退款表数据
+	 * @param  array data 退款表数据
 	 * @return
 	 */
-	public function getOrderRefundDesc( $data )
+	public function getOrderRefundDesc( array $data )
 	{
 		$state_desc = '';
 		// 1 申请退款，等待商家确认 2同意申请，等待买家退货 3买家已发货，等待收货  4已收货，确认退款 5退款成功 6退款关闭

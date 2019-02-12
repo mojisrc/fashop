@@ -19,7 +19,8 @@ use ezswoole\Model;
 class OrderExtend extends Model
 {
 	protected $softDelete = true;
-	protected $jsonFields = ['reciver_info','invoice_info'];
+	protected $jsonFields = ['reciver_info', 'invoice_info'];
+
 	/**
 	 * 列表
 	 * @param   $condition
@@ -30,9 +31,9 @@ class OrderExtend extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getOrderExtendList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
+	public function getOrderExtendList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1, 20], $group = '' )
 	{
-		if( $page == '' ){
+		if( $page ){
 			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
 
 		} else{
@@ -69,7 +70,7 @@ class OrderExtend extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getWithTrashedOrderExtendList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
+	public function getWithTrashedOrderExtendList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1, 20], $group = '' )
 	{
 		$data = $this->withTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 		return $data;
@@ -103,7 +104,7 @@ class OrderExtend extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getOnlyTrashedOrderExtendList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
+	public function getOnlyTrashedOrderExtendList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1, 20], $group = '' )
 	{
 		$data = $this->onlyTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 		return $data;
@@ -267,7 +268,7 @@ class OrderExtend extends Model
 	 */
 	public function insertOrderExtend( $insert = [] )
 	{
-		return $this->save( $insert ) ? $this->id : false;
+		return $this->add( $insert ) ;
 	}
 
 	/**

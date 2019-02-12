@@ -136,7 +136,7 @@ class DiscountGoods extends Model
 	 */
 	public function insertDiscountGoods( $insert )
 	{
-		return $this->save( $insert ) ? $this->id : false;
+		return $this->add( $insert );
 	}
 
 	/**

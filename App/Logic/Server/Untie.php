@@ -206,7 +206,7 @@ class Untie
             }
 
             //第三方被更改
-            $open_batch_result = $user_open_model->updateAllUserOpen($open_batch_updata);
+            $open_batch_result = $user_open_model->editMultiUserOpen($open_batch_updata);
             if(!$open_batch_result ){
                 $user_model->rollback();
                 return null;
@@ -251,7 +251,7 @@ class Untie
                 return null;
             }
             //第三方被更改
-            $user_open_result  = $user_open_model->updateUserOpen(['id'=>$open_info['id']], ['user_id'=>$open_info['origin_user_id'],'state'=>0]);
+            $user_open_result  = $user_open_model->editUserOpen(['id'=>$open_info['id']], ['user_id'=>$open_info['origin_user_id'],'state'=>0]);
             if(!$user_open_result ){
                 $user_model->rollback();
                 return null;

@@ -475,7 +475,7 @@ class GroupGoods extends Model
 	 */
 	public function insertGroupGoods( $insert = [] )
 	{
-		return $this->save( $insert ) ? $this->id : false;
+		return $this->add( $insert );
 	}
 
 	/**

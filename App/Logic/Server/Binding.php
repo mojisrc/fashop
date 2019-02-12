@@ -203,7 +203,7 @@ class Binding
                         return null;
                     }
                     //第三方被更改
-                    $user_open_result  = $user_open_model->updateUserOpen(['user_id'=>$user_id], ['user_id'=>$phone_user_id,'state'=>1]);
+                    $user_open_result  = $user_open_model->editUserOpen(['user_id'=>$user_id], ['user_id'=>$phone_user_id,'state'=>1]);
                     if(!$user_open_result ){
                         $user_model->rollback();
                         return null;
@@ -287,7 +287,7 @@ class Binding
                     return null;
                 }
                 //第三方被更改
-                $user_open_result  = $user_open_model->updateUserOpen(['id'=>$open_data['id']], ['user_id'=>$user_id,'state'=>$owner]);
+                $user_open_result  = $user_open_model->editUserOpen(['id'=>$open_data['id']], ['user_id'=>$user_id,'state'=>$owner]);
                 if(!$user_open_result ){
                     $user_model->rollback();
                     return null;
@@ -318,7 +318,7 @@ class Binding
                     'province' => $open_data['province'],
                     'city'     => $open_data['city']
                 ];
-                $user_open_id = $user_open_model->insertUserOpen($open_data);
+                $user_open_id = $user_open_model->addUserOpen($open_data);
                 if($user_open_id < 0){
                     $user_model->rollback();
                     return null;

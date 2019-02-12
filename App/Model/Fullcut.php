@@ -112,7 +112,7 @@ class Fullcut extends Model
 	 */
 	public function insertFullcut( $insert )
 	{
-		return $this->save( $insert ) ? $this->id : false;
+		return $this->add( $insert );
 	}
 
 	/**
