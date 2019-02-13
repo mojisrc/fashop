@@ -126,7 +126,7 @@ class Login extends Validator
 		$condition['channel_type'] = 'sms';
 		$condition['receiver']     = $data['phone'];
 		$condition['behavior']     = 'login';
-		$condition['expire_time']  = ['egt', time()];
+		$condition['expire_time']  = ['>=', time()];
 		$find                      = Db::name( 'VerifyCode' )->where( $condition )->count();
 		return $find ? true : Code::verify_code_expire;
 	}

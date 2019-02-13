@@ -86,7 +86,7 @@ class OrderRefund extends Model
 		if( $order_id > 0 ){
 			$condition               = [];
 			$condition['id']         = $order_id;
-			$condition['lock_state'] = ['egt', 1];
+			$condition['lock_state'] = ['>=', 1];
 			$data                    = [];
 			$data['lock_state']      = ['exp', 'lock_state-1'];
 			$data['delay_time']      = time();
@@ -131,7 +131,7 @@ class OrderRefund extends Model
 		if( $id > 0 ){
 			$condition               = [];
 			$condition['id']         = $id;
-			$condition['lock_state'] = ['egt', '1'];
+			$condition['lock_state'] = ['>=', '1'];
 			$data                    = [];
 			$data['lock_state']      = ['exp', 'lock_state-1'];
 			$result                  = OrderGoods::editOrderGoods( $condition, $data );

@@ -17,7 +17,7 @@ class Useradvice extends Admin
 	 */
 	// public function index(){
 	//     $user_advice_model = model('UserAdvice');
-	//     $table_prefix = config('database.prefix');
+	//     $table_prefix = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
 	//     $condition = array();
 	//     $get = $this->get;
 	//     if($get['advice_type_id']) $condition['advice_type_id'] = $get['advice_type_id'];

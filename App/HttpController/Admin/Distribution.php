@@ -34,7 +34,7 @@ class Distribution extends Admin
     public function promotion()
     {
         $get                                     = $this->get;
-        $prefix                                  = config('database.prefix');
+        $prefix                                  = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
         $table_distributor                       = $prefix . "distributor";
         $table_user                              = $prefix . "user";
         $condition                               = [];
@@ -88,7 +88,7 @@ class Distribution extends Admin
     public function achievement()
     {
         $get                                 = $this->get;
-        $prefix                              = config('database.prefix');
+        $prefix                              = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
         $table_order                         = $prefix . "order";
         $table_order_goods                   = $prefix . "order_goods";
         $condition                           = [];

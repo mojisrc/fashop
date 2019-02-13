@@ -80,7 +80,7 @@ class BindPhone extends Validator
 		} else{
 			return '没有该验证方法';
 		}
-		$condition['expire_time'] = ['egt', time()];
+		$condition['expire_time'] = ['>=', time()];
 		$find                     = \ezswoole\Db::name( 'VerifyCode' )->where( $condition )->count();
 		return $find ? true : "短信验证码已失效";
 

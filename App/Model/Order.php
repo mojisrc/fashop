@@ -779,7 +779,7 @@ class Order extends Model
 
 			$order_res = $this->editOrder( [
 				'id'         => $order_id,
-				'lock_state' => ['egt', 1],
+				'lock_state' => ['>=', 1],
 			], [
 				'refund_state' => 0,//退款状态:0是无退款,1是部分退款,2是全部退款
 				'lock_state'   => 0,

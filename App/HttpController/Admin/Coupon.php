@@ -43,12 +43,12 @@ class Coupon extends Admin
 					break;
 
 				case 1:
-					$condition['start_time'] = array('elt',time());
+					$condition['start_time'] = array('<=',time());
 					$condition['end_time']   = array('>',time());
 					break;
 
 				case 2:
-					$condition['end_time']   = array('elt',time());
+					$condition['end_time']   = array('<=',time());
 					break;
 
 			}

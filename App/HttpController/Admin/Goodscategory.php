@@ -42,7 +42,7 @@ class Goodscategory extends Admin
             return $this->send(Code::param_error, [], $this->getValidator()->getError());
         } else {
             $pid                  = $this->post['pid'];
-            $prefix               = config('database.prefix');
+            $prefix               = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
             $table_goods_category = $prefix . "goods_category";
             $grandpa_info         = \App\Model\GoodsCategory::query("SELECT pid FROM $table_goods_category WHERE id=(SELECT pid FROM $table_goods_category WHERE id=$pid AND delete_time IS NULL) AND delete_time IS NULL");
             if ($grandpa_info && $grandpa_info[0]['pid'] > 0) {
@@ -79,7 +79,7 @@ class Goodscategory extends Admin
                 $data['icon'] = $this->post['icon'];
             }
             $id                   = $this->post['id'];
-            $prefix               = config('database.prefix');
+            $prefix               = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
             $table_goods_category = $prefix . "goods_category";
 
             $grandpa_info = \App\Model\GoodsCategory::query("SELECT pid FROM $table_goods_category WHERE id=(SELECT pid FROM $table_goods_category WHERE id=(SELECT pid FROM $table_goods_category WHERE id=$id AND delete_time IS NULL) AND delete_time IS NULL) AND delete_time IS NULL");
@@ -155,7 +155,7 @@ class Goodscategory extends Admin
             return $this->send(Code::param_error, [], $this->getValidator()->getError());
         } else {
             $is_display_order = $this->post['sorts'];
-            $sql              = "UPDATE " . config('database.prefix') . "goods_category SET sort = CASE id ";
+            $sql              = "UPDATE " . \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix') . "goods_category SET sort = CASE id ";
             $ids              = [];
             foreach ($is_display_order as $sort) {
                 $ids[] = $sort['id'];

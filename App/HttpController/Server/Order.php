@@ -365,7 +365,7 @@ class Order extends Server
 				$order_id                = $get['id'];
 				$user                    = $this->getRequestUser();
 				$condition['id']         = $order_id;
-				$condition['state']      = ['egt', 20];
+				$condition['state']      = ['>=', 20];
 				$condition['goods_type'] = 2;
 				$condition['user_id']    = ['in', \App\Model\User::getUserAllIds( $user['id'] )];
 				$order_info              = \App\Model\Order::init()->getOrderInfo( $condition );
@@ -434,7 +434,7 @@ class Order extends Server
 				$order_id             = $get['id'];
 				$user                 = $this->getRequestUser();
 				$condition['id']      = $order_id;
-				$condition['state']   = ['egt', 30];
+				$condition['state']   = ['>=', 30];
 				$condition['user_id'] = ['in', \App\Model\User::getUserAllIds( $user['id'] )];
 				$order_info           = \App\Model\Order::init()->getOrderInfo( $condition );
 				if( !$order_info ){

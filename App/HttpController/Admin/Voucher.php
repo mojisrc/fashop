@@ -33,10 +33,10 @@ class Voucher extends Admin {
 		$condition = array();
 
 		if (isset($get['start_date'])) {
-			$condition['end_date'] = array('egt', strtotime($get['start_date']));
+			$condition['end_date'] = array('>=', strtotime($get['start_date']));
 		}
 		if (isset($get['end_date'])) {
-			$condition['start_date'] = array('elt', strtotime($get['end_date']));
+			$condition['start_date'] = array('<=', strtotime($get['end_date']));
 		}
 		$count      = \App\Model\Page::where($condition)->count();
 		$list       = \App\Model\Page::getVoucherList($condition, '*', 'id desc', $this->getPageLimit());
@@ -76,10 +76,10 @@ class Voucher extends Admin {
 			$condition['state'] = $state;
 		}
 		if ($get['start_date']) {
-			$condition['end_date'] = array('egt', strtotime($get['start_date']));
+			$condition['end_date'] = array('>=', strtotime($get['start_date']));
 		}
 		if ($get['end_date']) {
-			$condition['start_date'] = array('elt', strtotime($get['end_date']));
+			$condition['start_date'] = array('<=', strtotime($get['end_date']));
 		}
 		$count      = \App\Model\Page::where($condition)->count();
 		$list       = \App\Model\Page::getVoucherTemplateList($condition, '*', 'id desc', $this->getPageLimit());
@@ -186,7 +186,7 @@ class Voucher extends Admin {
 		$condition             = array();
 		$condition['id']       = $get['id'];
 		// $condition['state']    = 1;
-		// $condition['give_out'] = array('elt', '0');
+		// $condition['give_out'] = array('<=', '0');
 		// $condition['end_date'] = array('>', time());
 		$row                   = $coupon_template_model->getVoucherTemplateInfo($condition);
 
@@ -209,7 +209,7 @@ class Voucher extends Admin {
 		$model                  = model('VoucherTemplate');
 		$condition              = array();
 		$condition['id']        = $id;
-		$condition['give_out']  = array('elt', '0'); //会员没领取过优惠券才可删除
+		$condition['give_out']  = array('<=', '0'); //会员没领取过优惠券才可删除
 		$condition['is_system'] = 0;
 		$find                   = \App\Model\Page::getVoucherTemplateInfo($condition);
 		if (empty($find)) {

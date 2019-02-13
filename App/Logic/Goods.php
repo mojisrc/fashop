@@ -647,7 +647,7 @@ class Goods
 	 */
 	public function offSale( array $ids )
 	{
-		$goods_return = \App\Model\Goods::editGoods( ['id' => ['in', $ids,],], ['is_on_sale' => self::offSale] );
+		$goods_return = \App\Model\Goods::init()->editGoods( ['id' => ['in', $ids,],], ['is_on_sale' => self::offSale] );
 		if( $goods_return ){
 			return true;
 		} else{
@@ -662,7 +662,7 @@ class Goods
 	 */
 	public function onSale( array $ids )
 	{
-		$goods_return = \App\Model\Goods::editGoods( ['id' => ['in', $ids,],], ['is_on_sale' => self::onSale] );
+		$goods_return = \App\Model\Goods::init()->editGoods( ['id' => ['in', $ids,],], ['is_on_sale' => self::onSale] );
 		if( $goods_return ){
 			return true;
 		} else{

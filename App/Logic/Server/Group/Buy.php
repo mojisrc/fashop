@@ -451,7 +451,7 @@ class Buy
 		}
 
 		//拼团活动
-		$group = \App\Model\Group::getGroupInfo( ['id' => $this->getGroupId(), 'is_show' => 1, 'start_time' => ['elt', time()]] );
+		$group = \App\Model\Group::getGroupInfo( ['id' => $this->getGroupId(), 'is_show' => 1, 'start_time' => ['<=', time()]] );
 		if( !$group ){
 			throw new \Exception( '拼团活动错误' );
 		}

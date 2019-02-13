@@ -48,7 +48,7 @@ class Distributor extends Admin
     public function list()
     {
         $get                            = $this->get;
-        $prefix                         = config('database.prefix');
+        $prefix                         = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
         $table_order                    = $prefix . "order";
         $condition                      = [];
         $condition['distributor.state'] = 1; //默认0 待审核 1审核通过 2审核拒绝

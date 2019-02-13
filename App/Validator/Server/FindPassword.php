@@ -117,7 +117,7 @@ class FindPassword extends Validator
 		$condition['code']         = $value;
 		$condition['channel_type'] = $data['channel_type'];
 		$condition['behavior']     = 'findPassword';
-		$condition['expire_time']  = ['egt', time()];
+		$condition['expire_time']  = ['>=', time()];
 		$find                      = \ezswoole\Db::name( 'VerifyCode' )->where( $condition )->count();
 		return $find ? true : "短信验证码已失效";
 	}

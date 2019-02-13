@@ -34,15 +34,15 @@ class Message extends Admin {
 		if ($get['start'] && $get['start'] != '' && $get['end'] && $get['end'] != '') {
 			$get['start']             = strtotime($get['start']);
 			$get['end']               = strtotime($get['end']);
-			$condition['create_time'] = array(array('egt', $get['start']), array('elt', $get['end']));
+			$condition['create_time'] = array(array('>=', $get['start']), array('<=', $get['end']));
 
 		} elseif ($get['start'] && $get['start'] != '') {
 			$get['start']             = strtotime($get['start']);
-			$condition['create_time'] = array('egt', $get['start']);
+			$condition['create_time'] = array('>=', $get['start']);
 
 		} elseif ($get['end'] && $get['end'] != '') {
 			$get['end']               = strtotime($get['end']);
-			$condition['create_time'] = array('elt', $get['end']);
+			$condition['create_time'] = array('<=', $get['end']);
 
 		}
 		if ($get['keywords'] != '') {

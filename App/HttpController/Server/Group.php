@@ -29,8 +29,8 @@ class Group extends Server
         $param                   = $this->get;
         $condition               = [];
         $time                    = time();
-        $condition['start_time'] = ['elt', $time];
-        $condition['end_time']   = ['egt', $time];
+        $condition['start_time'] = ['<=', $time];
+        $condition['end_time']   = ['>=', $time];
         $condition['is_show']    = 1;
 
         //查询正在进行的拼团
@@ -84,8 +84,8 @@ class Group extends Server
             $this->send(Code::param_error, [], $this->getValidator()->getError());
         } else {
             $time                    = time();
-            $condition['start_time'] = ['elt', $time];
-            $condition['end_time']   = ['egt', $time];
+            $condition['start_time'] = ['<=', $time];
+            $condition['end_time']   = ['>=', $time];
             $condition['is_show']    = 1;
             $condition['goods_id']   = $get['goods_id'];
             $group_data              = \App\Model\Group::getGroupInfo($condition, '', '*');
@@ -140,7 +140,7 @@ class Group extends Server
             $condition['order.goods_type']     = 2; //拼团
             $condition['order.group_identity'] = 1; //团长
             $condition['order.group_state']    = 1; //正在进行 未满团
-            $prefix                            = config('database.prefix');
+            $prefix                            = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
             $table_order_goods                 = $prefix . "order_goods";
             $condition_string                  = "order.id in (SELECT order_id FROM $table_order_goods WHERE order_id=order.id AND goods_id=$goods_id)";
             $orderLogic                        = new OrderLogic($condition, $condition_string);
@@ -260,8 +260,8 @@ class Group extends Server
             $this->send(Code::param_error, [], $this->getValidator()->getError());
         } else {
             $time                    = time();
-            $condition['start_time'] = ['elt', $time];
-            $condition['end_time']   = ['egt', $time];
+            $condition['start_time'] = ['<=', $time];
+            $condition['end_time']   = ['>=', $time];
             $condition['is_show']    = 1;
             $condition['goods_id']   = $get['goods_id'];
             if($get['group_id']){
@@ -291,8 +291,8 @@ class Group extends Server
             $this->send(Code::param_error, [], $this->getValidator()->getError());
         } else {
             $time                    = time();
-            $condition['start_time'] = ['elt', $time];
-            $condition['end_time']   = ['egt', $time];
+            $condition['start_time'] = ['<=', $time];
+            $condition['end_time']   = ['>=', $time];
             $condition['is_show']    = 1;
             $condition['goods_id']   = $get['goods_id'];
             if($get['group_id']){

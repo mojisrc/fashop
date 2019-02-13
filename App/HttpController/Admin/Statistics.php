@@ -72,7 +72,7 @@ class Statistics extends Admin
         $order_goods_db = db( 'OrderGoods' );
 
         $condition                           = [];
-        $condition['order.state']            = ['egt', 20];
+        $condition['order.state']            = ['>=', 20];
         $condition['order_goods.lock_state'] = 0;
 
         $group = 'days';
@@ -121,7 +121,7 @@ class Statistics extends Admin
         $order_goods_db = db( 'OrderGoods' );
 
         $condition                           = [];
-        $condition['order.state']            = ['egt', 20];
+        $condition['order.state']            = ['>=', 20];
         $condition['order_goods.lock_state'] = 0;
 
         $group = 'days';
@@ -218,7 +218,7 @@ class Statistics extends Admin
         $order_goods_db = db( 'OrderGoods' );
 
         $condition                           = [];
-        $condition['order.state']            = ['egt', 20];
+        $condition['order.state']            = ['>=', 20];
         $condition['order_goods.lock_state'] = 0;
 
         $group = 'days';
@@ -268,7 +268,7 @@ class Statistics extends Admin
         $order_goods_db = db( 'OrderGoods' );
 
         $condition                           = [];
-        $condition['order.state']            = ['egt', 20];
+        $condition['order.state']            = ['>=', 20];
         $condition['order_goods.lock_state'] = 0;
 
         $accumulative_amount = $order_goods_db->where( $condition )->where( 'order.payment_time', 'between time', [
@@ -302,7 +302,7 @@ class Statistics extends Admin
         $order_goods_db = db( 'OrderGoods' );
 
         $condition                           = [];
-        $condition['order.state']            = ['egt', 20];
+        $condition['order.state']            = ['>=', 20];
         $condition['order_goods.lock_state'] = 0;
         $where                               = "date_format(FROM_UNIXTIME(order.payment_time, '%Y-%m-%d %H:%i:%S'),'%Y-%m')=".'\''.$date.'\'';
 
@@ -397,7 +397,7 @@ class Statistics extends Admin
         $order_goods_db = db( 'OrderGoods' );
 
         $condition                           = [];
-        $condition['order.state']            = ['egt', 20];
+        $condition['order.state']            = ['>=', 20];
         $condition['order_goods.lock_state'] = 0;
 
         $day_total = $order_goods_db->alias( 'order_goods' )->where( $condition )->whereTime( 'order.create_time', 'd' )->join( '__ORDER__ order', 'order_goods.order_id = order.id', 'LEFT' )->sum( 'order_goods.goods_pay_price' );
@@ -411,7 +411,7 @@ class Statistics extends Admin
     {
         $order_goods_db                      = db('OrderGoods');
         $condition                           = [];
-        $condition['order.state']            = ['egt', 20];
+        $condition['order.state']            = ['>=', 20];
         $condition['order_goods.lock_state'] = 0;
 
         $all_cost = $order_goods_db->alias( 'order_goods' )->where( $condition )->whereTime( 'order.create_time', 'today' )->join( '__ORDER__ order', 'order_goods.order_id = order.id', 'LEFT' )->sum( 'order_goods.goods_pay_price' );

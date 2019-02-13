@@ -44,12 +44,12 @@ class Fullcut extends Admin
 			break;
 
 			case 1:
-				$condition['start_time'] = ['elt', time()];
+				$condition['start_time'] = ['<=', time()];
 				$condition['end_time']   = ['>', time()];
 			break;
 
 			case 2:
-				$condition['end_time'] = ['elt', time()];
+				$condition['end_time'] = ['<=', time()];
 			break;
 
 			}

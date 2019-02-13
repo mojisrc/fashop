@@ -39,6 +39,7 @@ class GoodsImage
 	private $images;
 
 	/**
+	 * todo 废弃
 	 * @return mixed
 	 */
 	public function getModel() : \App\Model\GoodsImage

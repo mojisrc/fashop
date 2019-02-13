@@ -22,10 +22,10 @@ class Order
 	 */
 	static function autoCloseUnpay() : void
 	{
-		$config                   = \App\Model\Shop::getShopInfo( ['id' => 1] );
+		$config                   = \App\Model\Shop::init()->getShopInfo( ['id' => 1] );
 		$condition['state']       = \App\Logic\Order::state_new;
 		$condition['create_time'] = ['<', time() - $config['order_auto_close_expires']];
-		$order_list               = \App\Model\Order::getOrderList( $condition, '', 'id,user_id,create_time,state', 'id desc', [1,10000] );
+		$order_list               = \App\Model\Order::init()->getOrderList( $condition, '', 'id,user_id,create_time,state', 'id desc', [1,10000] );
 		if( !empty( $order_list ) ){
 			$now_time = time();
 			$tradeLogic  = new \App\Logic\Trade();

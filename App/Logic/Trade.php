@@ -134,7 +134,7 @@ class Trade
 				$goods_num             = $goods_info['goods_num'];
 				$condition             = [];
 				$condition['id']       = $goods_id;
-				$condition['sale_num'] = ['egt', $goods_num];
+				$condition['sale_num'] = ['>=', $goods_num];
 				$data                  = [];
 				$data['stock']         = ['exp', 'stock+'.$goods_num];
 				$data['sale_num']      = ['exp', 'sale_num-'.$goods_num];

@@ -83,8 +83,8 @@ class PageGoods
             $condition                     = [];
             $map                           = [];
             $time                          = time();
-            $condition['group.start_time'] = ['elt', $time];
-            $condition['group.end_time']   = ['egt', $time];
+            $condition['group.start_time'] = ['<=', $time];
+            $condition['group.end_time']   = ['>=', $time];
             $condition['group.is_show']    = 1;
 
 

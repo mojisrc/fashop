@@ -310,7 +310,7 @@ class UserSearch
         $this->condition['is_discard'] = 0;         //被丢弃 默认0否 1是[用于绑定后的失效的占位行]
         $this->condition['id']         = ['>', 1]; //临时解决后台超级管理员账号问题[不显示后台超级管理员]
 
-        $table_prefix                  = config('database.prefix');
+        $table_prefix                  = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
         $table_user                    = $table_prefix . 'user';
         $table_order                   = $table_prefix . 'order';
         $table_order_goods             = $table_prefix . 'order_goods';
@@ -352,17 +352,17 @@ class UserSearch
 
 		//购买次数
 		if( (int)$this->buyTimes > 0 ){
-			$this->condition["$buy_times_string"] = ['egt', (int)$this->buyTimes];
+			$this->condition["$buy_times_string"] = ['>=', (int)$this->buyTimes];
 		}
 
 		//累计消费
 		if( (int)$this->costTotal > 0 ){
-			$this->condition["$cost_total_string"] = ['egt', (int)$this->costTotal];
+			$this->condition["$cost_total_string"] = ['>=', (int)$this->costTotal];
 		}
 
 		//客单价(平均消费)
 		if( (int)$this->costAverage > 0 ){
-			$this->condition["$cost_average_string"] = ['egt', (int)$this->costAverage];
+			$this->condition["$cost_average_string"] = ['>=', (int)$this->costAverage];
 		}
 
 

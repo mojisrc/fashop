@@ -28,7 +28,7 @@ class UserTemp
 			\App\Model\UserTemp::addUserTemp( ['user_id' => $user_id] );
 		}
 		$order_goods_db                      = db( 'OrderGoods' );
-		$condition['order.state']            = ['egt', 20];
+		$condition['order.state']            = ['>=', 20];
 		$condition['order_goods.lock_state'] = 0;
 		$condition['order.user_id']         = $user_id;
 

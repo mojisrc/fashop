@@ -39,7 +39,7 @@ class Broadcast
 		$model  = model( 'WechatBroadcast' );
 		$list   = \App\Model\Page::getWechatBroadcastList( [
 			'send_state'     => 0,
-			'send_time'      => ['elt', time()],
+			'send_time'      => ['<=', time()],
 			'condition_type' => 1,
 		] );
 		if( !empty( $list ) ){

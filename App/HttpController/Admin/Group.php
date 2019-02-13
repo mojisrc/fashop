@@ -46,12 +46,12 @@ class Group extends Admin
 				$condition['is_show']    = 1;
 			break;
 			case 10:
-				$condition['start_time'] = ['elt', $time];
-				$condition['end_time']   = ['egt', $time];
+				$condition['start_time'] = ['<=', $time];
+				$condition['end_time']   = ['>=', $time];
 				$condition['is_show']    = 1;
 			break;
 			case 20:
-				$condition['end_time'] = ['elt', $time];
+				$condition['end_time'] = ['<=', $time];
 				$condition['is_show']  = 1;
 			break;
 			case 30:
@@ -558,8 +558,8 @@ class Group extends Admin
 		$param                   = $this->get;
 		$condition               = [];
 		$time                    = time();
-		$condition['start_time'] = ['elt', $time];
-		$condition['end_time']   = ['egt', $time];
+		$condition['start_time'] = ['<=', $time];
+		$condition['end_time']   = ['>=', $time];
 		$condition['is_show']    = 1;
 
 		//查询正在进行的拼团

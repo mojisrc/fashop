@@ -138,7 +138,7 @@ class Trade extends Model
 				$goods_num             = $v['goods_num'];
 				$condition             = [];
 				$condition['id']       = $goods_id;
-				$condition['sale_num'] = ['egt', $goods_num];
+				$condition['sale_num'] = ['>=', $goods_num];
 				$data                  = [];
 				$data['stock']         = ['exp', 'stock+'.$goods_num]; //库存
 				$data['sale_num']      = ['exp', 'sale_num-'.$goods_num]; //销售记录
