@@ -85,7 +85,7 @@ class Order extends Server
 
 			$result['state_success'] = $orderLogic->stateType( 'state_success' )->count();
 
-			$result['state_unevaluate'] = \App\Model\OrderGoods::getOrderGoodsCount( ['user_id' => ['in', \App\Model\User::getUserAllIds( $user['id'] )], 'evaluate_state' => 0, "(SElECT state FROM $table_order where id =$table_order_goods.order_id)" => 40] );
+			$result['state_unevaluate'] = \App\Model\OrderGoods::init()->getOrderGoodsCount( ['user_id' => ['in', \App\Model\User::getUserAllIds( $user['id'] )], 'evaluate_state' => 0, "(SElECT state FROM $table_order where id =$table_order_goods.order_id)" => 40] );
 
 			$result['state_refund'] = \App\Model\OrderRefund::getOrderRefundCount( ['user_id' => ['in', \App\Model\User::getUserAllIds( $user['id'] )], 'handle_state' => 0] );
 

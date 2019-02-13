@@ -40,7 +40,10 @@ class Order extends Model
 
 		//返回买家信息
 		if( in_array( 'user', $extend ) ){
-			$order_info['extend_user'] = \App\Model\User::getUserInfo( ['id' => $order_info['user_id']] );
+		    $model = new \App\Model\User;
+            $model->join(1111)->join(xxxx)->where(['id'=>1])->count();
+            $model->select();
+			$order_info['extend_user'] = \App\Model\User::init()->getUserInfo( ['id' => $order_info['user_id']] );
 		}
 
 		//追加返回商品信息
