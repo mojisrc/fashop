@@ -12,6 +12,7 @@
  */
 
 namespace App\HttpController\Server;
+
 use App\Utils\Code;
 use ezswoole\Db;
 
@@ -28,8 +29,8 @@ class Address extends Server
 			$this->send( Code::user_access_token_error );
 		} else{
 			$user = $this->getRequestUser();
-			\App\Model\Address::editAddress( ['user_id' => $user['id']], ['is_default' => 0] );
-			\App\Model\Address::editAddress( ['user_id' => $user['id'], 'id' => $this->post['id'],], ['is_default' => 1] );
+			\App\Model\Address::init()->editAddress( ['user_id' => $user['id']], ['is_default' => 0] );
+			\App\Model\Address::init()->editAddress( ['user_id' => $user['id'], 'id' => $this->post['id'],], ['is_default' => 1] );
 			$this->send( Code::success );
 		}
 	}
@@ -44,7 +45,7 @@ class Address extends Server
 			$this->send( Code::user_access_token_error );
 		} else{
 			$user = $this->getRequestUser();
-			$info = \App\Model\Address::getDefaultAddressInfo( ['user_id' => $user['id']] );
+			$info = \App\Model\Address::init()->getDefaultAddressInfo( ['user_id' => $user['id']] );
 			$this->send( Code::success, ['info' => $info] );
 		}
 	}
@@ -64,7 +65,7 @@ class Address extends Server
 				$this->send( $this->getValidator()->getError() );
 			} else{
 				$user = $this->getRequestUser();
-				$info = \App\Model\Address::getAddressInfo( ['id' => $this->get['id'], 'user_id' => $user['id']] );
+				$info = \App\Model\Address::init()->getAddressInfo( ['id' => $this->get['id'], 'user_id' => $user['id']] );
 				$this->send( Code::success, ['info' => $info] );
 			}
 		}
@@ -80,7 +81,7 @@ class Address extends Server
 			$this->send( Code::user_access_token_error );
 		} else{
 			$user = $this->getRequestUser();
-			$list = \App\Model\Address::getAddressList( ['user_id' => $user['id']], '*', 'is_default desc,id desc', $this->getPageLimit() );
+			$list = \App\Model\Address::init()->getAddressList( ['user_id' => $user['id']], '*', 'is_default desc,id desc', $this->getPageLimit() );
 			$this->send( Code::success, ['list' => $list] );
 		}
 	}
@@ -103,11 +104,11 @@ class Address extends Server
 				$this->send( $this->getValidator()->getError() );
 			} else{
 				try{
-					$user          = $this->getRequestUser();
-					$area          = Db::name( 'Area' )->where( ['id' => $this->post['area_id']] )->field( 'id,pid,name' )->find();
-					$city          = Db::name( 'Area' )->where( ['id' => $area['pid']] )->field( 'id,pid,name' )->find();
-					$province      = Db::name( 'Area' )->where( ['id' => $city['pid']] )->field( 'id,pid,name' )->find();
-					$address_id    = \App\Model\Address::addAddress( [
+					$user       = $this->getRequestUser();
+					$area       = Db::name( 'Area' )->where( ['id' => $this->post['area_id']] )->field( 'id,pid,name' )->find();
+					$city       = Db::name( 'Area' )->where( ['id' => $area['pid']] )->field( 'id,pid,name' )->find();
+					$province   = Db::name( 'Area' )->where( ['id' => $city['pid']] )->field( 'id,pid,name' )->find();
+					$address_id = \App\Model\Address::init()->addAddress( [
 						'user_id'        => $user['id'],
 						'truename'       => $this->post['truename'],
 						'province_id'    => $province['id'],
@@ -121,7 +122,7 @@ class Address extends Server
 					] );
 					if( $address_id ){
 						if( intval( $this->post['is_default'] ) === 1 ){
-							\App\Model\Address::editAddress( [
+							\App\Model\Address::init()->editAddress( [
 								'id'      => ['neq', $address_id],
 								'user_id' => $user['id'],
 							], ['is_default' => 0] );
@@ -156,11 +157,11 @@ class Address extends Server
 				$this->send( $this->getValidator()->getError() );
 			} else{
 				try{
-					$user          = $this->getRequestUser();
-					$area          = Db::name( 'Area' )->where( ['id' => $this->post['area_id']] )->field( 'id,pid,name' )->find();
-					$city          = Db::name( 'Area' )->where( ['id' => $area['pid']] )->field( 'id,pid,name' )->find();
-					$province      = Db::name( 'Area' )->where( ['id' => $city['pid']] )->field( 'id,pid,name' )->find();
-					$result        = \App\Model\Address::editAddress( ['id' => $this->post['id']], [
+					$user     = $this->getRequestUser();
+					$area     = Db::name( 'Area' )->where( ['id' => $this->post['area_id']] )->field( 'id,pid,name' )->find();
+					$city     = Db::name( 'Area' )->where( ['id' => $area['pid']] )->field( 'id,pid,name' )->find();
+					$province = Db::name( 'Area' )->where( ['id' => $city['pid']] )->field( 'id,pid,name' )->find();
+					$result   = \App\Model\Address::init()->editAddress( ['id' => $this->post['id']], [
 						'user_id'        => $user['id'],
 						'truename'       => $this->post['truename'],
 						'province_id'    => $province['id'],
@@ -174,7 +175,7 @@ class Address extends Server
 					] );
 					if( $result ){
 						if( $this->post['is_default'] === 1 ){
-							\App\Model\Address::editAddress( [
+							\App\Model\Address::init()->editAddress( [
 								'id'      => ['neq', $this->post['id']],
 								'user_id' => $user['id'],
 							], ['is_default' => 0] );
@@ -204,8 +205,8 @@ class Address extends Server
 				$this->send( $this->getValidator()->getError() );
 			} else{
 				$user = $this->getRequestUser();
-				\App\Model\Address::delAddress( ['id' => $this->post['id'], 'user_id' => $user['id']] );
-				$this->send( Code::success, []);
+				\App\Model\Address::init()->delAddress( ['id' => $this->post['id'], 'user_id' => $user['id']] );
+				$this->send( Code::success, [] );
 			}
 		}
 	}

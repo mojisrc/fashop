@@ -51,7 +51,7 @@ class Area extends Server
 		} else{
 			$condition['level'] = 1;
 		}
-		$list = \App\Model\Area::getAreaList($condition, 'id,name,pid', 'id asc', [1,1000000] );
+		$list = \App\Model\Area::init()->getAreaList($condition, 'id,name,pid', 'id asc', [1,1000000] );
 		$this->send( Code::success, [
 			'list' => isset($get['tree'])  ? \App\Utils\Tree::listToTree( $list ) : $list,
 		] );

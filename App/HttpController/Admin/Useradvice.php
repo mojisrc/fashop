@@ -48,10 +48,10 @@ class Useradvice extends Admin
 			$condition['type.id'] = $get['type_id'];
 		}
 		//分页
-		$count = \App\Model\UserAdvice::alias( 'user_advice' )->join( 'user_advice_type type', 'user_advice.advice_type_id = type.id' )->where( $condition )->count();
+		$count = \App\Model\UserAdvice::init()->alias( 'user_advice' )->join( 'user_advice_type type', 'user_advice.advice_type_id = type.id' )->where( $condition )->count();
 		$field = 'user_advice.*,user.username,type.title';
 		$order = 'user_advice.create_time desc';
-		$list  = \App\Model\UserAdvice::getUserAdviceMoreList( $condition, $field, $order, $this->getPageLimit() );
+		$list  = \App\Model\UserAdvice::init()->getUserAdviceMoreList( $condition, $field, $order, $this->getPageLimit() );
 
 		return $this->send( Code::success, [
 			'total_number' => $count,
@@ -71,7 +71,7 @@ class Useradvice extends Admin
 			exit( $this->send( '参数错误' ) );
 		}
 
-		$row = \App\Model\UserAdvice::getUserAdviceMoreInfo( $condition, '*' );
+		$row = \App\Model\UserAdvice::init()->getUserAdviceMoreInfo( $condition, '*' );
 
 		$result         = [];
 		$result['info'] = $row;

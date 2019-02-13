@@ -31,10 +31,10 @@ class Goodscollect extends Server
 				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				$user = $this->getRequestUser();
-				\App\Model\GoodsCollect::delGoodsCollect( ['user_id' => $user['id'], 'goods_id' => $this->post['goods_id']] );
+				\App\Model\GoodsCollect::init()->delGoodsCollect( ['user_id' => $user['id'], 'goods_id' => $this->post['goods_id']] );
 				$goods_id = \ezswoole\Db::name( 'Goods' )->where( ['id' => $this->post['goods_id']] )->value( 'id' );
 				if( $goods_id ){
-					\App\Model\GoodsCollect::addGoodsCollect( [
+					\App\Model\GoodsCollect::init()->addGoodsCollect( [
 						'user_id'  => $user['id'],
 						'goods_id' => $this->post['goods_id'],
 					] );
@@ -60,7 +60,7 @@ class Goodscollect extends Server
 				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				$user = $this->getRequestUser();
-				\App\Model\GoodsCollect::delGoodsCollect( ['user_id' => $user['id'], 'goods_id' => $this->post['goods_id']] );
+				\App\Model\GoodsCollect::init()->delGoodsCollect( ['user_id' => $user['id'], 'goods_id' => $this->post['goods_id']] );
 				$this->send( Code::success );
 			}
 		}
@@ -80,7 +80,7 @@ class Goodscollect extends Server
 				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				$user = $this->getRequestUser();
-				$info = \App\Model\GoodsCollect::getGoodsCollectInfo( ['user_id' => $user['id']], ['goods_id' => $this->post['goods_id']] );
+				$info = \App\Model\GoodsCollect::init()->getGoodsCollectInfo( ['user_id' => $user['id']], ['goods_id' => $this->post['goods_id']] );
 				$this->send( Code::success, ['state' => $info ? 1 : 0] );
 			}
 		}
@@ -101,6 +101,7 @@ class Goodscollect extends Server
 			] )->column( 'goods_id' );
 
 			if( $in_goods_ids ){
+				// TODO
 				$goods_search_logic = new \App\Logic\GoodsSearch( ['ids' => $in_goods_ids] );
 				$list               = $goods_search_logic->list();
 				$count              = $goods_search_logic->count();

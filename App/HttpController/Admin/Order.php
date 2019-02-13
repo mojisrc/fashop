@@ -58,7 +58,7 @@ class Order extends Admin
 		if( isset( $param['user_ids'] ) && is_array( $param['user_ids'] ) ){
 			$user_ids = [];
 			foreach( $param['user_ids'] as $key => $value ){
-				$user_ids = array_merge( $user_ids, \App\Model\User::getUserAllIds( $value ) );
+				$user_ids = array_merge( $user_ids, \App\Model\User::init()->getUserAllIds( $value ) );
 			}
 			$orderLogic->users( 'id', $user_ids );
 		}
@@ -115,7 +115,7 @@ class Order extends Admin
 		if( isset( $param['user_ids'] ) && is_array( $param['user_ids'] ) ){
 			$user_ids = [];
 			foreach( $param['user_ids'] as $key => $value ){
-				$user_ids = array_merge( $user_ids, \App\Model\User::getUserAllIds( $value ) );
+				$user_ids = array_merge( $user_ids, \App\Model\User::init()->getUserAllIds( $value ) );
 			}
 			$orderLogic->users( 'id', $user_ids );
 		}
@@ -171,7 +171,7 @@ class Order extends Admin
 		} else{
 			$order_id        = $this->get['id'];
 			$condition['id'] = $order_id;
-			$order_info      = \App\Model\Order::getOrderInfo( $condition, '', '*', [
+			$order_info      = \App\Model\Order::init()->getOrderInfo( $condition, '', '*', [
 				'order_extend',
 				'order_goods',
 				'user',
@@ -179,9 +179,9 @@ class Order extends Admin
 			if( empty( $order_info ) ){
 				$this->send( Code::error, [], '没有该订单' );
 			} else{
-				$log_list    = \App\Model\Order::getOrderLogList( ['order_id' => $order_id] );
-				$return_list = \App\Model\OrderRefund::getOrderRefundList( ['order_id' => $order_id, 'refund_type' => 2] );
-				$refund_list = \App\Model\OrderRefund::getOrderRefundList( ['order_id' => $order_id, 'refund_type' => 1] );
+				$log_list    = \App\Model\Order::init()->getOrderLogList( ['order_id' => $order_id] );
+				$return_list = \App\Model\OrderRefund::init()->getOrderRefundList( ['order_id' => $order_id, 'refund_type' => 2] );
+				$refund_list = \App\Model\OrderRefund::init()->getOrderRefundList( ['order_id' => $order_id, 'refund_type' => 1] );
 				$this->send( Code::success, [
 					'info'        => $order_info,
 					'order_log'   => $log_list,
@@ -205,7 +205,7 @@ class Order extends Admin
 			$order_id                = $this->get['id'];
 			$condition['id']         = $order_id;
 			$condition['goods_type'] = 2;
-			$order_info              = \App\Model\Order::getOrderInfo( $condition );
+			$order_info              = \App\Model\Order::init()->getOrderInfo( $condition );
 			if( empty( $order_info ) ){
 				$this->send( Code::error, [], '没有该订单' );
 			} else{
@@ -243,7 +243,7 @@ class Order extends Admin
 		} else{
 			$order_id = $this->post['id'];
 
-			$order_info = \App\Model\Order::getOrderInfo( ['id' => $order_id], '', '*', [
+			$order_info = \App\Model\Order::init()->getOrderInfo( ['id' => $order_id], '', '*', [
 				'order_extend',
 				'order_goods',
 			] );
@@ -364,7 +364,7 @@ class Order extends Admin
 					$condition['state']        = 10;
 					$condition['payment_time'] = 0;
 					$condition['goods_type']   = 1;//目前只支持普通订单
-					$order_info                = \App\Model\Order::getOrderInfo( $condition );
+					$order_info                = \App\Model\Order::init()->getOrderInfo( $condition );
 					if( empty( $order_info ) ){
 						return $this->send( Code::error, [], '没有可修改的订单' );
 					} else{

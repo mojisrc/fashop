@@ -117,16 +117,16 @@ class Buy extends Server
 			} else{
 				try{
 					$user    = $this->getRequestUser();
-					$payment = \App\Model\Setting::getSettingInfo( ['key' => $this->post['payment_code'], 'status' => 1] );
+					$payment = \App\Model\Setting::init()->getSettingInfo( ['key' => $this->post['payment_code'], 'status' => 1] );
 					if( !$payment ){
 						return $this->send( Code::error, [], '系统不支持选定的支付方式' );
 					} else{
-						$pay_info   = \App\Model\OrderPay::getOrderPayInfo( [
+						$pay_info   = \App\Model\OrderPay::init()->getOrderPayInfo( [
 							'pay_sn'    => $this->post['pay_sn'],
 							'user_id'   => $user['id'],
 							'pay_state' => 0,
 						] );
-						$order_info = \App\Model\Order::getOrderInfo( [
+						$order_info = \App\Model\Order::init()->getOrderInfo( [
 							'pay_sn' => $this->post['pay_sn'],
 							'state'  => \App\Logic\Order::state_new,
 						], '', 'id,pay_sn,amount,revise_amount' );
@@ -192,7 +192,7 @@ class Buy extends Server
 	public function wechatNotify()
 	{
 		try{
-			$payment = \App\Model\Setting::getSettingInfo( ['key' => 'wechat'] );
+			$payment = \App\Model\Setting::init()->getSettingInfo( ['key' => 'wechat'] );
 			$notice  = PayNoticeFacade::wechat( $this->getWechatPayConfig( $payment['config'], 'wechat' ) );
 			if( $notice->check() === true ){
 				$data       = $notice->getData();
@@ -218,7 +218,7 @@ class Buy extends Server
 	public function wechatMiniNotify()
 	{
 		try{
-			$payment = \App\Model\Setting::getSettingInfo( ['key' => 'wechat'] );
+			$payment = \App\Model\Setting::init()->getSettingInfo( ['key' => 'wechat'] );
 			$notice  = PayNoticeFacade::wechat( $this->getWechatPayConfig( $payment['config'], 'wechat_mini' ) );
 			if( $notice->check() === true ){
 				$data       = $notice->getData();
@@ -246,7 +246,7 @@ class Buy extends Server
 	public function wechatAppNotify()
 	{
 		try{
-			$payment = \App\Model\Setting::getSettingInfo( ['key' => 'wechat'] );
+			$payment = \App\Model\Setting::init()->getSettingInfo( ['key' => 'wechat'] );
 			$notice  = PayNoticeFacade::wechat( $this->getWechatPayConfig( $payment['config'], 'wechat_app' ) );
 			if( $notice->check() === true ){
 				$data       = $notice->getData();
@@ -272,7 +272,7 @@ class Buy extends Server
 	public function alipayAppNotify()
 	{
 		try{
-			$payment = \App\Model\Setting::getSettingInfo( ['key' => 'alipay'] );
+			$payment = \App\Model\Setting::init()->getSettingInfo( ['key' => 'alipay'] );
 			$notice  = PayNoticeFacade::alipay( $this->getAliPayConfig( $payment['config'], 'alipay_app' ) );
 			if( $notice->check() === true ){
 				$data       = $notice->getData();

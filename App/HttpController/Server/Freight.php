@@ -27,7 +27,7 @@ class Freight extends Server
 		if( $this->validator( $this->get, 'Server/Freight.info' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			$info = \App\Model\Freight::getFreightInfo( ['id' => $this->get['id']] );
+			$info = \App\Model\Freight::init()->getFreightInfo( ['id' => $this->get['id']] );
 			$this->send( Code::success, ['info' => $info] );
 		}
 	}

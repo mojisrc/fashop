@@ -59,10 +59,11 @@ class Goodsevaluate extends Server
             }
 
             $user                 = $this->getRequestUser();
-            $condition['user_id'] = ['in', \App\Model\User::getUserAllIds($user['id'])];
-            $count                = \App\Model\OrderGoods::getOrderGoodsCount( $condition );
+            // todo count 和 list 可以写一起
+            $condition['user_id'] = ['in', \App\Model\User::init()->getUserAllIds($user['id'])];
+            $count                = \App\Model\OrderGoods::init()->getOrderGoodsCount( $condition );
 
-            $list                 = \App\Model\OrderGoods::getOrderGoodsList( $condition, '*', 'id desc', $this->getPageLimit() );
+            $list                 = \App\Model\OrderGoods::init()->getOrderGoodsList( $condition, '*', 'id desc', $this->getPageLimit() );
             $this->send( Code::success, [
                 'total_number' => $count,
                 'list'         => $list,
@@ -86,14 +87,13 @@ class Goodsevaluate extends Server
             } else{
                 $user                                 = $this->getRequestUser();
                 $condition                            = [];
-                $condition['evaluate.order_goods_id'] = intval( $get['order_goods_id'] );
-                $condition['evaluate.user_id']        = ['in', \App\Model\User::getUserAllIds($user['id'])];
-                $data = \App\Model\GoodsEvaluate::alias( 'evaluate' )->join( 'order', 'evaluate.order_id = order.id', 'LEFT' )->join( 'order_goods goods', 'evaluate.order_goods_id = goods.id' )->join( 'user', 'evaluate.user_id = user.id', 'LEFT' )->join( 'user_profile', 'user_profile.user_id = user.id', 'LEFT' )->where( $condition )->field( 'evaluate.*,goods.goods_spec,user.phone,user_profile.nickname,user_profile.avatar' )->find();
+                $condition['goods_evaluateorder_goods_id'] = intval( $get['order_goods_id'] );
+                $condition['goods_evaluateuser_id']        = ['in', \App\Model\User::init()->getUserAllIds($user['id'])];
+                $data = \App\Model\GoodsEvaluate::join( 'order', 'goods_evaluateorder_id = order.id', 'LEFT' )->join( 'order_goods goods', 'goods_evaluateorder_goods_id = goods.id' )->join( 'user', 'goods_evaluateuser_id = user.id', 'LEFT' )->join( 'user_profile', 'user_profile.user_id = user.id', 'LEFT' )->where( $condition )->field( 'goods_evaluate*,goods.goods_spec,user.phone,user_profile.nickname,user_profile.avatar' )->find();
 
                 $this->send( Code::success, ['info' => $data] );
 
             }
-
         }
     }
 
@@ -163,26 +163,4 @@ class Goodsevaluate extends Server
         }
     }
 
-    //
-    //  /**
-    //   * 当前用户的评价列表
-    //   * @method GET
-    //   * @author 韩文博
-    //   */
-    //  public function mine()
-    //  {
-    //      if( $this->verifyResourceRequest() !== true ){
-    //          $this->send( Code::user_access_token_error );
-    //      } else{
-    //          $user                 = $this->getRequestUser();
-    //          $goods_evaluate_model = model( 'GoodsEvaluate' );
-    //          $condition['user_id'] = $user['id'];
-    //          $count                = \App\Model\GoodsEvaluate::where( $condition )->count();
-    //          $list                 = \App\Model\GoodsEvaluate::getGoodsEvaluateList( $condition, '*', 'id desc', $this->getPageLimit() );
-    //          $this->send( Code::success, [
-    //              'total_number' => $count,
-    //              'list'         => $list,
-    //          ] );
-    //      }
-    //  }
 }

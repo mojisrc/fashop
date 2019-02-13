@@ -59,8 +59,8 @@ class Goods extends Server
 			if( $this->validator( $this->get, 'Goods.info' ) !== true ){
 				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
-				$goods_info         = \App\Model\Goods::getGoodsInfo( ['id' => $this->get['id']] );
-				$goods_info['skus'] = \App\Model\GoodsSku::getGoodsSkuList( ['goods_id' => $this->get['id']], '*', 'id desc', [1,10000] );
+				$goods_info         = \App\Model\Goods::init()->getGoodsInfo( ['id' => $this->get['id']] );
+				$goods_info['skus'] = \App\Model\GoodsSku::init()->getGoodsSkuList( ['goods_id' => $this->get['id']], '*', 'id desc', [1,10000] );
 				$this->send( Code::success, ['info' => $goods_info] );
 			}
 		} else{
@@ -78,7 +78,7 @@ class Goods extends Server
 				'goods_sku.id' => $this->get['goods_sku_id'],
 			] )->field( 'goods.*,goods_sku.id as goods_sku_id' )->find();
 
-			$goods_info['skus'] = \App\Model\GoodsSku::getGoodsSkuList( ['goods_id' => $goods_info['id']], '*', 'id desc', [1,10000] );
+			$goods_info['skus'] = \App\Model\GoodsSku::init()->getGoodsSkuList( ['goods_id' => $goods_info['id']], '*', 'id desc', [1,10000] );
 			$this->send( Code::success, ['info' => $goods_info] );
 		}
 	}

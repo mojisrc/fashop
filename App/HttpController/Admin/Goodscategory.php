@@ -22,7 +22,7 @@ class Goodscategory extends Admin
     {
         $condition = [];
         $order = 'sort asc';
-        $list  = \App\Model\GoodsCategory::getGoodsCategoryList($condition, '*', $order, [1,1000]);
+        $list  = \App\Model\GoodsCategory::init()->getGoodsCategoryList($condition, '*', $order, [1,1000]);
         return $this->send(Code::success, [
             'list' => isset($this->get['tree']) ? \App\Utils\Tree::listToTree($list, 'id', 'pid', '_child', 0) : $list,
         ]);
@@ -101,7 +101,7 @@ class Goodscategory extends Admin
         if ($this->validator($this->get, 'Admin/GoodsCategory.info') !== true) {
             $this->send(Code::param_error, [], $this->getValidator()->getError());
         } else {
-            $info                 = \App\Model\GoodsCategory::getGoodsCategoryInfo(['id' => $this->get['id']], '*');
+            $info                 = \App\Model\GoodsCategory::init()->getGoodsCategoryInfo(['id' => $this->get['id']], '*');
             if (!$info) {
                 $this->send(Code::param_error, []);
             } else {
@@ -124,15 +124,15 @@ class Goodscategory extends Admin
 
             $condition       = [];
             $condition['id'] = $this->post['id'];
-            $row                  = \App\Model\GoodsCategory::getGoodsCategoryInfo($condition, '*');
+            $row                  = \App\Model\GoodsCategory::init()->getGoodsCategoryInfo($condition, '*');
             if (!$row) {
                 return $this->send(Code::param_error, []);
             } else {
-                $sub_info = \App\Model\GoodsCategory::getGoodsCategoryInfo(['pid' => $row['id']], '*');
+                $sub_info = \App\Model\GoodsCategory::init()->getGoodsCategoryInfo(['pid' => $row['id']], '*');
                 if ($sub_info) {
                     return $this->send(Code::param_error, [], '存在子级分类，不可删除');
                 }
-                $result = \App\Model\GoodsCategory::softDelGoodsCategory($condition);
+                $result = \App\Model\GoodsCategory::init()->delGoodsCategory($condition);
                 if (!$result) {
                     return $this->send(Code::error);
                 } else {

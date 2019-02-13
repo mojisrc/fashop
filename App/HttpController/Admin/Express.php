@@ -133,7 +133,7 @@ class Express extends Admin
 	 */
 	public function info()
 	{
-		$info = \App\Model\Express::getExpressInfo( ['id' => $this->get['id']] );
+		$info = \App\Model\Express::init()->getExpressInfo( ['id' => $this->get['id']] );
 		$this->send( Code::success, ['info' => $info] );
 	}
 
@@ -152,7 +152,7 @@ class Express extends Admin
 			$condition       = [];
 			$condition['id'] = $post['id'];
 
-			$row = \App\Model\Express::getExpressInfo( $condition, '*' );
+			$row = \App\Model\Express::init()->getExpressInfo( $condition, '*' );
 			if( !$row ){
 				return $this->send( Code::param_error );
 			}

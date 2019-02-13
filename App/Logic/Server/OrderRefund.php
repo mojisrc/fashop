@@ -279,7 +279,7 @@ class OrderRefund
             }
         }
 
-        $order = \App\Model\Order::getOrderInfo([
+        $order = \App\Model\Order::init()->getOrderInfo([
                                                 'id' => $order_goods['order_id'],
 //                                                 'user_id' => $this->getUserId(),
                                             ]);

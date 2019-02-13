@@ -201,7 +201,7 @@ class Order extends Server
 				 */
 				$condition['id']      = $order_id;
 				$condition['user_id'] = ['in', \App\Model\User::getUserAllIds( $user['id'] )];
-				$order_info           = \App\Model\Order::getOrderInfo( $condition, '', '*', [
+				$order_info           = \App\Model\Order::init()->getOrderInfo( $condition, '', '*', [
 					'order_extend',
 					'order_goods',
 				] );
@@ -256,7 +256,7 @@ class Order extends Server
 				$user                 = $this->getRequestUser();
 				$condition['id']      = $this->post['id'];
 				$condition['user_id'] = ['in', \App\Model\User::getUserAllIds( $user['id'] )];
-				$order_info           = \App\Model\Order::getOrderInfo( $condition );
+				$order_info           = \App\Model\Order::init()->getOrderInfo( $condition );
 				$extend_msg           = isset( $this->post['state_remark'] ) ? $this->post['state_remark'] : null;
 				$result               = \App\Model\Order::userChangeState( 'order_cancel', $order_info, $user['id'], $user['username'], $extend_msg );
 				if( $result === true ){
@@ -284,7 +284,7 @@ class Order extends Server
 				$user                 = $this->getRequestUser();
 				$condition['id']      = $this->post['id'];
 				$condition['user_id'] = ['in', \App\Model\User::getUserAllIds( $user['id'] )];
-				$order_info           = \App\Model\Order::getOrderInfo( $condition );
+				$order_info           = \App\Model\Order::init()->getOrderInfo( $condition );
 				$extend_msg           = isset( $this->post['state_remark'] ) ? $this->post['state_remark'] : null;
 				$result               = \App\Model\Order::userChangeState( 'order_receive', $order_info, $user['id'], $user['username'], $extend_msg );
 				if( $result === true ){
@@ -368,7 +368,7 @@ class Order extends Server
 				$condition['state']      = ['egt', 20];
 				$condition['goods_type'] = 2;
 				$condition['user_id']    = ['in', \App\Model\User::getUserAllIds( $user['id'] )];
-				$order_info              = \App\Model\Order::getOrderInfo( $condition );
+				$order_info              = \App\Model\Order::init()->getOrderInfo( $condition );
 				if( !$order_info ){
 					return $this->send( Code::param_error, [], '参数错误' );
 				} else{
@@ -436,7 +436,7 @@ class Order extends Server
 				$condition['id']      = $order_id;
 				$condition['state']   = ['egt', 30];
 				$condition['user_id'] = ['in', \App\Model\User::getUserAllIds( $user['id'] )];
-				$order_info           = \App\Model\Order::getOrderInfo( $condition );
+				$order_info           = \App\Model\Order::init()->getOrderInfo( $condition );
 				if( !$order_info ){
 					return $this->send( Code::param_error, [], '参数错误' );
 				} else{
@@ -481,7 +481,7 @@ class Order extends Server
 // 			$order_model          = model( 'Order' );
 // 			$condition['id']      = $this->get['id'];
 // 			$condition['user_id'] = $this->user['id'];
-// 			$order_info           = \App\Model\Order::getOrderInfo( $condition, '', '*', ['order_extend', 'order_goods'] );
+// 			$order_info           = \App\Model\Order::init()->getOrderInfo( $condition, '', '*', ['order_extend', 'order_goods'] );
 // 			if(
 // 				empty( $order_info ) || !in_array( $order_info['state'], [
 // 					OrderLogic::state_send,

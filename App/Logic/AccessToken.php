@@ -41,7 +41,7 @@ class AccessToken
 			if( empty( $jwt ) || !isset( $jwt['jti'] ) ){
 				return false;
 			}
-			$find = \App\Model\AccessToken::getAccessTokenInfo( [
+			$find = \App\Model\AccessToken::init()->getAccessTokenInfo( [
 				'jti'        => $jwt['jti'],
 				'sub'        => $jwt['sub'],
 				'exp'        => ['egt', $jwt['exp']],

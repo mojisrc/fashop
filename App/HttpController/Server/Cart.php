@@ -59,7 +59,7 @@ class Cart extends Server
 			} else{
 				$quantity = $this->post['quantity'];
 
-				$find = \App\Model\Cart::getCartInfo( [
+				$find = \App\Model\Cart::init()->getCartInfo( [
 					'goods_sku_id' => $this->post['goods_sku_id'],
 					'user_id'      => ['eq', $user['id']],
 				] );
@@ -67,7 +67,7 @@ class Cart extends Server
 					return $this->send( Code::param_error, [], '购物车已存在，不可重复添加' );
 				}
 
-				$goods_sku_info = \App\Model\GoodsSku::getGoodsSkuOnlineInfo( ['goods_sku.id' => $this->post['goods_sku_id']], 'goods_sku.*,goods.img as img,goods.title as title' );
+				$goods_sku_info = \App\Model\GoodsSku::init()->getGoodsSkuOnlineInfo( ['goods_sku.id' => $this->post['goods_sku_id']], 'goods_sku.*,goods.img as img,goods.title as title' );
 				if( empty( $goods_sku_info ) ){
 					return $this->send( Code::param_error, [], '产品不存在' );
 				}
@@ -119,7 +119,7 @@ class Cart extends Server
 					return $this->send( Code::cart_goods_not_exist );
 				}
 
-				$goods_sku_info = \App\Model\GoodsSku::getGoodsSkuOnlineInfo( ['goods_sku.id' => $goods_sku_id], 'goods_sku.*,goods.img as img,goods.title as title' );
+				$goods_sku_info = \App\Model\GoodsSku::init()->getGoodsSkuOnlineInfo( ['goods_sku.id' => $goods_sku_id], 'goods_sku.*,goods.img as img,goods.title as title' );
 				if( empty( $goods_sku_info ) ){
 					return $this->send( Code::goods_offline );
 				}
@@ -130,11 +130,11 @@ class Cart extends Server
 				if( $goods_sku_info['stock'] < $quantity ){
 					if( $goods_sku_info['stock'] > 0 ){
 						// 更新下购物车数量
-						\App\Model\Cart::editCart( $condition, ['goods_num' => $goods_sku_info['stock']] );
+						\App\Model\Cart::init()->editCart( $condition, ['goods_num' => $goods_sku_info['stock']] );
 					}
 					$this->send( Code::goods_stockout );
 				} else{
-					\App\Model\Cart::editCart( $condition, [
+					\App\Model\Cart::init()->editCart( $condition, [
 						'goods_sku_id' => $goods_sku_info['id'],
 						'goods_num'    => $quantity,
 					] );
@@ -209,7 +209,7 @@ class Cart extends Server
 				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				$user      = $this->getRequestUser();
-				$cart_info = \App\Model\Cart::getCartInfo( [
+				$cart_info = \App\Model\Cart::init()->getCartInfo( [
 					'goods_sku_id' => $this->get['goods_sku_id'],
 					'user_id'      => ['eq', $user['id']],
 				], 'id' );
@@ -230,7 +230,7 @@ class Cart extends Server
 			$this->send( Code::user_access_token_error );
 		} else{
 			$user = $this->getRequestUser();
-			\App\Model\Cart::delCart( ['user_id' => ['eq', $user['id']]] );
+			\App\Model\Cart::init()->delCart( ['user_id' => ['eq', $user['id']]] );
 			$this->send( Code::success );
 		}
 	}
@@ -270,7 +270,7 @@ class Cart extends Server
 				$condition                 = [];
 				$condition['user_id']      = ['eq', $user['id']];
 				$condition['goods_sku_id'] = ['in', $this->post['goods_sku_ids']];
-				$result                    = \App\Model\Cart::editCart( $condition, ['is_check' => $this->post['is_check']] );
+				$result                    = \App\Model\Cart::init()->editCart( $condition, ['is_check' => $this->post['is_check']] );
 				if( !$result ){
 					$this->send( Code::error, [], '编辑失败' );
 				} else{

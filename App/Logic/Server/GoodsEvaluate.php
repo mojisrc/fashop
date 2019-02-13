@@ -228,7 +228,7 @@ class GoodsEvaluate
         }
 		$this->setOrderId($order_goods_info['order_id']);
 		//获取订单信息
-		$order_info = \App\Model\Order::getOrderInfo( [
+		$order_info = \App\Model\Order::init()->getOrderInfo( [
 			'id'      => $this->getOrderId(),
 			'user_id' => $this->getUserId(),
 		] );

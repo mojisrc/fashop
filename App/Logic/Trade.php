@@ -197,7 +197,7 @@ class Trade
 	 */
 	public function editOrderFinish( $order_id, $log_data = [] )
 	{
-		$order           = \App\Model\Order::getOrderInfo( ['id' => $order_id], '', 'id,user_id,user_name,id,sn,amount,payment_code,state' );
+		$order           = \App\Model\Order::init()->getOrderInfo( ['id' => $order_id], '', 'id,user_id,user_name,id,sn,amount,payment_code,state' );
 		$order_shipped   = $this->getOrderState( 'order_shipped' ); //订单状态30:已发货
 		$order_completed = $this->getOrderState( 'order_completed' ); //订单状态40:已收货
 		if( $order['state'] == $order_shipped ){

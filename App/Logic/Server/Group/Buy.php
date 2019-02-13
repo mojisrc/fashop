@@ -468,13 +468,13 @@ class Buy
 		$this->setGroupGoods( $group_goods );
 
 		//拼团订单
-		$group_order_num = \App\Model\Order::getOrderInfo( ['user_id' => $this->getUserId(), 'group_id' => $this->getGroupId(), 'group_state' => ['in', '0,1,2']], '', 'COUNT(id) AS group_num', [] );
+		$group_order_num = \App\Model\Order::init()->getOrderInfo( ['user_id' => $this->getUserId(), 'group_id' => $this->getGroupId(), 'group_state' => ['in', '0,1,2']], '', 'COUNT(id) AS group_num', [] );
 		if( $group['limit_group_num'] > 0 && $group_order_num > $group['limit_group_num'] ){
 			throw new \Exception( '此活动每位用户最多拼团'.$group['limit_group_num'].'次' );
 		}
 
 		if( $this->getBuyWay() == 'join_group' ){
-			$captain_group_order = \App\Model\Order::getOrderInfo( ['id' => $this->getOrderId(), 'group_id' => $this->getGroupId(), 'group_state' => 1], '', '*', [] );
+			$captain_group_order = \App\Model\Order::init()->getOrderInfo( ['id' => $this->getOrderId(), 'group_id' => $this->getGroupId(), 'group_state' => 1], '', '*', [] );
 			if( !$captain_group_order ){
 				throw new \Exception( '团长订单信息错误' );
 			}
