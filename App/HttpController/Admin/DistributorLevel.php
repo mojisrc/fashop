@@ -187,7 +187,7 @@ class DistributorLevel extends Admin
             if ($distributor_level_info['level'] != $max_level) {
                 return $this->send(Code::param_error, [], '只能从最高级依次删除');
             }
-            $distributor_level_model->startTrans();
+            $distributor_level_model->startTransaction();
 
             //删除分销等级
             $distributor_level_result = $distributor_level_model->delDistributorLevel(['id' => $post['id']]);

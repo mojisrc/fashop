@@ -195,7 +195,7 @@ class Fullcut extends Admin
 			$condition       = [];
 			$condition['id'] = $post['id'];
 
-			\App\Model\Fullcut::startTrans();// 启动事务
+			\App\Model\Fullcut::startTransaction();// 启动事务
 
 			//查询活动
 			$row = \App\Model\Fullcut::getFullcutInfo( $condition, '*' );
@@ -459,7 +459,7 @@ class Fullcut extends Admin
 
 		} else{
 
-			\App\Model\FullcutGoods::startTrans();// 启动事务
+			\App\Model\FullcutGoods::startTransaction();// 启动事务
 			//为空代表删除所有goods_sku
 			if( empty( $post['goods_sku'] ) ){
 

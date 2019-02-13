@@ -12,7 +12,7 @@ class User extends Model
 
 	public function addUser( array $data )
 	{
-		$this->startTrans();
+		$this->startTransaction();
 		try{
 			$now_time = time();
 			$user_id  = $this->insertGetId( array_merge( $data, [

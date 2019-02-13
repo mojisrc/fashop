@@ -184,7 +184,7 @@ class Binding
             $user_open_model  = model('UserOpen');
             $user_alias_model = model('UserAlias');
 
-            \App\Model\User::startTrans();
+            \App\Model\User::startTransaction();
 
             $phone_user_id    = \App\Model\User::getUserValue(['phone'=>$phone], 'id');
 
@@ -258,7 +258,7 @@ class Binding
             $user_open_model  = model('UserOpen');
             $user_alias_model = model('UserAlias');
 
-            \App\Model\User::startTrans();
+            \App\Model\User::startTransaction();
 
             $user_phone       = \App\Model\User::getUserValue(['id'=>$user_id], 'phone');
             $owner            = $user_phone ? 1 : 0;

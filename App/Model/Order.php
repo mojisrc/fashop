@@ -615,7 +615,7 @@ class Order extends Model
 	public function userChangeState( $state_type, $order_info, $user_id, $username, $extend_msg ) : bool
 	{
 		try{
-			$this->startTrans();
+			$this->startTransaction();
 
 			if( $state_type == 'order_cancel' ){
 				$this->userChangeStateOrderCancel( $order_info, $user_id, $username, $extend_msg );

@@ -169,7 +169,7 @@ class Group extends Admin
 			$data['is_show']          = 1;
 			$data['goods_id']         = $goods_id;
 
-			\App\Model\Group::startTrans();
+			\App\Model\Group::startTransaction();
 			$group_id = \App\Model\Group::insertGroup( $data );
 			if( !$group_id ){
 				\App\Model\Group::rollback();
@@ -357,7 +357,7 @@ class Group extends Admin
 				return $this->send( Code::error, [], '参数错误' );
 			}
 
-			\App\Model\Group::startTrans();
+			\App\Model\Group::startTransaction();
 
 			$condition       = [];
 			$condition['id'] = $post['id'];
@@ -527,7 +527,7 @@ class Group extends Admin
 				return $this->send( Code::param_error, [], '不可删除' );
 			} else{
 
-				\App\Model\Group::startTrans();
+				\App\Model\Group::startTransaction();
 				//删除拼团活动
 				$group_result = \App\Model\Group::delGroup( ['id' => $post['id']] );
 				if( !$group_result ){

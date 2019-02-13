@@ -271,10 +271,10 @@ class Statistics extends Admin
         $condition['order.state']            = ['egt', 20];
         $condition['order_goods.lock_state'] = 0;
 
-        $accumulative_amount = $order_goods_db->alias( 'order_goods' )->where( $condition )->where( 'order.payment_time', 'between time', [
+        $accumulative_amount = $order_goods_db->where( $condition )->where( 'order.payment_time', 'between time', [
             $beginMonth,
             $endMonth,
-        ] )->join( '__ORDER__ order', 'order_goods.order_id = order.id', 'LEFT' )->sum( 'order_goods.goods_pay_price' );
+        ] )->join( 'order', 'order_goods.order_id = order.id', 'LEFT' )->sum( 'order_goods.goods_pay_price' );
 
         $this->send( Code::success, ['accumulative_amount' => $accumulative_amount] );
 

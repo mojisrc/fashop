@@ -14,7 +14,6 @@
 
 namespace App\HttpController\Admin;
 
-use ezswoole\Request;
 use App\Utils\Code;
 use App\Logic\Admin\Auth as AuthLogic;
 use App\HttpController\AccessTokenAbstract;
@@ -28,7 +27,6 @@ abstract class Admin extends AccessTokenAbstract
 	protected function onRequest( $actionName ) : ?bool
 	{
 		parent::onRequest( $actionName );
-		$this->request = Request::getInstance();
 		if( $this->request->method() === 'OPTIONS' ){
 			$this->send( Code::success );
 			$this->response()->end();

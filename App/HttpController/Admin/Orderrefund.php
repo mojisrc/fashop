@@ -119,7 +119,7 @@ class Orderrefund extends Admin
 			if( !$refund ){
 				return $this->send( Code::error, [], "未查询到可收货的退款记录" );
 			} else{
-				\App\Model\OrderRefund::startTrans();
+				\App\Model\OrderRefund::startTransaction();
 				$result = \App\Model\OrderRefund::editOrderRefund( ['id' => $refund['id']], [
 					'receive'      => 2,
 					'receive_time' => time(),
@@ -143,7 +143,7 @@ class Orderrefund extends Admin
 	 */
 	private function predepositRefund( array $data )
 	{
-		\App\Model\OrderRefund::startTrans();
+		\App\Model\OrderRefund::startTransaction();
 
 		$order_goods_res = \App\Model\OrderGoods::editOrderGoods( ['id' => $data['order_goods_id']], ['refund_handle_state' => 30] );
 		if( !$order_goods_res ){

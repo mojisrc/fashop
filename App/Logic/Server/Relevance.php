@@ -178,7 +178,7 @@ class Relevance
             $condition['username'] = $username;
         }
         $user_model = model('User');
-        \App\Model\User::startTrans();
+        \App\Model\User::startTransaction();
 
         $user       = \App\Model\User::getUserInfo($condition, 'id');
         if( $user ){
@@ -243,7 +243,7 @@ class Relevance
                 $data['username'] = "wechat_{$wechat_openid}_" . RandomKey::randMd5(8);
 
                 $user_model       = model('User');
-                \App\Model\User::startTrans();
+                \App\Model\User::startTransaction();
 
                 $user_id          = \App\Model\User::addUser($data);
 
@@ -334,7 +334,7 @@ class Relevance
 					throw new \App\Utils\Exception( "wechatmini openid exist", Code::user_wechat_openid_exist );
                 } else{
                     $user_model 	  = model('User');
-                    \App\Model\User::startTrans();
+                    \App\Model\User::startTransaction();
 
                     $data['username'] = "wechat_{$mini_user['openId']}_" . RandomKey::randMd5(8);
                     $user_id          = \App\Model\User::addUser($data);

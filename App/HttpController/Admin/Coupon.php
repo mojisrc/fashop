@@ -262,7 +262,7 @@ class Coupon extends Admin
 		} else{
 			$condition['id'] = $post['id'];
 
-			\App\Model\Coupon::startTrans();// 启动事务
+			\App\Model\Coupon::startTransaction();// 启动事务
 			//查询优惠券
 			$row             = \App\Model\Coupon::getCouponInfo( $condition, '*' );
 			if( !$row ){
@@ -529,7 +529,7 @@ class Coupon extends Admin
 			return $this->send( Code::error, [], $error );
 
 		} else{
-            \App\Model\CouponGoods::startTrans();// 启动事务
+            \App\Model\CouponGoods::startTransaction();// 启动事务
 
 			//为空代表删除所有goods_sku
 			if(empty($post['goods_sku'])){

@@ -95,7 +95,7 @@ class Message extends Admin {
 				return $this->send('请选择用户');
 			}
 
-			\App\Model\Message::startTrans();
+			\App\Model\Message::startTransaction();
 
 			try {
 				$message_id = \App\Model\Message::addMessage([

@@ -564,7 +564,7 @@ class Buy
 	 */
 	public function createOrder() : \App\Logic\Server\Buy\CreateOrderResult
 	{
-		\App\Model\Order::startTrans();
+		\App\Model\Order::startTransaction();
 
 		try{
 			$group       = $this->getGroup();

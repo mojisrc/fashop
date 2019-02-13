@@ -187,4 +187,40 @@ class Goods extends Server
 
 	}
 
+	public function test(){
+		$goodsModel = new \App\Model\Goods;
+		$goodsModel->startTransaction();
+		try{
+			$id = $goodsModel->addGoods( [
+				'title'=>'test startTransaction'
+			] );
+//			var_dump("goods id : {$id}");
+			$image_id = \App\Model\GoodsImage::init()->addGoodsImage([
+				'goods_id'=>1
+			]);
+			var_dump($image_id);
+//			\App\Logic\GoodsSku::make( [
+//				'goods_id'    => 1,
+//				'goods_title' => 'test startTransaction ',
+//				'skus'        => [],
+//			] )->add();
+//			\App\Logic\GoodsImage::make( ['goods_id' => 1, 'images' =>[]] )->add();
+//
+//			$addCategoryIds = [];
+//
+//			\App\Model\GoodsCategoryIds::init()->addMultiGoodsCategoryIds( $addCategoryIds );
+//
+			$goodsModel->getDb()->rollback();
+
+			//			$goodsModel->commit();
+			var_dump('ok');
+			return true;
+		} catch( \Exception $e ){
+			$this->exception = $e;
+			$goodsModel->rollback();
+			var_dump('faile');
+			return false;
+		}
+	}
+
 }

@@ -110,7 +110,7 @@ class Pdrecharge extends Admin {
 		$update['admin']            = $this->user['username'];
 		$log_msg                    = lang('admin_predeposit_recharge_edit_state') . ',' . lang('admin_predeposit_sn') . ':' . $info['sn'];
 		try {
-			$pd_model->startTrans();
+			$pd_model->startTransaction();
 			//更改充值状态
 			$state = $pd_model->editPdRecharge($update, $condition);
 

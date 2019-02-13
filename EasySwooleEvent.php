@@ -13,7 +13,6 @@ use EasySwoole\EasySwoole\Swoole\EventRegister;
 use EasySwoole\EasySwoole\AbstractInterface\Event;
 use EasySwoole\Http\Request;
 use EasySwoole\Http\Response;
-use \ezswoole\Core;
 use App\WebSocket\WebSocketEvent;
 use App\WebSocket\WebSocketParser;
 use EasySwoole\Socket\Dispatcher;
@@ -29,7 +28,6 @@ class EasySwooleEvent implements Event
     public static function mainServerCreate(EventRegister $register)
     {
 	    \ezswoole\Core::register();
-
 	    /**
 	     * **************** websocket控制器 **********************
 	     */
@@ -54,19 +52,15 @@ class EasySwooleEvent implements Event
 		    $websocketEvent->onClose($server, $fd, $reactorId);
 	    });
 
-
-
-
     }
 
     public static function onRequest(Request $request, Response $response): bool
     {
-	    Core::onRequest( $request, $response );
         return true;
     }
 
     public static function afterRequest(Request $request, Response $response): void
     {
-	    Core::afterAction( $request, $response );
     }
 }
+

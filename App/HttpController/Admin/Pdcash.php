@@ -132,7 +132,7 @@ class Pdcash extends Admin {
 		$log_msg                 = lang('admin_predeposit_cash_edit_state') . ',' . lang('admin_predeposit_cs_sn') . ':' . $info['sn'];
 
 		try {
-			$pd_model->startTrans();
+			$pd_model->startTransaction();
 			$result = $pd_model->editPdCash($update, $condition);
 			if (!$result) {
 				throw new \Exception(lang('admin_predeposit_cash_edit_fail'));

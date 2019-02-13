@@ -177,7 +177,7 @@ class Distributor extends Admin
                 return $this->send(Code::param_error, [], '参数错误');
             }
 
-            $distributor_model->startTrans();
+            $distributor_model->startTransaction();
 
             //清退此分销员 和  清理此分销员的上级关系
             $distributor_result = $distributor_model->updateDistributor(['id' => $distributor_info['id']], ['is_retreat' => 1, 'inviter_id' => 0]);

@@ -87,7 +87,7 @@ class User extends Admin
 		// } else{
 		// 	$condition['id'] = ['in', $this->post['ids']];
 
-		// 	\App\Model\User::startTrans();
+		// 	\App\Model\User::startTransaction();
 
 		// 	$result = \App\Model\User::editUser( $condition, ['is_disable' => 1] );//禁用 默认0否 1是
 		// 	if( !$result ){

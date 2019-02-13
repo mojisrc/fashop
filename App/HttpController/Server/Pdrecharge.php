@@ -52,7 +52,7 @@ class Pdrecharge extends Server {
 					$user                = $this->getRequestUser();
 					$pd_model            = model('PdRecharge');
 					$pd_log_model        = model('PdLog');
-					$pd_model->startTrans();
+					$pd_model->startTransaction();
 					$data                = array();
 					$data['sn']          = $pay_sn          = $pd_model->makeSn($user['id']);
 					$data['user_id']     = $user['id'];
@@ -261,7 +261,7 @@ class Pdrecharge extends Server {
 				}else{
 
 					try{
-						$pd_model->startTrans();
+						$pd_model->startTransaction();
 						$sn                    = $pd_model->makeSn($user['id']);
 						$data                  = array();
 						$data['sn']            = $sn;
