@@ -13,9 +13,6 @@
 
 namespace App\Model;
 
-
-
-
 class UserLevel extends Model
 {
 	protected $softDelete = true;
@@ -28,7 +25,7 @@ class UserLevel extends Model
 
 	public function editUserLevel( $condition = [], $data = [] )
 	{
-		return $this->where($condition)->edit($data);
+		return $this->where( $condition )->edit( $data );
 	}
 
 	public function delUserLevel( $condition = [] )
@@ -48,7 +45,7 @@ class UserLevel extends Model
 		return $info;
 	}
 
-	public function getUserLevelList( $condition = [], $field = '*', $order = 'id desc', $page = [1,10] )
+	public function getUserLevelList( $condition = [], $field = '*', $order = 'id desc', $page = [1, 10] )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $list;

@@ -20,9 +20,9 @@ class Sms extends Model
 {
 	/**
 	 * 验证短信验证码是否过期
-	 * @param $phone 手机号
-	 * @param $code  邀请码
-	 * @param $model 模块名
+	 * @param string $phone 手机号
+	 * @param string $code  邀请码
+	 * @param string $model 模块名
 	 */
 	function isExpired( $phone, $code, $model )
 	{

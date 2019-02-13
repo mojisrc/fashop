@@ -34,12 +34,10 @@ abstract class AccessTokenAbstract extends Controller
 	{
 		if( empty( $this->user ) ){
 			$access_token_data = $this->getRequestAccessTokenData();
-			$condition         = [];
 			$condition['id']   = $access_token_data['sub'];
-			$user              = \App\Model\User::getUserExcludeInfo( $condition, '', 'password' );
+			$user              = \App\Model\User::init()->getUserInfo( $condition );
 			if( !empty( $user ) ){
 				$user_auxiliary = $this->getUserInfo( $user['id'] );
-
 				return new SplArray( array_merge( $user, $user_auxiliary ) );
 			} else{
 				return false;
@@ -97,15 +95,15 @@ abstract class AccessTokenAbstract extends Controller
 
 	/**
 	 * 获得用户的相关信息
-	 * @throws \App\Utils\Exception
+	 * @param $user_id
+	 * @return array
 	 */
 	final protected function getUserInfo( $user_id )
 	{
 		$data                 = [];
-		$condition            = [];
 		$condition['user_id'] = $user_id;
-		$data['profile']      = \App\Model\UserProfile::getUserProfileInfo( $condition );
-		$data['assets']       = \App\Model\UserAssets::getUserAssetsInfo( $condition );
+		$data['profile']      = \App\Model\UserProfile::init()->getUserProfileInfo( $condition );
+		$data['assets']       = \App\Model\UserAssets::init()->getUserAssetsInfo( $condition );
 		return $data;
 	}
 }

@@ -165,12 +165,12 @@ class GoodsSku
 
             if ($filter_update_skus) {
 
-                $state = $this->getModel()->updateAll($filter_update_skus['goods_skus']);
+                $state = $this->getModel()->editMulti($filter_update_skus['goods_skus']);
                 if ($state === false) {
                     throw new \Exception("goods sku update all fail");
                 }
 
-                $goods_state = \App\Model\Goods::editGoods(['id' => $this->goodsId], ['sku_list' => $filter_update_skus['sku_list'], 'stock' => array_sum(array_column($filter_update_skus['sku_list'], 'stock'))]);
+                $goods_state = \App\Model\Goods::init()->editGoods(['id' => $this->goodsId], ['sku_list' => $filter_update_skus['sku_list'], 'stock' => array_sum(array_column($filter_update_skus['sku_list'], 'stock'))]);
                 if (!$goods_state) {
                     throw new \Exception("sku_list update fail");
                 }
@@ -185,7 +185,7 @@ class GoodsSku
         if (!empty($del_ids)) {
             // 删除不存在的商品
             foreach ($del_ids as $del_id) {
-                $state = $this->getModel()->softDelGoodsSku(['id' => $del_id]);
+                $state = $this->getModel()->delGoodsSku(['id' => $del_id]);
                 if ($state === false) {
                     throw new \Exception("goods sku del fail");
                 }
@@ -239,7 +239,7 @@ class GoodsSku
                 }
             }
             // 不可以通过model 进行转换json等type约定
-            $state = $this->getModel()->updateAll($update_skus);
+            $state = $this->getModel()->editMulti($update_skus);
             if ($state === false) {
                 throw new \Exception("goods sku update all fail");
             }
@@ -254,7 +254,7 @@ class GoodsSku
      */
     public function del(array $ids)
     {
-        $state = $this->getModel()->softDelGoodsSku(['id' => $ids]);
+        $state = $this->getModel()->delGoodsSku(['id' => $ids]);
         if ($state !== true) {
             throw new \Exception("goods sku del fail");
         } else {
@@ -266,158 +266,4 @@ class GoodsSku
     {
         return new static($options);
     }
-
-
-
-    /**
-     * 获取商品收藏排行
-     * TODO
-     * @param int $limit 数量
-     * @return array    商品信息
-     */
-    //	public function getHotCollectList( $limit = 5 )
-    //	{
-    //		$prefix           = 'collect_sales_list_'.$limit;
-    //		$hot_collect_list = S( $prefix );
-    //		if( empty( $hot_collect_list ) ){
-    //			$goods_model      = model( 'Goods' );
-    //			$hot_collect_list = \App\Model\Goods::getGoodsOnlineList( [], '*', 0, 'collect desc', $limit );
-    //			S( $prefix, $hot_collect_list );
-    //		}
-    //		return $hot_collect_list;
-    //	}
-
-    /**
-     * 计算商品库存
-     * TODO
-     * @param array $goods_list
-     * @return array|boolean
-     */
-    //	public function calculateStorage( $goods_list, $stock_alarm = 0 )
-    //	{
-    //		// 计算库存
-    //		if( !empty( $goods_list ) ){
-    //			$goodsid_array = [];
-    //			foreach( $goods_list as $value ){
-    //				$goodscommonid_array[] = $value['id'];
-    //			}
-    //			$stock       = $this->getGoodsList( [
-    //				'id' => [
-    //					'in',
-    //					$goodscommonid_array,
-    //				],
-    //			], 'stock,id,id', '', '', 10000 );
-    //			$stock_array = [];
-    //			foreach( $stock as $val ){
-    //				if( !isset( $stock_array[$val['id']] ) ){
-    //					$stock_array[$val['id']] = [];
-    //				}
-    //				if( $stock_alarm != 0 && $val['stock'] <= $stock_alarm ){
-    //					$stock_array[$val['id']]['alarm'] = true;
-    //				}
-    //				if( !isset( $stock_array[$val['id']]['sum'] ) ){
-    //					$stock_array[$val['id']]['sum'] = $val['stock'];
-    //				} else{
-    //					$stock_array[$val['id']]['sum'] += $val['stock'];
-    //				}
-    //				if( !isset( $stock_array[$val['id']]['id'] ) ){
-    //					$stock_array[$val['id']]['id'] = $val['id'];
-    //				} else{
-    //					$stock_array[$val['id']]['id'] = $val['id'];
-    //				}
-    //
-    //			}
-    //			return $stock_array;
-    //		} else{
-    //			return false;
-    //		}
-    //	}
-
-    /**
-     * 获取商品列表
-     * @method GET
-     * @date        2017-05-09
-     * @Author      沈旭
-     * @param       array $get
-     * @param       array $condition
-     * @return      array
-     */
-    public function getGoodsList($get, $condition = [])
-    {
-        $goods_common_model = model('GoodsCommon');
-        if (isset($get['id']) && $get['id']) {
-            $condition['id'] = $get['id'];
-        }
-        if (isset($get['title']) && $get['title']) {
-            $condition['title'] = ['like', '%' . $get['title'] . '%'];
-        }
-        if (isset($get['brand_title']) && $get['brand_title']) {
-            $condition['brand_title'] = ['like', '%' . $get['brand_title'] . '%'];
-        }
-
-        if (isset($get['category_id']) && $get['category_id'] > 0) {
-            $childs_ids = model('GoodsCategory', 'logic')->getSelfAndChildId($get['category_id']);
-            if ($childs_ids) {
-                $condition['category_id'] = ['in', implode(',', $childs_ids)];
-            } else {
-                $condition['category_id'] = -1;
-            }
-        }
-        if (isset($get['state']) && $get['state']) {
-            $condition['state'] = $get['state'];
-        }
-
-        if (isset($get['off_shelf_state']) && $get['off_shelf_state']) {
-            $condition['state'] = 10;
-        }
-
-        $count     = $goods_common_model->getGoodsCommonCount($condition);
-        $Page      = new Page($count, isset($get['rows']) ? $get['rows'] : 10);
-        $page      = $Page->currentPage . ',' . $Page->listRows;
-        $page_show = $Page->show();
-        // 审核中
-        $list = $goods_common_model->getGoodsCommonList($condition, '*', 'id desc', $page);
-
-        // 计算库存
-        $stock_array = $goods_common_model->calculateStorage($list);
-        $data        = ['list' => $list, 'page' => $page_show, 'stock_array' => $stock_array];
-        return $data;
-    }
-
-    /**
-     * 同步商品信息到主表
-     * 说明：总销量，总点击率，总评分，库存
-     * stock,visit_count,share_count,sale_num,evaluate_good_star,evaluate_count
-     * @datetime 2017-05-28T21:04:17+0800
-     * @param int $id 商品主表id
-     * @author   韩文博
-     * @return   boolean
-     */
-    public function syncGoodsCommonByGoods($id)
-    {
-        $list = \App\Model\Goods::where(['id' => $id])->field('stock,visit_count,share_count,sale_num,evaluate_good_star,evaluate_count')->select();
-        $list = $list;
-        $data = [
-            'stock'              => 0,
-            'sale_num'           => 0,
-            'evaluate_good_star' => 0,
-            'evaluate_count'     => 0,
-            'visit_count'        => 0,
-            'share_count'        => 0,
-        ];
-        if ($list) {
-            foreach ($list as $key => $value) {
-                $data['stock']              += $value['stock'];
-                $data['sale_num']           += $value['sale_num'];
-                $data['evaluate_good_star'] += $value['evaluate_good_star'];
-                $data['evaluate_count']     += $value['evaluate_count'];
-                $data['visit_count']        += $value['visit_count'];
-                $data['share_count']        += $value['share_count'];
-            }
-            return model('GoodsCommon')->editGoodsCommon(['id' => $id], $data);
-        } else {
-            return false;
-        }
-    }
-
 }

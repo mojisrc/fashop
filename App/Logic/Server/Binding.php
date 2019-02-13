@@ -359,13 +359,13 @@ class Binding
             $master_user_assets_update['points']  = $master_user_assets_info['points'] + $user_assets_info['points'];
             $master_user_assets_update['balance'] = $master_user_assets_info['balance'] + $user_assets_info['balance'];
 
-            $user_assets_result = \App\Model\UserAssets::updateUserAssets(['id'=>$user_id],$user_assets_update);
+            $user_assets_result = \App\Model\UserAssets::editUserAssets(['id'=>$user_id],$user_assets_update);
             if(!$user_assets_result){
                 \App\Model\User::rollback();
                 return null;
             }
 
-            $master_user_assets_result = \App\Model\UserAssets::updateUserAssets(['id'=>$master_user_id],$master_user_assets_update);
+            $master_user_assets_result = \App\Model\UserAssets::editUserAssets(['id'=>$master_user_id],$master_user_assets_update);
             if(!$master_user_assets_result){
                 \App\Model\User::rollback();
                 return null;

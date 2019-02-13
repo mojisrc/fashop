@@ -119,7 +119,7 @@ class Discount extends Model
 	 *
 	 * @param array $update 数据
 	 */
-	public function updateAllDiscount( $update )
+	public function editMultiDiscount( $update )
 	{
 		return $this->editMulti( $update );
 	}

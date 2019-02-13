@@ -426,6 +426,7 @@ class GoodsSearch
     {
         // 分类
         if (isset($search_options['category_id'])) {
+        	// TODO 废弃
             $category_ids                   = \App\Logic\GoodsCategory::getSelfAndChildId($search_options['category_id']);
             $this->condition['category_id'] = ['in', $category_ids];
         }

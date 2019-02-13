@@ -14,7 +14,6 @@
 namespace App\Model;
 
 
-
 class VerifyCode extends Model
 {
 	protected $createTime = true;
@@ -49,7 +48,7 @@ class VerifyCode extends Model
 	}
 
 
-	public function getVerifyCodeList( $condition = [], $field = '*', $order = 'id desc', $page = [1,10], $group = '' )
+	public function getVerifyCodeList( $condition = [], $field = '*', $order = 'id desc', $page = [1, 10], $group = '' )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->group( $group )->page( $page )->select();
 		return $list;

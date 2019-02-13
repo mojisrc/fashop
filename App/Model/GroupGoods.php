@@ -503,7 +503,7 @@ class GroupGoods extends Model
 	 * 修改多条数据
 	 * @param   $update
 	 */
-	public function updateAllGroupGoods( $update = [] )
+	public function editMultiGroupGoods( $update = [] )
 	{
 		return $this->editMulti( $update );
 	}

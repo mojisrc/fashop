@@ -124,7 +124,7 @@ class DiscountGoods extends Model
 	 *
 	 * @param array $update 数据
 	 */
-	public function updateAllDiscountGoods( $update )
+	public function editMultiDiscountGoods( $update )
 	{
 		return $this->editMulti( $update );
 	}

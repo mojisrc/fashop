@@ -456,7 +456,7 @@ class Register
                 return null;
             }
 
-            $user_assets_id = \App\Model\UserAssets::insertUserAssets($assets_data);
+            $user_assets_id = \App\Model\UserAssets::addUserAssets($assets_data);
             if ($user_assets_id < 0) {
                 return null;
             }

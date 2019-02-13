@@ -13,13 +13,12 @@
  */
 
 namespace App\Logic;
-
+// todo 准备废弃
 class Trade
 {
 	/**
 	 * 订单处理天数
 	 * @method     GET
-	 * @datetime 2017-05-29T10:53:23+0800
 	 * @param    string $day_type
 	 * @return   int | array
 	 */
@@ -46,7 +45,6 @@ class Trade
 
 	/**
 	 * 获得订单状态
-	 * @datetime 2017-05-29T10:53:34+0800
 	 * @param    string $type
 	 * @return   int | array
 	 */
@@ -126,13 +124,11 @@ class Trade
 	 * 取消订单并退回库存
 	 * @param int      $order_id 订单编号
 	 * @param    array $log_data 订单记录信息
-	 * @datetime 2017-05-29T10:53:23+0800
 	 */
 	public function editOrderCancel( $order_id, $log_data )
 	{
 		$goods_list = \App\Model\OrderGoods::getOrderGoodsList( ['order_id' => $order_id], 'order_id,goods_num,goods_sku_id,goods_id', 'id desc', [1,10000] );
 		if( !empty( $goods_list ) && is_array( $goods_list ) ){
-			$GoodsSkuModel = model( 'GoodsSku' );
 			foreach( $goods_list as $goods_info ){
 				$goods_id              = $goods_info['goods_sku_id'];
 				$goods_num             = $goods_info['goods_num'];
@@ -142,15 +138,14 @@ class Trade
 				$data                  = [];
 				$data['stock']         = ['exp', 'stock+'.$goods_num];
 				$data['sale_num']      = ['exp', 'sale_num-'.$goods_num];
-				$GoodsSkuModel->editGoodsSku( $condition, $data );
+				GoodsSku::init()->editGoodsSku( $condition, $data );
 			}
 			$orderData          = [];
 			$orderData['state'] = \App\Logic\Order::state_cancel;
-			$order_model        = model( 'Order' );
-			$state              = \App\Model\Order::editOrder( ['id' => $order_id], $orderData ); //更新订单
+			$state              = \App\Model\Order::init()->editOrder( ['id' => $order_id], $orderData ); //更新订单
 			if( $state ){
 				$log_data['order_state'] = $orderData['state'];
-				$state                   = \App\Model\Order::addOrderLog( $log_data );
+				$state                   = \App\Model\Order::init()->addOrderLog( $log_data );
 			}
 			return $state;
 		}
@@ -160,7 +155,6 @@ class Trade
 	/**
 	 * 更新退款申请
 	 * @param int $user_id 会员编号
-	 * @datetime 2017-05-29T10:53:23+0800
 	 */
 	public function editRefundConfirm( $user_id = 0 )
 	{
@@ -200,7 +194,6 @@ class Trade
 	 * 自动收货完成订单
 	 * @param int      $order_id 订单编号
 	 * @param    array $log_data 订单记录信息
-	 * @datetime 2017-05-29T10:53:23+0800
 	 */
 	public function editOrderFinish( $order_id, $log_data = [] )
 	{
@@ -218,10 +211,10 @@ class Trade
 			$order_data                  = [];
 			$order_data['finnshed_time'] = time();
 			$order_data['state']         = $order_completed;
-			$state                       = \App\Model\Order::editOrder( ['id' => $order_id], $order_data ); //更新订单状态为已收货
+			$state                       = \App\Model\Order::init()->editOrder( ['id' => $order_id], $order_data ); //更新订单状态为已收货
 			$log_data['order_state']     = $order_completed;
 			if( $state ){
-				$state = \App\Model\Order::addOrderLog( $log_data );
+				$state = \App\Model\Order::init()->addOrderLog( $log_data );
 			}
 			// 订单处理记录信息
 			return $state;

@@ -27,10 +27,8 @@ class OrderRefund
 
 	/**
 	 * 获取退款列表后
-	 * @date        2017-05-15
-	 * @Author      作者
-	 * @param       [数组]     $get  [传递的参数]
-	 * @return      [数组]     $data [返回的参数]
+	 * @param            $get
+	 * @return           $data
 	 */
 	public function getOrderRefundList( $get )
 	{

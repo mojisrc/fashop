@@ -100,7 +100,7 @@ class Fullcut extends Model
 	 *
 	 * @param array $update 数据
 	 */
-	public function updateAllFullcut( $update )
+	public function editMultiFullcut( $update )
 	{
 		return $this->editMulti( $update );
 	}

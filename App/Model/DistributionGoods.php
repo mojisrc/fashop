@@ -174,7 +174,7 @@ class DistributionGoods extends Model
 	 * 修改多条数据
 	 * @param   $update
 	 */
-	public function updateAllDistributionGoods( $update = [] )
+	public function editMultiDistributionGoods( $update = [] )
 	{
 		return $this->editMulti( $update );
 	}

@@ -296,7 +296,7 @@ class OrderExtend extends Model
 	 * 修改多条数据
 	 * @param   $update
 	 */
-	public function updateAllOrderExtend( $update = [] )
+	public function editMultiOrderExtend( $update = [] )
 	{
 		return $this->editMulti( $update );
 	}

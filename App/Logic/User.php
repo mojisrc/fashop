@@ -17,7 +17,6 @@ use App\Utils\Encrypt;
 
 class User
 {
-
 	/**
 	 * 系统加密方法
 	 * @param string $string 要加密的字符串
@@ -25,7 +24,7 @@ class User
 	 */
 	static function encryptPassword( string $string ) : string
 	{
-		return Encrypt::encrypt( $string, \EasySwoole\Config::getInstance()->getConf( 'data_auth_key' ), 0 );
+		return Encrypt::encrypt( $string, \EasySwoole\EasySwoole\Config::getInstance()->getConf( 'ENCRYPT.data_auth_key' ), 0 );
 	}
 
 	/**
@@ -36,7 +35,7 @@ class User
 	 */
 	static function decryptPassword( string $string ) : string
 	{
-		return Encrypt::decrypt( $string, \EasySwoole\Config::getInstance()->getConf( 'data_auth_key' ) );
+		return Encrypt::decrypt( $string, \EasySwoole\EasySwoole\Config::getInstance()->getConf( 'ENCRYPT.data_auth_key' ) );
 	}
 
 }

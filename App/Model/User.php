@@ -9,6 +9,7 @@ class User extends Model
 {
 	protected $softDelete = true;
 	protected $createTime = true;
+	protected $hidden = ['password', 'pay_password'];
 
 	public function addUser( array $data )
 	{
@@ -31,7 +32,7 @@ class User extends Model
 
 	public function editUser( $condition = [], $data = [] )
 	{
-		return $this->where($condition)->edit($data);
+		return $this->where( $condition )->edit( $data );
 	}
 
 	public function delUser( $condition = [] )
@@ -51,12 +52,9 @@ class User extends Model
 		return $list;
 	}
 
-	public function getUserInfo( $condition = [], $field = '*', $extends = [] )
+	public function getUserInfo( $condition = [], $field = '*' )
 	{
-		$result    = $this->field( $field )->where( $condition )->find();
-		$user_info = $result ? $result->toArray() : [];
-		unset( $user_info['pay_password'] );
-		return $user_info;
+		return $this->field( $field )->where( $condition )->find();
 	}
 
 	/**
@@ -82,7 +80,7 @@ class User extends Model
 	// 获取用户等级信息
 	public function getUserLevel( $condition = [], $field = '*' )
 	{
-		$info = $this->where( $condition )->alias( 'user' )->join( '__USER_LEVEL__ user_level', 'user.user_level_id = user_level.id', 'LEFT' )->field( $field )->find();
+		$info = $this->where( $condition )->alias( 'user' )->join( 'user_level', 'user.user_level_id = user_level.id', 'LEFT' )->field( $field )->find();
 		return $info;
 	}
 

@@ -111,7 +111,7 @@ class DistributionConfig extends Model
 	 * 修改多条数据
 	 * @param   $update
 	 */
-	public function updateAllDistributionConfig( $update = [] )
+	public function editMultiDistributionConfig( $update = [] )
 	{
 		return $this->editMulti( $update );
 	}

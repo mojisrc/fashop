@@ -88,7 +88,7 @@ class AccessToken
 	public function createAccessToken( int $user_id, int $start_time ) : ? array
 	{
 
-		$jti = \App\Model\AccessToken::addAccessToken( [
+		$jti = \App\Model\AccessToken::init()->addAccessToken( [
 			'sub' => $user_id,
 			'iat' => $start_time,
 			'exp' => $start_time + $this->config['expire_interval'],
@@ -96,7 +96,7 @@ class AccessToken
 
 		$access_token = $this->encode( [
 			'jti' => $jti,
-			'iss' => 'api.fashop.cn',
+			'iss' => self::iss,
 			'sub' => $user_id,
 			'iat' => $start_time,
 			'exp' => $start_time + $this->config['expire_interval'],
@@ -124,7 +124,7 @@ class AccessToken
 
 		if( $refresh_access_token ){
 			// 修改之前秘钥id的过期时间
-			$state = \App\Model\AccessToken::editAccessToken( ['jti' => $access_token_data['jti']], [
+			$state = \App\Model\AccessToken::init()->editAccessToken( ['jti' => $access_token_data['jti']], [
 				'exp' => $start_time + $this->config['expire_interval'],
 			] );
 			if( $state ){

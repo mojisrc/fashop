@@ -263,7 +263,7 @@ class Order extends Logic
 		if( !empty( $this->userIds ) ){
 			$this->condition['order.user_id'] = ['in', $this->userIds];
 		}
-		$prefix             = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
+		$prefix             = \EasySwoole\EasySwoole\Config::getInstance()->getConf( 'MYSQL.prefix' );
 		$table_order_extend = $prefix."order_extend";
 		$table_order_goods  = $prefix."order_goods";
 		if( !empty( $this->keywords ) && !empty( $this->keywordsType ) ){
@@ -376,7 +376,7 @@ class Order extends Logic
 
 	public function info() : array
 	{
-		return $this->make()->getOrderInfo( $this->condition, $this->condition_string, $this->field, $this->order, $this->page, $this->extend );
+		return $this->make()->getOrderInfo( $this->condition, $this->condition_string, $this->field, $this->extend );
 	}
 
 
@@ -390,12 +390,11 @@ class Order extends Logic
 	 */
 	public function pay( string $pay_sn, string $payment_code, string $trade_no ) : bool
 	{
-		$order_model     = model( 'Order' );
-		$order_pay_model = model( 'OrderPay' );
-		\App\Model\Order::startTransaction();
+		$order_model = new \App\Model\Order;
+		$order_model->startTransaction();
 		try{
 			// 修改支付状态
-			$order_pay_info = $order_pay_model->getOrderPayInfo( ['pay_sn' => $pay_sn, 'pay_state' => 0] );
+			$order_pay_info = \App\Model\OrderPay::init()->getOrderPayInfo( ['pay_sn' => $pay_sn, 'pay_state' => 0] );
 			if( empty( $order_pay_info ) ){
 				throw new \Exception( '订单支付信息不存在' );
 			}
@@ -403,13 +402,13 @@ class Order extends Logic
 				'pay_sn' => $pay_sn,
 				'state'  => self::state_new,
 			];
-			$order_info      = \App\Model\Order::getOrderInfo( $order_condition );
+			$order_info      = \App\Model\Order::init()->getOrderInfo( $order_condition );
 			if( empty( $order_info ) ){
 				throw new \Exception( '订单不存在' );
 			}
-			$update = $order_pay_model->editOrderPay( ['pay_sn' => $pay_sn], ['pay_state' => 1] );
+			$update = \App\Model\OrderPay::init()->editOrderPay( ['pay_sn' => $pay_sn], ['pay_state' => 1] );
 			if( !$update ){
-				\App\Model\Order::rollback();
+				$order_model->rollback();
 				throw new \Exception( '更新订单支付状态失败' );
 			}
 			// 修改订单
@@ -418,50 +417,49 @@ class Order extends Logic
 				'payment_time'   => time(),
 				'payment_code'   => $payment_code,
 				'trade_no'       => $trade_no,    //支付宝交易号
-                'out_request_no' => 'HZ01RF00'.$order_info['id'], //支付宝：标识一次退款请求，同一笔交易多次退款需要保证唯一，如需部分退款，则此参数必传。
-            ];
+				'out_request_no' => 'HZ01RF00'.$order_info['id'], //支付宝：标识一次退款请求，同一笔交易多次退款需要保证唯一，如需部分退款，则此参数必传。
+			];
 
 			//判断是否为拼团订单
 			if( $order_info['goods_type'] == 2 ){
 				$group_state  = 2;
-				$grouping_num = \App\Model\Order::getOrderColumn( ['group_sign' => $order_info['group_sign'], 'state' => self::state_pay, 'group_state' => 2], 'id' );//已刨除自身
+				$grouping_num = \App\Model\Order::init()->getOrderColumn( ['group_sign' => $order_info['group_sign'], 'state' => self::state_pay, 'group_state' => 2], 'id' );//已刨除自身
 				if( $order_info['group_people_num'] == $order_info['group_men_num'] && $order_info['group_men_num'] == (count( $grouping_num ) + 1) ){
 					$group_state = 3;
 				}
 				$order_update = array_merge( $order_update, ['group_state' => $group_state] );
 			}
 
-			$order_update_result = \App\Model\Order::editOrder( $order_condition, $order_update );
+			$order_update_result = \App\Model\Order::init()->editOrder( $order_condition, $order_update );
 			if( !$order_update_result ){
-				\App\Model\Order::rollback();
+				$order_model->rollback();
 				throw new \Exception( '更新订单状态失败' );
 			}
 
 			//修改整团订单拼团状态为拼团成功 刨除自身(上步已更改)
 			if( isset( $group_state ) && $group_state == 3 ){
-				$order_update_result = [];
-				$order_update_result = \App\Model\Order::editOrder( ['group_sign' => $order_info['group_sign'], 'id' => ['neq', $order_info['id']]], ['group_state' => $group_state] );
+				$order_update_result = \App\Model\Order::init()->editOrder( ['group_sign' => $order_info['group_sign'], 'id' => ['neq', $order_info['id']]], ['group_state' => $group_state] );
 				if( !$order_update_result ){
-					\App\Model\Order::rollback();
+					$order_model->rollback();
 					throw new \Exception( '更新整团拼团状态失败' );
 				}
 			}
 
 			//记录订单日志
-			$insert = \App\Model\OrderLog::addOrderLog( [
+			$insert = \App\Model\OrderLog::init()->addOrderLog( [
 				'order_id'    => $order_info['id'],
 				'role'        => 'buyer',
 				'msg'         => "支付成功，支付平台交易号 : {$trade_no}",
 				'order_state' => self::state_pay,
 			] );
 			if( !$insert ){
-				\App\Model\Order::rollback();
+				$order_model->rollback();
 				throw new \Exception( '记录订单日志出现错误' );
 			}
-			\App\Model\Order::commit();
+			$order_model->commit();
 			return true;
 		} catch( \Exception $e ){
-			\App\Model\Order::rollback();
+			$order_model->rollback();
 			\ezswoole\Log::write( "第三方支付通知成功后，更改订单状态失败：".$e->getMessage() );
 			return false;
 		}

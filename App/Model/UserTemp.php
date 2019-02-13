@@ -28,8 +28,6 @@ namespace App\Model;
 
 namespace App\Model;
 
-
-
 class UserTemp extends Model
 {
 	public function addUserTemp( array $data )

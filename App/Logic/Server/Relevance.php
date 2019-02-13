@@ -408,7 +408,7 @@ class Relevance
 				return null;
 			}
 
-			$user_assets_id = \App\Model\UserAssets::insertUserAssets($assets_data);
+			$user_assets_id = \App\Model\UserAssets::addUserAssets($assets_data);
 			if($user_assets_id < 0){
 				\App\Model\User::rollback();
 				return null;
@@ -424,7 +424,7 @@ class Relevance
                 $alias_data                  = [];
                 $alias_data['user_id']       = $user_id;
                 $alias_data['alias_user_id'] = $user_id;
-                $user_alias_id               = $user_alias_model->insertUserAlias($alias_data);
+                $user_alias_id               = $user_alias_model->addUserAlias($alias_data);
                 if($user_alias_id < 0){
                     \App\Model\User::rollback();
                     return null;

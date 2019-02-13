@@ -93,7 +93,7 @@ class Coupon extends Model
 	 *
 	 * @param array $update 数据
 	 */
-	public function updateAllCoupon( $update )
+	public function editMultiCoupon( $update )
 	{
 		return $this->editMulti( $update );
 	}

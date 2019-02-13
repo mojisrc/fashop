@@ -224,7 +224,7 @@ class Distributor extends Model
 	 * 修改多条数据
 	 * @param   $update
 	 */
-	public function updateAllDistributor( $update = [] )
+	public function editMultiDistributor( $update = [] )
 	{
 		return $this->editMulti( $update );
 	}

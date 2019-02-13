@@ -18,7 +18,6 @@ use ezswoole\Model;
 class Message extends Model {
 	/**
 	 * 添加消息
-	 * @datetime 2017-06-20T23:56:33+0800
 	 * @param    string $to_user_id
 	 * @param    string $title
 	 * @param    string $body
@@ -28,8 +27,7 @@ class Message extends Model {
 	 * @return int | array
 	 */
 	function addMessage(int $to_user_id, string $title, string $body, string $relation_model, int $relation_model_id, int $type_id) {
-		$model      = model('Message');
-		$message_id = \App\Model\Page::addMessage([
+		$message_id = \App\Model\Message::init()->addMessage([
 			'title'             => $title,
 			'body'              => $body,
 			'relation_model'    => $relation_model,
@@ -38,7 +36,7 @@ class Message extends Model {
 			'is_group'          => 0,
 		]);
 		if ($message_id > 0) {
-			model('MessageState')->addMessageState([
+			\App\Model\MessageState::init()->addMessageState([
 				'to_user_id'     => $to_user_id,
 				'message_id'     => $message_id,
 				'app_push_state' => 0,
@@ -49,12 +47,5 @@ class Message extends Model {
 		}
 		return $message_id;
 	}
-	/**
-	 * 异步检测消息推送
-	 * @method     GET
-	 * @datetime 2017-06-21T12:29:39+0800
-	 */
-	static function asynCheckMessagePush() {
-		ajax($_SERVER['SERVER_NAME'], str_replace('/index.php', '', \ezswoole\Request::getInstance()->root()) . '/Api/Push/checkMessage', [], 'GET', 80, array('Access-Token' => config('access_token')));
-	}
+
 }

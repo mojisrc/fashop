@@ -44,7 +44,7 @@ class GoodsImage
 	public function getModel() : \App\Model\GoodsImage
 	{
 		if( !$this->model instanceof \App\Model\GoodsImage ){
-			$this->model = model( 'GoodsImage' );
+			$this->model = new \App\Model\GoodsImage;
 		}
 		return $this->model;
 	}

@@ -13,7 +13,7 @@
 
 namespace App\Logic;
 
-use EasySwoole\Core\Component\Spl\SplString;
+use EasySwoole\Spl\SplString;
 
 class OrderRefundSearch
 {
@@ -179,7 +179,7 @@ class OrderRefundSearch
 
 
     /**
-     * @return string
+     * @return array
      */
     public function getPage(): string
     {
@@ -261,7 +261,7 @@ class OrderRefundSearch
     public function buildCondition(): void
     {
 
-        $table_prefix       = config('database.prefix');
+        $table_prefix       = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
         $table_order_extend = $table_prefix . 'order_extend';
 
         // 搜索条件：商品名称goods_name 、订单号order_no、收货人姓名 receiver_name、收货人电话 receiver_phone、 退款编号refund_sn

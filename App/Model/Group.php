@@ -304,7 +304,7 @@ class Group extends Model
 	 * 修改多条数据
 	 * @param   $update
 	 */
-	public function updateAllGroup( $update = [] )
+	public function editMultiGroup( $update = [] )
 	{
 		return $this->editMulti( $update );
 	}

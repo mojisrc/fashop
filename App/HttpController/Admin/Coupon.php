@@ -582,7 +582,7 @@ class Coupon extends Admin
 							}
 						}
 
-						$result = \App\Model\CouponGoods::updateAllCouponGoods($coupon_goods_updata);
+						$result = \App\Model\CouponGoods::editMultiCouponGoods($coupon_goods_updata);
 						if( !$result ){
 							\App\Model\CouponGoods::rollback();// 回滚事务
 							return $this->send( Code::error );

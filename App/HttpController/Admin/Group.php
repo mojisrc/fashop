@@ -368,7 +368,7 @@ class Group extends Admin
 			}
 
 			if( $group_goods_updata ){
-				$group_goods_result = \App\Model\GroupGoods::updateAllGroupGoods( $group_goods_updata );
+				$group_goods_result = \App\Model\GroupGoods::editMultiGroupGoods( $group_goods_updata );
 				if( !$group_goods_result ){
 					\App\Model\Group::rollback();// 回滚事务
 					return $this->send( Code::error );
