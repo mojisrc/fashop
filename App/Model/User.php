@@ -3,20 +3,20 @@
 namespace App\Model;
 
 
-use ezswoole\Log;
+use EasySwoole\EasySwoole\Logger;
 
 class User extends Model
 {
 	protected $softDelete = true;
 	protected $createTime = true;
-	protected $hidden = ['password', 'pay_password'];
+	protected $hiddenFields = ['password', 'pay_password','salt'];
 
 	public function addUser( array $data )
 	{
 		$this->startTransaction();
 		try{
 			$now_time = time();
-			$user_id  = $this->insertGetId( array_merge( $data, [
+			$user_id  = $this->add( array_merge( $data, [
 				//				'invitation_code' => $this->getInvitationCode(),
 				'salt'        => $this->createSalt( 0 ),
 				'create_time' => $now_time,
@@ -25,7 +25,7 @@ class User extends Model
 			return $user_id;
 		} catch( \Exception $e ){
 			$this->rollback();
-			Log::write( $e->getMessage(), 'sql' );
+			Logger::getInstance()->log( $e->getMessage(), 'sql' );
 			return false;
 		}
 	}
@@ -123,7 +123,7 @@ class User extends Model
 			return [];
 		}
 		$user_id_array      = [$user_id];
-		$open_user_id_array = UserOpen::getUserOpenColumn( ['user_id' => $user_id], '', 'origin_user_id' );
+		$open_user_id_array = UserOpen::init()->getUserOpenColumn( ['user_id' => $user_id], '', 'origin_user_id' );
 		return $open_user_id_array ? array_unique( array_merge( $user_id_array, $open_user_id_array ) ) : $user_id_array;
 	}
 

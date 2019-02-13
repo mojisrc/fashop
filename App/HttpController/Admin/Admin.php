@@ -56,12 +56,7 @@ abstract class Admin extends AccessTokenAbstract
 
 	}
 
-	/**
-	 * @param \Throwable $throwable
-	 * @param            $actionName
-	 * @throws \Throwable
-	 */
-	protected function onException( \Throwable $throwable, $actionName ) : void
+	protected function onException( \Throwable $throwable ) : void
 	{
 		$this->send( Code::server_error, [], $throwable->getFile()." - ".$throwable->getLine()." - ".$throwable->getMessage() );
 		$this->response()->end();

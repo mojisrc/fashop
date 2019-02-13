@@ -191,13 +191,10 @@ class Member extends Admin
 	public function login()
 	{
 		$loginLogic = new \App\Logic\Admin\Login();
-
 		if( $this->validator( $this->post, 'Admin/Login.pcPassword' ) !== true ){
-//			session( 'verify_code', null );
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$result = $loginLogic->pcPasswordLogin( $this->post['username'] );
-//			session( 'verify_code', null );
 			if( !empty( $result ) ){
 				$this->send( Code::success, $result );
 			} else{
@@ -271,7 +268,7 @@ class Member extends Admin
 			if( isset( $this->post['nickname'] ) ){
 				$data['nickname'] = $this->post['nickname'];
 			}
-			\App\Model\User::editUser( ['id' => $user['id']], $data );
+			\App\Model\User::init()->editUser( ['id' => $user['id']], $data );
 			$this->send();
 		}
 	}

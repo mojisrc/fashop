@@ -44,7 +44,7 @@ class AccessToken
 			$find = \App\Model\AccessToken::init()->getAccessTokenInfo( [
 				'jti'        => $jwt['jti'],
 				'sub'        => $jwt['sub'],
-				'exp'        => ['egt', $jwt['exp']],
+				'exp'        => ['>=', $jwt['exp']],
 				'is_invalid' => 0,
 				'is_logout'  => 0,
 			] );

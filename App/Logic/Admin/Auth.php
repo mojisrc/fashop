@@ -90,6 +90,7 @@ class Auth
 			}
 			$list = []; //保存验证通过的规则名
 			if( 'url' == $mode ){
+				// todo
 				$REQUEST = unserialize( strtolower( serialize( Request::getInstance()->param() ) ) );
 			}
 			foreach( $authList as $auth ){
