@@ -261,7 +261,7 @@ class Order extends Admin
 			}
 
 			try{
-				\App\Model\Order::startTrans();
+				\App\Model\Order::startTransaction();
 				$data                    = [];
 				$data['deliver_name']    = $this->post['deliver_name'];
 				$data['deliver_phone']   = $this->post['deliver_phone'];
@@ -375,7 +375,7 @@ class Order extends Admin
 								}
 							}
 						}
-						\App\Model\Order::startTrans();
+						\App\Model\Order::startTransaction();
 						$order_goods_update = [];
 						foreach( $post['revise_goods'] as $key => $value ){
 							$order_goods_update[$key]['id']                 = $value['id'];

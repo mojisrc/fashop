@@ -249,7 +249,7 @@ class GoodsEvaluate
 		if( $evaluate_score <= 0 || $evaluate_score > 5 ){
 			$evaluate_score = 5;
 		}
-		\App\Model\GoodsEvaluate::startTrans();
+		\App\Model\GoodsEvaluate::startTransaction();
 		try{
 			$add_state  = \App\Model\GoodsEvaluate::addGoodsEvaluate( [
 				'order_id'       => $this->getOrderId(),
@@ -336,7 +336,7 @@ class GoodsEvaluate
 			throw new \Exception( "评价信息错误" );
 		}
 
-		\App\Model\GoodsEvaluate::startTrans();
+		\App\Model\GoodsEvaluate::startTransaction();
 		try{
 			$edit_state = \App\Model\GoodsEvaluate::editGoodsEvaluate( ['id' => $evaluate_find['id']], [
 				'additional_images'  => $this->getImages(),

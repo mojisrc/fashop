@@ -182,7 +182,7 @@ class Register
             $condition['username'] = $username;
         }
         $user_model = model('User');
-        \App\Model\User::startTrans();
+        \App\Model\User::startTransaction();
 
         $user = \App\Model\User::getUserInfo($condition, 'id');
         if ($user) {
@@ -256,7 +256,7 @@ class Register
                     $unionid_user_id = $user_open_model->getUserOpenValue(['unionid' => $unionid], '', 'user_id');
                 }
 
-                \App\Model\User::startTrans();
+                \App\Model\User::startTransaction();
 
                 if ($unionid_user_id > 0) {
                     //修改$unionid对应的用户
@@ -369,7 +369,7 @@ class Register
                         $unionid_user_id = $user_open_model->getUserOpenValue(['unionid' => $unionid], '', 'user_id');
                     }
 
-                    \App\Model\User::startTrans();
+                    \App\Model\User::startTransaction();
 
                     if ($unionid_user_id > 0) {
                         //修改$unionid对应的用户

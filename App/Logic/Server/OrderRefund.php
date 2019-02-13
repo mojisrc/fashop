@@ -336,7 +336,7 @@ class OrderRefund
         }
 
         try {
-            \App\Model\OrderRefund::startTrans();
+            \App\Model\OrderRefund::startTransaction();
             $refund_id              = \App\Model\OrderRefund::addOrderRefund($refund_array, $order, $order_goods);
             $refund_result          = \App\Model\OrderRefund::editOrderRefund(['id' => $refund_id], ['refund_sn' => \App\Model\OrderRefund::getOrderRefundSn($refund_id)]);
             $edit_lock_result       = \App\Model\OrderRefund::editOrderLock($order_goods['order_id'], 1);

@@ -452,7 +452,7 @@ class Buy
 	public function createOrder() : CreateOrderResult
 	{
 		$cart_model = $this->getCartModel();
-		\App\Model\Cart::startTrans();
+		\App\Model\Cart::startTransaction();
 
 		try{
 			$order_model  = model( 'Order' );

@@ -1120,7 +1120,7 @@ class Wechat extends Admin
 			];
 
 
-			\App\Model\WechatAutoReply::startTrans();
+			\App\Model\WechatAutoReply::startTransaction();
 
 			$auto_reply_id = \App\Model\WechatAutoReply::addWechatAutoReply( $autoReplyData );
 
@@ -1182,7 +1182,7 @@ class Wechat extends Admin
 			];
 
 
-			\App\Model\WechatAutoReply::startTrans();
+			\App\Model\WechatAutoReply::startTransaction();
 
 			$state = \App\Model\WechatAutoReply::editWechatAutoReply( ['id' => $this->post['id']], $autoReplyData );
 
@@ -1232,7 +1232,7 @@ class Wechat extends Admin
 			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 
-			\App\Model\WechatAutoReply::startTrans();
+			\App\Model\WechatAutoReply::startTransaction();
 
 			$state = \App\Model\WechatAutoReply::delWechatAutoReply( ['id' => $this->post['id']] );
 

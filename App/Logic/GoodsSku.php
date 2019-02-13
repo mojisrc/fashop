@@ -27,7 +27,7 @@ class GoodsSku
     public function getModel(): \App\Model\GoodsSku
     {
         if (!$this->model instanceof \App\Model\GoodsSku) {
-            $this->model = model('GoodsSku');
+            $this->model = new \App\Model\GoodsSku;
         }
         return $this->model;
     }

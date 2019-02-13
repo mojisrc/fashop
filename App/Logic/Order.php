@@ -392,7 +392,7 @@ class Order extends Logic
 	{
 		$order_model     = model( 'Order' );
 		$order_pay_model = model( 'OrderPay' );
-		\App\Model\Order::startTrans();
+		\App\Model\Order::startTransaction();
 		try{
 			// 修改支付状态
 			$order_pay_info = $order_pay_model->getOrderPayInfo( ['pay_sn' => $pay_sn, 'pay_state' => 0] );

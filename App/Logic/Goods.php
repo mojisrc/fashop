@@ -524,7 +524,7 @@ class Goods
 
 		$goodsModel = $this->getModel();
 
-		$goodsModel->startTrans();
+		$goodsModel->startTransaction();
 		try{
 			$this->id = $goodsModel->addGoods( $addData );
 
@@ -575,7 +575,7 @@ class Goods
 		$data['sale_time'] = ($this->saleTime > 0) ? $this->saleTime : time();
 
 		$goodsModel = new \App\Model\Goods;
-		$goodsModel->startTrans();
+		$goodsModel->startTransaction();
 		try{
 			//查询是否涉及到拼团
 			$logic_group = new \App\Logic\Group( ['goods_id' => $this->id] );

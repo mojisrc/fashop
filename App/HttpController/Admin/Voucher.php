@@ -260,7 +260,7 @@ class Voucher extends Admin {
 				if ($user_count >= ($template['total'] - $template['give_out'])) {
 					return $this->send( Code::error, [], '本次发送已超出了能发放的总人数' );
 				}
-				\App\Model\Coupon::startTrans();
+				\App\Model\Coupon::startTransaction();
 				try {
 					$state = \App\Model\Coupon::addVoucherAll($add_data);
 					if (!$state) {

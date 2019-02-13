@@ -221,7 +221,7 @@ class Orderrefund extends Server
 					return $this->send( Code::error, [], '只有未处理的可以撤销退款' );
 				} else{
 					$order_id = $refund['order_id'];
-					\App\Model\OrderRefund::startTrans();
+					\App\Model\OrderRefund::startTransaction();
 					$refund_res = \App\Model\OrderRefund::editOrderRefund( ['id' => $this->post['id']], [
 						'handle_time'    => time(),
 						'handle_message' => '用户撤销退款申请',

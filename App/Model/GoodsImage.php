@@ -15,7 +15,6 @@ namespace App\Model;
 
 class GoodsImage extends Model
 {
-	protected $createTime = true;
 	protected $softDelete = true;
 	public function addGoodsImage( array $data )
 	{

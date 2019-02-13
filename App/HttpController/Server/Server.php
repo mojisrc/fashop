@@ -14,7 +14,6 @@
 namespace App\HttpController\Server;
 
 use App\HttpController\AccessTokenAbstract;
-use ezswoole\Request;
 use App\Utils\Code;
 use EasySwoole\EasySwoole\Config as AppConfig;
 
@@ -27,7 +26,6 @@ abstract class Server extends AccessTokenAbstract
 	protected function onRequest( $actionName ) : ?bool
 	{
 		parent::onRequest( $actionName );
-		$this->request = Request::getInstance();
 		if( $this->request->method() === 'OPTIONS' ){
 			$this->send( Code::success );
 			$this->response()->end();
