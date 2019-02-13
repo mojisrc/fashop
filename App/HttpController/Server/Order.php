@@ -77,17 +77,17 @@ class Order extends Server
 			$result['state_refund']     = 0;
 
 			$user = $this->getRequestUser();
-			$orderLogic->users( 'id', \App\Model\User::getUserAllIds( $user['id'] ) );
+			$orderLogic->users( 'id', \App\Model\User::init()->getUserAllIds( $user['id'] ) );
 
 			$result['state_new'] = $orderLogic->stateType( 'state_new' )->count();
 
 			$result['state_send'] = $orderLogic->stateType( 'state_send' )->count();
 
 			$result['state_success'] = $orderLogic->stateType( 'state_success' )->count();
-
+			// todo getUserAllIds 为什么不用同一个
 			$result['state_unevaluate'] = \App\Model\OrderGoods::init()->getOrderGoodsCount( ['user_id' => ['in', \App\Model\User::getUserAllIds( $user['id'] )], 'evaluate_state' => 0, "(SElECT state FROM $table_order where id =$table_order_goods.order_id)" => 40] );
 
-			$result['state_refund'] = \App\Model\OrderRefund::getOrderRefundCount( ['user_id' => ['in', \App\Model\User::getUserAllIds( $user['id'] )], 'handle_state' => 0] );
+			$result['state_refund'] = \App\Model\OrderRefund::init()->getOrderRefundCount( ['user_id' => ['in', \App\Model\User::getUserAllIds( $user['id'] )], 'handle_state' => 0] );
 
 			return $this->send( Code::success, $result );
 		} catch( \Exception $e ){
@@ -133,7 +133,7 @@ class Order extends Server
 					$orderLogic->stateType( $param['state_type'] );
 				}
 
-				$orderLogic->users( 'id', \App\Model\User::getUserAllIds( $user['id'] ) );
+				$orderLogic->users( 'id', \App\Model\User::init()->getUserAllIds( $user['id'] ) );
 
 				if( isset( $param['is_print'] ) ){
 					$orderLogic->print( $param['is_print'] );
@@ -200,7 +200,7 @@ class Order extends Server
 				 * @var $order_model \App\Model\Order
 				 */
 				$condition['id']      = $order_id;
-				$condition['user_id'] = ['in', \App\Model\User::getUserAllIds( $user['id'] )];
+				$condition['user_id'] = ['in', \App\Model\User::init()->getUserAllIds( $user['id'] )];
 				$order_info           = \App\Model\Order::init()->getOrderInfo( $condition, '', '*', [
 					'order_extend',
 					'order_goods',
@@ -255,7 +255,7 @@ class Order extends Server
 			} else{
 				$user                 = $this->getRequestUser();
 				$condition['id']      = $this->post['id'];
-				$condition['user_id'] = ['in', \App\Model\User::getUserAllIds( $user['id'] )];
+				$condition['user_id'] = ['in', \App\Model\User::init()->getUserAllIds( $user['id'] )];
 				$order_info           = \App\Model\Order::init()->getOrderInfo( $condition );
 				$extend_msg           = isset( $this->post['state_remark'] ) ? $this->post['state_remark'] : null;
 				$result               = \App\Model\Order::userChangeState( 'order_cancel', $order_info, $user['id'], $user['username'], $extend_msg );

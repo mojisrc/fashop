@@ -122,7 +122,6 @@ class User extends Model
 		if( $user_id <= 0 ){
 			return [];
 		}
-
 		$user_id_array      = [$user_id];
 		$open_user_id_array = UserOpen::getUserOpenColumn( ['user_id' => $user_id], '', 'origin_user_id' );
 		return $open_user_id_array ? array_unique( array_merge( $user_id_array, $open_user_id_array ) ) : $user_id_array;
