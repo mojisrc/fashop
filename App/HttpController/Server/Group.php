@@ -34,7 +34,7 @@ class Group extends Server
 		$condition['is_show']    = 1;
 
 		//查询正在进行的拼团
-		$group_list = \App\Model\Group::init()->getGroupList( $condition, '', '*', 'id desc', '', '' );
+		$group_list = \App\Model\Group::init()->getGroupList( $condition,  '*', 'id desc', [1,1000] );
 		if( !$group_list ){
 			$this->send( Code::success, [
 				'total_number' => 0,

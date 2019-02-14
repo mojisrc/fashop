@@ -71,10 +71,7 @@ class Order extends Logic
 	 * @var array
 	 */
 	private $condition;
-	/**
-	 * @var string
-	 */
-	private $condition_string;
+
 	/**
 	 * @var array
 	 */
@@ -216,10 +213,9 @@ class Order extends Logic
 	 * @param array $condition
 	 * @throws \Exception
 	 */
-	public function __construct( array $condition = [], string $condition_string = '' )
+	public function __construct( array $condition = [] )
 	{
 		$this->condition        = $condition;
-		$this->condition_string = $condition_string;
 
 
 	}
