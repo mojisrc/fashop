@@ -426,14 +426,14 @@ class UserSearch
 	{
 		if( empty( $this->make ) ){
 			$this->buildCondition();
-			$this->make = model( 'User' );
+			$this->make = new \App\Model\User;
 		}
 		return $this->make;
 	}
 
 	public function count() : int
 	{
-		return $this->make()->where( $this->condition )->count();
+		return $this->make()->count();
 	}
 
 	public function list() : ? array

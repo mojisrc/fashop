@@ -193,7 +193,7 @@ class User extends Server
 			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
 			$condition['phone'] = $this->post['phone'];
-			$user_info          = \App\Model\User::getUserInfo( $condition, "id" );
+			$user_info          = \App\Model\User::init()->getUserInfo( $condition, "id" );
 			\App\Model\User::editUser( [
 				'id' => $user_info['id'],
 			], [

@@ -38,10 +38,10 @@ class User extends Admin
 		$param = !empty( $this->post ) ? $this->post : $this->get;
 
 		$userLogic = new \App\Logic\UserSearch( (array)$param );
-        $userLogic->page($this->getPageLimit());
+		$userLogic->page( $this->getPageLimit() );
 		$this->send( Code::success, [
-			'total_number' => $userLogic->count(),
 			'list'         => $userLogic->list(),
+			'total_number' => $userLogic->count(),
 		] );
 	}
 
@@ -59,12 +59,12 @@ class User extends Admin
 		if( $this->validator( $this->post, 'Admin/User.add' ) !== true ){
 			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
-			$data['name']          = $this->post['name'];
-			$data['username']      = $this->post['phone'];
-			$data['password']      = \App\Logic\User::encryptPassword( $this->post['password'] );
-			$data['phone']         = $this->post['phone'];
-			$data['create_time']   = time();
-			$result                = \App\Model\User::addUser( $data );
+			$data['name']        = $this->post['name'];
+			$data['username']    = $this->post['phone'];
+			$data['password']    = \App\Logic\User::encryptPassword( $this->post['password'] );
+			$data['phone']       = $this->post['phone'];
+			$data['create_time'] = time();
+			$result              = \App\Model\User::addUser( $data );
 			if( !$result ){
 				$this->send( Code::error );
 			} else{
@@ -72,40 +72,6 @@ class User extends Admin
 			}
 		}
 	}
-
-	/**
-	 * 删除客户 [不要删除 关联好多账号 怎么可以删除呢]
-	 * @method POST
-	 * @param array ids 用户id数组
-	 */
-	public function del()
-	{
-		// $user_model = model( 'User' );
-
-		// if( $this->validator( $this->post, 'Admin/User.del' ) !== true ){
-		// 	$this->send( Code::error, [], $this->getValidator()->getError() );
-		// } else{
-		// 	$condition['id'] = ['in', $this->post['ids']];
-
-		// 	\App\Model\User::startTransaction();
-
-		// 	$result = \App\Model\User::editUser( $condition, ['is_disable' => 1] );//禁用 默认0否 1是
-		// 	if( !$result ){
-		// 		\App\Model\User::rollback();
-		// 		return $this->send( Code::error );
-		// 	}
-
-		// 	$result2 = \App\Model\User::softDelUser( $condition );
-		// 	if( !$result2 ){
-		// 		\App\Model\User::rollback();
-		// 		return $this->send( Code::error );
-		// 	}
-
-		// 	\App\Model\User::commit();
-		$this->send( Code::success );
-		// }
-	}
-
 
 	/**
 	 * 客户详情-客户信息
@@ -117,10 +83,9 @@ class User extends Admin
 		if( $this->validator( $this->get, 'Admin/User.info' ) !== true ){
 			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
-			$condition            = [];
 			$condition['user.id'] = $this->get['id'];
 			$field                = 'user.id,username,phone,email,state,create_time,user_profile.name,nickname,avatar,sex,birthday,qq';
-			$user                 = \App\Model\UserProfile::getUserProfileMoreInfo($condition, '', $field);
+			$user                 = \App\Model\UserProfile::init()->join( 'user', 'user.id = user_profile.user_id', 'LEFT' )->getUserProfileInfo( $condition, $field );
 			$this->send( Code::success, ['info' => $user] );
 		}
 	}
@@ -136,39 +101,39 @@ class User extends Admin
 			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
 			$user_id           = $this->get['id'];
-			$table_prefix      = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
+			$table_prefix      = \EasySwoole\EasySwoole\Config::getInstance()->getConf( 'MYSQL.prefix' );
 			$table_user        = $table_prefix.'user';
 			$table_order       = $table_prefix.'order';
 			$table_order_goods = $table_prefix.'order_goods';
-        	$table_user_open   = $table_prefix . 'user_open';
+			$table_user_open   = $table_prefix.'user_open';
 
-            $common_string = "SELECT GROUP_CONCAT(distinct user_id SEPARATOR '_') FROM ".$table_user_open." WHERE user_id=".$table_user.".id";
-
-
-            //退款次数
-            $refund_times_string = "(SELECT COUNT(*) FROM $table_order_goods WHERE lock_state=1 AND user_id IN ($common_string))";
-
-            //退款金额
-            $refund_total_string = "(SELECT SUM(goods_pay_price) FROM $table_order_goods WHERE lock_state=1 AND user_id IN ($common_string))";
-
-            //购买次数
-            $buy_times_string = "(SELECT COUNT(*) FROM $table_order WHERE state>=20 AND user_id IN ($common_string))";//计算总订单的所有的已付款的购买次数
-
-            //客单价(平均消费)
-            $cost_average_string = "(SELECT TRUNCATE(IFNULL(AVG(goods_pay_price),0),2) FROM $table_order_goods WHERE lock_state=0 AND user_id=$table_user.id AND order_id IN (SELECT id FROM $table_order WHERE user_id IN ($common_string) AND state>=20))";//计算子订单的未退款的平均消费
-
-            //累计消费
-            $cost_total_string = "(SELECT SUM(goods_pay_price) FROM $table_order_goods WHERE lock_state=0 AND user_id=$table_user.id AND order_id IN (SELECT id FROM $table_order WHERE user_id IN ($common_string) AND state>=20))"; //计算子订单的未退款的累计订单金额
+			$common_string = "SELECT GROUP_CONCAT(distinct user_id SEPARATOR '_') FROM ".$table_user_open." WHERE user_id=".$table_user.".id";
 
 
-            $field = "id,$refund_times_string AS refund_times,$refund_total_string AS refund_total,$buy_times_string AS buy_times,$cost_average_string AS cost_average,$cost_total_string AS cost_total";
+			//退款次数
+			$refund_times_string = "(SELECT COUNT(*) FROM $table_order_goods WHERE lock_state=1 AND user_id IN ($common_string))";
 
-            $user                 = \App\Model\User::getUserInfo(['id' => $user_id], $field);
-            $user['refund_times'] = intval($user['refund_times'])>0 ? intval($user['refund_times']) : 0;
-            $user['refund_total'] = $user['refund_total']>0 ? $user['refund_total'] : 0;
-            $user['buy_times']    = intval($user['buy_times'])>0 ? intval($user['buy_times']) : 0;
-            $user['cost_average'] = $user['cost_average']>0 ? $user['cost_average'] : 0;
-            $user['cost_total']   = $user['cost_total']>0 ? $user['cost_total'] : 0;
+			//退款金额
+			$refund_total_string = "(SELECT SUM(goods_pay_price) FROM $table_order_goods WHERE lock_state=1 AND user_id IN ($common_string))";
+
+			//购买次数
+			$buy_times_string = "(SELECT COUNT(*) FROM $table_order WHERE state>=20 AND user_id IN ($common_string))";//计算总订单的所有的已付款的购买次数
+
+			//客单价(平均消费)
+			$cost_average_string = "(SELECT TRUNCATE(IFNULL(AVG(goods_pay_price),0),2) FROM $table_order_goods WHERE lock_state=0 AND user_id=$table_user.id AND order_id IN (SELECT id FROM $table_order WHERE user_id IN ($common_string) AND state>=20))";//计算子订单的未退款的平均消费
+
+			//累计消费
+			$cost_total_string = "(SELECT SUM(goods_pay_price) FROM $table_order_goods WHERE lock_state=0 AND user_id=$table_user.id AND order_id IN (SELECT id FROM $table_order WHERE user_id IN ($common_string) AND state>=20))"; //计算子订单的未退款的累计订单金额
+
+
+			$field = "id,$refund_times_string AS refund_times,$refund_total_string AS refund_total,$buy_times_string AS buy_times,$cost_average_string AS cost_average,$cost_total_string AS cost_total";
+
+			$user                 = \App\Model\User::init()->getUserInfo( ['id' => $user_id], $field );
+			$user['refund_times'] = intval( $user['refund_times'] ) > 0 ? intval( $user['refund_times'] ) : 0;
+			$user['refund_total'] = $user['refund_total'] > 0 ? $user['refund_total'] : 0;
+			$user['buy_times']    = intval( $user['buy_times'] ) > 0 ? intval( $user['buy_times'] ) : 0;
+			$user['cost_average'] = $user['cost_average'] > 0 ? $user['cost_average'] : 0;
+			$user['cost_total']   = $user['cost_total'] > 0 ? $user['cost_total'] : 0;
 			$this->send( Code::success, ['info' => $user] );
 		}
 
@@ -186,9 +151,9 @@ class User extends Admin
 			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
 
-			$condition['user_id']  = ['in', \App\Model\User::getUserAllIds($this->get['id'])];
-			$count                 = \App\Model\Order::init()->where( $condition )->count();
-			$order_list            = \App\Model\Order::getOrderList( $condition, '', "*", "id desc", $this->getPageLimit(), [
+			$condition['user_id'] = ['in', \App\Model\User::getUserAllIds( $this->get['id'] )];
+			$count                = \App\Model\Order::init()->where( $condition )->count();
+			$order_list           = \App\Model\Order::init()->getOrderList( $condition, '', "*", "id desc", $this->getPageLimit(), [
 				'order_goods',
 				'order_extend',
 				'user',
@@ -210,9 +175,9 @@ class User extends Admin
 		if( $this->validator( $this->get, 'Admin/User.info' ) !== true ){
 			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
-			$condition['user_id'] = ['in', \App\Model\User::getUserAllIds($this->get['id'])];
+			$condition['user_id'] = ['in', \App\Model\User::init()->getUserAllIds( $this->get['id'] )];
 			$count                = \App\Model\Address::init()->where( $condition )->count();
-			$list                 = \App\Model\Address::getAddressList( $condition, '*', 'id desc', $this->getPageLimit() );
+			$list                 = \App\Model\Address::init()->getAddressList( $condition, '*', 'id desc', $this->getPageLimit() );
 			$this->send( Code::success, [
 				'total_number' => $count,
 				'list'         => $list,

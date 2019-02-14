@@ -184,7 +184,7 @@ class Register
         $user_model = model('User');
         \App\Model\User::startTransaction();
 
-        $user = \App\Model\User::getUserInfo($condition, 'id');
+        $user = \App\Model\User::init()->getUserInfo($condition, 'id');
         if ($user) {
             throw new \App\Utils\Exception("user account exist", Code::user_account_exist);
         }

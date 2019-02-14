@@ -47,7 +47,7 @@ class Order
 		$condition['state']       = \App\Logic\Order::state_send;
 		$condition['lock_state'] =  0;
 		$condition['delay_time'] = ['<', time() - $config['order_auto_confirm_expires']];
-		$order_list               = \App\Model\Order::getOrderList( $condition, '', 'id,user_id,create_time,state', 'id desc', [1,10000] );
+		$order_list               = \App\Model\Order::init()->getOrderList( $condition, '', 'id,user_id,create_time,state', 'id desc', [1,10000] );
 		if( !empty( $order_list ) ){
 			$now_time = time();
 			$tradeLogic  = new \App\Logic\Trade();

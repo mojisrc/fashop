@@ -9,16 +9,11 @@ class UserProfile extends Model
 {
 	protected $softDelete = true;
 
-	public function getUserProfileInfo( $condition = [], $condition_str = '', $field = '*' )
+	public function getUserProfileInfo( $condition = [], $field = '*' )
 	{
-		$data = $this->where( $condition )->where( $condition_str )->field( $field )->find();
+		$data = $this->where( $condition )->field( $field )->find();
 		return $data;
 	}
 
-	public function getUserProfileMoreInfo( $condition = [], $condition_str = '', $field = '*' )
-	{
-		$data = $this->join( 'user', 'user_profile.user_id = user.id', 'LEFT' )->where( $condition )->where( $condition_str )->field( $field )->find();
-		return $data;
-	}
 
 }

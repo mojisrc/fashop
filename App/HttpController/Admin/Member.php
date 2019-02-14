@@ -117,7 +117,7 @@ class Member extends Admin
 				'phone',
 				'sex',
 			];
-			$info  = \App\Model\User::getUserInfo( [
+			$info  = \App\Model\User::init()->getUserInfo( [
 				'id' => $this->get['id'],
 			], $field );
 			$this->send( Code::success, ['info' => $info] );
