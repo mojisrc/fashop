@@ -242,7 +242,7 @@ class Untie
             }
 
             //占位行被恢复
-            $user_result = \App\Model\User::editUser(['id'=>$open_info['origin_user_id']], ['state'=>1,'is_discard'=>0] );
+            $user_result = \App\Model\User::init()->editUser(['id'=>$open_info['origin_user_id']], ['state'=>1,'is_discard'=>0] );
             if(!$user_result ){
                 \App\Model\User::rollback();
                 return null;

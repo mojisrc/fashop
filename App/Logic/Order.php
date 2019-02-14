@@ -374,9 +374,10 @@ class Order extends Logic
 		return $this->make()->getOrderList( $this->condition,  $this->field, $this->order, $this->page, $this->extend );
 	}
 
+		// TODO condition string
 	public function info() : array
 	{
-		return $this->make()->getOrderInfo( $this->condition, $this->condition_string, $this->field, $this->extend );
+		return $this->make()->getOrderInfo( $this->condition, $this->field, $this->extend );
 	}
 
 

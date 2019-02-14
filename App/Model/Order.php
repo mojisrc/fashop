@@ -25,9 +25,9 @@ class Order extends Model
 	 * @param array  $extend 追加返回那些表的信息,如array('order_extend','order_goods')
 	 * @return array|bool
 	 */
-	public function getOrderInfo( $condition = [], $condition_string = '', $fields = '*', $extend = [] )
+	public function getOrderInfo( $condition = [],  $fields = '*', $extend = [] )
 	{
-		$order_info = $this->field( $fields )->where( $condition )->where( $condition_string )->find();
+		$order_info = $this->field( $fields )->where( $condition )->find();
 		if( empty( $order_info ) ){
 			return [];
 		}
@@ -516,7 +516,7 @@ class Order extends Model
 				// 主表更新
 				$common_data['stock']    = ['exp', 'stock+'.$goods['goods_num']];
 				$common_data['sale_num'] = ['exp', 'sale_num-'.$goods['goods_num']];
-				$update                  = \App\Model\GoodsSku::editGoodsSku( ['id' => $goods['goods_common_id']], $common_data );
+				$update                  = \App\Model\GoodsSku::init()->editGoodsSku( ['id' => $goods['goods_common_id']], $common_data );
 				if( !$update ){
 					throw new \Exception( '保存失败' );
 				}

@@ -153,7 +153,7 @@ class Coupon extends Admin
 
 			$post['create_time']= time();
 
-			$result = \App\Model\Coupon::addCoupon( $post );
+			$result = \App\Model\Coupon::init()->addCoupon( $post );
 			if( $result ){
 				return $this->send( Code::success );
 			} else{
@@ -237,7 +237,7 @@ class Coupon extends Admin
 
 			unset( $post['id'] );
 
-			$result = \App\Model\Coupon::editCoupon( $condition, $post );
+			$result = \App\Model\Coupon::init()->editCoupon( $condition, $post );
 
 			if( $result ){
 			return $this->send( Code::success, [], '修改成功' );
@@ -582,7 +582,7 @@ class Coupon extends Admin
 							}
 						}
 
-						$result = \App\Model\CouponGoods::editMultiCouponGoods($coupon_goods_updata);
+						$result = \App\Model\CouponGoods::init()->editMultiCouponGoods($coupon_goods_updata);
 						if( !$result ){
 							\App\Model\CouponGoods::rollback();// 回滚事务
 							return $this->send( Code::error );

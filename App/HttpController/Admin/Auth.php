@@ -95,7 +95,7 @@ class Auth extends Admin
 			$post  = $this->post;
 			$model = model( 'AuthGroupAccess' );
 			\App\Model\AuthGroupAccess::delAuthGroupAccess( ['group_id' => $this->post['id']] );
-			\App\Model\AuthGroupAccess::addMultiAuthGroupAccess( collect( $this->post['member_ids'] )->map( function( $uid ) use ( $post ){
+			\App\Model\AuthGroupAccess::init()->addMultiAuthGroupAccess( collect( $this->post['member_ids'] )->map( function( $uid ) use ( $post ){
 				return [
 					'uid'      => $uid,
 					'group_id' => $post['id'],
@@ -115,7 +115,7 @@ class Auth extends Admin
 		if( $this->validator( $this->post, 'Admin/AuthGroup.add' ) !== true ){
 			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			\App\Model\AuthGroup::addAuthGroup( $this->post );
+			\App\Model\AuthGroup::init()->addAuthGroup( $this->post );
 			return $this->send();
 		}
 	}
@@ -131,7 +131,7 @@ class Auth extends Admin
 		if( $this->validator( $this->post, 'Admin/AuthGroup.edit' ) !== true ){
 			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			\App\Model\AuthGroup::editAuthGroup( ['id' => $this->post['id']], $this->post );
+			\App\Model\AuthGroup::init()->editAuthGroup( ['id' => $this->post['id']], $this->post );
 			return $this->send();
 		}
 	}
@@ -191,7 +191,7 @@ class Auth extends Admin
 		if( $this->validator( $this->post, 'Admin/AuthRule.add' ) !== true ){
 			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			\App\Model\AuthRule::addAuthRule( $this->post );
+			\App\Model\AuthRule::init()->addAuthRule( $this->post );
 			return $this->send();
 		}
 	}
@@ -210,7 +210,7 @@ class Auth extends Admin
 		if( $this->validator( $this->post, 'Admin/AuthRule.edit' ) !== true ){
 			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			\App\Model\AuthRule::editAuthRule( ['id' => $this->post['id']], $this->post );
+			\App\Model\AuthRule::init()->editAuthRule( ['id' => $this->post['id']], $this->post );
 			return $this->send();
 		}
 	}

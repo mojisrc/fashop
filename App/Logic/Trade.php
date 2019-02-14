@@ -127,6 +127,7 @@ class Trade
 	 */
 	public function editOrderCancel( $order_id, $log_data )
 	{
+
 		$goods_list = \App\Model\OrderGoods::getOrderGoodsList( ['order_id' => $order_id], 'order_id,goods_num,goods_sku_id,goods_id', 'id desc', [1,10000] );
 		if( !empty( $goods_list ) && is_array( $goods_list ) ){
 			foreach( $goods_list as $goods_info ){
@@ -145,7 +146,7 @@ class Trade
 			$state              = \App\Model\Order::init()->editOrder( ['id' => $order_id], $orderData ); //更新订单
 			if( $state ){
 				$log_data['order_state'] = $orderData['state'];
-				$state                   = \App\Model\Order::init()->addOrderLog( $log_data );
+				$state                   = \App\Model\OrderLog::init()->addOrderLog( $log_data );
 			}
 			return $state;
 		}
@@ -153,6 +154,7 @@ class Trade
 	}
 
 	/**
+	 * TODO 这个有用吗
 	 * 更新退款申请
 	 * @param int $user_id 会员编号
 	 */
@@ -197,7 +199,7 @@ class Trade
 	 */
 	public function editOrderFinish( $order_id, $log_data = [] )
 	{
-		$order           = \App\Model\Order::init()->getOrderInfo( ['id' => $order_id], '', 'id,user_id,user_name,id,sn,amount,payment_code,state' );
+		$order           = \App\Model\Order::init()->getOrderInfo( ['id' => $order_id], 'id,user_id,user_name,id,sn,amount,payment_code,state' );
 		$order_shipped   = $this->getOrderState( 'order_shipped' ); //订单状态30:已发货
 		$order_completed = $this->getOrderState( 'order_completed' ); //订单状态40:已收货
 		if( $order['state'] == $order_shipped ){
@@ -214,7 +216,7 @@ class Trade
 			$state                       = \App\Model\Order::init()->editOrder( ['id' => $order_id], $order_data ); //更新订单状态为已收货
 			$log_data['order_state']     = $order_completed;
 			if( $state ){
-				$state = \App\Model\Order::init()->addOrderLog( $log_data );
+				$state = \App\Model\OrderLog::init()->addOrderLog( $log_data );
 			}
 			// 订单处理记录信息
 			return $state;

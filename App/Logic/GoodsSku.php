@@ -262,7 +262,7 @@ class GoodsSku
         }
     }
 
-    public static function make(array $options = []): GoodsSku
+    public static function init(array $options = []): GoodsSku
     {
         return new static($options);
     }

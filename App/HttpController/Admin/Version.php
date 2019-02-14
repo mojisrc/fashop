@@ -38,7 +38,7 @@ class Version extends Admin {
 			$model                = model('Version');
 			$data                 = $this->post;
 			$data['publish_time'] = strtotime($data['publish_time']);
-			if ($id = \App\Model\Version::addVersion($data)) {
+			if ($id = \App\Model\Version::init()->addVersion($data)) {
 				$this->send(lang('common_op_succ'));
 			} else {
 				$this->send(lang('common_op_fail'));
@@ -54,7 +54,7 @@ class Version extends Admin {
 		if ($this->post) {
 			$data                 = $this->post;
 			$data['publish_time'] = strtotime($data['publish_time']);
-			\App\Model\Version::editVersion(['id' => $data['id']], $data) ? $this->send(lang('common_save_succ')) : $this->send(lang('common_save_fail'));
+			\App\Model\Version::init()->editVersion(['id' => $data['id']], $data) ? $this->send(lang('common_save_succ')) : $this->send(lang('common_save_fail'));
 		} else {
 			$row = model('Version')->getVersionInfo(['id' => input('get.id')]);
 			$this->assign('row', $row);

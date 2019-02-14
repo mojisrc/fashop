@@ -28,7 +28,7 @@ class Smsprovider extends Admin
 	 */
 	public function list()
 	{
-		$list  = \App\Model\SmsProvider::getSmsProviderList( [], '*', null, [1,1000] );
+		$list  = \App\Model\SmsProvider::init()->getSmsProviderList( [], '*', null, [1,1000] );
 		return $this->send( Code::success, [
 			'list' => $list,
 		] );
@@ -46,7 +46,7 @@ class Smsprovider extends Admin
 			if( $this->validator( $this->post, 'Admin/SmsProvider.status' ) !== true ){
 				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
-				\App\Model\SmsProvider::editSmsProvider( ['type' => $this->post['type']], [
+				\App\Model\SmsProvider::init()->editSmsProvider( ['type' => $this->post['type']], [
 					'status' => $this->post['status'] ? 1 : 0,
 				] );
 				$this->send( Code::success );
@@ -55,7 +55,7 @@ class Smsprovider extends Admin
 			if( $this->validator( $this->post, 'Admin/SmsProvider.edit' ) ){
 				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
-				\App\Model\SmsProvider::editSmsProvider( ['type' => $this->post['type']], [
+				\App\Model\SmsProvider::init()->editSmsProvider( ['type' => $this->post['type']], [
 					'config' => $this->post['config'],
 				] );
 				$this->send( Code::success );
@@ -72,7 +72,7 @@ class Smsprovider extends Admin
 		if( $this->validator( $this->get, 'Admin/SmsProvider.info' ) !== true ){
 			$this->send( Code::param_error, $this->getValidator()->getError() );
 		} else{
-			$info = \App\Model\SmsProvider::getSmsProviderInfo( ['type' => $this->get['type']] );
+			$info = \App\Model\SmsProvider::init()->getSmsProviderInfo( ['type' => $this->get['type']] );
 			$this->send( Code::success, ['info' => $info] );
 		}
 	}

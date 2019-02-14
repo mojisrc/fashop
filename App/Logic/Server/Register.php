@@ -201,7 +201,7 @@ class Register
             }
         }
 
-        $user_id = \App\Model\User::addUser($data);
+        $user_id = \App\Model\User::init()->addUser($data);
         if (!($user_id > 0)) {
             \App\Model\User::rollback();
             return null;
@@ -272,7 +272,7 @@ class Register
                 } else {
                     //创建用户
                     $data['username'] = "wechat_{$wechat_openid}_" . RandomKey::randMd5(8);
-                    $user_id          = \App\Model\User::addUser($data);
+                    $user_id          = \App\Model\User::init()->addUser($data);
 
                     if (!($user_id > 0)) {
                         \App\Model\User::rollback();
@@ -384,7 +384,7 @@ class Register
                     } else {
                         //创建用户
                         $data['username'] = "wechat_mini_{$mini_user['openId']}_" . RandomKey::randMd5(8);
-                        $user_id          = \App\Model\User::addUser($data);
+                        $user_id          = \App\Model\User::init()->addUser($data);
 
                         if (!($user_id > 0)) {
                             \App\Model\User::rollback();
@@ -456,7 +456,7 @@ class Register
                 return null;
             }
 
-            $user_assets_id = \App\Model\UserAssets::addUserAssets($assets_data);
+            $user_assets_id = \App\Model\UserAssets::init()->addUserAssets($assets_data);
             if ($user_assets_id < 0) {
                 return null;
             }

@@ -22,7 +22,7 @@ class Smsscene extends Admin
 	 */
 	public function list()
 	{
-		$list  = \App\Model\SmsScene::getSmsSceneList( [], '*', 'id asc', [1,1000] );
+		$list  = \App\Model\SmsScene::init()->getSmsSceneList( [], '*', 'id asc', [1,1000] );
 		return $this->send( Code::success, [
 			'list' => $list,
 		] );
@@ -42,7 +42,7 @@ class Smsscene extends Admin
 		if( $this->validator( $this->post, 'Admin/SmsScene.edit' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			$result = \App\Model\SmsScene::editSmsScene( ['sign' => $this->post['sign']], [
+			$result = \App\Model\SmsScene::init()->editSmsScene( ['sign' => $this->post['sign']], [
 				'name'                 => $this->post['name'],
 				'signature'            => $this->post['signature'],
 				'provider_template_id' => $this->post['provider_template_id'],
@@ -66,7 +66,7 @@ class Smsscene extends Admin
 		if( $this->validator( $this->get, 'Admin/SmsScene.info' ) !== true ){
 			 $this->send( Code::error, $this->getValidator()->getError() );
 		} else{
-			$info = \App\Model\SmsScene::getSmsSceneInfo( ['sign' => $this->get['sign']] );
+			$info = \App\Model\SmsScene::init()->getSmsSceneInfo( ['sign' => $this->get['sign']] );
 			 $this->send( Code::success, ['info' => $info] );
 		}
 	}

@@ -25,7 +25,7 @@ class UserTemp
 	{
 		$find          = \App\Model\UserTemp::getUserTempInfo( ['user_id' => $user_id] );
 		if( !$find ){
-			\App\Model\UserTemp::addUserTemp( ['user_id' => $user_id] );
+			\App\Model\UserTemp::init()->addUserTemp( ['user_id' => $user_id] );
 		}
 		$order_goods_db                      = db( 'OrderGoods' );
 		$condition['order.state']            = ['>=', 20];
@@ -40,7 +40,7 @@ class UserTemp
 
 		$cost_average = sprintf( "%.2f", ($cost_price / $cost_times) );
 
-		return \App\Model\UserTemp::editUserTemp( ['user_id' => $user_id], [
+		return \App\Model\UserTemp::init()->editUserTemp( ['user_id' => $user_id], [
 			'cost_average_price' => $cost_average,
 			'cost_times'         => $cost_price,
 			'cost_price'         => $cost_times,

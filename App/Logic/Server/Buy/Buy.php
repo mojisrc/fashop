@@ -458,7 +458,7 @@ class Buy
 			$order_model  = model( 'Order' );
 			$user         = $this->getUserInfo();
 			$pay_sn       = $this->makePaySn( $this->getUserId() );
-			$order_pay_id = \App\Model\Order::addOrderPay( [
+			$order_pay_id = \App\Model\Order::init()->addOrderPay( [
 				'pay_sn'    => $pay_sn,
 				'user_id'   => $this->getUserId(),
 				'pay_state' => 0
@@ -481,7 +481,7 @@ class Buy
 			}
 
 			// 主表订单创建
-			$order_id = \App\Model\Order::addOrder( [
+			$order_id = \App\Model\Order::init()->addOrder( [
 				'sn'                   => $this->makeOrderSn( $order_pay_id ),
                 'pay_sn'               => $pay_sn,
                 'user_id'              => $user['id'],
@@ -549,13 +549,13 @@ class Buy
 				];
 			}
 			// 订单商品创建
-			$order_goods_insert = \App\Model\OrderGoods::addMultiOrderGoods( $order_goods );
+			$order_goods_insert = \App\Model\OrderGoods::init()->addMultiOrderGoods( $order_goods );
 			if( !$order_goods_insert ){
 				\App\Model\Cart::rollback();
 				throw new \Exception( '订单商品保存失败' );
 			}
 			// 订单日志记录
-			\App\Model\OrderLog::addOrderLog( [
+			\App\Model\OrderLog::init()->addOrderLog( [
 				'order_id'    => $this->getOrderId(),
 				'msg'         => '买家下单',
 				'role'        => 'buyer',
@@ -608,7 +608,7 @@ class Buy
 				'sale_num' => ['exp', 'sale_num+'.$sku_item->getGoodsNum()],
 			];
 		}
-		$state = \App\Model\GoodsSku::editMultiGoodsSku( $goods_sku_update_data );
+		$state = \App\Model\GoodsSku::init()->editMultiGoodsSku( $goods_sku_update_data );
 
 		if( !$state ){
 			throw new \Exception( '更新库存GoodsSku失败' );
@@ -622,7 +622,7 @@ class Buy
 					'sale_num' => ['exp', 'sale_num+'.$goods_item['sale_num']],
 				];
 			}
-			$state = \App\Model\Goods::editMultiGoods( $goods_update_data );
+			$state = \App\Model\Goods::init()->editMultiGoods( $goods_update_data );
 			if( !$state){
 				throw new \Exception( '更新Goods库存失败' );
 			}

@@ -64,7 +64,7 @@ class User extends Admin
 			$data['password']    = \App\Logic\User::encryptPassword( $this->post['password'] );
 			$data['phone']       = $this->post['phone'];
 			$data['create_time'] = time();
-			$result              = \App\Model\User::addUser( $data );
+			$result              = \App\Model\User::init()->addUser( $data );
 			if( !$result ){
 				$this->send( Code::error );
 			} else{
@@ -220,7 +220,7 @@ class User extends Admin
 				$this->send( Code::param_error );
 			} else{
 				$updata['password'] = \App\Logic\User::encryptPassword( $this->post['password'] );
-				\App\Model\User::editUser( $condition, $updata );
+				\App\Model\User::init()->editUser( $condition, $updata );
 				$this->send( Code::success );
 			}
 		}

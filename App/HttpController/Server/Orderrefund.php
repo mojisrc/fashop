@@ -191,7 +191,7 @@ class Orderrefund extends Server
 				if( (int)$refund_data['refund_type'] != 2 ){
 					return $this->send( Code::error, [], '退货退款类型才可以填写订单号' );
 				}
-				$order_res = \App\Model\OrderRefund::editOrderRefund( $condition, $update );
+				$order_res = \App\Model\OrderRefund::init()->editOrderRefund( $condition, $update );
 				if( !$order_res ){
 					return $this->send( Code::error, [], '添加物流单号失败' );
 				}
@@ -222,7 +222,7 @@ class Orderrefund extends Server
 				} else{
 					$order_id = $refund['order_id'];
 					\App\Model\OrderRefund::startTransaction();
-					$refund_res = \App\Model\OrderRefund::editOrderRefund( ['id' => $this->post['id']], [
+					$refund_res = \App\Model\OrderRefund::init()->editOrderRefund( ['id' => $this->post['id']], [
 						'handle_time'    => time(),
 						'handle_message' => '用户撤销退款申请',
 						'is_close'       => 1,   //此退款关闭
@@ -234,7 +234,7 @@ class Orderrefund extends Server
 						return $this->send( Code::error, [], '撤销失败' );
 					}
 					// 更改订单状态 解锁 子订单解锁
-					$order_goods_res = \App\Model\OrderGoods::editOrderGoods( [
+					$order_goods_res = \App\Model\OrderGoods::init()->editOrderGoods( [
 						'lock_state' => 1,
 						'id'         => $refund['order_goods_id'],
 					], [
@@ -256,7 +256,7 @@ class Orderrefund extends Server
 					//该总订单下已锁定未关闭的退款记录
 					if( !$have_lock ){
 						//没有代表总订单可以解锁
-						$order_res = \App\Model\Order::editOrder( [
+						$order_res = \App\Model\Order::init()->editOrder( [
 							'id'         => $order_id,
 							'lock_state' => ['>=', 1],
 						], [

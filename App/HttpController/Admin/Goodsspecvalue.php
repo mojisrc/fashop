@@ -35,7 +35,7 @@ class Goodsspecvalue extends Admin
 		} else{
 			$condition            = [];
 			$condition['spec_id'] = $this->get['spec_id'];
-			$list                 = \App\Model\GoodsSpecValue::getGoodsSpecValueList( $condition, 'id,name', 'id desc', [1,10000] );
+			$list                 = \App\Model\GoodsSpecValue::init()->getGoodsSpecValueList( $condition, 'id,name', 'id desc', [1,10000] );
 			$this->send( Code::success, [
 				'list' => $list,
 			] );
@@ -53,7 +53,7 @@ class Goodsspecvalue extends Admin
 		if( $this->validator( $this->post, 'Admin/GoodsSpecValue.add' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			$result = \App\Model\GoodsSpecValue::addGoodsSpecValue( $this->post );
+			$result = \App\Model\GoodsSpecValue::init()->addGoodsSpecValue( $this->post );
 			if( $result ){
 				$this->send( Code::success );
 			} else{
@@ -74,7 +74,7 @@ class Goodsspecvalue extends Admin
 		} else{
 			$condition       = [];
 			$condition['id'] = $this->post['id'];
-			$row                    = \App\Model\GoodsSpecValue::getGoodsSpecValueInfo( $condition, '*' );
+			$row                    = \App\Model\GoodsSpecValue::init()->getGoodsSpecValueInfo( $condition, '*' );
 			if( !$row ){
 				$this->send( Code::param_error );
 			} else{
@@ -83,7 +83,7 @@ class Goodsspecvalue extends Admin
 				//     return $this->send( Code::param_error, [], '系统数据，不可删除' );
 				// }
 
-				$result = \App\Model\GoodsSpecValue::delGoodsSpecValue( $condition );
+				$result = \App\Model\GoodsSpecValue::init()->delGoodsSpecValue( $condition );
 				if( !$result ){
 					$this->send( Code::error );
 				} else{

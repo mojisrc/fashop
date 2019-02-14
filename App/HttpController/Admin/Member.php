@@ -31,7 +31,7 @@ class Member extends Admin
 	 */
 	public function list()
 	{
-		$condition['is_member'] = ['eq', 1];
+		$condition['is_member'] = ['=', 1];
 		$field                  = [
 			'id',
 			'username',
@@ -41,7 +41,7 @@ class Member extends Admin
 			'email',
 			'sex',
 		];
-		$list                   = \App\Model\User::getUserList( $condition, $field, 'id desc', $this->getPageLimit() );
+		$list                   = \App\Model\User::init()->getUserList( $condition, $field, 'id desc', $this->getPageLimit() );
 		return $this->send( Code::success, ['list' => $list] );
 	}
 
@@ -65,7 +65,7 @@ class Member extends Admin
 			if( isset( $this->post['nickname'] ) ){
 				$data['nickname'] = $this->post['nickname'];
 			}
-			\App\Model\User::addUser( $data );
+			\App\Model\User::init()->addUser( $data );
 			return $this->send();
 		}
 	}
@@ -93,7 +93,7 @@ class Member extends Admin
 			if( isset( $this->post['password'] ) ){
 				$data['password'] = UserLogic::encryptPassword( $this->post['password'] );
 			}
-			\App\Model\User::editUser( ['id' => $this->post['id']], $data );
+			\App\Model\User::init()->editUser( ['id' => $this->post['id']], $data );
 			$this->send();
 		}
 	}
@@ -131,7 +131,7 @@ class Member extends Admin
 	public function loginInfo()
 	{
 		$access_token_data = $this->getRequestAccessTokenData();
-		$last_info         = \App\Model\AccessToken::getAccessTokenInfo( [
+		$last_info         = \App\Model\AccessToken::init()->getAccessTokenInfo( [
 			'sub' => $access_token_data['sub'],
 			'jti' => ['!=', $access_token_data['jti']],
 		], '*', 'create_time desc' );
@@ -157,7 +157,7 @@ class Member extends Admin
 		if( $this->validator( $this->post, 'Admin/Member.del' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			\App\Model\User::delUser( ['id' => $this->post['id']] );
+			\App\Model\User::init()->delUser( ['id' => $this->post['id']] );
 			$this->send( Code::success );
 		}
 	}
@@ -175,7 +175,7 @@ class Member extends Admin
 		if( $this->validator( $this->post, 'Admin/Member.selfPassword' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			\App\Model\User::editUser( ['id' => $user['id']], ['password' => UserLogic::encryptPassword( $this->post['password'] )] );
+			\App\Model\User::init()->editUser( ['id' => $user['id']], ['password' => UserLogic::encryptPassword( $this->post['password'] )] );
 			$this->send( Code::success );
 		}
 	}
@@ -237,7 +237,7 @@ class Member extends Admin
 		} else{
 			$group_id = \ezswoole\Db::name( 'AuthGroupAccess' )->where( ['uid' => $user['id']] )->value( 'group_id' );
 			if( $group_id > 0 ){
-				$group = \App\Model\AuthGroup::getAuthGroupInfo( ['id' => $group_id] );
+				$group = \App\Model\AuthGroup::init()->getAuthGroupInfo( ['id' => $group_id] );
 				$rules = \App\Model\AuthRule::init()->where( ['id' => ['in', $group['rule_ids']]] )->column( 'sign' );
 			}
 		}
@@ -283,7 +283,7 @@ class Member extends Admin
 			$this->send( Code::user_access_token_error );
 		} else{
 			$jwt    = $this->getRequestAccessTokenData();
-			$result = \App\Model\AccessToken::editAccessToken( [
+			$result = \App\Model\AccessToken::init()->editAccessToken( [
 				'jti' => $jwt['jti'],
 			], [
 				'is_logout'   => 1,

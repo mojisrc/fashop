@@ -61,7 +61,7 @@ class Group extends Admin
 		}
 
 		$count = \App\Model\Group::getGroupCount( $condition, $condition_str );
-		$list  = \App\Model\Group::getGroupList( $condition, $condition_str, '*', 'id desc', $this->getPageLimit(), '' );
+		$list  = \App\Model\Group::init()->getGroupList( $condition, $condition_str, '*', 'id desc', $this->getPageLimit(), '' );
 		$this->send( Code::success, [
 			'total_number' => $count,
 			'list'         => $list,
@@ -202,7 +202,7 @@ class Group extends Admin
 				$group_goods[$key]['create_time']   = time();
 			}
 
-			$group_goods_result = \App\Model\GroupGoods::addMultiGroupGoods( $group_goods );
+			$group_goods_result = \App\Model\GroupGoods::init()->addMultiGroupGoods( $group_goods );
 			if( !$group_goods_result ){
 				\App\Model\Group::rollback();
 				return $this->send( Code::error );
@@ -368,7 +368,7 @@ class Group extends Admin
 			}
 
 			if( $group_goods_updata ){
-				$group_goods_result = \App\Model\GroupGoods::editMultiGroupGoods( $group_goods_updata );
+				$group_goods_result = \App\Model\GroupGoods::init()->editMultiGroupGoods( $group_goods_updata );
 				if( !$group_goods_result ){
 					\App\Model\Group::rollback();// 回滚事务
 					return $this->send( Code::error );
@@ -563,7 +563,7 @@ class Group extends Admin
 		$condition['is_show']    = 1;
 
 		//查询正在进行的拼团
-		$group_list = \App\Model\Group::getGroupList( $condition, '', '*', 'id desc', '', '' );
+		$group_list = \App\Model\Group::init()->getGroupList( $condition, '', '*', 'id desc', '', '' );
 		if( !$group_list ){
 			$this->send( Code::success, [
 				'total_number' => 0,

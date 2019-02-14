@@ -526,14 +526,15 @@ class Goods
 
 		$goodsModel->startTransaction();
 		try{
+			var_dump($addData);
 			$this->id = $goodsModel->addGoods( $addData );
 
-			GoodsSku::make( [
+			GoodsSku::init( [
 				'goods_id'    => $this->id,
 				'goods_title' => $this->title,
 				'skus'        => $this->getSkus(),
 			] )->add();
-			GoodsImage::make( ['goods_id' => $this->id, 'images' => $this->getImages()] )->add();
+			GoodsImage::init( ['goods_id' => $this->id, 'images' => $this->getImages()] )->add();
 
 			$addCategoryIds = [];
 			foreach( $this->categoryIds as $key => $value ){
@@ -591,9 +592,9 @@ class Goods
 
 			$goodsModel->editGoods( ['id' => $this->id], $data );
 
-			GoodsSku::make( ['goods_id' => $this->id, 'skus' => $this->skus] )->edit();
+			GoodsSku::init( ['goods_id' => $this->id, 'skus' => $this->skus] )->edit();
 
-			$GoodsImage = GoodsImage::make( ['goods_id' => $this->id, 'images' => $this->images] );
+			$GoodsImage = GoodsImage::init( ['goods_id' => $this->id, 'images' => $this->images] );
 			\App\Model\GoodsImage::init()->delGoodsImage( ['goods_id' => $this->id] );
 			$GoodsImage->add();
 

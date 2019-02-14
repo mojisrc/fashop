@@ -279,10 +279,7 @@ class OrderRefund
             }
         }
 
-        $order = \App\Model\Order::init()->getOrderInfo([
-                                                'id' => $order_goods['order_id'],
-//                                                 'user_id' => $this->getUserId(),
-                                            ]);
+        $order = \App\Model\Order::init()->getOrderInfo(['id' => $order_goods['order_id']]);
         if ($order['state'] < 20) {
             throw new \Exception("订单未支付");
         }
@@ -337,10 +334,10 @@ class OrderRefund
 
         try {
             \App\Model\OrderRefund::startTransaction();
-            $refund_id              = \App\Model\OrderRefund::addOrderRefund($refund_array, $order, $order_goods);
-            $refund_result          = \App\Model\OrderRefund::editOrderRefund(['id' => $refund_id], ['refund_sn' => \App\Model\OrderRefund::getOrderRefundSn($refund_id)]);
-            $edit_lock_result       = \App\Model\OrderRefund::editOrderLock($order_goods['order_id'], 1);
-            $edit_goods_lock_result = \App\Model\OrderRefund::editOrderGoodsLock($order_goods['id'], $refund_id);
+            $refund_id              = \App\Model\OrderRefund::init()->addOrderRefund($refund_array, $order, $order_goods);
+            $refund_result          = \App\Model\OrderRefund::init()->editOrderRefund(['id' => $refund_id], ['refund_sn' => \App\Model\OrderRefund::getOrderRefundSn($refund_id)]);
+            $edit_lock_result       = \App\Model\OrderRefund::init()->editOrderLock($order_goods['order_id'], 1);
+            $edit_goods_lock_result = \App\Model\OrderRefund::init()->editOrderGoodsLock($order_goods['id'], $refund_id);
 
             if ($refund_id > 0 && $refund_result && $edit_lock_result && $edit_goods_lock_result) {
                 \App\Model\OrderRefund::commit();

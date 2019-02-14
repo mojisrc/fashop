@@ -87,7 +87,7 @@ class Voucher extends Server {
 			'owner_id'    => $this->user['id'],
 			'owner_name'  => $this->user['nickname'],
 		);
-		$result = \App\Model\Page::addVoucher($data);
+		$result = \App\Model\Page::init()->addVoucher($data);
 		if ($result) {
 			return $this->faJson(array(), 0);
 		} else {

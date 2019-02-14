@@ -403,7 +403,7 @@ class Order extends Server
 			$group_sign_arr = array_column( $list, 'group_sign' );
 			if( $group_sign_arr && is_array( $group_sign_arr ) ){
 				//未付款的已经被关闭的跟团的拼团订单 也会更改他的拼团状态为失败
-				$result = \App\Model\Order::editOrder( ['group_sign' => ['in', $group_sign_arr]], ['group_state' => 3, 'group_fail_time' => time()] );
+				$result = \App\Model\Order::init()->editOrder( ['group_sign' => ['in', $group_sign_arr]], ['group_state' => 3, 'group_fail_time' => time()] );
 				if( !$result ){
 					return $this->send( Code::param_error, [], '更改拼团订单状态失败' );
 				} else{
@@ -439,7 +439,7 @@ class Order extends Server
 				if( !$order_info ){
 					return $this->send( Code::param_error, [], '参数错误' );
 				} else{
-					$extend_info = \App\Model\OrderExtend::getOrderExtendInfo( ['id' => $order_info['id']], '', '*' );
+					$extend_info = \App\Model\OrderExtend::init()->getOrderExtendInfo( ['id' => $order_info['id']], '*' );
 					if( !$extend_info ){
 						return $this->send( Code::param_error, [], '参数错误' );
 					} else{

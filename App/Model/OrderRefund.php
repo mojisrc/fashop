@@ -67,7 +67,7 @@ class OrderRefund extends Model
 			$data                 = [];
 			$data['lock_state']   = ['exp', 'lock_state+1'];
 			$data['refund_state'] = $refund_state; //退款状态:0是无退款,1是部分退款,2是全部退款
-			$result               = Order::editOrder( $condition, $data );
+			$result               = Order::init()->editOrder( $condition, $data );
 			return $result;
 		}
 		return false;
@@ -91,7 +91,7 @@ class OrderRefund extends Model
 			$data['lock_state']      = ['exp', 'lock_state-1'];
 			$data['delay_time']      = time();
 			$data['refund_state']    = $refund_state; //退款状态:0是无退款,1是部分退款,2是全部退款
-			$result                  = Order::editOrder( $condition, $data );
+			$result                  = Order::init()->editOrder( $condition, $data );
 			return $result;
 		}
 		return false;
@@ -113,7 +113,7 @@ class OrderRefund extends Model
 			$data['lock_state']          = ['exp', 'lock_state+1'];
 			$data['refund_handle_state'] = 0; //退款平台处理状态 默认0处理中(未处理) 10拒绝(驳回) 20同意 30成功(已完成) 只有锁定时才管用
 			$data['refund_id']           = $refund_id;
-			$result                      = OrderGoods::editOrderGoods( $condition, $data );
+			$result                      = OrderGoods::init()->editOrderGoods( $condition, $data );
 			return $result;
 		}
 		return false;
@@ -134,7 +134,7 @@ class OrderRefund extends Model
 			$condition['lock_state'] = ['>=', '1'];
 			$data                    = [];
 			$data['lock_state']      = ['exp', 'lock_state-1'];
-			$result                  = OrderGoods::editOrderGoods( $condition, $data );
+			$result                  = OrderGoods::init()->editOrderGoods( $condition, $data );
 			return $result;
 		}
 		return false;

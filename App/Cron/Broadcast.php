@@ -60,9 +60,9 @@ class Broadcast
 				// todo 测试返回的是个啥
 				$result = $wechat->broadcast->sendMessage( $message, null );
 				if( $result ){
-					\App\Model\Page::editWechatBroadcast( ['id' => $item['id']], ['send_state' => 1] );
+					\App\Model\Page::init()->editWechatBroadcast( ['id' => $item['id']], ['send_state' => 1] );
 				} else{
-					\App\Model\Page::editWechatBroadcast( ['id' => $item['id']], ['send_state' => 2] );
+					\App\Model\Page::init()->editWechatBroadcast( ['id' => $item['id']], ['send_state' => 2] );
 				}
 			}
 		}

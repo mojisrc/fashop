@@ -28,7 +28,7 @@ class Goods extends Server
 	 */
 	public function list()
 	{
-		$param         = !empty( $this->post ) ? $this->post : $this->get;
+		$param               = !empty( $this->post ) ? $this->post : $this->get;
 		$param['page']       = $this->getPageLimit();
 		$param['sale_time']  = ['<', time()];
 		$param['is_on_sale'] = 1;
@@ -67,10 +67,9 @@ class Goods extends Server
 		if( $this->validator( $this->get, 'Goods.sku' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			$goods_info = \App\Model\Goods::init()->join( 'goods_sku', 'goods.id = goods_sku.goods_id', 'LEFT' )->where( [
+			$goods_info         = \App\Model\Goods::init()->join( 'goods_sku', 'goods.id = goods_sku.goods_id', 'LEFT' )->where( [
 				'goods_sku.id' => $this->get['goods_sku_id'],
 			] )->field( 'goods.*,goods_sku.id as goods_sku_id' )->find();
-
 			$goods_info['skus'] = \App\Model\GoodsSku::init()->getGoodsSkuList( ['goods_id' => $goods_info['id']], '*', 'id desc', [1, 10000] );
 			$this->send( Code::success, ['info' => $goods_info] );
 		}

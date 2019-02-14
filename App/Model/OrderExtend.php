@@ -19,42 +19,28 @@ class OrderExtend extends Model
 	protected $softDelete = true;
 	protected $jsonFields = ['reciver_info', 'invoice_info'];
 
-	/**
-	 * 列表
-	 * @param   $condition
-	 * @param   $field
-	 * @param   $order
-	 * @param   $page
-	 * @param   $group
-	 * @return
-	 */
-	public function getOrderExtendList( $condition = [],  $field = '*', $order = 'id desc', $page = [1, 20])
+
+	public function getOrderExtendList( $condition = [], $field = '*', $order = 'id desc', $page = [1, 20] )
 	{
 		$data = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $data;
 	}
 
-	/**
-	 * 获得信息
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $field
-	 * @return
-	 */
-	public function getOrderExtendInfo( $condition = [], $condition_str = '', $field = '*' )
+	public function editOrderExtend( $condition, $data )
 	{
-		$data = $this->where( $condition )->where( $condition_str )->field( $field )->find();
-		return $data;
+		return $this->where( $condition )->edit( $data );
+	}
+
+	public function addOrderExtend( $data )
+	{
+		return $this->add( $data );
 	}
 
 
-	/**
-	 * 添加单条数据
-	 * @param   $insert
-	 */
-	public function addOrderExtend( $insert = [] )
+	public function getOrderExtendInfo( $condition = [], $field = '*' )
 	{
-		return $this->add( $insert );
+		$data = $this->where( $condition )->field( $field )->find();
+		return $data;
 	}
 
 

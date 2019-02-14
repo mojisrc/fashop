@@ -54,7 +54,7 @@ class Voucher extends Admin {
 		$get        = $this->get;
 		$coupon_id = $get['id'];
 		if ($coupon_id > 0) {
-			$result = \App\Model\Voucher::editVoucher(['id' => $coupon_id], ['state' => 4]);
+			$result = \App\Model\Voucher::init()->editVoucher(['id' => $coupon_id], ['state' => 4]);
 			return $this->send( Code::success );
 		} else {
 			return $this->send( Code::param_error );
@@ -119,7 +119,7 @@ class Voucher extends Admin {
 			$data['used']        = 0;
 			$data['create_time'] = time();
 			$data['each_limit']  = intval($post['each_limit']) > 0 ? intval($post['each_limit']) : 0;
-			$resutl              = \App\Model\Page::addVoucherTemplate($data);
+			$resutl              = \App\Model\Page::init()->addVoucherTemplate($data);
 			if ($resutl) {
 				return $this->send( Code::success );
 
@@ -161,7 +161,7 @@ class Voucher extends Admin {
 			$data['total']      = intval($post['total']) > 0 ? intval($post['total']) : 0;
 			$data['each_limit'] = intval($post['each_limit']) > 0 ? intval($post['each_limit']) : 0;
 
-			$result = \App\Model\Page::editVoucherTemplate(array('id' => $post['id']), $data);
+			$result = \App\Model\Page::init()->editVoucherTemplate(array('id' => $post['id']), $data);
 			if ($result) {
 				return $this->send( Code::success );
 			} else {
@@ -262,7 +262,7 @@ class Voucher extends Admin {
 				}
 				\App\Model\Coupon::startTransaction();
 				try {
-					$state = \App\Model\Coupon::addVoucherAll($add_data);
+					$state = \App\Model\Coupon::init()->addVoucherAll($add_data);
 					if (!$state) {
 						\App\Model\Coupon::rollback();
 						return $this->send( Code::error, [], '发送失败' );

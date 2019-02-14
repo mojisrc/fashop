@@ -61,7 +61,7 @@ class Cart extends Server
 
 				$find = \App\Model\Cart::init()->getCartInfo( [
 					'goods_sku_id' => $this->post['goods_sku_id'],
-					'user_id'      => ['eq', $user['id']],
+					'user_id'      => ['=', $user['id']],
 				] );
 				if( !empty( $find ) ){
 					return $this->send( Code::param_error, [], '购物车已存在，不可重复添加' );
@@ -82,7 +82,7 @@ class Cart extends Server
 					return $this->send( Code::error, [], '库存不足' );
 				}
 				//				$goods_sku_info['user_id'] = $user['id'];
-				\App\Model\Cart::addCart( [
+				\App\Model\Cart::init()->addCart( [
 					'user_id'      => $user['id'],
 					'goods_sku_id' => $goods_sku_info['id'],
 					'goods_num'    => $quantity,
@@ -113,7 +113,7 @@ class Cart extends Server
 				$quantity     = $this->post['quantity'];
 				$cart_info    = \App\Model\Cart::getCartInfo( [
 					'goods_sku_id' => $goods_sku_id,
-					'user_id'      => ['eq', $user['id']],
+					'user_id'      => ['=', $user['id']],
 				] );
 				if( empty( $cart_info ) ){
 					return $this->send( Code::cart_goods_not_exist );
@@ -125,7 +125,7 @@ class Cart extends Server
 				}
 				$condition = [
 					'id'      => $cart_info['id'],
-					'user_id' => ['eq', $user['id']],
+					'user_id' => ['=', $user['id']],
 				];
 				if( $goods_sku_info['stock'] < $quantity ){
 					if( $goods_sku_info['stock'] > 0 ){
@@ -161,7 +161,7 @@ class Cart extends Server
 			} else{
 				\App\Model\Cart::delCart( [
 					'goods_sku_id' => ['in', $this->post['goods_sku_ids']],
-					'user_id'      => ['eq', $user['id']],
+					'user_id'      => ['=', $user['id']],
 				] );
 				return $this->send( Code::success );
 			}
@@ -211,7 +211,7 @@ class Cart extends Server
 				$user      = $this->getRequestUser();
 				$cart_info = \App\Model\Cart::init()->getCartInfo( [
 					'goods_sku_id' => $this->get['goods_sku_id'],
-					'user_id'      => ['eq', $user['id']],
+					'user_id'      => ['=', $user['id']],
 				], 'id' );
 				return $this->send( Code::success, [
 					'state' => $cart_info ? true : false,
@@ -230,7 +230,7 @@ class Cart extends Server
 			$this->send( Code::user_access_token_error );
 		} else{
 			$user = $this->getRequestUser();
-			\App\Model\Cart::init()->delCart( ['user_id' => ['eq', $user['id']]] );
+			\App\Model\Cart::init()->delCart( ['user_id' => ['=', $user['id']]] );
 			$this->send( Code::success );
 		}
 	}
@@ -245,7 +245,7 @@ class Cart extends Server
 			$this->send( Code::user_access_token_error );
 		} else{
 			$user  = $this->getRequestUser();
-			$total = \App\Model\Cart::init()->where( ['user_id' => ['eq', $user['id']]] )->sum( 'goods_num' );
+			$total = \App\Model\Cart::init()->where( ['user_id' => ['=', $user['id']]] )->sum( 'goods_num' );
 			$this->send( Code::success, ['total_num' => $total] );
 		}
 	}
@@ -268,7 +268,7 @@ class Cart extends Server
 			} else{
 
 				$condition                 = [];
-				$condition['user_id']      = ['eq', $user['id']];
+				$condition['user_id']      = ['=', $user['id']];
 				$condition['goods_sku_id'] = ['in', $this->post['goods_sku_ids']];
 				$result                    = \App\Model\Cart::init()->editCart( $condition, ['is_check' => $this->post['is_check']] );
 				if( !$result ){

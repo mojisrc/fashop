@@ -315,7 +315,7 @@ class OrderRefundSearch
                     $this->condition['handle_state']  = 20; //平台处理状态 默认0处理中(未处理) 10拒绝(驳回) 20同意 30成功(已完成)
                     $this->condition['refund_type']   = 2;  //申请类型:1为仅退款,2为退货退款)
                     $this->condition['tracking_no']   = ['EXP', 'IS NULL']; //退款退货物 买家发货流单号
-                    $this->condition['tracking_time'] = ['eq', '0']; //退款退货物 买家发货时间,默认为0
+                    $this->condition['tracking_time'] = ['=', '0']; //退款退货物 买家发货时间,默认为0
                     break;
                 case 3:
                     $this->condition['handle_state']  = 20; //平台处理状态 默认0处理中(未处理) 10拒绝(驳回) 20同意 30成功(已完成)
@@ -336,7 +336,7 @@ class OrderRefundSearch
                     break;
                 case 6:
                     $this->condition['is_close']     = 1; //默认0未关闭 1已关闭(退款关闭)
-                    $this->condition['handle_state'] = [['eq', 50], ['eq', 51], 'or']; //50取消(用户主动撤销) 51取消(用户主动收货)
+                    $this->condition['handle_state'] = [['=', 50], ['=', 51], 'or']; //50取消(用户主动撤销) 51取消(用户主动收货)
 
                     break;
                 case 7:

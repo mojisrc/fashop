@@ -47,7 +47,7 @@ class Userlevel extends Admin
 				return $this->send( Code::param_error, [], '请输入名称' );
 			}
 			$data          = $post;
-			$user_level_id = \App\Model\UserLevel::addUserLevel( $data );
+			$user_level_id = \App\Model\UserLevel::init()->addUserLevel( $data );
 			if( $user_level_id ){
 				//记录行为
 				// action_log('update_user_level', 'user_level', $user_level_id, $this->user['id']);
@@ -75,7 +75,7 @@ class Userlevel extends Admin
 			}
 
 			$data          = $post;
-			$user_level_id = \App\Model\UserLevel::editUserLevel( $data, $condition );
+			$user_level_id = \App\Model\UserLevel::init()->editUserLevel( $data, $condition );
 			if( $user_level_id ){
 				//记录行为
 				// action_log('update_user_level', 'user_level', $user_level_id, $this->user['id']);

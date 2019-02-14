@@ -67,6 +67,6 @@ class WechatUser
 				'tagid_list'     => json_encode( $user['tagid_list'] ),
 			];
 		}
-		return \App\Model\WechatUser::editMulti( $datas );
+		return \App\Model\WechatUser::init()->editMulti( $datas );
 	}
 }

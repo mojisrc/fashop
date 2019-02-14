@@ -84,7 +84,7 @@ class GoodsImage
 		}
 	}
 
-	public static function make( array $options = [] ) : GoodsImage
+	public static function init( array $options = [] ) : GoodsImage
 	{
 		return new static( $options );
 	}

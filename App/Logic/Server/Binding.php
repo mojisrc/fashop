@@ -195,7 +195,7 @@ class Binding
                     throw new \App\Utils\Exception( "user account exist", Code::user_account_exist );
                 }else{
                     //占位行被丢弃
-                    $user_result = \App\Model\User::editUser(['id'=>$user_id], ['state'=>0,'is_discard'=>1] );
+                    $user_result = \App\Model\User::init()->editUser(['id'=>$user_id], ['state'=>0,'is_discard'=>1] );
                     if(!$user_result ){
                         \App\Model\User::rollback();
                         return null;
@@ -222,7 +222,7 @@ class Binding
                 $data['phone']    = $phone;
                 $data['username'] = $phone;
                 $data['password'] = UserLogic::encryptPassword($this->getPassword());
-                $user_result      = \App\Model\User::editUser($condition, $data );
+                $user_result      = \App\Model\User::init()->editUser($condition, $data );
                 if(!$user_result ){
                     \App\Model\User::rollback();
                     return null;
@@ -278,7 +278,7 @@ class Binding
                 }
 
                 //占位行被丢弃
-                $user_result = \App\Model\User::editUser(['id'=>$open_data['user_id']], ['state'=>0,'is_discard'=>1] );
+                $user_result = \App\Model\User::init()->editUser(['id'=>$open_data['user_id']], ['state'=>0,'is_discard'=>1] );
                 if(!$user_result ){
                     \App\Model\User::rollback();
                     return null;
@@ -359,13 +359,13 @@ class Binding
             $master_user_assets_update['points']  = $master_user_assets_info['points'] + $user_assets_info['points'];
             $master_user_assets_update['balance'] = $master_user_assets_info['balance'] + $user_assets_info['balance'];
 
-            $user_assets_result = \App\Model\UserAssets::editUserAssets(['id'=>$user_id],$user_assets_update);
+            $user_assets_result = \App\Model\UserAssets::init()->editUserAssets(['id'=>$user_id],$user_assets_update);
             if(!$user_assets_result){
                 \App\Model\User::rollback();
                 return null;
             }
 
-            $master_user_assets_result = \App\Model\UserAssets::editUserAssets(['id'=>$master_user_id],$master_user_assets_update);
+            $master_user_assets_result = \App\Model\UserAssets::init()->editUserAssets(['id'=>$master_user_id],$master_user_assets_update);
             if(!$master_user_assets_result){
                 \App\Model\User::rollback();
                 return null;

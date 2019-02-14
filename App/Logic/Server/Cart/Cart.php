@@ -209,7 +209,7 @@ class Cart
 	public function list( array $condition = [] )
 	{
 		$model     = $this->getModel();
-		$condition = array_merge( $condition, ['cart.user_id' => ['eq', $this->getUserId()]] );
+		$condition = array_merge( $condition, ['cart.user_id' => ['=', $this->getUserId()]] );
 		if( $this->ids ){
 			$condition['cart.id'] = ['in', $this->getIds()];
 		}
@@ -249,7 +249,7 @@ class Cart
 	public function info( array $condition = [] )
 	{
 		$model       = $this->getModel();
-		$condition   = array_merge( $condition, ['cart.user_id' => ['eq', $this->getUserId()]] );
+		$condition   = array_merge( $condition, ['cart.user_id' => ['=', $this->getUserId()]] );
 		$field_array = [
 			'cart.id',
 			'cart.create_time',

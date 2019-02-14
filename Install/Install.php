@@ -134,7 +134,7 @@ class Install
 	private function initAdmin()
 	{
 		$model = model( 'User' );
-		\App\Model\Page::addUser( [
+		\App\Model\Page::init()->addUser( [
 			'username' => $this->adminUsername,
 			'password' => \App\Logic\User::encryptPassword( $this->adminPassword ),
 		] );

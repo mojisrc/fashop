@@ -62,7 +62,7 @@ class System extends Admin
 
 	public function runCron()
 	{
-		\App\Cron\WechatUser::addUser();
+		\App\Cron\WechatUser::init()->addUser();
 		$this->send( Code::success );
 	}
 

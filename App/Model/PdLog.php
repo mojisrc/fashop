@@ -125,7 +125,7 @@ class PdLog extends Model
 			//充值下单情况
 
 		} else{
-			$update = \App\Model\User::editUser( ['id' => $data['user_id']], $pd_data );
+			$update = \App\Model\User::init()->editUser( ['id' => $data['user_id']], $pd_data );
 			if( !$update ){
 				throw new \Exception( '操作失败' );
 			}

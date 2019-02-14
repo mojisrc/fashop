@@ -81,7 +81,7 @@ class Order extends Admin
 			'user',
 		] );
 
-		$list  = $orderLogic->list();
+		$list = $orderLogic->list();
 
 		$this->send( Code::success, [
 			'total_number' => $orderLogic->count(),
@@ -208,13 +208,12 @@ class Order extends Admin
 			if( empty( $order_info ) ){
 				$this->send( Code::error, [], '没有该订单' );
 			} else{
-				$prefix             = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
+				$prefix             = \EasySwoole\EasySwoole\Config::getInstance()->getConf( 'MYSQL.prefix' );
 				$table_user_profile = $prefix."user_profile";
 				$orderLogic         = new OrderLogic( ['order.group_sign' => $order_info['group_sign']] );
 				$field              = 'order.*'.",(SELECT nickname FROM $table_user_profile WHERE user_id=order.user_id) AS user_nickname";
 				$orderLogic->field( $field );
 				$orderLogic->order( 'order.group_identity asc' );
-				$orderLogic->page( '' );
 				$list = $orderLogic->list();
 				$this->send( Code::success, [
 					'list' => $list,
@@ -242,7 +241,7 @@ class Order extends Admin
 		} else{
 			$order_id = $this->post['id'];
 
-			$order_info = \App\Model\Order::init()->getOrderInfo( ['id' => $order_id], '', '*', [
+			$order_info = \App\Model\Order::init()->getOrderInfo( ['id' => $order_id],  '*', [
 				'order_extend',
 				'order_goods',
 			] );
@@ -258,9 +257,9 @@ class Order extends Admin
 			if( $order_info['refund_state'] != 0 || $order_info['refund_state'] != 0 ){
 				return $this->send( Code::error, [], '退款状态中不可设置发货' );
 			}
-
+			$orderModel = new \App\Model\Order;
 			try{
-				\App\Model\Order::startTransaction();
+				$orderModel->startTransaction();
 				$data                    = [];
 				$data['deliver_name']    = $this->post['deliver_name'];
 				$data['deliver_phone']   = $this->post['deliver_phone'];
@@ -280,7 +279,7 @@ class Order extends Admin
 				$data['tracking_time'] = $now_time;
 
 				$condition['id'] = $order_id;
-				$update          = \App\Model\Order::editOrderExtend( $condition, $data );
+				$update          = \App\Model\OrderExtend::init()->editOrderExtend( $condition, $data );
 				if( !$update ){
 					throw new \Exception( '修改失败' );
 				}
@@ -288,14 +287,14 @@ class Order extends Admin
 				$data               = [];
 				$data['state']      = OrderLogic::state_send;
 				$data['delay_time'] = $now_time;
-				$update             = \App\Model\Order::editOrder( $condition, $data );
+				$update             = \App\Model\Order::init()->editOrder( $condition, $data );
 				if( !$update ){
-					\App\Model\Order::rollback();
+					$orderModel->rollback();
 					$this->send( Code::error, [], "订单状态修改失败" );
 				} else{
-					\App\Model\Order::commit();
+					$orderModel->commit();
 					$user = $this->getRequestUser();
-					\App\Model\Order::addOrderLog( [
+					\App\Model\OrderLog::init()->addOrderLog( [
 						'user'     => $user['username'],
 						'order_id' => $order_id,
 						'role'     => 'seller',
@@ -305,7 +304,7 @@ class Order extends Admin
 				}
 
 			} catch( \Exception $e ){
-				\App\Model\Order::rollback();
+				$orderModel->rollback();
 				$this->send( Code::error, [], $e->getMessage() );
 			}
 		}
@@ -383,13 +382,13 @@ class Order extends Admin
 								return $this->send( Code::error, [], '商品实际支付金额不可以小于0' );
 							}
 						}
-						$order_goods_result = \App\Model\OrderGoods::editMultiOrderGoods( $order_goods_update );
+						$order_goods_result = \App\Model\OrderGoods::init()->editMultiOrderGoods( $order_goods_update );
 
 						$order_update                       = [];
 						$order_update['revise_amount']      = array_sum( array_column( $order_goods_update, 'goods_revise_price' ) ) + $post['revise_freight_fee'];
 						$order_update['revise_freight_fee'] = $post['revise_freight_fee'];
 
-						$order_result = \App\Model\Order::editOrder( ['id' => $order_id], $order_update );
+						$order_result = \App\Model\Order::init()->editOrder( ['id' => $order_id], $order_update );
 
 						if( !$order_goods_result || !$order_result ){
 							\App\Model\Order::rollback();

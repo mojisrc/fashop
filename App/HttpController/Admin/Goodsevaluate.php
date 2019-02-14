@@ -124,7 +124,7 @@ class Goodsevaluate extends Admin
 		} else{
 			try{
 				$condition['id'] = $this->post['id'];
-				$row             = \App\Model\GoodsEvaluate::getGoodsEvaluateInfo( $condition, '*' );
+				$row             = \App\Model\GoodsEvaluate::init()->getGoodsEvaluateInfo( $condition, '*' );
 				if( $row['content'] != '' && $row['reply_content'] == '' ){
 					if( isset( $this->post['reply_content'] ) && $this->post['reply_content'] != '' ){
 						$data['reply_content'] = $this->post['reply_content'];
@@ -136,7 +136,7 @@ class Goodsevaluate extends Admin
 						$data['reply_time2']    = time();
 					}
 				}
-				$result = \App\Model\GoodsEvaluate::editGoodsEvaluate( $condition, $data );
+				$result = \App\Model\GoodsEvaluate::init()->editGoodsEvaluate( $condition, $data );
 				if( $result ){
 					$this->send( Code::success );
 				} else{
@@ -161,13 +161,13 @@ class Goodsevaluate extends Admin
 		} else{
 			try{
 				$condition['id'] = $this->post['id'];
-				$row             = \App\Model\GoodsEvaluate::getGoodsEvaluateInfo( $condition, '*' );
+				$row             = \App\Model\GoodsEvaluate::init()->getGoodsEvaluateInfo( $condition, '*' );
 				if( $row['display'] === 1 ){
 					$data['display'] = 0;
 				} else{
 					$data['display'] = 1;
 				}
-				$result = \App\Model\GoodsEvaluate::editGoodsEvaluate( $condition, $data );
+				$result = \App\Model\GoodsEvaluate::init()->editGoodsEvaluate( $condition, $data );
 				if( $result ){
 					$this->send( Code::success );
 				} else{

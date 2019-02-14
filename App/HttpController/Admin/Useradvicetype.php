@@ -43,7 +43,7 @@ class Useradvicetype extends Admin
 
 			$user_advice_type_model = model( 'UserAdviceType' );
 			$data                   = $post;
-			$user_advice_type_id    = \App\Model\UserAdviceType::addUserAdviceType( $data );
+			$user_advice_type_id    = \App\Model\UserAdviceType::init()->addUserAdviceType( $data );
 			if( $user_advice_type_id ){
 				return $this->send( Code::success );
 			} else{
@@ -72,7 +72,7 @@ class Useradvicetype extends Admin
 
 			$user_advice_type_model = model( 'UserAdviceType' );
 			$data                   = $post;
-			$user_advice_type_id    = \App\Model\UserAdviceType::editUserAdviceType( $data, $condition );
+			$user_advice_type_id    = \App\Model\UserAdviceType::init()->editUserAdviceType( $data, $condition );
 			if( $user_advice_type_id ){
 				return $this->send( Code::success );
 			} else{

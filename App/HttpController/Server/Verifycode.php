@@ -87,7 +87,7 @@ class Verifycode extends Server
 									],
 								], ['aliyun'] );
 								$now_time = time();
-								\App\Model\VerifyCode::addVerifyCode( [
+								\App\Model\VerifyCode::init()->addVerifyCode( [
 									'receiver'     => $post['receiver'],
 									'code'         => $code,
 									'channel_type' => $post['channel_type'],

@@ -245,7 +245,7 @@ class Relevance
                 $user_model       = model('User');
                 \App\Model\User::startTransaction();
 
-                $user_id          = \App\Model\User::addUser($data);
+                $user_id          = \App\Model\User::init()->addUser($data);
 
                 if( !($user_id > 0) ){
                     \App\Model\User::rollback();
@@ -337,7 +337,7 @@ class Relevance
                     \App\Model\User::startTransaction();
 
                     $data['username'] = "wechat_{$mini_user['openId']}_" . RandomKey::randMd5(8);
-                    $user_id          = \App\Model\User::addUser($data);
+                    $user_id          = \App\Model\User::init()->addUser($data);
 
                     if( !($user_id > 0) ){
                         \App\Model\User::rollback();
@@ -408,7 +408,7 @@ class Relevance
 				return null;
 			}
 
-			$user_assets_id = \App\Model\UserAssets::addUserAssets($assets_data);
+			$user_assets_id = \App\Model\UserAssets::init()->addUserAssets($assets_data);
 			if($user_assets_id < 0){
 				\App\Model\User::rollback();
 				return null;

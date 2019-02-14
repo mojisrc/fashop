@@ -99,7 +99,7 @@ class OrderRefund
 		\App\Model\OrderRefund::startTransaction();
 
 		$condition                 = [];
-		$condition['handle_state'] = [['eq', 0], ['eq', 20], ['eq', 30], 'or'];
+		$condition['handle_state'] = [['=', 0], ['=', 20], ['=', 30], 'or'];
 		$condition['is_close']     = 0;
 		$condition['id']           = ['!=', $refund['id']];
 		$condition['order_id']     = $refund['order_id'];
@@ -126,7 +126,7 @@ class OrderRefund
 		switch( $data['handle_state'] ){
 		case  self::refuse :
 			// 更改退款状态
-			$result = \App\Model\OrderRefund::editOrderRefund( ['id' => $data['id']], [
+			$result = \App\Model\OrderRefund::init()->editOrderRefund( ['id' => $data['id']], [
 				'handle_state'   => self::refuse,
 				'handle_time'    => time(),
 				'handle_message' => isset( $data['handle_message'] ) ? $data['handle_message'] : null,
@@ -138,7 +138,7 @@ class OrderRefund
 
 			}
 			// 拒绝 ：恢复 商品的锁定状态，判断是否还需要锁定订单
-			$order_goods_res = \App\Model\OrderGoods::editOrderGoods( [
+			$order_goods_res = \App\Model\OrderGoods::init()->editOrderGoods( [
 				'id'         => $refund['order_goods_id'],
 				'lock_state' => 1,
 			], [
@@ -158,7 +158,7 @@ class OrderRefund
 			] )->find();
 			if( !$exist_lock ){
 				// 解锁总订单
-				$order_res = \App\Model\Order::editOrder( [
+				$order_res = \App\Model\Order::init()->editOrder( [
 					'id'         => $refund['order_id'],
 					'lock_state' => ['!=', 0],
 				], [
@@ -185,7 +185,7 @@ class OrderRefund
 			}
 
 			// 更改退款状态
-			$result = \App\Model\OrderRefund::editOrderRefund( ['id' => $data['id']], [
+			$result = \App\Model\OrderRefund::init()->editOrderRefund( ['id' => $data['id']], [
 				'refund_amount'  => floatval( $data['refund_amount'] ),
 				'handle_state'   => $refund_update_state,
 				'handle_time'    => time(),
@@ -198,7 +198,7 @@ class OrderRefund
 
 			}
 			// 同意 ： 设置 refund_handle_state = 30 是因为我们v1版本采用用户自行去支付平台退款的方式，这儿的退款同意，仅为标记作用
-			$order_goods_res = \App\Model\OrderGoods::editOrderGoods( [
+			$order_goods_res = \App\Model\OrderGoods::init()->editOrderGoods( [
 				'lock_state' => 1,
 				'id'         => $refund['order_goods_id'],
 			], [
@@ -228,7 +228,7 @@ class OrderRefund
 
 			$order_refund_amount  = \App\Model\Order::getOrderValue( ['id' => $refund['order_id']], 'refund_amount' );
 			$update_refund_amount = $order_refund_amount + floatval( $data['refund_amount'] );
-			$order_result         = \App\Model\Order::editOrder( ['id' => $refund['order_id']], ['refund_amount' => $update_refund_amount] );
+			$order_result         = \App\Model\Order::init()->editOrder( ['id' => $refund['order_id']], ['refund_amount' => $update_refund_amount] );
 			if( !$order_result ){
 				\App\Model\OrderRefund::rollback();
 				throw new \Exception( '修改订单退款金额失败' );
@@ -337,7 +337,7 @@ class OrderRefund
 					$updata['refund_no']    = $result->transaction_id;
 					$updata['handle_state'] = 30;
 					$updata['success_time'] = time();//退款回调完成时间
-					$result                 = \App\Model\OrderRefund::editOrderRefund( ['id' => $refund['id']], $updata );
+					$result                 = \App\Model\OrderRefund::init()->editOrderRefund( ['id' => $refund['id']], $updata );
 					if( !$result ){
 						throw new \Exception( '退款失败' );
 					}
@@ -384,7 +384,7 @@ class OrderRefund
 					$updata['refund_no']    = $result->trade_no;
 					$updata['handle_state'] = 30;
 					$updata['success_time'] = time();//退款回调完成时间
-					$result                 = \App\Model\OrderRefund::editOrderRefund( ['id' => $refund['id']], $updata );
+					$result                 = \App\Model\OrderRefund::init()->editOrderRefund( ['id' => $refund['id']], $updata );
 					if( !$result ){
 						throw new \Exception( '退款失败' );
 					}

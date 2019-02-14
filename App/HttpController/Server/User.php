@@ -163,7 +163,7 @@ class User extends Server
 			return $this->send( Code::user_access_token_error );
 		} else{
 			$jwt    = $this->getRequestAccessTokenData();
-			$result = \App\Model\AccessToken::editAccessToken( [
+			$result = \App\Model\AccessToken::init()->editAccessToken( [
 				'jti' => $jwt['jti'],
 			], [
 				'is_logout'   => 1,
@@ -194,7 +194,7 @@ class User extends Server
 		} else{
 			$condition['phone'] = $this->post['phone'];
 			$user_info          = \App\Model\User::init()->getUserInfo( $condition, "id" );
-			\App\Model\User::editUser( [
+			\App\Model\User::init()->editUser( [
 				'id' => $user_info['id'],
 			], [
 				'password' => UserLogic::encryptPassword( $this->post['password'] ),
@@ -219,7 +219,7 @@ class User extends Server
 			if( $this->validator( $this->post, 'Server/EditPaasword.edit' ) !== true ){
 				$this->send( Code::error, [], $this->getValidator()->getError() );
 			} else{
-				$result = \App\Model\User::editUser( [
+				$result = \App\Model\User::init()->editUser( [
 					'id'       => $user['id'],
 					'password' => UserLogic::encryptPassword( $this->post['oldpassword'] ),
 				], [
@@ -270,7 +270,7 @@ class User extends Server
 			}
 			if( !empty( $data ) ){
 				$user = $this->getRequestUser();
-				\App\Model\User::editUser( ['id' => $user['id']], $data );
+				\App\Model\User::init()->editUser( ['id' => $user['id']], $data );
 				$this->send( Code::success );
 			} else{
 				$this->send( Code::error );

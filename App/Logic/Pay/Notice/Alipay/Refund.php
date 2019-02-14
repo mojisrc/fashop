@@ -55,7 +55,7 @@ class Refund extends Notice
 	{
 		if( $this->check() === true ){
 			$order_model = model( 'Audition' );
-			$result      = \App\Model\Order::editAudition( ['id' => $this->order['id']], [
+			$result      = \App\Model\Order::init()->editAudition( ['id' => $this->order['id']], [
 				'refund_state' => 1,
 				'refund_time'  => strtotime($this->data->gmt_refund),
 

@@ -468,7 +468,7 @@ class Buy
 		$this->setGroupGoods( $group_goods );
 
 		//拼团订单
-		$group_order_num = \App\Model\Order::init()->getOrderInfo( ['user_id' => $this->getUserId(), 'group_id' => $this->getGroupId(), 'group_state' => ['in', '0,1,2']], '', 'COUNT(id) AS group_num', [] );
+		$group_order_num = \App\Model\Order::init()->getOrderInfo( ['user_id' => $this->getUserId(), 'group_id' => $this->getGroupId(), 'group_state' => ['in', '0,1,2']], 'COUNT(id) AS group_num', [] );
 		if( $group['limit_group_num'] > 0 && $group_order_num > $group['limit_group_num'] ){
 			throw new \Exception( '此活动每位用户最多拼团'.$group['limit_group_num'].'次' );
 		}
@@ -595,7 +595,7 @@ class Buy
 
 			$user         = $this->getUserInfo();
 			$pay_sn       = $this->makePaySn( $this->getUserId() );
-			$order_pay_id = \App\Model\Order::addOrderPay( [
+			$order_pay_id = \App\Model\Order::init()->addOrderPay( [
 				'pay_sn'    => $pay_sn,
 				'user_id'   => $this->getUserId(),
 				'pay_state' => 0,
@@ -639,7 +639,7 @@ class Buy
 				'group_end_time'       => $group_end_time,
 				'goods_group_amount'   => $calculateResult->getGoodsGroupAmount(),
 			];
-			$order_id = \App\Model\Order::addOrder( $order );
+			$order_id = \App\Model\Order::init()->addOrder( $order );
 			if( !$order_id ){
 				\App\Model\Order::rollback();
 				throw new \Exception( '订单保存失败' );
@@ -659,7 +659,7 @@ class Buy
 				$order_update_data['group_men_num']   = $order['group_men_num'];
 			break;
 			}
-			$order_update_result = \App\Model\Order::editOrder( $order_update_condition, $order_update_data );
+			$order_update_result = \App\Model\Order::init()->editOrder( $order_update_condition, $order_update_data );
 			if( !$order_update_result ){
 				\App\Model\Order::rollback();
 				throw new \Exception( '订单拓展保存失败' );
@@ -681,7 +681,7 @@ class Buy
 				'reciver_city_id'     => $address->getCityId(),
 				'reciver_area_id'     => $address->getAreaId(),
 			];
-			$state        = \App\Model\OrderExtend::addOrderExtend( $order_extend );
+			$state        = \App\Model\OrderExtend::init()->addOrderExtend( $order_extend );
 			if( !$state ){
 				\App\Model\Order::rollback();
 				throw new \Exception( '订单拓展保存失败' );
@@ -713,7 +713,7 @@ class Buy
 				throw new \Exception( '订单商品保存失败' );
 			}
 			// 订单日志记录
-			\App\Model\OrderLog::addOrderLog( [
+			\App\Model\OrderLog::init()->addOrderLog( [
 				'order_id'    => $this->getOrderId(),
 				'msg'         => '买家下单',
 				'role'        => 'buyer',
@@ -746,7 +746,7 @@ class Buy
 			'stock'    => ['exp', 'stock-'.$goods_num],
 			'sale_num' => ['exp', 'sale_num+'.$goods_num],
 		];
-		$goods_result              = \App\Model\GoodsSku::editGoodsSku( $goods_sku_condition, $goods_sku_update_data );
+		$goods_result              = \App\Model\GoodsSku::init()->editGoodsSku( $goods_sku_condition, $goods_sku_update_data );
 		if( !$goods_result ){
 			throw new \Exception( '更新库存GoodsSku失败' );
 		} else{
@@ -755,7 +755,7 @@ class Buy
 				'stock'    => ['exp', 'stock-'.$goods_num],
 				'sale_num' => ['exp', 'sale_num+'.$goods_num],
 			];
-			$goods_sku_result      = \App\Model\Goods::editGoods( $goods_condition, $goods_update_data );
+			$goods_sku_result      = \App\Model\Goods::init()->editGoods( $goods_condition, $goods_update_data );
 			if( !$goods_sku_result ){
 				throw new \Exception( '更新Goods库存失败' );
 			}

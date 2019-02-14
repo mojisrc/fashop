@@ -87,7 +87,7 @@ class Image extends Admin
 						if( isset( $this->post['name'] ) ){
 							$data['name'] = $this->post['name'];
 						}
-						\App\Model\Image::addImage( $data );
+						\App\Model\Image::init()->addImage( $data );
 					}
 					foreach( $images as $key => $image ){
 						$images[$key]['path'] = $host.$image['path'];
