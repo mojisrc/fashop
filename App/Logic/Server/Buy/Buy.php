@@ -506,7 +506,7 @@ class Buy
 				$this->setOrderId( $order_id );
 			}
 			// 拓展订单表创建
-			$state = model('OrderExtend')->insertOrderExtend( [
+			$state = model('OrderExtend')->addOrderExtend( [
 				'id'                  => $order_id,
 				'reciver_info'        => [
                     'name'           => $address->getTruename(),

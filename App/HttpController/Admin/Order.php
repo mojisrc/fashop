@@ -81,11 +81,10 @@ class Order extends Admin
 			'user',
 		] );
 
-		$count = $orderLogic->count();
 		$list  = $orderLogic->list();
 
 		$this->send( Code::success, [
-			'total_number' => $count,
+			'total_number' => $orderLogic->count(),
 			'list'         => $list,
 		] );
 	}

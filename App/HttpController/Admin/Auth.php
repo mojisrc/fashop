@@ -100,7 +100,7 @@ class Auth extends Admin
 					'uid'      => $uid,
 					'group_id' => $post['id'],
 				];
-			} )->toArray() );
+			} ) );
 			return $this->send();
 		}
 	}

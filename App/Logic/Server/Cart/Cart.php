@@ -235,9 +235,7 @@ class Cart
 		$field       = implode( ",", $field_array );
 		$list        = \App\Model\Page::alias( 'cart' )->join( 'goods_sku', 'goods_sku.id = cart.goods_sku_id', "LEFT" )->join( 'goods', 'goods_sku.goods_id = goods.id', "LEFT" )->join( 'freight', 'goods.freight_id = freight.id', "LEFT" )->field( $field )->where( $condition )->group( 'goods_sku_id' )->select();
 
-		if( $list ){
-			$list = $list->toArray();
-		} else{
+		if( !$list ){
 			$list = [];
 		}
 		return $list;
@@ -271,13 +269,9 @@ class Cart
 			'freight.areas as goods_freight_areas',
 		];
 		$field       = implode( ",", $field_array );
-		$info        = \App\Model\Page::alias( 'cart' )->join( 'goods_sku', 'goods_sku.id = cart.goods_sku_id', "LEFT" )->join( 'goods', 'goods_sku.goods_id = goods.id', "LEFT" )->join( 'freight', 'goods.freight_id = freight.id', "LEFT" )->field( $field )->where( $condition )->find();
+		$info        = \App\Model\Cart::join( 'goods_sku', 'goods_sku.id = cart.goods_sku_id', "LEFT" )->join( 'goods', 'goods_sku.goods_id = goods.id', "LEFT" )->join( 'freight', 'goods.freight_id = freight.id', "LEFT" )->field( $field )->where( $condition )->find();
 
-		if( $info ){
-			$info = $info->toArray();
-		} else{
-			$list = [];
-		}
+
 		return $info;
 	}
 

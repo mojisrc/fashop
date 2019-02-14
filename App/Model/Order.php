@@ -14,8 +14,6 @@
 namespace App\Model;
 
 
-
-
 class Order extends Model
 {
 	protected $softDelete = true;
@@ -40,9 +38,9 @@ class Order extends Model
 
 		//返回买家信息
 		if( in_array( 'user', $extend ) ){
-		    $model = new \App\Model\User;
-            $model->join(1111)->join(xxxx)->where(['id'=>1])->count();
-            $model->select();
+			$model = new \App\Model\User;
+			$model->join( 1111 )->join( xxxx )->where( ['id' => 1] )->count();
+			$model->select();
 			$order_info['extend_user'] = \App\Model\User::init()->getUserInfo( ['id' => $order_info['user_id']] );
 		}
 
@@ -108,20 +106,15 @@ class Order extends Model
 
 	/**
 	 * @param array  $condition
-	 * @param string $condition_string
 	 * @param string $field
 	 * @param string $order
 	 * @param string $page
 	 * @param array  $extend
 	 * @return array
 	 */
-	public function getOrderList( $condition = [], $condition_string = '', $field = '*', $order = 'id desc', $page = [1, 20], $extend = [] )
+	public function getOrderList( $condition = [], $field = '*', $order = 'id desc', $page = [1, 20], $extend = [] )
 	{
-		if( $page == '' ){
-			$list = $this->field( $field )->where( $condition )->where( $condition_string )->order( $order )->select();
-		} else{
-			$list = $this->field( $field )->where( $condition )->where( $condition_string )->order( $order )->page( $page )->select();
-		}
+		$list = $this->where( $condition )->field( $field )->order( $order )->page( $page )->select();
 		if( !$list ){
 			return [];
 		}
@@ -352,9 +345,9 @@ class Order extends Model
 	 * @param string $group
 	 * @param string $key
 	 */
-	public function getOrderGoodsList( $condition = [], $fields = '*', $order = 'id desc', $page = [1,1000], $group = null, $key = null )
+	public function getOrderGoodsList( $condition = [], $fields = '*', $order = 'id desc', $page = [1, 1000], $group = null, $key = null )
 	{
-		$list = \App\Model\OrderGoods::field( $fields )->where( $condition )->order( $order )->group( $group )->page( $page )->select()->toArray();
+		$list = \App\Model\OrderGoods::field( $fields )->where( $condition )->order( $order )->group( $group )->page( $page )->select();
 		return $this->array_under_reset( $list, $key );
 	}
 
@@ -364,9 +357,9 @@ class Order extends Model
 	 * @param string $fields
 	 * @param string $limit
 	 */
-	public function getOrderExtendList( $condition = [], $fields = '*', $page = '1,200' )
+	public function getOrderExtendList( $condition = [], $fields = '*', $page = [1,200] )
 	{
-		return \App\Model\OrderExtend::field( $fields )->where( $condition )->page( $page )->select()->toArray();
+		return \App\Model\OrderExtend::where( $condition )->field( $fields )->page( $page )->select();
 	}
 
 	/**
@@ -419,8 +412,7 @@ class Order extends Model
 	public function addOrderLog( $data )
 	{
 		$data['role']        = str_replace( ['buyer', 'seller', 'system'], ['买家', '商家', '系统'], $data['role'] );
-		$data['create_time'] = time();
-		return \App\Model\OrderLog::insertGetId( $data );
+		return \App\Model\OrderLog::add( $data );
 	}
 
 	/**
@@ -461,8 +453,6 @@ class Order extends Model
 	 * 订单操作历史列表
 	 * @param $condition
 	 * @return array|bool
-	 * @throws \ezswoole\db\exception\DataNotFoundException
-	 * @throws \ezswoole\db\exception\ModelNotFoundException
 	 * @throws \ezswoole\exception\DbException
 	 */
 	public function getOrderLogList( $condition )
@@ -832,7 +822,6 @@ class Order extends Model
 		//查询改用户已支付未发货的订单的地址id
 		$data = $this->alias( 'order' )->where( $condition )->join( '__ORDER_EXTEND__ order_extend', 'order.id = order_extend.id', 'LEFT' )->field( 'order.id as order_id,order.address_id,address_area_id,address_street_id,order_extend.reciver_info' )->select();
 		if( $data ){
-			$data = $data->toArray();
 			foreach( $data as $key => $value ){
 				$data[$key]['reciver_info'] = unserialize( $value['reciver_info'] );
 			}

@@ -106,11 +106,11 @@ class Order extends Logic
 	/**
 	 * @var string
 	 */
-	private $order = 'order.id desc';
+	private $order = 'id desc';
 	/**
 	 * @var string
 	 */
-	private $field = 'order.*';
+	private $field = '*';
 
 	/**
 	 * @var array
@@ -226,42 +226,43 @@ class Order extends Logic
 
 	public function buildCondition() : void
 	{
-		$this->condition['order.all_agree_refound'] = 0;//默认为0，1是订单的全部商品都退了
+		// todo 什么意思？@孙泉
+//		$this->condition['all_agree_refound'] = 0;//默认为0，1是订单的全部商品都退了
 
 		if( !empty( $this->stateType ) ){
 
-			$this->condition['order.state'] = constant( 'self::'.$this->stateType );
+			$this->condition['state'] = constant( 'self::'.$this->stateType );
 
 			//          if( $this->stateType === 'state_unevaluate' ){
-			//                $this->condition['order.evaluate_state'] = 0; // 评价状态 0未评价，1已评价
+			//                $this->condition['evaluate_state'] = 0; // 评价状态 0未评价，1已评价
 			//            }
 			if( $this->stateType === 'state_cancel' ){
-				$this->condition['order.refund_state'] = 0;
+				$this->condition['refund_state'] = 0;
 			}
 
 		}
 
 		if( !empty( $this->groupStateType ) ){
-			$this->condition['order.group_state'] = constant( 'self::'.$this->groupStateType );
+			$this->condition['group_state'] = constant( 'self::'.$this->groupStateType );
 		}
 
 		if( !empty( $this->orderType ) ){
-			$this->condition['order.goods_type'] = $this->orderType;
+			$this->condition['goods_type'] = $this->orderType;
 		}
 
 		if( !empty( $this->print ) ){
-			$this->condition['order.is_print'] = $this->print;
+			$this->condition['is_print'] = $this->print;
 		}
 
 		if( !empty( $this->createTime ) ){
-			$this->condition['order.create_time'] = [
+			$this->condition['create_time'] = [
 				'between',
 				$this->createTime,
 			];
 		}
 
 		if( !empty( $this->userIds ) ){
-			$this->condition['order.user_id'] = ['in', $this->userIds];
+			$this->condition['user_id'] = ['in', $this->userIds];
 		}
 		$prefix             = \EasySwoole\EasySwoole\Config::getInstance()->getConf( 'MYSQL.prefix' );
 		$table_order_extend = $prefix."order_extend";
@@ -275,7 +276,7 @@ class Order extends Logic
 				];
 			break;
 			case 'order_no':
-				$this->condition['order.sn'] = ['like', '%'.$this->keywords.'%'];
+				$this->condition['sn'] = ['like', '%'.$this->keywords.'%'];
 			break;
 
 			case 'receiver_name':
@@ -293,7 +294,7 @@ class Order extends Logic
 			break;
 
 			case 'courier_number':
-				$this->condition['order.trade_no'] = ['like', '%'.$this->keywords.'%'];
+				$this->condition['trade_no'] = ['like', '%'.$this->keywords.'%'];
 			break;
 			}
 		}
@@ -302,8 +303,8 @@ class Order extends Logic
 
 		if( !empty( $this->feedback ) ){
 			//维权状态：退款处理中 todo、退款结束 closed
-			$this->condition['order.refund_state'] = ['>', 0]; // 退款状态:0是无退款,1是部分退款,2是全部退款
-			$this->condition['order.lock_state']   = ['>', 0];   // 锁定状态:0是正常,大于0是锁定,默认是0
+			$this->condition['refund_state'] = ['>', 0]; // 退款状态:0是无退款,1是部分退款,2是全部退款
+			$this->condition['lock_state']   = ['>', 0];   // 锁定状态:0是正常,大于0是锁定,默认是0
 			switch( $this->feedback ){
 			case 'todo':
 				$this->condition["id"] = [
@@ -365,12 +366,12 @@ class Order extends Logic
 
 	public function count() : int
 	{
-		return $this->make()->where( $this->condition )->where( $this->condition_string )->count();
+		return $this->make()->count();
 	}
 
 	public function list() : array
 	{
-		return $this->make()->getOrderList( $this->condition, $this->condition_string, $this->field, $this->order, $this->page, $this->extend );
+		return $this->make()->getOrderList( $this->condition,  $this->field, $this->order, $this->page, $this->extend );
 	}
 
 	public function info() : array

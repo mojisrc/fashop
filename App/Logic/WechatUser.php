@@ -47,7 +47,7 @@ class WechatUser
 				'in',
 				$openids,
 			],
-		], 'id,openid', 'id desc', '1,100000' );
+		], 'id,openid', 'id desc', [1,100000] );
 		$wechat_user_list = array_column( $wechat_user_list, null, 'openid' );
 		foreach( $_user_list['user_info_list'] as $user ){
 			$datas[] = [

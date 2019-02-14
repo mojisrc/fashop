@@ -36,14 +36,12 @@ class Image extends Admin
 	{
 		$condition = [];
 		if( isset( $this->get['create_time'] ) ){
-			$condition['create_time'] = [
-				'between',
-				[$this->get['create_time']],
-			];
+			$condition['create_time'] = ['BETWEEN', [$this->get['create_time']]];
 		}
-		$list = \App\Model\Image::getImageList( $condition, '*', 'create_time desc', $this->getPageLimit() );
+		$imageModel = new \App\Model\Image;
+		$list       = $imageModel->getImageList( $condition, '*', 'create_time desc', $this->getPageLimit() );
 		return $this->send( Code::success, [
-			'total_number' => \App\Model\Page::where( $condition )->count(),
+			'total_number' => $imageModel->count(),
 			'list'         => $list ? $list : [],
 		] );
 	}
@@ -140,12 +138,12 @@ class Image extends Admin
 			$condition['goods.title'] = ['like', '%'.$this->get['keywords'].'%'];
 		}
 
-		$field = 'goods_image.id,goods_image.goods_id,goods_image.img,goods.title';
-		$count = \App\Model\GoodsImage::init()->getGoodsImageMoreCount( $condition, '', 'goods_image.id' );
-		$list  = \App\Model\GoodsImage::init()->getGoodsImageMoreList( $condition, '', $field, 'goods_image.goods_id', $this->getPageLimit(), 'goods_image.id' );;
+		$field           = 'goods_image.id,goods_image.goods_id,goods_image.img,goods.title';
+		$goodsImageModel = new \App\Model\GoodsImage;
+		$list            = $goodsImageModel->join( 'goods', 'goods.id = goods_image.id', 'LEFT' )->getGoodsImageList( $condition, $field, 'goods_image.goods_id', $this->getPageLimit() );
 
 		return $this->send( Code::success, [
-			'total_number' => $count,
+			'total_number' => $goodsImageModel->count(),
 			'list'         => $list,
 		] );
 	}

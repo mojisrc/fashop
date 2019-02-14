@@ -82,8 +82,6 @@ class Distributor extends Model
 		if( !$data ){
 			return [];
 		} else{
-			$data = $data->toArray();
-
 			foreach( $data as $key => $value ){
 				$data[$key] = $this->stateDesc( $value );
 			}

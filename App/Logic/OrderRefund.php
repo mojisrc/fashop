@@ -218,7 +218,7 @@ class OrderRefund
 				'lock_state'          => 1,
 			] )->count( "DISTINCT id" );
 			if( count( $order_goods_ids ) === $refund_goods_count ){
-				$order_res = \App\Model\Order::editOrder( ['id' => $refund['order_id']], ['all_agree_refound' => 1] );
+				$order_res = \App\Model\Order::init()->editOrder( ['id' => $refund['order_id']], ['all_agree_refound' => 1] );
 				if( !$order_res ){
 					\App\Model\OrderRefund::rollback();
 					throw new \Exception( '修改订单全退状态失败' );

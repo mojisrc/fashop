@@ -681,7 +681,7 @@ class Buy
 				'reciver_city_id'     => $address->getCityId(),
 				'reciver_area_id'     => $address->getAreaId(),
 			];
-			$state        = \App\Model\OrderExtend::insertOrderExtend( $order_extend );
+			$state        = \App\Model\OrderExtend::addOrderExtend( $order_extend );
 			if( !$state ){
 				\App\Model\Order::rollback();
 				throw new \Exception( '订单拓展保存失败' );

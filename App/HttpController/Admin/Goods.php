@@ -106,7 +106,7 @@ class Goods extends Admin
 		if( $this->validator( $this->get, 'Admin/Goods.info' ) !== true ){
 			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
-			$info = \App\Model\Goods::getGoodsInfo( ['id' => $this->get['id']], '*' );
+			$info = \App\Model\Goods::init()->getGoodsInfo( ['id' => $this->get['id']], '*' );
 			// 获得商品的规格
 			$this->send( Code::success, ['info' => $info] );
 		}
@@ -186,13 +186,11 @@ class Goods extends Admin
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
-			$condition             = [];
 			$condition['goods_id'] = $get['goods_id'];
-			$goods_sku_count       = \App\Model\GoodsSku::getGoodsSkuCount( $condition );
-			$goods_sku_list        = \App\Model\GoodsSku::getGoodsSkuList( $condition, '*', 'id desc', [1, 100] );
-
+			$goods_sku_model       = new \App\Model\GoodsSku();
+			$goods_sku_list        = $goods_sku_model->getGoodsSkuList( $condition, '*', 'id desc', [1, 100] );
 			return $this->send( Code::success, [
-				'total_number' => $goods_sku_count,
+				'total_number' => $goods_sku_model->count(),
 				'list'         => $goods_sku_list,
 			] );
 

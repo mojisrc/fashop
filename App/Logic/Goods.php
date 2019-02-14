@@ -679,7 +679,7 @@ class Goods
 	{
 		$condition                         = [];
 		$condition['group_goods.goods_id'] = $this->id;
-		$group_goods                       = \App\Model\GroupGoods::init()->getGroupGoodsSkuMoreList( $condition, '', 'group_goods.*,group.end_time,group.is_show', 'group_goods.id desc', '1,200', '' );
+		$group_goods                       = \App\Model\GroupGoods::init()->getGroupGoodsSkuMoreList( $condition, '', 'group_goods.*,group.end_time,group.is_show', 'group_goods.id desc', [1,200], '' );
 		if( !$group_goods ){
 			return false;
 		} else{

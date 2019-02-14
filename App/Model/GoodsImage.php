@@ -33,6 +33,7 @@ class GoodsImage extends Model
 	}
 
 	/**
+	 * todo废弃
 	 * 列表更多
 	 * @param   $condition
 	 * @param   $field
@@ -41,26 +42,10 @@ class GoodsImage extends Model
 	 * @param   $group
 	 * @return
 	 */
-	public function getGoodsImageMoreList( $condition = [], $field = '*', $order = 'id desc', $page = [1, 20], $group = '' )
+	public function getGoodsImageList( $condition = [], $field = '*', $order = 'id desc', $page = [1, 20] )
 	{
-		$data = $this->join( 'goods', 'goods_image.goods_id = goods.id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->page( $page )->group( $group )->select();
+		$data = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $data;
-	}
-
-	/**
-	 * 获得数量
-	 * @param   $condition
-	 * @param   $distinct [去重]
-	 * @return
-	 */
-	public function getGoodsImageMoreCount( $condition = [], $distinct = '' )
-	{
-		if( $distinct == '' ){
-			return $this->join( 'goods', 'goods_image.goods_id = goods.id', 'LEFT' )->where( $condition )->count();
-
-		} else{
-			return $this->join( 'goods', 'goods_image.goods_id = goods.id', 'LEFT' )->where( $condition )->count( "DISTINCT ".$distinct );
-		}
 	}
 
 }

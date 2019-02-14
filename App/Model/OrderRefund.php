@@ -208,7 +208,7 @@ class OrderRefund extends Model
 				'in',
 				array_column( $order_list, 'id' ),
 			],
-		] )->order( 'id desc' )->select()->toArray();
+		] )->order( 'id desc' )->select();
 		$refund_goods = []; // 已经提交的退款\退款退货商品
 		if( !empty( $refund_list ) && is_array( $refund_list ) ){
 			foreach( $refund_list as $key => $value ){
@@ -272,7 +272,7 @@ class OrderRefund extends Model
 			return false;
 		}
 		$trade_logic  = model( 'Trade', 'Logic' );
-		$refund_list  = $this->where( ['order_id' => $order_info['id']] )->order( 'id desc' )->select()->toArray();
+		$refund_list  = $this->where( ['order_id' => $order_info['id']] )->order( 'id desc' )->select();
 		$refund_goods = []; // 已经提交的退款\退款退货商品
 		if( !empty( $refund_list ) && is_array( $refund_list ) ){
 			foreach( $refund_list as $key => $value ){
