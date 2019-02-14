@@ -141,8 +141,8 @@ class Image extends Admin
 		}
 
 		$field = 'goods_image.id,goods_image.goods_id,goods_image.img,goods.title';
-		$count = \App\Model\GoodsImage::getGoodsImageMoreCount( $condition, '', 'goods_image.id' );
-		$list  = \App\Model\GoodsImage::getGoodsImageMoreList( $condition, '', $field, 'goods_image.goods_id', $this->getPageLimit(), 'goods_image.id' );;
+		$count = \App\Model\GoodsImage::init()->getGoodsImageMoreCount( $condition, '', 'goods_image.id' );
+		$list  = \App\Model\GoodsImage::init()->getGoodsImageMoreList( $condition, '', $field, 'goods_image.goods_id', $this->getPageLimit(), 'goods_image.id' );;
 
 		return $this->send( Code::success, [
 			'total_number' => $count,

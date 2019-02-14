@@ -13,9 +13,6 @@
 
 namespace App\Model;
 
-
-
-
 class Statistics extends Model
 {
 	protected $softDelete = true;
@@ -30,7 +27,7 @@ class Statistics extends Model
 
 	public function editStatistics( $condition = [], $data = [] )
 	{
-		return $this->where($condition)->edit($data);
+		return $this->where( $condition )->edit( $data );
 	}
 
 	public function delStatistics( $condition = [] )
@@ -49,7 +46,7 @@ class Statistics extends Model
 		return $info;
 	}
 
-	public function getStatisticsList( $condition = [], $field = '*',  $order = 'id desc', $page = [1,10] )
+	public function getStatisticsList( $condition = [], $field = '*', $order = 'id desc', $page = [1, 10] )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $list;

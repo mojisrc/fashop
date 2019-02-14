@@ -36,7 +36,7 @@ class Goods extends Admin
 		$param         = !empty( $this->post ) ? $this->post : $this->get;
 		$param['page'] = $this->getPageLimit();
 		$goodsLogic    = new \App\Logic\GoodsSearch( $param );
-		return $this->send( Code::success, [
+		$this->send( Code::success, [
 			'total_number' => $goodsLogic->count(),
 			'list'         => $goodsLogic->list(),
 		] );
@@ -173,31 +173,31 @@ class Goods extends Admin
 	}
 
 
-    /**
-     * 根据商品id获得商品sku列表
-     * @method GET
-     * @param int    goods_id 商品id
-     */
-    public function skuList()
-    {
+	/**
+	 * 根据商品id获得商品sku列表
+	 * @method GET
+	 * @param int    goods_id 商品id
+	 */
+	public function skuList()
+	{
 
-        $get   = $this->get;
-        $error = $this->validator($get, 'Admin/Goods.skuList');
-        if ($error !== true) {
-            return $this->send(Code::error, [], $error);
-        } else {
-            $condition             = [];
-            $condition['goods_id'] = $get['goods_id'];
-            $goods_sku_count       = \App\Model\GoodsSku::getGoodsSkuCount($condition);
-            $goods_sku_list        = \App\Model\GoodsSku::getGoodsSkuList($condition, '*', 'id desc', [1,100]);
+		$get   = $this->get;
+		$error = $this->validator( $get, 'Admin/Goods.skuList' );
+		if( $error !== true ){
+			return $this->send( Code::error, [], $error );
+		} else{
+			$condition             = [];
+			$condition['goods_id'] = $get['goods_id'];
+			$goods_sku_count       = \App\Model\GoodsSku::getGoodsSkuCount( $condition );
+			$goods_sku_list        = \App\Model\GoodsSku::getGoodsSkuList( $condition, '*', 'id desc', [1, 100] );
 
-            return $this->send(Code::success, [
-                'total_number' => $goods_sku_count,
-                'list'         => $goods_sku_list,
-            ]);
+			return $this->send( Code::success, [
+				'total_number' => $goods_sku_count,
+				'list'         => $goods_sku_list,
+			] );
 
-        }
-    }
+		}
+	}
 
 }
 

@@ -29,8 +29,8 @@ class Goodsspec extends Admin
 	 */
 	public function list()
 	{
-		$_list      = \App\Model\GoodsSpec::getGoodsSpecList( [], 'id,name', 'id asc', [1,1000] );
-		$value_list = \App\Model\GoodsSpecValue::getGoodsSpecValueList( [], 'id,name,spec_id', 'spec_id asc', '1,100000' );
+		$_list      = \App\Model\GoodsSpec::init()->getGoodsSpecList( [], 'id,name', 'id asc', [1, 1000] );
+		$value_list = \App\Model\GoodsSpecValue::init()->getGoodsSpecValueList( [], 'id,name,spec_id', 'spec_id asc', '1,100000' );
 		foreach( $_list as $key => $item ){
 			$list[$item['id']]           = $item;
 			$list[$item['id']]['values'] = [];
@@ -53,7 +53,7 @@ class Goodsspec extends Admin
 		if( $this->validator( $this->post, 'Admin/GoodsSpec.add' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			$result = \App\Model\GoodsSpec::addGoodsSpec( $this->post );
+			$result = \App\Model\GoodsSpec::init()->addGoodsSpec( $this->post );
 			if( $result ){
 				$this->send( Code::success );
 			} else{
@@ -75,7 +75,7 @@ class Goodsspec extends Admin
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$condition['id'] = $this->post['id'];
-			$result          = \App\Model\GoodsSpec::editGoodsSpec( ['id' => $this->post['id']], $this->post );
+			$result          = \App\Model\GoodsSpec::init()->editGoodsSpec( ['id' => $this->post['id']], $this->post );
 			if( $result ){
 				$this->send( Code::success );
 			} else{
@@ -96,7 +96,7 @@ class Goodsspec extends Admin
 		} else{
 			$condition       = [];
 			$condition['id'] = $this->post['id'];
-			$row             = \App\Model\GoodsSpec::getGoodsSpecInfo( $condition, '*' );
+			$row             = \App\Model\GoodsSpec::init()->getGoodsSpecInfo( $condition, '*' );
 			if( !$row ){
 				$this->send( Code::param_error );
 			}
