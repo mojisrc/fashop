@@ -271,7 +271,7 @@ class Binding
                 if($open_data['state'] == 1){
                     throw new \App\Utils\Exception( "user account exist", Code::user_account_exist );
                 }else{
-                    $open_id = $user_open_model->getUserOpenValue(['id'=>['neq',$open_data['id']],'user_id'=>$open_data['user_id']], '', 'id');
+                    $open_id = $user_open_model->getUserOpenValue(['id'=>['!=',$open_data['id']],'user_id'=>$open_data['user_id']], '', 'id');
                     if($open_id){
                         throw new \App\Utils\Exception( "user account exist", Code::user_account_exist );
                     }

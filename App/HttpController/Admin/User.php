@@ -187,7 +187,7 @@ class User extends Admin
 		} else{
 
 			$condition['user_id']  = ['in', \App\Model\User::getUserAllIds($this->get['id'])];
-			$count                 = \App\Model\Order::where( $condition )->count();
+			$count                 = \App\Model\Order::init()->where( $condition )->count();
 			$order_list            = \App\Model\Order::getOrderList( $condition, '', "*", "id desc", $this->getPageLimit(), [
 				'order_goods',
 				'order_extend',
@@ -211,7 +211,7 @@ class User extends Admin
 			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
 			$condition['user_id'] = ['in', \App\Model\User::getUserAllIds($this->get['id'])];
-			$count                = \App\Model\Address::where( $condition )->count();
+			$count                = \App\Model\Address::init()->where( $condition )->count();
 			$list                 = \App\Model\Address::getAddressList( $condition, '*', 'id desc', $this->getPageLimit() );
 			$this->send( Code::success, [
 				'total_number' => $count,

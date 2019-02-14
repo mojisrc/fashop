@@ -57,7 +57,7 @@ class Message extends Admin {
 			}
 		}
 
-		$count      = \App\Model\Message::where($condition)->count();
+		$count      = \App\Model\Message::init()->where($condition)->count();
 		$page_class = new Message($count, 10);
 		$page       = $this->getMessageLimit()
 ;
@@ -82,7 +82,7 @@ class Message extends Admin {
 			if ($post['type_id'] > 1 && !$post['relation_model_id']) {
 				return $this->send('该消息类型，必须关联数据');
 			} else {
-				$relation_model = \App\Model\MessageType::where(['id' => $post['type_id']])->value('model');
+				$relation_model = \App\Model\MessageType::init()->where(['id' => $post['type_id']])->value('model');
 				if (!$relation_model) {
 					return $this->send('请填写关联表名');
 				}
@@ -202,7 +202,7 @@ class Message extends Admin {
 			// 文章
 			$model              = model('Info');
 			$condition['title'] = ['like', '%' . $get['keywords'] . '%'];
-			$count         = \App\Model\Message::where($condition)->count();
+			$count         = \App\Model\Message::init()->where($condition)->count();
 			$list               = \App\Model\Message::getInfoList($condition, 'id,title,`desc` as description', 'id desc', $this->getMessageLimit());
 
 			break;

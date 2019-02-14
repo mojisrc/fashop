@@ -438,7 +438,7 @@ class Order extends Logic
 
 			//修改整团订单拼团状态为拼团成功 刨除自身(上步已更改)
 			if( isset( $group_state ) && $group_state == 3 ){
-				$order_update_result = \App\Model\Order::init()->editOrder( ['group_sign' => $order_info['group_sign'], 'id' => ['neq', $order_info['id']]], ['group_state' => $group_state] );
+				$order_update_result = \App\Model\Order::init()->editOrder( ['group_sign' => $order_info['group_sign'], 'id' => ['!=', $order_info['id']]], ['group_state' => $group_state] );
 				if( !$order_update_result ){
 					$order_model->rollback();
 					throw new \Exception( '更新整团拼团状态失败' );

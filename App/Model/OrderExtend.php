@@ -22,21 +22,15 @@ class OrderExtend extends Model
 	/**
 	 * 列表
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $field
 	 * @param   $order
 	 * @param   $page
 	 * @param   $group
 	 * @return
 	 */
-	public function getOrderExtendList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1, 20], $group = '' )
+	public function getOrderExtendList( $condition = [],  $field = '*', $order = 'id desc', $page = [1, 20])
 	{
-		if( $page ){
-			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
-
-		} else{
-			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
-		}
+		$data = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $data;
 	}
 

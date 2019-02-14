@@ -23,7 +23,7 @@ class Orderrefundreason extends Admin
 			$condition['type'] = $get['type']; //1未收到货 1已收到货
 
 		//分页
-		$count = \App\Model\OrderRefundReason::where( $condition )->count();
+		$count = \App\Model\OrderRefundReason::init()->where( $condition )->count();
 		$field = '*';
 		$order = 'id desc';
 		$list  = \App\Model\OrderRefundReason::getOrderRefundReasonList( $condition, $field, $order, $this->getPageLimit() );

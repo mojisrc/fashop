@@ -124,7 +124,7 @@ class Voucher extends Server {
 			}
 		}
 
-		$count      = \App\Model\Page::where($condition)->count();
+		$count      = \App\Model\Page::init()->where($condition)->count();
 		$page_class = new Page($count, $get['rows'] ? $get['rows'] : config('db_setting.api_default_rows'));
 		$list       = \App\Model\Page::getVoucherList($condition, '*', 'state asc ,id desc', $page_class->currentPage . ',' . $page_class->listRows);
 		return $this->faJson(['page_data' => $page_class->httpShow(), 'list' => $list], 0);

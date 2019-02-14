@@ -56,8 +56,8 @@ class Orderrefund extends Admin
 		if( $this->validator( $this->get, 'Admin/OrderRefund.info' ) !== true ){
 			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
-			$row               = \App\Model\OrderRefund::getOrderRefundInfo( ['id' => $this->get['id']] );
-			$row['state_desc'] = \App\Model\OrderRefund::getOrderRefundDesc( $row );
+			$row               = \App\Model\OrderRefund::init()->getOrderRefundInfo( ['id' => $this->get['id']] );
+			$row['state_desc'] = \App\Model\OrderRefund::init()->getOrderRefundDesc( $row );
 			$this->send( Code::success, ['info' => $row] );
 		}
 	}
@@ -80,7 +80,7 @@ class Orderrefund extends Admin
 				$this->send( Code::param_error, [], '未知handle_state' );
 			} else{
 				// 判断是否已经处理
-				$refund = \App\Model\OrderRefund::getOrderRefundInfo( ['id' => $this->post['id']] );
+				$refund = \App\Model\OrderRefund::init()->getOrderRefundInfo( ['id' => $this->post['id']] );
 				if( !$refund ){
 					return $this->send( Code::param_error, [], "查询退款信息失败" );
 				} else{
@@ -110,27 +110,29 @@ class Orderrefund extends Admin
 		if( $this->validator( $this->post, 'Admin/OrderRefund.receive' ) !== true ){
 			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
+			// todo 孙泉 condition 废弃了吗？
 			$condition                = [];
 			$condition['id']          = $this->post['id'];
 			$condition['refund_type'] = 2;
-			$condition['tracking_no'] = ['neq', null];
+			$condition['tracking_no'] = ['!=', null];
 			$condition['receive']     = 1;
-			$refund                   = \App\Model\OrderRefund::getOrderRefundInfo( ['id' => $this->post['id']] );
+			$orderRefundInfoObj       = new \App\Model\OrderRefund;
+			$refund                   = $orderRefundInfoObj->getOrderRefundInfo( ['id' => $this->post['id']] );
 			if( !$refund ){
 				return $this->send( Code::error, [], "未查询到可收货的退款记录" );
 			} else{
-				\App\Model\OrderRefund::startTransaction();
-				$result = \App\Model\OrderRefund::editOrderRefund( ['id' => $refund['id']], [
+				$orderRefundInfoObj->startTransaction();
+				$result = \App\Model\OrderRefund::init()->editOrderRefund( ['id' => $refund['id']], [
 					'receive'      => 2,
 					'receive_time' => time(),
 				] );
 
 				if( !$result ){
-					\App\Model\OrderRefund::rollback();
+					$orderRefundInfoObj->rollback();
 					return $this->send( Code::error );
 				}
 
-				\App\Model\OrderRefund::commit();
+				$orderRefundInfoObj->commit();
 				$this->send( Code::success );
 			}
 		}
@@ -143,21 +145,22 @@ class Orderrefund extends Admin
 	 */
 	private function predepositRefund( array $data )
 	{
-		\App\Model\OrderRefund::startTransaction();
+		$orderRefundModel = new \App\Model\OrderRefund;
+		$orderRefundModel->startTransaction();
 
-		$order_goods_res = \App\Model\OrderGoods::editOrderGoods( ['id' => $data['order_goods_id']], ['refund_handle_state' => 30] );
+		$order_goods_res = \App\Model\OrderGoods::init()->editOrderGoods( ['id' => $data['order_goods_id']], ['refund_handle_state' => 30] );
 		if( !$order_goods_res ){
-			\App\Model\OrderRefund::rollback();
+			$orderRefundModel->rollback();
 			return $this->send( Code::error, [], '退款失败' );
 		}
 
 
-		$res = \App\Model\OrderRefund::editOrderRefund( ['id' => $data['id']], [
+		$res = \App\Model\OrderRefund::init()->editOrderRefund( ['id' => $data['id']], [
 			'handle_state' => 30,
 			'success_time' => time(),
 		] );
 		if( !$res ){
-			\App\Model\OrderRefund::rollback();
+			$orderRefundModel->rollback();
 			return $this->send( Code::error, [], '退款失败' );
 		}
 
@@ -169,12 +172,12 @@ class Orderrefund extends Admin
 		$log_data['pd_sn']     = $data['refund_sn'];
 		$log_data['pd_id']     = $data['id'];
 		$log_data['username']  = $data['user_name'];
-		$pd_log_res            = \App\Model\PdLog::changePd( 'refund', $log_data );
+		$pd_log_res            = \App\Model\PdLog::init()->changePd( 'refund', $log_data );
 		if( !$pd_log_res ){
-			\App\Model\OrderRefund::rollback();
+			$orderRefundModel->rollback();
 			return $this->send( Code::error, [], '退款失败' );
 		} else{
-			\App\Model\OrderRefund::commit();
+			$orderRefundModel->commit();
 			$this->send( Code::success );
 		}
 	}
@@ -192,7 +195,7 @@ class Orderrefund extends Admin
 			$condition['id']           = $this->post['id'];
 			$condition['handle_state'] = 20;
 			$condition['is_close']     = 0;
-			$refund                    = \App\Model\OrderRefund::getOrderRefundInfo( $condition );
+			$refund                    = \App\Model\OrderRefund::init()->getOrderRefundInfo( $condition );
 			if( !$refund ){
 				return $this->send( Code::param_error, [], "查询退款信息失败" );
 			} else{

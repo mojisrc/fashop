@@ -89,7 +89,7 @@ class Goodsevaluate extends Server
                 $condition                            = [];
                 $condition['goods_evaluateorder_goods_id'] = intval( $get['order_goods_id'] );
                 $condition['goods_evaluateuser_id']        = ['in', \App\Model\User::init()->getUserAllIds($user['id'])];
-                $data = \App\Model\GoodsEvaluate::join( 'order', 'goods_evaluateorder_id = order.id', 'LEFT' )->join( 'order_goods goods', 'goods_evaluateorder_goods_id = goods.id' )->join( 'user', 'goods_evaluateuser_id = user.id', 'LEFT' )->join( 'user_profile', 'user_profile.user_id = user.id', 'LEFT' )->where( $condition )->field( 'goods_evaluate*,goods.goods_spec,user.phone,user_profile.nickname,user_profile.avatar' )->find();
+                $data = \App\Model\GoodsEvaluate::init()->join( 'order', 'goods_evaluateorder_id = order.id', 'LEFT' )->join( 'order_goods goods', 'goods_evaluateorder_goods_id = goods.id' )->join( 'user', 'goods_evaluateuser_id = user.id', 'LEFT' )->join( 'user_profile', 'user_profile.user_id = user.id', 'LEFT' )->where( $condition )->field( 'goods_evaluate*,goods.goods_spec,user.phone,user_profile.nickname,user_profile.avatar' )->find();
 
                 $this->send( Code::success, ['info' => $data] );
 

@@ -162,7 +162,7 @@ class Shipper extends Admin
 			$condition['id'] = $this->post['id'];
 			\App\Model\Shipper::editShipper( [
 				'id' => [
-					'neq',
+					'!=',
 					$this->post['id'],
 				],
 			], ['is_default' => 0] );
@@ -187,7 +187,7 @@ class Shipper extends Admin
 			$condition['id'] = $this->post['id'];
 			\App\Model\Shipper::editShipper( [
 				'id' => [
-					'neq',
+					'!=',
 					$this->post['id'],
 				],
 			], ['refund_default' => 0] );

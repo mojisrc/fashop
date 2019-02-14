@@ -19,7 +19,7 @@ class Useradvicetype extends Admin
 	public function index()
 	{
 		$condition              = [];
-		$count = \App\Model\UserAdviceType::where( $condition )->count();
+		$count = \App\Model\UserAdviceType::init()->where( $condition )->count();
 		$field = '*';
 		$order = 'id asc';
 		$list  = \App\Model\UserAdviceType::getUserAdviceTypeList( $condition, $field, $order, $order, $this->getPageLimit() );

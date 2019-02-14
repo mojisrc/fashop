@@ -104,7 +104,7 @@ class Orderrefund extends Server
                 $condition['id'] = ['in', $this->get['ids']];
             }
 
-			$count       = \App\Model\OrderRefund::where( $condition )->count();
+			$count       = \App\Model\OrderRefund::init()->where( $condition )->count();
 			$refund_list = \App\Model\OrderRefund::getOrderRefundList( $condition, '*', 'id desc', $this->getPageLimit() );
 			$this->send( Code::success, [
 				'list'         => $refund_list ? $refund_list : [],
@@ -248,7 +248,7 @@ class Orderrefund extends Server
 						\App\Model\OrderRefund::rollback();
 						return $this->send( Code::error );
 					}
-					$have_lock = \App\Model\OrderRefund::where( [
+					$have_lock = \App\Model\OrderRefund::init()->where( [
 						'order_id'   => $order_id,
 						'order_lock' => 2,
 						'is_close'   => 0,

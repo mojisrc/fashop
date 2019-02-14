@@ -1,5 +1,23 @@
 # FaShop
 长期维护版本，欢迎大家踊跃提交贡献代码；
+## 安装
+```bash
+# 安装swoole
+docker-compose up --d swoole
+
+# 进入docke容器内部执行命令
+docker-compose exec swoole bash
+
+composer install
+
+php vendor/bin/easyswoole install
+
+php easyswoole start
+```
+## 访问
+http://127.0.0.1:9511
+> 如果想修改端口号请配置dev.php 和 docker-compose.yml
+
 ## 参与开发
 更多项目请关注：[https://www.fashop.cn](https://www.fashop.cn)
 

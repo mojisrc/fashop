@@ -70,7 +70,7 @@ class Voucher extends Model
 	{
 		$result = $this->insertGetId( $data );
 		if( $result ){
-			$result = VoucherTemplate::where( ['id' => $data['template_id']] )->setInc( 'giveout' );
+			$result = VoucherTemplate::init()->where( ['id' => $data['template_id']] )->setInc( 'giveout' );
 		}
 		return $result;
 	}
@@ -80,7 +80,7 @@ class Voucher extends Model
 	 */
 	public function checkExpired()
 	{
-		return $this->where( ['end_date' => ['<', time()], 'state' => ['neq', 2]] )->edit( ['state' => 3] );
+		return $this->where( ['end_date' => ['<', time()], 'state' => ['!=', 2]] )->edit( ['state' => 3] );
 	}
 
 	/**

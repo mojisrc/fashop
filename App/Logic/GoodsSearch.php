@@ -286,7 +286,7 @@ class GoodsSearch
 
 		// 分类
 		if( !empty( $this->categoryIds ) && is_array( $this->categoryIds ) ){
-			$goods_ids = \App\Model\GoodsCategoryIds::where( ['category_id' => ['in', $this->categoryIds]] )->column( 'goods_id' );
+			$goods_ids = \App\Model\GoodsCategoryIds::init()->where( ['category_id' => ['in', $this->categoryIds]] )->column( 'goods_id' );
 			if( $goods_ids ){
 				if( $this->ids ){
 					$this->condition['id'] = ['in', array_values( array_unique( array_merge( $this->ids, array_unique( $goods_ids ) ) ) )];

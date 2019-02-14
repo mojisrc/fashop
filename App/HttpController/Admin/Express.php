@@ -39,7 +39,7 @@ class Express extends Admin
 			$express_id = \App\Model\Express::init()->addExpress( $post );
 			if( $express_id ){
 				if( $this->post['is_commonly_use'] === 1 ){
-					\App\Model\Express::init()->editExpress( ['id' => ['neq', $express_id]], ['is_commonly_use' => 0] );
+					\App\Model\Express::init()->editExpress( ['id' => ['!=', $express_id]], ['is_commonly_use' => 0] );
 				}
 				return $this->send( Code::success );
 			} else{
@@ -63,7 +63,7 @@ class Express extends Admin
 		} else{
 			\App\Model\Express::init()->editExpress( ['id' => $this->post['id']], $this->post );
 			if( $this->post['is_commonly_use'] === 1 ){
-				\App\Model\Express::init()->editExpress( ['id' => ['neq', $this->post['id']]], ['is_commonly_use' => 0] );
+				\App\Model\Express::init()->editExpress( ['id' => ['!=', $this->post['id']]], ['is_commonly_use' => 0] );
 			} else{
 				$this->send( Code::success, [], '修改成功' );
 			}
@@ -86,7 +86,7 @@ class Express extends Admin
 			} else{
 				$result = \App\Model\Express::init()->editExpress( ['id' => $this->post['id']], ['is_commonly_use' => 1] );
 				if( $result ){
-					\App\Model\Express::init()->editExpress( ['id' => ['neq', $this->post['id']]], ['is_commonly_use' => 0] );
+					\App\Model\Express::init()->editExpress( ['id' => ['!=', $this->post['id']]], ['is_commonly_use' => 0] );
 					$this->send( Code::success );
 				} else{
 					$this->send( Code::error );

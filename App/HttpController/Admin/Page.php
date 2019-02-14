@@ -173,7 +173,7 @@ class Page extends Admin
 		if( $this->validator( $this->post, 'Admin/Page.setPortal' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			$module = \App\Model\Page::where( ['id' => $this->post['id']] )->value( 'module' );
+			$module = \App\Model\Page::init()->where( ['id' => $this->post['id']] )->value( 'module' );
 			\App\Model\Page::init()->editPage( ['module' => $module], ['is_portal' => 0] );
 			\App\Model\Page::init()->editPage( ['id' => $this->post['id']], ['is_portal' => 1] );
 			$this->send( Code::success );

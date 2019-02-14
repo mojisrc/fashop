@@ -104,7 +104,7 @@ class Goodsspec extends Admin
 			// if($row['is_system'] == 1){
 			//     return $this->send( Code::param_error, [], '系统数据，不可删除' );
 			// }
-			$result = \App\Model\GoodsSpec::where( $condition )->del();
+			$result = \App\Model\GoodsSpec::init()->where( $condition )->del();
 			if( !$result ){
 				$this->send( Code::error );
 			} else{

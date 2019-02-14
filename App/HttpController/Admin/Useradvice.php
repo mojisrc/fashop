@@ -22,7 +22,7 @@ class Useradvice extends Admin
 	//     $get = $this->get;
 	//     if($get['advice_type_id']) $condition['advice_type_id'] = $get['advice_type_id'];
 	//     //分页
-	//     $count      = \App\Model\UserAdvice::where($condition)->count();
+	//     $count      = \App\Model\UserAdvice::init()->where($condition)->count();
 	//     $Page        = new \App\extend\Page($count,$get['rows'] ? $get['rows'] : 20);
 	//     $this->page     = $Page->show();
 	//     $page       = $Page->currentPage.','.$Page->listRows;

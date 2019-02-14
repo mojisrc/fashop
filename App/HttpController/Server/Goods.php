@@ -60,7 +60,7 @@ class Goods extends Server
 				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				$goods_info         = \App\Model\Goods::init()->getGoodsInfo( ['id' => $this->get['id']] );
-				$goods_info['skus'] = \App\Model\GoodsSku::init()->getGoodsSkuList( ['goods_id' => $this->get['id']], '*', 'id desc', [1,10000] );
+				$goods_info['skus'] = \App\Model\GoodsSku::init()->getGoodsSkuList( ['goods_id' => $this->get['id']], '*', 'id desc', [1, 10000] );
 				$this->send( Code::success, ['info' => $goods_info] );
 			}
 		} else{
@@ -74,11 +74,11 @@ class Goods extends Server
 		if( $this->validator( $this->get, 'Goods.sku' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			$goods_info = \App\Model\Goods::join( 'goods_sku', 'goods.id = goods_sku.goods_id', 'LEFT' )->where( [
+			$goods_info = \App\Model\Goods::init()->join( 'goods_sku', 'goods.id = goods_sku.goods_id', 'LEFT' )->where( [
 				'goods_sku.id' => $this->get['goods_sku_id'],
 			] )->field( 'goods.*,goods_sku.id as goods_sku_id' )->find();
 
-			$goods_info['skus'] = \App\Model\GoodsSku::init()->getGoodsSkuList( ['goods_id' => $goods_info['id']], '*', 'id desc', [1,10000] );
+			$goods_info['skus'] = \App\Model\GoodsSku::init()->getGoodsSkuList( ['goods_id' => $goods_info['id']], '*', 'id desc', [1, 10000] );
 			$this->send( Code::success, ['info' => $goods_info] );
 		}
 	}
@@ -103,7 +103,7 @@ class Goods extends Server
 
 		// 获得浏览商品的id数组
 		if( $user['id'] ){
-			$goods_ids = \App\Model\Visit::where( [
+			$goods_ids = \App\Model\Visit::init()->where( [
 				'user_id' => $user['id'],
 				'model'   => 'goods',
 			] )->value( 'model_relation_id' );
@@ -170,57 +170,21 @@ class Goods extends Server
 				}
 			}
 			if( isset( $param['has_image'] ) ){
-				$condition['goods_evaluate.images'] = ['neq', 'null'];
+				$condition['goods_evaluate.images'] = ['!=', 'null'];
 			}
 
 			if( isset( $this->get['ids'] ) && is_array( $this->get['ids'] ) ){
 				$condition['goods_evaluate.id'] = ['in', $this->get['ids']];
 			}
 
-			$count = \App\Model\GoodsEvaluate::join( 'order order', 'goods_evaluate.order_id = order.id', 'LEFT' )->group( 'goods_evaluate.id' )->where( $condition )->count();
-			$list  = \App\Model\GoodsEvaluate::join( 'order order', 'goods_evaluate.order_id = order.id', 'LEFT' )->join( 'order_goods goods', 'goods_evaluate.order_goods_id = goods.id' )->join( 'user user', 'goods_evaluate.user_id = user.id', 'LEFT' )->join( 'user_profile user_profile', 'user.id = user_profile.user_id', 'LEFT' )->where( $condition )->field( 'goods_evaluate.id,score,goods_evaluate.goods_img,goods_evaluate.content,goods_evaluate.create_time,goods_evaluate.images,additional_content,additional_images,additional_time,reply_content,reply_content2,display,top,goods.goods_spec,user.phone,user_profile.nickname,user_profile.avatar' )->order( 'goods_evaluate.id desc' )->page( $this->getPageLimit() )->group( 'goods_evaluate.id' )->select();
+			$count = \App\Model\GoodsEvaluate::init()->join( 'order', 'goods_evaluate.order_id = order.id', 'LEFT' )->group( 'goods_evaluate.id' )->where( $condition )->count();
+			$list  = \App\Model\GoodsEvaluate::init()->join( 'order', 'goods_evaluate.order_id = order.id', 'LEFT' )->join( 'order_goods goods', 'goods_evaluate.order_goods_id = goods.id' )->join( 'user user', 'goods_evaluate.user_id = user.id', 'LEFT' )->join( 'user_profile user_profile', 'user.id = user_profile.user_id', 'LEFT' )->where( $condition )->field( 'goods_evaluate.id,score,goods_evaluate.goods_img,goods_evaluate.content,goods_evaluate.create_time,goods_evaluate.images,additional_content,additional_images,additional_time,reply_content,reply_content2,display,top,goods.goods_spec,user.phone,user_profile.nickname,user_profile.avatar' )->order( 'goods_evaluate.id desc' )->page( $this->getPageLimit() )->group( 'goods_evaluate.id' )->select();
 			$this->send( Code::success, [
 				'total_number' => $count,
 				'list'         => $list,
 			] );
 		}
 
-	}
-
-	public function test(){
-		$goodsModel = new \App\Model\Goods;
-		$goodsModel->startTransaction();
-		try{
-			$id = $goodsModel->addGoods( [
-				'title'=>'test startTransaction'
-			] );
-//			var_dump("goods id : {$id}");
-			$image_id = \App\Model\GoodsImage::init()->addGoodsImage([
-				'goods_id'=>1
-			]);
-			var_dump($image_id);
-//			\App\Logic\GoodsSku::make( [
-//				'goods_id'    => 1,
-//				'goods_title' => 'test startTransaction ',
-//				'skus'        => [],
-//			] )->add();
-//			\App\Logic\GoodsImage::make( ['goods_id' => 1, 'images' =>[]] )->add();
-//
-//			$addCategoryIds = [];
-//
-//			\App\Model\GoodsCategoryIds::init()->addMultiGoodsCategoryIds( $addCategoryIds );
-//
-			$goodsModel->getDb()->rollback();
-
-			//			$goodsModel->commit();
-			var_dump('ok');
-			return true;
-		} catch( \Exception $e ){
-			$this->exception = $e;
-			$goodsModel->rollback();
-			var_dump('faile');
-			return false;
-		}
 	}
 
 }

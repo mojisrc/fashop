@@ -220,13 +220,13 @@ class Wechat extends Admin
 					$beginThismonth         = mktime( 0, 0, 0, date( 'm', $send_time ), 1, date( 'Y', $send_time ) );
 					$endThismonth           = mktime( 23, 59, 59, date( 'm', $send_time ), date( 't', $send_time ), date( 'Y', $send_time ) );
 					$condition['send_time'] = ['between', [$beginThismonth, $endThismonth]];
-					$total_number           = \App\Model\Material::where( $condition )->count();
+					$total_number           = \App\Model\Material::init()->where( $condition )->count();
 					$can_send_state         = $total_number >= 4 ? 0 : 1;
 				} else{
 					$beginToday = strtotime( date( 'Y-m-d ', $send_time )."00:00:00" );
 					$endToday   = strtotime( date( 'Y-m-d ', $send_time )."23:59:59" );;
 					$condition['send_time'] = ['between', [$beginToday, $endToday]];
-					$total_number           = \App\Model\Material::where( $condition )->count();
+					$total_number           = \App\Model\Material::init()->where( $condition )->count();
 					$can_send_state         = $total_number > 0 ? 0 : 1;
 				}
 				$this->send( Code::success, [
@@ -262,13 +262,13 @@ class Wechat extends Admin
 					$beginThismonth         = mktime( 0, 0, 0, date( 'm', $send_time ), 1, date( 'Y', $send_time ) );
 					$endThismonth           = mktime( 23, 59, 59, date( 'm', $send_time ), date( 't' ), date( 'Y', $send_time ) );
 					$condition['send_time'] = ['between', [$beginThismonth, $endThismonth]];
-					$total_number           = \App\Model\Material::where( $condition )->count();
+					$total_number           = \App\Model\Material::init()->where( $condition )->count();
 					$can_send_state         = $total_number >= 4 ? 0 : 1;
 				} else{
 					$beginToday = strtotime( date( 'Y-m-d ', $send_time )."00:00:00" );
 					$endToday   = strtotime( date( 'Y-m-d ', $send_time )."23:59:59" );;
 					$condition['send_time'] = ['between', [$beginToday, $endToday]];
-					$total_number           = \App\Model\Material::where( $condition )->count();
+					$total_number           = \App\Model\Material::init()->where( $condition )->count();
 					$can_send_state         = $total_number > 0 ? 0 : 1;
 				}
 
@@ -300,7 +300,7 @@ class Wechat extends Admin
 		if( isset( $this->get['send_content_type'] ) ){
 			$condition['send_content_type'] = $this->get['send_content_type'];
 		}
-		$count = \App\Model\Material::where( $condition )->count();
+		$count = \App\Model\Material::init()->where( $condition )->count();
 		$list  = \App\Model\Material::getWechatBroadcastList( $condition, '*', 'create_time desc', $this->getMaterialLimit() );
 		$this->send( Code::success, [
 			'total_number' => $count,
@@ -772,7 +772,7 @@ class Wechat extends Admin
 	public function localNews()
 	{
 		$condition['type'] = 'news';
-		$total_number      = \App\Model\Material::where( $condition )->count();
+		$total_number      = \App\Model\Material::init()->where( $condition )->count();
 		$list              = \App\Model\Material::getMaterialList( $condition, '*', 'create_time desc', $this->getMaterialLimit() );
 		$this->send( Code::success, [
 			'total_number' => $total_number,
@@ -1087,7 +1087,7 @@ class Wechat extends Admin
 		if( isset( $this->get['keywords'] ) ){
 			$condition['rule_name|keys'] = ['like', '%'.$this->get['keywords'].'%'];
 		}
-		$total_number = \App\Model\WechatAutoReply::where( $condition )->count();
+		$total_number = \App\Model\WechatAutoReply::init()->where( $condition )->count();
 		$list         = \App\Model\WechatAutoReply::getWechatAutoReplyList( $condition, '*', 'create_time desc', $this->getMaterialLimit() );
 		$this->send( Code::success, [
 			'total_number' => $total_number,

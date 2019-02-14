@@ -269,7 +269,7 @@ class Cart
 			'freight.areas as goods_freight_areas',
 		];
 		$field       = implode( ",", $field_array );
-		$info        = \App\Model\Cart::join( 'goods_sku', 'goods_sku.id = cart.goods_sku_id', "LEFT" )->join( 'goods', 'goods_sku.goods_id = goods.id', "LEFT" )->join( 'freight', 'goods.freight_id = freight.id', "LEFT" )->field( $field )->where( $condition )->find();
+		$info        = \App\Model\Cart::init()->join( 'goods_sku', 'goods_sku.id = cart.goods_sku_id', "LEFT" )->join( 'goods', 'goods_sku.goods_id = goods.id', "LEFT" )->join( 'freight', 'goods.freight_id = freight.id', "LEFT" )->field( $field )->where( $condition )->find();
 
 
 		return $info;

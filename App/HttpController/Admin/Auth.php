@@ -226,7 +226,7 @@ class Auth extends Admin
 			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$model        = model( 'AuthRule' );
-			$exsist_child = \App\Model\Page::where( ['pid' => $this->post['id']] )->column( 'id' );
+			$exsist_child = \App\Model\Page::init()->where( ['pid' => $this->post['id']] )->column( 'id' );
 			if( $exsist_child )
 				return $this->send( Code::error, [], '存在子项不可删除' );
 			if( \App\Model\Page::delAuthRule( ['id' => $this->post['id'], 'is_system' => 0] ) ){

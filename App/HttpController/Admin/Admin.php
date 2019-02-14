@@ -58,6 +58,7 @@ abstract class Admin extends AccessTokenAbstract
 
 	protected function onException( \Throwable $throwable ) : void
 	{
+		var_dump($throwable->getTraceAsString());
 		var_dump( "文件：".$throwable->getFile()."第：".$throwable->getLine()."行" );
 		var_dump( "错误原因".$throwable->getMessage() );
 		$this->send( Code::server_error, [], $throwable->getTraceAsString() );

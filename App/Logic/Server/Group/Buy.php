@@ -655,7 +655,7 @@ class Buy
 			break;
 			case 'join_group':
 				$order_update_condition['group_sign'] = $group_sign;
-				$order_update_condition['id']         = ['neq', $order_id];
+				$order_update_condition['id']         = ['!=', $order_id];
 				$order_update_data['group_men_num']   = $order['group_men_num'];
 			break;
 			}

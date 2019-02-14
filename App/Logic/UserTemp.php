@@ -32,11 +32,11 @@ class UserTemp
 		$condition['order_goods.lock_state'] = 0;
 		$condition['order.user_id']         = $user_id;
 
-		$cost_price = $order_goods_db->alias( 'order_goods' )->where( $condition )->join( 'order order', 'order_goods.order_id = order.id', 'LEFT' )->sum( 'order_goods.goods_pay_price' );
+		$cost_price = $order_goods_db->alias( 'order_goods' )->where( $condition )->join( 'order', 'order_goods.order_id = order.id', 'LEFT' )->sum( 'order_goods.goods_pay_price' );
 
-		$cost_times = $order_goods_db->alias( 'order_goods' )->where( $condition )->join( 'order order', 'order_goods.order_id = order.id', 'LEFT' )->count();
+		$cost_times = $order_goods_db->alias( 'order_goods' )->where( $condition )->join( 'order', 'order_goods.order_id = order.id', 'LEFT' )->count();
 
-		$resent_cost_time = \App\Model\Order::where( ['user_id' => $user_id] )->order( 'payment_time desc' )->value( 'payment_time' );
+		$resent_cost_time = \App\Model\Order::init()->where( ['user_id' => $user_id] )->order( 'payment_time desc' )->value( 'payment_time' );
 
 		$cost_average = sprintf( "%.2f", ($cost_price / $cost_times) );
 

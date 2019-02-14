@@ -76,7 +76,7 @@ class Statistics extends Admin
 		$group = 'days';
 		$field = "sum(order_goods.goods_pay_price) as sales,date_format(FROM_UNIXTIME(order.payment_time, '%Y-%m-%d %H:%i:%S'),'%Y-%m-%d') as days";
 
-		$data = \App\Model\Order::where( $condition )->where( [
+		$data = \App\Model\Order::init()->where( $condition )->where( [
 			'order.payment_time' => ['BETWEEN', [$beginMonth, $endMonth]],
 		] )->join( 'order', 'order_goods.order_id = order.id', 'LEFT' )->field( $field )->order( 'order.payment_time asc' )->group( $group )->select();
 
@@ -118,7 +118,7 @@ class Statistics extends Admin
 		$condition['order.payment_time']     = ['BETWEEN', [$beginMonth, $endMonth]];
 		$field                               = "count(order_goods.order_id) as number,date_format(FROM_UNIXTIME(order.payment_time, '%Y-%m-%d %H:%i:%S'),'%Y-%m-%d') as days";
 		$group                               = 'days,order_goods.order_id';
-		$data                                = \App\Model\OrderGoods::where( $condition )->join( 'order', 'order_goods.order_id = order.id', 'LEFT' )->field( $field )->order( 'order.payment_time asc' )->group( $group )->select();
+		$data                                = \App\Model\OrderGoods::init()->where( $condition )->join( 'order', 'order_goods.order_id = order.id', 'LEFT' )->field( $field )->order( 'order.payment_time asc' )->group( $group )->select();
 		$list                                = [];
 		foreach( $daysSet['list'] as $k => $v ){
 			$list[$k]['day']          = date( 'j', strtotime( $v ) );
@@ -159,7 +159,7 @@ class Statistics extends Admin
 		$group                    = 'days';
 		$field                    = "count(id) as number,date_format(FROM_UNIXTIME(create_time, '%Y-%m-%d %H:%i:%S'),'%Y-%m-%d') as days";
 
-		$data = \App\Model\User::where( $condition )->field( $field )->order( 'create_time asc' )->group( $group )->select();
+		$data = \App\Model\User::init()->where( $condition )->field( $field )->order( 'create_time asc' )->group( $group )->select();
 
 		$list = [];
 		foreach( $daysSet['list'] as $k => $v ){
@@ -204,7 +204,7 @@ class Statistics extends Admin
 		$group = 'days';
 		$field = "sum(order_goods.goods_pay_price) as sales,date_format(FROM_UNIXTIME(order.payment_time, '%Y-%m-%d %H:%i:%S'),'%Y-%m-%d') as days";
 
-		$data = \App\Model\OrderGoods::where( $condition )->where( [
+		$data = \App\Model\OrderGoods::init()->where( $condition )->where( [
 			'order.payment_time' => ['BETWEEN', [$beginMonth, $endMonth]],
 		] )->where( 'user.create_time', 'between time', [
 			$beginMonth,
@@ -248,7 +248,7 @@ class Statistics extends Admin
 		$condition['order.state']            = ['>=', 20];
 		$condition['order_goods.lock_state'] = 0;
 
-		$accumulative_amount = \App\Model\OrderGoods::where( $condition )->where( [
+		$accumulative_amount = \App\Model\OrderGoods::init()->where( $condition )->where( [
 			'order.payment_time' => ['BETWEEN', [$beginMonth, $endMonth]],
 		] )->join( 'order', 'order_goods.order_id = order.id', 'LEFT' )->sum( 'order_goods.goods_pay_price' );
 
@@ -281,7 +281,7 @@ class Statistics extends Admin
 		$where                               = "date_format(FROM_UNIXTIME(order.payment_time, '%Y-%m-%d %H:%i:%S'),'%Y-%m')=".'\''.$date.'\'';
 
 		// 获取本月
-		$month_amount = \App\Model\OrderGoods::where( $condition )->where( $where )->join( 'order', 'order_goods.order_id = order.id', 'LEFT' )->sum( 'order_goods.goods_pay_price' );
+		$month_amount = \App\Model\OrderGoods::init()->where( $condition )->where( $where )->join( 'order', 'order_goods.order_id = order.id', 'LEFT' )->sum( 'order_goods.goods_pay_price' );
 
 		//认为这种写法也是对的1
 		// $beginMonth = date('Y-m-01', strtotime($date)); //月初
@@ -329,7 +329,7 @@ class Statistics extends Admin
 		$condition['state']        = 20;
 		$condition['refund_state'] = 0;
 		$condition['lock_state']   = 0;
-		$no_send_count             = \App\Model\Order::where( $condition )->count();
+		$no_send_count             = \App\Model\Order::init()->where( $condition )->count();
 		return $no_send_count;
 	}
 
@@ -342,7 +342,7 @@ class Statistics extends Admin
 		$condition['order.state']            = ['>=', 20];
 		$condition['order_goods.lock_state'] = 0;
 
-		$day_total = \App\Model\OrderGoods::where( $condition )->where( [
+		$day_total = \App\Model\OrderGoods::init()->where( $condition )->where( [
 			'order.create_time' => ['BETWEEN', Time::today()],
 		] )->join( 'order', 'order_goods.order_id = order.id', 'LEFT' )->sum( 'order_goods.goods_pay_price' );
 		return $day_total;
@@ -357,11 +357,11 @@ class Statistics extends Admin
 		$condition['order.state']            = ['>=', 20];
 		$condition['order_goods.lock_state'] = 0;
 
-		$all_cost = \App\Model\OrderGoods::where( $condition )->where( [
+		$all_cost = \App\Model\OrderGoods::init()->where( $condition )->where( [
 			'order.create_time' => ['BETWEEN', Time::today()],
 		] )->join( 'order', 'order_goods.order_id = order.id', 'LEFT' )->sum( 'order_goods.goods_pay_price' );
 
-		$all_count = \App\Model\OrderGoods::where( $condition )->where( [
+		$all_count = \App\Model\OrderGoods::init()->where( $condition )->where( [
 			'order.create_time' => ['BETWEEN', Time::today()],
 		] )->join( 'order', 'order_goods.order_id = order.id', 'LEFT' )->count();
 
@@ -379,7 +379,7 @@ class Statistics extends Admin
 		$condition['state']      = 1;//默认1 0禁止 1正常
 		$condition['is_discard'] = 0;//被丢弃 默认0否 1是[用于绑定后的失效的占位行]
 		$condition['id']         = ['>', 1];//超级管理员 临时解决后台用户问题
-		$yesterday_new_user      = \App\Model\User::where( $condition )->where( [
+		$yesterday_new_user      = \App\Model\User::init()->where( $condition )->where( [
 			'create_time' => ['BETWEEN', Time::yesterday()],
 		] )->count();
 		return $yesterday_new_user;
@@ -394,7 +394,7 @@ class Statistics extends Admin
 		$condition['state']      = 1;//默认1 0禁止 1正常
 		$condition['is_discard'] = 0;//被丢弃 默认0否 1是[用于绑定后的失效的占位行]
 		$condition['id']         = ['>', 1];//超级管理员 临时解决后台用户问题
-		$all_user                = \App\Model\User::where( $condition )->count();
+		$all_user                = \App\Model\User::init()->where( $condition )->count();
 		return $all_user;
 	}
 
@@ -403,7 +403,7 @@ class Statistics extends Admin
 	 */
 	private function allPositiveCount()
 	{
-		$positive_count = \App\Model\GoodsEvaluate::where( 'score', 5 )->count();
+		$positive_count = \App\Model\GoodsEvaluate::init()->where( 'score', 5 )->count();
 		return $positive_count;
 	}
 
@@ -412,7 +412,7 @@ class Statistics extends Admin
 	 */
 	private function yesterdayPositiveCount()
 	{
-		$yesterday_positive_count = \App\Model\GoodsEvaluate::where( [
+		$yesterday_positive_count = \App\Model\GoodsEvaluate::init()->where( [
 			'score'       => 5,
 			'create_time' => ['BETWEEN', Time::yesterday()],
 		] )->count();
@@ -424,7 +424,7 @@ class Statistics extends Admin
 	 */
 	private function yesterdayModerateCount()
 	{
-		$yesterday_moderate_count = \App\Model\GoodsEvaluate::where( [
+		$yesterday_moderate_count = \App\Model\GoodsEvaluate::init()->where( [
 			'score'       => ['IN', [3, 4]],
 			'create_time' => ['BETWEEN', Time::yesterday()],
 		] )->count();
@@ -436,7 +436,7 @@ class Statistics extends Admin
 	 */
 	private function yesterdayNegativeCount()
 	{
-		$yesterday_negative_count = \App\Model\GoodsEvaluate::where( [
+		$yesterday_negative_count = \App\Model\GoodsEvaluate::init()->where( [
 			'score'       => ['IN', [1, 2]],
 			'create_time' => ['BETWEEN', Time::yesterday()],
 		] )->count();
@@ -448,7 +448,7 @@ class Statistics extends Admin
 	 */
 	private function yesterdayAdviceCount()
 	{
-		$yesterday_advice_count = \App\Model\UserAdvice::where( [
+		$yesterday_advice_count = \App\Model\UserAdvice::init()->where( [
 			'create_time' => ['BETWEEN', Time::yesterday()],
 		] )->count();
 		return $yesterday_advice_count;

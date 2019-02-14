@@ -24,7 +24,7 @@ class Refund extends Notice
 			if( isset( $this->data->gmt_refund ) || isset($this->data->refund_fee) ){
 				// 1、商户需要验证该通知数据中的out_trade_no是否为商户系统中创建的订单号；
 				$order_model = model( 'Audition' );
-				$this->order = \App\Model\Order::where( [
+				$this->order = \App\Model\Order::init()->where( [
 					'out_trade_no' => $this->data->out_trade_no,
 					'trade_no'=>$this->data->trade_no,
 				] )->find();

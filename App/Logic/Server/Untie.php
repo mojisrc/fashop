@@ -236,7 +236,7 @@ class Untie
             }
 
             $user_phone       = \App\Model\User::getUserValue(['id' => $user_id], 'phone');
-            $other_open_info  = $user_open_model->getUserOpenInfo(['user_id' => $user_id, 'id' => ['neq', $open_info['id']]], '', '*');
+            $other_open_info  = $user_open_model->getUserOpenInfo(['user_id' => $user_id, 'id' => ['!=', $open_info['id']]], '', '*');
             if(!$user_phone && !$other_open_info){
                 throw new \App\Utils\Exception( "param error", Code::param_error );
             }

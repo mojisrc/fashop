@@ -38,7 +38,7 @@ class Voucher extends Admin {
 		if (isset($get['end_date'])) {
 			$condition['start_date'] = array('<=', strtotime($get['end_date']));
 		}
-		$count      = \App\Model\Page::where($condition)->count();
+		$count      = \App\Model\Page::init()->where($condition)->count();
 		$list       = \App\Model\Page::getVoucherList($condition, '*', 'id desc', $this->getPageLimit());
 
 		return $this->send(Code::success,[
@@ -81,7 +81,7 @@ class Voucher extends Admin {
 		if ($get['end_date']) {
 			$condition['start_date'] = array('<=', strtotime($get['end_date']));
 		}
-		$count      = \App\Model\Page::where($condition)->count();
+		$count      = \App\Model\Page::init()->where($condition)->count();
 		$list       = \App\Model\Page::getVoucherTemplateList($condition, '*', 'id desc', $this->getPageLimit());
 		return $this->send(Code::success,[
 			'total_number' => $count,
@@ -239,7 +239,7 @@ class Voucher extends Admin {
 			if ($post['user_ids'] && $template) {
 				$add_data = [];
 				foreach ($post['user_ids'] as $user_id) {
-					$nickname   = \App\Model\User::where(['id' => $user_id])->value('nickname');
+					$nickname   = \App\Model\User::init()->where(['id' => $user_id])->value('nickname');
 					$add_data[] = [
 						'code'        => \App\Model\Coupon::getCode($user_id),
 						'template_id' => $template['id'],

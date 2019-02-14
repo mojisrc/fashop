@@ -133,7 +133,7 @@ class Member extends Admin
 		$access_token_data = $this->getRequestAccessTokenData();
 		$last_info         = \App\Model\AccessToken::getAccessTokenInfo( [
 			'sub' => $access_token_data['sub'],
-			'jti' => ['neq', $access_token_data['jti']],
+			'jti' => ['!=', $access_token_data['jti']],
 		], '*', 'create_time desc' );
 
 		$data['current_login_ip'] = $this->request->ip();
@@ -238,7 +238,7 @@ class Member extends Admin
 			$group_id = \ezswoole\Db::name( 'AuthGroupAccess' )->where( ['uid' => $user['id']] )->value( 'group_id' );
 			if( $group_id > 0 ){
 				$group = \App\Model\AuthGroup::getAuthGroupInfo( ['id' => $group_id] );
-				$rules = \App\Model\AuthRule::where( ['id' => ['in', $group['rule_ids']]] )->column( 'sign' );
+				$rules = \App\Model\AuthRule::init()->where( ['id' => ['in', $group['rule_ids']]] )->column( 'sign' );
 			}
 		}
 		$rules = array_merge( $rules, \App\Logic\Admin\Auth::$noNeedAuthActionCheck );

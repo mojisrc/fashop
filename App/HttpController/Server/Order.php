@@ -257,7 +257,7 @@ class Order extends Server
 				$condition['user_id'] = ['in', \App\Model\User::init()->getUserAllIds( $user['id'] )];
 				$order_info           = \App\Model\Order::init()->getOrderInfo( $condition );
 				$extend_msg           = isset( $this->post['state_remark'] ) ? $this->post['state_remark'] : null;
-				$result               = \App\Model\Order::userChangeState( 'order_cancel', $order_info, $user['id'], $user['username'], $extend_msg );
+				$result               = \App\Model\Order::init()->userChangeState( 'order_cancel', $order_info, $user['id'], $user['username'], $extend_msg );
 				if( $result === true ){
 					$this->send( Code::success );
 				} else{

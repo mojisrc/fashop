@@ -38,9 +38,6 @@ class Order extends Model
 
 		//返回买家信息
 		if( in_array( 'user', $extend ) ){
-			$model = new \App\Model\User;
-			$model->join( 1111 )->join( xxxx )->where( ['id' => 1] )->count();
-			$model->select();
 			$order_info['extend_user'] = \App\Model\User::init()->getUserInfo( ['id' => $order_info['user_id']] );
 		}
 
@@ -57,8 +54,7 @@ class Order extends Model
 				} else{
 					$value['if_refund'] = true;
 				}
-
-				//refund_state 0不显示申请退款按钮 1显示申请退款按钮 2显示退款中按钮 3显示退款完成
+				// refund_state 0不显示申请退款按钮 1显示申请退款按钮 2显示退款中按钮 3显示退款完成
 				if( $order_info['state'] <= 10 ){
 					$refund_state = 0;
 				} else{
@@ -70,7 +66,6 @@ class Order extends Model
 						} else{
 							$refund_state = 2;
 						}
-
 					}
 				}
 
@@ -78,7 +73,6 @@ class Order extends Model
 				$order_info['extend_order_goods'][] = $value;
 			}
 		}
-
 		return $order_info;
 	}
 
@@ -87,9 +81,9 @@ class Order extends Model
 	 * @param string $field
 	 * @return array|bool
 	 */
-	public function getOrderExtendInfo( $condition = [], $field = '*' )
+	public function getOrderExtendInfo( $condition = [] )
 	{
-		$info = \App\Model\OrderExtend::where( $condition )->find();
+		$info = \App\Model\OrderExtend::init()->where( $condition )->find();
 		return $info;
 	}
 
@@ -99,7 +93,7 @@ class Order extends Model
 	 */
 	public function getOrderPayInfo( $condition = [] )
 	{
-		$info = \App\Model\OrderPay::where( $condition )->find();
+		$info = \App\Model\OrderPay::init()->where( $condition )->find();
 		return $info;
 	}
 
@@ -138,7 +132,8 @@ class Order extends Model
 
 		// 追加返回订单扩展表信息
 		if( in_array( 'order_extend', $extend ) ){
-			$order_extend_list = $this->getOrderExtendList( ['id' => ['in', array_keys( $order_list )]] );
+			$model = new OrderExtend;
+			$order_extend_list = $model->getOrderExtendList( ['id' => ['in', array_keys( $order_list )]] );
 			foreach( $order_extend_list as $value ){
 				$order_list[$value['id']]['extend_order_extend'] = $value;
 			}
@@ -154,24 +149,23 @@ class Order extends Model
 			}
 			// todo 简化
 			//->field('id') ->key
-			$user_list = \App\Model\User::where( ['id' => ['in', $user_id_array]] )->select();
+			$user_list = \App\Model\User::init()->where( ['id' => ['in', $user_id_array]] )->select();
 			$user_list = $this->array_under_reset( $user_list, 'id' );
 			foreach( $order_list as $order_id => $order ){
 				$order_list[$order_id]['extend_user'] = $user_list[$order['user_id']];
 			}
 		}
-
 		// 追加返回商品信息
 		if( in_array( 'order_goods', $extend ) ){
 			//取商品列表
-			$order_goods_list = $this->getOrderGoodsList( ['order_id' => ['in', array_keys( $order_list )]] );
-			foreach( $order_goods_list as $value ){
-				$order_list[$value['order_id']]['extend_order_goods'][] = $value;
+			$order_goods_list = $this->getOrderGoodsList( ['order_id' => ['IN', array_keys( $order_list )]] );
+			if(!empty($order_goods_list)){
+				foreach( $order_goods_list as $value ){
+					$order_list[$value['order_id']]['extend_order_goods'][] = $value;
+				}
 			}
 		}
-
 		// todo pay_info
-
 		return array_values( $order_list );
 	}
 
@@ -212,8 +206,8 @@ class Order extends Model
 	{
 		$condition['no_display']   = 0;
 		$condition['state']        = \App\Logic\Order::state_cancel;
-		$condition['refund_state'] = ['eq', 0];
-		$condition['lock_state']   = ['eq', 0];
+		$condition['refund_state'] = ['=', 0];
+		$condition['lock_state']   = ['=', 0];
 		return $this->getOrderCount( $condition );
 	}
 
@@ -225,8 +219,8 @@ class Order extends Model
 	{
 		$condition['no_display']   = 0;
 		$condition['state']        = \App\Logic\Order::state_new;
-		$condition['refund_state'] = ['eq', 0];
-		$condition['lock_state']   = ['eq', 0];
+		$condition['refund_state'] = ['=', 0];
+		$condition['lock_state']   = ['=', 0];
 		return $this->getOrderCount( $condition );
 	}
 
@@ -238,8 +232,8 @@ class Order extends Model
 	{
 		$condition['no_display'] = 0;
 		$condition['state']      = \App\Logic\Order::state_pay;
-		// $condition['refund_state'] = array('eq',0);
-		// $condition['lock_state'] = array('eq',0);
+		// $condition['refund_state'] = array('=',0);
+		// $condition['lock_state'] = array('=',0);
 		return $this->getOrderCount( $condition );
 	}
 
@@ -251,8 +245,8 @@ class Order extends Model
 	{
 		$condition['no_display'] = 0;
 		$condition['state']      = \App\Logic\Order::state_send;
-		// $condition['refund_state'] = array('eq',0);
-		// $condition['lock_state'] = array('eq',0);
+		// $condition['refund_state'] = array('=',0);
+		// $condition['lock_state'] = array('=',0);
 		return $this->getOrderCount( $condition );
 	}
 
@@ -278,8 +272,8 @@ class Order extends Model
 		$condition['state']          = \App\Logic\Order::state_success;
 		$condition['evaluate_state'] = 0;
 		$condition['finnshed_time']  = ['>', time() - \App\Logic\Order::ORDER_EVALUATE_TIME];
-		// $condition['refund_state'] = array('eq',0);
-		// $condition['lock_state'] = array('eq',0);
+		// $condition['refund_state'] = array('=',0);
+		// $condition['lock_state'] = array('=',0);
 		return $this->getOrderCount( $condition );
 	}
 
@@ -290,7 +284,7 @@ class Order extends Model
 	public function getOrderRefundCount( $condition = [] )
 	{
 		$condition['state']        = \App\Logic\Order::state_pay;
-		$condition['refund_state'] = ['neq', 0]; // 退款状态:0是无退款,1是部分退款,2是全部退款
+		$condition['refund_state'] = ['!=', 0]; // 退款状态:0是无退款,1是部分退款,2是全部退款
 		$condition['lock_state']   = ['>', 0]; // 锁定状态:0是正常,大于0是锁定,默认是0
 		return $this->getOrderCount( $condition );
 	}
@@ -322,19 +316,10 @@ class Order extends Model
 	 */
 	public function getOrderGoodsInfo( $condition = [], $fields = '*', $order = 'id asc' )
 	{
-		$data = \App\Model\OrderGoods::where( $condition )->field( $fields )->order( $order )->find();
+		$data = \App\Model\OrderGoods::init()->where( $condition )->field( $fields )->order( $order )->find();
 		return $data;
 	}
 
-	/**
-	 * 修改订单商品表详细信息
-	 * @param array $condition
-	 * @param array $update_data
-	 */
-	public function updateOrderGoodsInfo( $condition = [], $update_data )
-	{
-		return \App\Model\OrderGoods::where( $condition )->edit( $update_data );
-	}
 
 	/**
 	 * 取得订单商品表列表
@@ -345,35 +330,10 @@ class Order extends Model
 	 * @param string $group
 	 * @param string $key
 	 */
-	public function getOrderGoodsList( $condition = [], $fields = '*', $order = 'id desc', $page = [1, 1000], $group = null, $key = null )
+	public function getOrderGoodsList( $condition = [], $fields = '*', $order = 'id desc', $page = [1, 1000], $key = null )
 	{
-		$list = \App\Model\OrderGoods::field( $fields )->where( $condition )->order( $order )->group( $group )->page( $page )->select();
+		$list = \App\Model\OrderGoods::init()->field( $fields )->where( $condition )->order( $order )->page( $page )->select();
 		return $this->array_under_reset( $list, $key );
-	}
-
-	/**
-	 * 取得订单扩展表列表
-	 * @param array  $condition
-	 * @param string $fields
-	 * @param string $limit
-	 */
-	public function getOrderExtendList( $condition = [], $fields = '*', $page = [1,200] )
-	{
-		return \App\Model\OrderExtend::where( $condition )->field( $fields )->page( $page )->select();
-	}
-
-	/**
-	 * 插入订单支付表信息
-	 * @param array $data
-	 * @return int 返回 insert_id
-	 */
-	public function addOrderPay( $data )
-	{
-		$result = \App\Model\OrderPay::allowField( true )->save( $data );
-		if( $result ){
-			return \App\Model\OrderPay::getLastInsID();
-		}
-		return $result;
 	}
 
 	/**
@@ -386,34 +346,6 @@ class Order extends Model
 		return $this->add( $data );
 	}
 
-	/**
-	 * 插入订单扩展表信息
-	 * @param array $data
-	 * @return int 返回 insert_id
-	 */
-	public function addOrderExtend( $data )
-	{
-		return \App\Model\OrderExtend::insertGetId( $data );
-	}
-
-	/**
-	 * 插入订单扩展表信息
-	 * @param array $data
-	 * @return int 返回 insert_id
-	 */
-	public function addOrderGoods( $data )
-	{
-		return \App\Model\OrderGoods::addMulti( $data );
-	}
-
-	/**
-	 * 添加订单日志
-	 */
-	public function addOrderLog( $data )
-	{
-		$data['role']        = str_replace( ['buyer', 'seller', 'system'], ['买家', '商家', '系统'], $data['role'] );
-		return \App\Model\OrderLog::add( $data );
-	}
 
 	/**
 	 * 更改订单信息
@@ -424,41 +356,6 @@ class Order extends Model
 	public function editOrder( $condition, $data )
 	{
 		return $this->where( $condition )->edit( $data );
-	}
-
-	/**
-	 * 更改订单信息
-	 *
-	 * @param array $data
-	 * @param array $condition
-	 */
-	public function editOrderExtend( $condition, $data )
-	{
-		return \App\Model\OrderExtend::where( $condition )->edit( $data );
-	}
-
-	/**
-	 * 更改订单支付信息
-	 *
-	 * @param array $data
-	 * @param array $condition
-	 */
-	public function editOrderPay( $data, $condition )
-	{
-		return \App\Model\OrderPay::where( $condition )->edit( $data );
-	}
-
-
-	/**
-	 * 订单操作历史列表
-	 * @param $condition
-	 * @return array|bool
-	 * @throws \ezswoole\exception\DbException
-	 */
-	public function getOrderLogList( $condition )
-	{
-		$list = \App\Model\OrderLog::where( $condition )->select();
-		return $list;
 	}
 
 
@@ -507,12 +404,6 @@ class Order extends Model
 			$state = $order_info['state'] == \App\Logic\Order::state_new && $order_info['payment_code'] == 'online';
 		break;
 
-			//买家投诉
-		case 'complain':
-			$state = in_array( $order_info['state'], [
-					\App\Logic\Order::state_pay,
-					\App\Logic\Order::state_send,
-				] ) || intval( $order_info['finnshed_time'] ) > (time() - config( 'complain_time_limit' ));
 		break;
 
 			//调整运费
@@ -562,39 +453,6 @@ class Order extends Model
 
 	}
 
-	/**
-	 * 联查订单表订单商品表
-	 *
-	 * @param array  $condition
-	 * @param string $field
-	 * @param number $page
-	 * @param string $order
-	 * @return array
-	 */
-	public function getOrderAndOrderGoodsList( $condition, $field = '*', $page = "20", $order = 'id desc' )
-	{
-		return $this->table( 'order_goods,order' )->join( 'inner' )->on( 'order_goods.order_id=order.order_id' )->where( $condition )->field( $field )->order( $order )->page( $page );
-	}
-
-	/**
-	 * 订单销售记录 订单状态为20、30、40时
-	 * @param array  $condition
-	 * @param string $field
-	 * @param number $page
-	 * @param string $order
-	 */
-	public function getOrderAndOrderGoodsSalesRecordList( $condition, $field = "*", $page = "20", $order = 'id desc' )
-	{
-		$condition['order_state'] = [
-			'in',
-			[
-				\App\Logic\Order::state_pay,
-				\App\Logic\Order::state_send,
-				\App\Logic\Order::state_success,
-			],
-		];
-		return $this->getOrderAndOrderGoodsList( $condition, $field, $page, $order );
-	}
 
 	/**
 	 * 买家订单状态操作
@@ -629,7 +487,6 @@ class Order extends Model
 
 	/**
 	 * 取消订单操作
-	 * @datetime 2017-05-30T19:34:04+0800
 	 * @param    array  $order_info 订单信息
 	 * @param    int    $user_id
 	 * @param    string $username
@@ -641,13 +498,10 @@ class Order extends Model
 		$order_id = $order_info['id'];
 		$if_allow = $this->getOrderOperateState( 'user_cancel', $order_info );
 		if( !$if_allow ){
-			trace( '非法访问', 'userChangeStateOrderCancel' );
 			throw new \Exception( '非法访问' );
 		}
 
-		$goods_list      = $this->getOrderGoodsList( ['order_id' => $order_id] );
-		$goods_model     = model( 'Goods' );
-		$goods_sku_model = model( 'GoodsSku' );
+		$goods_list = $this->getOrderGoodsList( ['order_id' => $order_id] );
 
 		if( is_array( $goods_list ) && !empty( $goods_list ) ){
 
@@ -657,7 +511,7 @@ class Order extends Model
 
 				$data['stock']    = ['exp', 'stock+'.$goods['goods_num']];
 				$data['sale_num'] = ['exp', 'sale_num-'.$goods['goods_num']];
-				$update           = \App\Model\Goods::editGoods( ['id' => $goods['goods_id']], $data );
+				\App\Model\Goods::init()->editGoods( ['id' => $goods['goods_id']], $data );
 
 				// 主表更新
 				$common_data['stock']    = ['exp', 'stock+'.$goods['goods_num']];
@@ -671,15 +525,13 @@ class Order extends Model
 		// 解冻预存款
 		$pd_amount = floatval( $order_info['pd_amount'] );
 		if( $pd_amount > 0 ){
-			$pd_model            = model( 'PdRecharge' );
 			$pd_data             = [];
 			$pd_data['user_id']  = $user_id;
 			$pd_data['username'] = $username;
 			$pd_data['amount']   = $pd_amount;
 			$pd_data['order_sn'] = $order_info['sn'];
-			$pd_model->changePd( 'order_cancel', $pd_data );
+			\App\Model\PdRecharge::init()->changePd( 'order_cancel', $pd_data );
 		}
-		trace( '\App\Logic\Order::state_cancel', '\App\Logic\Order::state_cancel' );
 		//更新订单信息
 		$update_order = ['state' => \App\Logic\Order::state_cancel, 'pd_amount' => 0];
 		$update       = $this->editOrder( ['id' => $order_id], $update_order );
@@ -696,7 +548,7 @@ class Order extends Model
 			$data['msg'] .= ' ( '.$extend_msg.' )';
 		}
 		$data['order_state'] = \App\Logic\Order::state_cancel;
-		return $this->addOrderLog( $data );
+		return OrderLog::init()->addOrderLog( $data );
 	}
 
 	/**
@@ -708,12 +560,10 @@ class Order extends Model
 		$order_id = $order_info['id'];
 		$if_allow = $this->getOrderOperateState( 'receive', $order_info );
 		if( !$if_allow ){
-			trace( '非法访问', 'userChangeStateOrderReceive' );
 			throw new \Exception( '非法访问' );
 		}
 
 		//更新订单状态
-		$update_order                  = [];
 		$update_order['finnshed_time'] = time();
 		$update_order['state']         = \App\Logic\Order::state_success;
 		$update                        = $this->editOrder( ['id' => $order_id], $update_order );
@@ -730,19 +580,17 @@ class Order extends Model
 			$data['msg'] .= ' ( '.$extend_msg.' )';
 		}
 		$data['order_state'] = \App\Logic\Order::state_success;
-		$order_log_id        = $this->addOrderLog( $data );
+		$order_log_id        = OrderLog::init()->addOrderLog( $data );
 		if( !$order_log_id ){
 			throw new \Exception( '日志保存失败' );
 		}
 
-		$refund_model      = model( 'OrderRefund' );
-		$order_goods_model = model( 'OrderGoods' );
 
-		$refund = \App\Model\OrderRefund::getOrderRefundInfo( ['order_id' => $order_id, 'is_close' => 0] );
+		$refund = \App\Model\OrderRefund::init()->getOrderRefundInfo( ['order_id' => $order_id, 'is_close' => 0] );
 
 		//查询收货订单是否存在退款记录 存在则关闭
 		if( $refund ){
-			$refund_res = \App\Model\OrderRefund::editOrderRefund( ['order_id' => $order_id], [
+			$refund_res = \App\Model\OrderRefund::init()->editOrderRefund( ['order_id' => $order_id], [
 				'handle_time'    => time(),
 				'handle_message' => '因您确认收货，本次申请关闭',
 				'is_close'       => 1,   //此退款关闭
@@ -754,7 +602,7 @@ class Order extends Model
 			}
 
 			// 更改订单状态 解锁 子订单解锁
-			$order_goods_res = \App\Model\OrderGoods::editOrderGoods( [
+			$order_goods_res = \App\Model\OrderGoods::init()->editOrderGoods( [
 				'lock_state' => 1,
 				'order_id'   => $order_id,
 			], [
@@ -787,7 +635,7 @@ class Order extends Model
 	 * @param array $condition
 	 * @param array $update_data
 	 */
-	public function getOrderField( $condition = [], $field )
+	public function getOrderField( $condition , $field )
 	{
 		return $this->where( $condition )->value( $field );
 	}
@@ -797,7 +645,7 @@ class Order extends Model
 	 * @param array $condition
 	 * @param array $update_data
 	 */
-	public function getOrderValue( $condition = [], $field )
+	public function getOrderValue( $condition , $field )
 	{
 		return $this->where( $condition )->value( $field );
 	}
@@ -807,7 +655,7 @@ class Order extends Model
 	 * @param array $condition
 	 * @param array $update_data
 	 */
-	public function getOrderColumn( $condition = [], $field )
+	public function getOrderColumn( $condition , $field )
 	{
 		return $this->where( $condition )->column( $field );
 	}
@@ -820,7 +668,7 @@ class Order extends Model
 	public function isPayNoSend( $condition = [] )
 	{
 		//查询改用户已支付未发货的订单的地址id
-		$data = $this->alias( 'order' )->where( $condition )->join( '__ORDER_EXTEND__ order_extend', 'order.id = order_extend.id', 'LEFT' )->field( 'order.id as order_id,order.address_id,address_area_id,address_street_id,order_extend.reciver_info' )->select();
+		$data = $this->where( $condition )->join( 'order_extend', 'order.id = order_extend.id', 'LEFT' )->field( 'order.id as order_id,order.address_id,address_area_id,address_street_id,order_extend.reciver_info' )->select();
 		if( $data ){
 			foreach( $data as $key => $value ){
 				$data[$key]['reciver_info'] = unserialize( $value['reciver_info'] );
@@ -831,7 +679,6 @@ class Order extends Model
 		return $data;
 	}
 
-	// Admin使用
 
 	/**
 	 * 已取消订单数量
@@ -840,8 +687,8 @@ class Order extends Model
 	public function getAdminOrderStateCancelCount( $condition = [] )
 	{
 		$condition['state']        = \App\Logic\Order::state_cancel;
-		$condition['refund_state'] = ['eq', 0];
-		$condition['lock_state']   = ['eq', 0];
+		$condition['refund_state'] = ['=', 0];
+		$condition['lock_state']   = ['=', 0];
 		return $this->getOrderCount( $condition );
 	}
 
@@ -852,8 +699,8 @@ class Order extends Model
 	public function getAdminOrderStateNewCount( $condition = [] )
 	{
 		$condition['state']        = \App\Logic\Order::state_new;
-		$condition['refund_state'] = ['eq', 0];
-		$condition['lock_state']   = ['eq', 0];
+		$condition['refund_state'] = ['=', 0];
+		$condition['lock_state']   = ['=', 0];
 		return $this->getOrderCount( $condition );
 	}
 
@@ -864,8 +711,8 @@ class Order extends Model
 	public function getAdminOrderStatePayCount( $condition = [] )
 	{
 		$condition['state']        = \App\Logic\Order::state_pay;
-		$condition['refund_state'] = ['eq', 0];
-		$condition['lock_state']   = ['eq', 0];
+		$condition['refund_state'] = ['=', 0];
+		$condition['lock_state']   = ['=', 0];
 		return $this->getOrderCount( $condition );
 	}
 
@@ -877,8 +724,8 @@ class Order extends Model
 	{
 
 		$condition['state']        = \App\Logic\Order::state_send;
-		$condition['refund_state'] = ['eq', 0];
-		$condition['lock_state']   = ['eq', 0];
+		$condition['refund_state'] = ['=', 0];
+		$condition['lock_state']   = ['=', 0];
 		return $this->getOrderCount( $condition );
 	}
 
@@ -903,8 +750,8 @@ class Order extends Model
 		$condition['state']          = \App\Logic\Order::state_success;
 		$condition['evaluate_state'] = 0;
 		$condition['finnshed_time']  = ['>', time() - \App\Logic\Order::ORDER_EVALUATE_TIME];
-		$condition['refund_state']   = ['eq', 0];
-		$condition['lock_state']     = ['eq', 0];
+		$condition['refund_state']   = ['=', 0];
+		$condition['lock_state']     = ['=', 0];
 		return $this->getOrderCount( $condition );
 	}
 
@@ -914,7 +761,7 @@ class Order extends Model
 	 */
 	public function getAdminOrderRefundCount( $condition = [] )
 	{
-		$condition['refund_state'] = ['neq', 0]; // 退款状态:0是无退款,1是部分退款,2是全部退款
+		$condition['refund_state'] = ['!=', 0]; // 退款状态:0是无退款,1是部分退款,2是全部退款
 		$condition['lock_state']   = ['>', 0]; // 锁定状态:0是正常,大于0是锁定,默认是0
 		return $this->getOrderCount( $condition );
 	}

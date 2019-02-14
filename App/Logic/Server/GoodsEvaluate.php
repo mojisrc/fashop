@@ -240,7 +240,7 @@ class GoodsEvaluate
 		}
 
 		// 判断是否已经评价过了
-		$evaluate_find = \App\Model\GoodsEvaluate::where( 'order_goods_id', '=', $this->getOrderGoodsId() )->find();
+		$evaluate_find = \App\Model\GoodsEvaluate::init()->where( 'order_goods_id', '=', $this->getOrderGoodsId() )->find();
 		if( $evaluate_find ){
 			throw new \Exception( "已经评价了" );
 		}
@@ -272,7 +272,7 @@ class GoodsEvaluate
 			] );
 
 			$order_state = 1;
-            $no_evaluate_order_goods_id = \App\Model\OrderGoods::getOrderGoodsId( ['order_id'=>$order_info['id'],'evaluate_state'=>0,'id'=>['neq',$order_goods_info['id']]] );
+            $no_evaluate_order_goods_id = \App\Model\OrderGoods::getOrderGoodsId( ['order_id'=>$order_info['id'],'evaluate_state'=>0,'id'=>['!=',$order_goods_info['id']]] );
             if( !($no_evaluate_order_goods_id >0) ){
                 $order_state = \App\Model\Order::editOrder( ['id'=>$order_info['id']], ['evaluate_state'=>1] );
             }
@@ -331,7 +331,7 @@ class GoodsEvaluate
 			throw new \Exception( "订单不存在该商品" );
 		}
 		// 判断是否已经评价过了
-		$evaluate_find = \App\Model\GoodsEvaluate::where( ['order_goods_id' => $this->getOrderGoodsId()] )->find();
+		$evaluate_find = \App\Model\GoodsEvaluate::init()->where( ['order_goods_id' => $this->getOrderGoodsId()] )->find();
 		if( !$evaluate_find ){
 			throw new \Exception( "评价信息错误" );
 		}

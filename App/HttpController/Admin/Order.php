@@ -178,7 +178,7 @@ class Order extends Admin
 			if( empty( $order_info ) ){
 				$this->send( Code::error, [], '没有该订单' );
 			} else{
-				$log_list    = \App\Model\Order::init()->getOrderLogList( ['order_id' => $order_id] );
+				$log_list    = \App\Model\OrderLog::init()->getOrderLogList( ['order_id' => $order_id] );
 				$return_list = \App\Model\OrderRefund::init()->getOrderRefundList( ['order_id' => $order_id, 'refund_type' => 2] );
 				$refund_list = \App\Model\OrderRefund::init()->getOrderRefundList( ['order_id' => $order_id, 'refund_type' => 1] );
 				$this->send( Code::success, [
@@ -354,7 +354,7 @@ class Order extends Admin
 			if( !$order_ids || count( array_count_values( $order_ids ) ) != 1 ){
 				return $this->send( Code::error, [], '没有该订单' );
 			} else{
-				$order_goods = \App\Model\OrderGoods::getOrderGoodsList( ['id' => ['in', $order_goods_ids]], 'id,goods_pay_price', 'id asc', '1,30' );
+				$order_goods = \App\Model\OrderGoods::init()->getOrderGoodsList( ['id' => ['in', $order_goods_ids]], 'id,goods_pay_price', 'id asc', '1,30' );
 				if( !$order_goods ){
 					return $this->send( Code::error, [], '没有该订单' );
 				} else{

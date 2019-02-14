@@ -245,7 +245,7 @@ class Cart extends Server
 			$this->send( Code::user_access_token_error );
 		} else{
 			$user  = $this->getRequestUser();
-			$total = \App\Model\Cart::where( ['user_id' => ['eq', $user['id']]] )->sum( 'goods_num' );
+			$total = \App\Model\Cart::init()->where( ['user_id' => ['eq', $user['id']]] )->sum( 'goods_num' );
 			$this->send( Code::success, ['total_num' => $total] );
 		}
 	}

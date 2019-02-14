@@ -25,7 +25,7 @@ class Userlevel extends Admin
 		$get['keywords'] ? $condition['title'] = ['like', '%'.$get['keywords'].'%'] : null;
 
 		//分页
-		$count = \App\Model\UserLevel::where( $condition )->count();
+		$count = \App\Model\UserLevel::init()->where( $condition )->count();
 		$field = '*';
 		$order = 'id asc';
 		$list  = \App\Model\UserLevel::getUserLevelList( $condition, $field, $order, $this->getPageLimit() );
@@ -110,7 +110,7 @@ class Userlevel extends Admin
 	{
 		$post = $this->post;
 		$ids  = $post['ids'];
-		$res  = \App\Model\UserLevel::where( [
+		$res  = \App\Model\UserLevel::init()->where( [
 			'id' => is_array( $ids ) ? ['in', implode( ',', $ids )] : $ids,
 		] )->delete();
 		if( $res ){

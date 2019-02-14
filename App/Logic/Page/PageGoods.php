@@ -115,7 +115,7 @@ class PageGoods
                             if ($goods_list) {
                                 $map['id']       = ['in', array_unique(array_column($group_goods, 'id'))];
                                 $map['goods_id'] = ['in', array_unique(array_column($goods_list, 'id'))];
-                                $min_group_price = \App\Model\GroupGoods::where($map)->group('goods_id')->column('goods_id,min(group_price)');
+                                $min_group_price = \App\Model\GroupGoods::init()->where($map)->group('goods_id')->column('goods_id,min(group_price)');
                                 foreach ($goods_list as $k => $v) {
                                     $goods_list[$k]['group_price'] = $min_group_price[$v['id']];
                                 }
@@ -131,7 +131,7 @@ class PageGoods
                         if ($goods_list) {
                             $map['id']       = ['in', array_unique(array_column($group_goods, 'id'))];
                             $map['goods_id'] = ['in', array_unique(array_column($goods_list, 'id'))];
-                            $min_group_price = \App\Model\GroupGoods::where($map)->group('goods_id')->column('goods_id,min(group_price)');
+                            $min_group_price = \App\Model\GroupGoods::init()->where($map)->group('goods_id')->column('goods_id,min(group_price)');
                             foreach ($goods_list as $k => $v) {
                                 $goods_list[$k]['group_price'] = $min_group_price[$v['id']];
                             }

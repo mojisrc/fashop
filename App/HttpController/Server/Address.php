@@ -123,7 +123,7 @@ class Address extends Server
 					if( $address_id ){
 						if( intval( $this->post['is_default'] ) === 1 ){
 							\App\Model\Address::init()->editAddress( [
-								'id'      => ['neq', $address_id],
+								'id'      => ['!=', $address_id],
 								'user_id' => $user['id'],
 							], ['is_default' => 0] );
 						}
@@ -176,7 +176,7 @@ class Address extends Server
 					if( $result ){
 						if( $this->post['is_default'] === 1 ){
 							\App\Model\Address::init()->editAddress( [
-								'id'      => ['neq', $this->post['id']],
+								'id'      => ['!=', $this->post['id']],
 								'user_id' => $user['id'],
 							], ['is_default' => 0] );
 						}

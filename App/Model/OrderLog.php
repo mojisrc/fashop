@@ -27,6 +27,7 @@ class OrderLog extends Model
 	 */
 	public function addOrderLog( array $data )
 	{
+		$data['role'] = str_replace( ['buyer', 'seller', 'system'], ['买家', '商家', '系统'], $data['role'] );
 		return $this->add( $data );
 	}
 
