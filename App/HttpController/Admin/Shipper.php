@@ -32,7 +32,7 @@ class Shipper extends Admin
 	 */
 	public function list()
 	{
-		$list = \App\Model\Shipper::getShipperList( [], 'id,name,province_id,city_id,area_id,combine_detail,address,contact_number,is_default', 'is_default desc ,id desc', $this->getPageLimit() );
+		$list = \App\Model\Shipper::init()->getShipperList( [], 'id,name,province_id,city_id,area_id,combine_detail,address,contact_number,is_default', 'is_default desc ,id desc', $this->getPageLimit() );
 		$this->send( Code::success, [
 			'list'         => $list,
 			'total_number' => \App\Model\Shipper::count(),
@@ -46,7 +46,7 @@ class Shipper extends Admin
 	 */
 	public function info()
 	{
-		$info = \App\Model\Shipper::getShipperInfo( ['id' => $this->get['id']] );
+		$info = \App\Model\Shipper::init()->getShipperInfo( ['id' => $this->get['id']] );
 		$this->send( Code::success, ['info' => $info] );
 	}
 
@@ -67,7 +67,7 @@ class Shipper extends Admin
 				$area       = Db::name( 'Area' )->where( ['id' => $this->post['area_id']] )->field( 'id,pid,name' )->find();
 				$city       = Db::name( 'Area' )->where( ['id' => $area['pid']] )->field( 'id,pid,name' )->find();
 				$province   = Db::name( 'Area' )->where( ['id' => $city['pid']] )->field( 'id,pid,name' )->find();
-				$address_id = \App\Model\Shipper::addShipper( [
+				$address_id = \App\Model\Shipper::init()->addShipper( [
 					'name'           => $this->post['name'],
 					'province_id'    => $province['id'],
 					'city_id'        => $city['id'],
@@ -107,7 +107,7 @@ class Shipper extends Admin
 				$area            = Db::name( 'Area' )->where( ['id' => $this->post['area_id']] )->field( 'id,pid,name' )->find();
 				$city            = Db::name( 'Area' )->where( ['id' => $area['pid']] )->field( 'id,pid,name' )->find();
 				$province        = Db::name( 'Area' )->where( ['id' => $city['pid']] )->field( 'id,pid,name' )->find();
-				\App\Model\Shipper::editShipper( $condition, [
+				\App\Model\Shipper::init()->editShipper( $condition, [
 					'name'           => $this->post['name'],
 					'province_id'    => $province['id'],
 					'city_id'        => $city['id'],
@@ -136,7 +136,7 @@ class Shipper extends Admin
 		} else{
 			$condition       = [];
 			$condition['id'] = $this->post['id'];
-			$row             = \App\Model\Shipper::getShipperInfo( $condition, '*' );
+			$row             = \App\Model\Shipper::init()->getShipperInfo( $condition, '*' );
 			if( !$row ){
 				$this->send( Code::param_error, [], '没有该记录' );
 			} elseif( $row['is_system'] == 1 ){
@@ -160,13 +160,13 @@ class Shipper extends Admin
 		} else{
 			$condition       = [];
 			$condition['id'] = $this->post['id'];
-			\App\Model\Shipper::editShipper( [
+			\App\Model\Shipper::init()->editShipper( [
 				'id' => [
 					'!=',
 					$this->post['id'],
 				],
 			], ['is_default' => 0] );
-			\App\Model\Shipper::editShipper( [
+			\App\Model\Shipper::init()->editShipper( [
 				'id' => $this->post['id'],
 			], ['is_default' => 1] );
 			$this->send( Code::success );
@@ -185,13 +185,13 @@ class Shipper extends Admin
 		} else{
 			$condition       = [];
 			$condition['id'] = $this->post['id'];
-			\App\Model\Shipper::editShipper( [
+			\App\Model\Shipper::init()->editShipper( [
 				'id' => [
 					'!=',
 					$this->post['id'],
 				],
 			], ['refund_default' => 0] );
-			\App\Model\Shipper::editShipper( [
+			\App\Model\Shipper::init()->editShipper( [
 				'id' => $this->post['id'],
 			], ['refund_default' => 1] );
 			$this->send( Code::success );

@@ -28,23 +28,16 @@ class Goods extends Server
 	 */
 	public function list()
 	{
-		if( $this->post ){
-			$param = $this->post;
-		} else{
-			$param = $this->get;
-		}
+		$param         = !empty( $this->post ) ? $this->post : $this->get;
 		$param['page']       = $this->getPageLimit();
 		$param['sale_time']  = ['<', time()];
 		$param['is_on_sale'] = 1;
-
-		$goodsLogic = new \App\Logic\GoodsSearch( $param );
-
+		$goodsLogic          = new \App\Logic\GoodsSearch( $param );
+		$list                = $goodsLogic->withTotalCount()->list();
 		$this->send( Code::success, [
-			'total_number' => $goodsLogic->count(),
-			'list'         => $goodsLogic->list(),
+			'total_number' => $goodsLogic->getTotalCount(),
+			'list'         => $list,
 		] );
-
-
 	}
 
 	/**

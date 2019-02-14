@@ -38,7 +38,7 @@ class Setting extends Admin
 		} else{
 			$condition        = [];
 			$condition['key'] = $get['key'];
-			$info             = \App\Model\Setting::getSettingInfo( $condition );
+			$info             = \App\Model\Setting::init()->getSettingInfo( $condition );
 			return $this->send( Code::success, ['info' => $info] );
 		}
 	}
@@ -59,7 +59,7 @@ class Setting extends Admin
 		if( $error !== true ){
 			return $this->send( Code::error, [], $error );
 		} else{
-			$setting_data = \App\Model\Setting::getSettingInfo( ['key' => $post['key']] );
+			$setting_data = \App\Model\Setting::init()->getSettingInfo( ['key' => $post['key']] );
 			if( $setting_data ){
 				return $this->send( Code::param_error, [], '已经存在该配置' );
 			} else{
@@ -67,7 +67,7 @@ class Setting extends Admin
 				$data['key']    = $post['key'];
 				$data['config'] = $post['config'];
 				$data['status'] = $post['status'];
-				$result         = \App\Model\Setting::addSetting( $data );
+				$result         = \App\Model\Setting::init()->addSetting( $data );
 				if( !$result ){
 					return $this->send( Code::error );
 				}
@@ -93,7 +93,7 @@ class Setting extends Admin
 		if( $error !== true ){
 			$this->send( Code::error, [], $error );
 		} else{
-			$setting_data = \App\Model\Setting::getSettingInfo( ['key' => $post['key']] );
+			$setting_data = \App\Model\Setting::init()->getSettingInfo( ['key' => $post['key']] );
 			if( !$setting_data ){
 				$this->send( Code::param_error, [], '配置不存在' );
 			} else{
@@ -101,7 +101,7 @@ class Setting extends Admin
 				$data['config'] = $post['config'];
 				$data['status'] = $post['status'];
 
-				$result = \App\Model\Setting::editSetting( [
+				$result = \App\Model\Setting::init()->editSetting( [
 					'key' => $post['key'],
 				], $data );
 				if( !$result ){

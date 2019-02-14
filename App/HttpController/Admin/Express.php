@@ -160,7 +160,7 @@ class Express extends Admin
 			if( $row['is_system'] == 1 ){
 				return $this->send( Code::param_error, [], '系统数据，不可删除' );
 			}
-			$result = \App\Model\Express::delExpress( $condition );
+			$result = \App\Model\Express::init()->delExpress( $condition );
 			if( !$result ){
 				return $this->send( Code::error );
 			}

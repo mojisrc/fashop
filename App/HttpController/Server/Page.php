@@ -26,11 +26,10 @@ class Page extends Server
 	{
 		try{
 			$pageModel = new \App\Model\Page;
-			$total     = $pageModel->count();
-			$list      = $pageModel->getPageList( [], '*', 'id desc', $this->getPageLimit() );
+			$list      = $pageModel->withTotalCount()->getPageList( [], '*', 'id desc', $this->getPageLimit() );
 			$this->send( Code::success, [
 				'list'         => $list,
-				'total_number' => $total,
+				'total_number' => $pageModel->getTotalCount(),
 			] );
 		} catch( \Exception $e ){
 			$this->send( Code::server_error, [], $e->getMessage() );
@@ -65,7 +64,7 @@ class Page extends Server
 			$this->send( Code::param_error );
 		} else{
 			try{
-				$info           = \App\Model\Page::getPageInfo( [
+				$info           = \App\Model\Page::init()->getPageInfo( [
 					'id' => $this->get['id'],
 				] );
 				$pageGoodsLogic = new PageGoodsLogic();

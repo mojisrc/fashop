@@ -94,8 +94,8 @@ class Auth extends Admin
 		} else{
 			$post  = $this->post;
 			$model = model( 'AuthGroupAccess' );
-			\App\Model\Page::delAuthGroupAccess( ['group_id' => $this->post['id']] );
-			\App\Model\Page::addMultiAuthGroupAccess( collect( $this->post['member_ids'] )->map( function( $uid ) use ( $post ){
+			\App\Model\AuthGroupAccess::delAuthGroupAccess( ['group_id' => $this->post['id']] );
+			\App\Model\AuthGroupAccess::addMultiAuthGroupAccess( collect( $this->post['member_ids'] )->map( function( $uid ) use ( $post ){
 				return [
 					'uid'      => $uid,
 					'group_id' => $post['id'],

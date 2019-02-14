@@ -55,8 +55,8 @@ class Fullcut extends Admin
 			}
 		}
 
-		$count = \App\Model\Fullcut::getFullcutCount( $condition );
-		$list  = \App\Model\Fullcut::getFullcutList( $condition, '*', 'id desc', $this->getPageLimit() );
+		$count = \App\Model\Fullcut::init()->getFullcutCount( $condition );
+		$list  = \App\Model\Fullcut::init()->getFullcutList( $condition, '*', 'id desc', $this->getPageLimit() );
 		return $this->send( Code::success, [
 			'total_number' => $count,
 			'list'         => $list,

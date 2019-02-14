@@ -387,50 +387,30 @@ class GoodsSearch
 
 	}
 
-	public function make() : void
-	{
-		if( empty( $this->make ) ){
-			$this->buildCondition();
-			$this->make = true;
-		}
-	}
-
 	public function count() : int
 	{
-		$this->make();
 		return $this->goodsModel->where( $this->condition )->count();
+	}
+
+	public function withTotalCount()
+	{
+		$this->goodsModel->withTotalCount();
+		return $this;
+	}
+
+	public function getTotalCount() : int
+	{
+		return $this->goodsModel->getTotalCount();
 	}
 
 	public function list() : ?array
 	{
-		$this->make();
 		return $this->goodsModel->getGoodsList( $this->condition, $this->field, $this->order, $this->page );
 	}
 
-	/**
-	 * 获得商品列表
-	 * @param array  $search_options 搜索条件
-	 * @param string $field          字段
-	 * @param string $order          排序
-	 * @param string $page           分页
-	 *                               $search_options 子参数
-	 * @param array  $ids            商品id集合
-	 * @param int    $category_id    分类id
-	 * @param string $keywords       关键词 目前只对商品标题有效果
-	 * @param array  $brand_items    品牌
-	 * @param float  $price_from     价格区间开始
-	 * @param float  $price_to       价格区间结束
-	 * @return   array
-	 */
-	public function getGoodsList( $search_options, $field = "id,title,category_ids,price,img,freight", $order = 'id desc', $page = [1, 10] )
+	public function getGoodsModel()
 	{
-		// 分类
-		if( isset( $search_options['category_id'] ) ){
-			// TODO 废弃
-			$category_ids                   = \App\Logic\GoodsCategory::getSelfAndChildId( $search_options['category_id'] );
-			$this->condition['category_id'] = ['in', $category_ids];
-		}
-		return $this->goodsModel->getGoodsList( $this->condition, $field, $order, $page );
-
+		return $this->goodsModel;
 	}
+
 }
