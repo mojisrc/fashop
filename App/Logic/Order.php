@@ -358,8 +358,7 @@ class Order extends Logic
 			return $this->make;
 		} else{
 			$this->buildCondition();
-			$model = model( 'Order' );
-			\App\Model\Page::alias( $this->alias['order'] );
+			$model = new \App\Model\Order;
 			return $model;
 		}
 	}

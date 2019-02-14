@@ -48,7 +48,6 @@ class Order extends Server
 		}
 		try{
 			$orderLogic = new OrderLogic();
-
 			if( isset( $param['create_time'] ) ){
 				$orderLogic->createTime( $param['create_time'] );
 			}
