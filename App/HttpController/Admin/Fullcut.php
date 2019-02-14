@@ -205,7 +205,7 @@ class Fullcut extends Admin
 			}
 
 			//删除活动
-			$fullcut_result = \App\Model\Fullcut::delFullcut( $condition );
+			$fullcut_result = \App\Model\Fullcut::init()->delFullcut( $condition );
 
 			if( !$fullcut_result ){
 				\App\Model\Fullcut::rollback();// 回滚事务
@@ -216,7 +216,7 @@ class Fullcut extends Admin
 			//级别 默认0全店 1商品级
 			if( $row['level'] == 1 ){
 				//删除活动下商品
-				$fullcut_goods_result = \App\Model\FullcutGoods::delFullcutGoods( ['fullcut_id' => $post['id']] );
+				$fullcut_goods_result = \App\Model\FullcutGoods::init()->delFullcutGoods( ['fullcut_id' => $post['id']] );
 
 				if( !$fullcut_goods_result ){
 					\App\Model\Fullcut::rollback();// 回滚事务
@@ -326,7 +326,7 @@ class Fullcut extends Admin
 			$intersection_goods_ids = array_values( array_intersect( $goods_ids, $online_goods_ids ) );
 
 			//删除活动下失效商品
-			$fullcut_goods_result = \App\Model\FullcutGoods::delFullcutGoods( ['fullcut_id' => $get['fullcut_id'], 'goods_id' => ['not in', $intersection_goods_ids]] );
+			$fullcut_goods_result = \App\Model\FullcutGoods::init()->delFullcutGoods( ['fullcut_id' => $get['fullcut_id'], 'goods_id' => ['not in', $intersection_goods_ids]] );
 			if( !$fullcut_goods_result ){
 				return $this->send( Code::error );
 			}
@@ -468,7 +468,7 @@ class Fullcut extends Admin
 				$condition['goods_id']   = $post['goods_id'];
 
 				//删除活动下商品
-				$fullcut_goods_result = \App\Model\FullcutGoods::delFullcutGoods( $condition );
+				$fullcut_goods_result = \App\Model\FullcutGoods::init()->delFullcutGoods( $condition );
 				if( !$fullcut_goods_result ){
 					\App\Model\FullcutGoods::rollback();// 回滚事务
 					return $this->send( Code::error );
@@ -539,7 +539,7 @@ class Fullcut extends Admin
 					//差集 [已删除的sku]
 					if( $difference_goods_sku_del_ids ){
 						$condition['goods_sku_id'] = ['in', $difference_goods_sku_del_ids];
-						$result                    = \App\Model\FullcutGoods::delFullcutGoods( $condition );
+						$result                    = \App\Model\FullcutGoods::init()->delFullcutGoods( $condition );
 
 						if( !$result ){
 							\App\Model\FullcutGoods::rollback();// 回滚事务

@@ -215,7 +215,7 @@ class Voucher extends Admin {
 		if (empty($find)) {
 			return $this->send( Code::param_error );
 		}
-		$result = \App\Model\Page::delVoucherTemplate(array('id' => $find['id']));
+		$result = \App\Model\Page::init()->delVoucherTemplate(array('id' => $find['id']));
 		if ($result) {
 			return $this->send( Code::success );
 		} else {

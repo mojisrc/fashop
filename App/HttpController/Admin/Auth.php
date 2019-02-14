@@ -94,7 +94,7 @@ class Auth extends Admin
 		} else{
 			$post  = $this->post;
 			$model = model( 'AuthGroupAccess' );
-			\App\Model\AuthGroupAccess::delAuthGroupAccess( ['group_id' => $this->post['id']] );
+			\App\Model\AuthGroupAccess::init()->delAuthGroupAccess( ['group_id' => $this->post['id']] );
 			\App\Model\AuthGroupAccess::init()->addMultiAuthGroupAccess( collect( $this->post['member_ids'] )->map( function( $uid ) use ( $post ){
 				return [
 					'uid'      => $uid,
@@ -146,7 +146,7 @@ class Auth extends Admin
 		if( $this->validator( $this->post, 'Admin/AuthGroup.del' ) !== true ){
 			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			\App\Model\AuthGroup::delAuthGroup( ['id' => $this->post['id']] );
+			\App\Model\AuthGroup::init()->delAuthGroup( ['id' => $this->post['id']] );
 			model( 'AuthGroupAccess' )->delAuthGroupAccess( ['group_id' => $this->post['id']] );
 			return $this->send();
 		}
@@ -229,7 +229,7 @@ class Auth extends Admin
 			$exsist_child = \App\Model\Page::init()->where( ['pid' => $this->post['id']] )->column( 'id' );
 			if( $exsist_child )
 				return $this->send( Code::error, [], '存在子项不可删除' );
-			if( \App\Model\Page::delAuthRule( ['id' => $this->post['id'], 'is_system' => 0] ) ){
+			if( \App\Model\Page::init()->delAuthRule( ['id' => $this->post['id'], 'is_system' => 0] ) ){
 				return $this->send();
 			} else{
 				return $this->send( Code::error, [], '系统节点不可删除或者不存在该节点' );

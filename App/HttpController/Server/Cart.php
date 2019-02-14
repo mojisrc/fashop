@@ -159,7 +159,7 @@ class Cart extends Server
 			if( $this->validator( $this->post, 'Server/Cart.del' ) !== true ){
 				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
-				\App\Model\Cart::delCart( [
+				\App\Model\Cart::init()->delCart( [
 					'goods_sku_id' => ['in', $this->post['goods_sku_ids']],
 					'user_id'      => ['=', $user['id']],
 				] );

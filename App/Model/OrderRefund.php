@@ -13,9 +13,6 @@
 
 namespace App\Model;
 
-
-
-
 class OrderRefund extends Model
 {
 	protected $softDelete = true;
@@ -202,7 +199,7 @@ class OrderRefund extends Model
 		if( empty( $order_list ) ){
 			return false;
 		}
-		$trade_logic  = model( 'Trade', 'Logic' );
+		$trade_logic  = new \App\Logic\Trade;
 		$refund_list  = $this->where( [
 			'order_id' => [
 				'in',
@@ -271,7 +268,7 @@ class OrderRefund extends Model
 		if( empty( $order_info ) ){
 			return false;
 		}
-		$trade_logic  = model( 'Trade', 'Logic' );
+		$trade_logic  = new \App\Logic\Trade;
 		$refund_list  = $this->where( ['order_id' => $order_info['id']] )->order( 'id desc' )->select();
 		$refund_goods = []; // 已经提交的退款\退款退货商品
 		if( !empty( $refund_list ) && is_array( $refund_list ) ){
@@ -374,7 +371,7 @@ class OrderRefund extends Model
 	{
 		$refund          = 0; //默认不允许退款\退款退货
 		$order_state     = $order['state']; //订单状态
-		$trade_logic     = model( 'Trade', 'Logic' );
+		$trade_logic     = new \App\Logic\Trade;
 		$order_shipped   = $trade_logic->getOrderState( 'order_shipped' ); //30:已发货
 		$order_completed = $trade_logic->getOrderState( 'order_completed' ); //40:已收货
 

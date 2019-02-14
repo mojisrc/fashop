@@ -318,7 +318,7 @@ class Wechat extends Admin
 		if( $this->validator( $this->post, 'Admin/Wechat/Broadcast.del' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			\App\Model\WechatBroadcast::delWechatBroadcast( ['id' => $this->post['id']] );
+			\App\Model\WechatBroadcast::init()->delWechatBroadcast( ['id' => $this->post['id']] );
 			$this->send( Code::success );
 		}
 	}
@@ -758,7 +758,7 @@ class Wechat extends Admin
 		if( $this->validator( $this->post, 'Admin/Wechat/LocalMaterial.del' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			\App\Model\Material::delMaterial( ['id' => $this->post['id'], 'type' => 'news'] );
+			\App\Model\Material::init()->delMaterial( ['id' => $this->post['id'], 'type' => 'news'] );
 			$this->send( Code::success );
 		}
 	}
@@ -1234,7 +1234,7 @@ class Wechat extends Admin
 
 			\App\Model\WechatAutoReply::startTransaction();
 
-			$state = \App\Model\WechatAutoReply::delWechatAutoReply( ['id' => $this->post['id']] );
+			$state = \App\Model\WechatAutoReply::init()->delWechatAutoReply( ['id' => $this->post['id']] );
 
 			if( $state ){
 

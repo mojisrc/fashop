@@ -111,7 +111,7 @@ class Image extends Admin
 		if( $this->validator( $this->post, 'Admin/Image.del' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			\App\Model\Image::delImage( ['id' => $this->post['id']] );
+			\App\Model\Image::init()->delImage( ['id' => $this->post['id']] );
 			$this->send( Code::success );
 		}
 	}

@@ -79,54 +79,5 @@ class OrderRefundReason extends Model
 		return $this->where( $condition )->del();
 	}
 
-	/**
-	 * 退款\退款退货原因的id
-	 * @param   $condition
-	 * @return
-	 */
-	public function getOrderRefundReasonId( $condition )
-	{
-		return $this->where( $condition )->value( 'id' );
-	}
-
-	/**
-	 * 退款\退款退货原因的某个字段
-	 * @param   $condition
-	 * @return
-	 */
-	public function getOrderRefundReasonValue( $condition, $field )
-	{
-		return $this->where( $condition )->value( $field );
-	}
-
-	/**
-	 * 退款\退款退货原因的某个字段列
-	 * @param   $condition
-	 * @return
-	 */
-	public function getOrderRefundReasonColumn( $condition, $field )
-	{
-		return $this->where( $condition )->column( $field );
-	}
-
-	/**
-	 * 退款\退款退货原因的某个字段+1
-	 * @param   $condition
-	 * @return
-	 */
-	public function setIncOrderRefundReason( $condition, $field, $num )
-	{
-		return $this->where( $condition )->setInc( $field, $num );
-	}
-
-	/**
-	 * 退款\退款退货原因的某个字段+1
-	 * @param   $condition
-	 * @return
-	 */
-	public function setDecOrderRefundReason( $condition, $field, $num )
-	{
-		return $this->where( $condition )->setDec( $field, $num );
-	}
 
 }

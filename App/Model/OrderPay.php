@@ -14,11 +14,10 @@
 namespace App\Model;
 
 
-
-
 class OrderPay extends Model
 {
 	protected $softDelete = true;
+
 	public function addOrderPay( array $data )
 	{
 		return $this->add( $data );
@@ -26,7 +25,7 @@ class OrderPay extends Model
 
 	public function editOrderPay( $condition = [], $data = [] )
 	{
-		return $this->where($condition)->edit($data);
+		return $this->where( $condition )->edit( $data );
 	}
 
 	public function getOrderPayInfo( $condition = [], $field = '*' )

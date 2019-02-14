@@ -14,8 +14,6 @@
 namespace App\Model;
 
 
-
-
 class OrderGoods extends Model
 {
 	protected $softDelete = true;
@@ -50,7 +48,7 @@ class OrderGoods extends Model
 	 */
 	public function editOrderGoods( $condition = [], $data = [] )
 	{
-		return !!$this->where($condition)->edit($data)->saveResult;
+		return $this->where( $condition )->edit( $data );
 	}
 
 	/**
@@ -93,7 +91,7 @@ class OrderGoods extends Model
 	 * @param    string $page
 	 * @return   array | false
 	 */
-	public function getOrderGoodsList( $condition = [], $field = '*', $order = 'id desc', $page = [1,10] )
+	public function getOrderGoodsList( $condition = [], $field = '*', $order = 'id desc', $page = [1, 10] )
 	{
 		if( $page == '' ){
 			$list = $this->where( $condition )->order( $order )->field( $field )->select();
@@ -117,37 +115,6 @@ class OrderGoods extends Model
 		return $this->where( $condition )->sum( $field );
 	}
 
-	/**
-	 * 列表 todo废除
-	 *
-	 * @param array   $condition 条件
-	 * @param string  $field     字段
-	 * @param string  $group     分组
-	 * @param string  $order     排序
-	 * @param int     $limit     限制
-	 * @param int     $page      分页
-	 * @param boolean $lock      是否锁定
-	 * @return array 二维数组
-	 */
-	public function getOrderGoodsMoreList( $condition, $field = '*', $group = '', $order = 'id desc', $page = [1,20] )
-	{
-		return $this->join( '__GOODS__ goods ON order_goods.goods_id = goods.id', 'inner' )->field( $field )->where( $condition )->group( $group )->order( $order )->paginate( $page )->select();
-
-	}
-
-	/**
-	 * 获得数量 todo 废除
-	 *
-	 * @param array  $condition
-	 * @param string $field
-	 * @return int
-	 */
-	public function getOrderGoodsMoreCount( $condition )
-	{
-		return $this->join( '__GOODS__ goods ON order_goods.goods_id = goods.id', 'inner' )->where( $condition )->count( "DISTINCT order_goods.goods_id" );
-
-	}
-
 
 	/**
 	 * 获取的id
@@ -155,20 +122,9 @@ class OrderGoods extends Model
 	 * @param   $condition_str
 	 * @return
 	 */
-	public function getOrderGoodsId( $condition = [], $condition_str = '' )
+	public function getOrderGoodsId( $condition = [] )
 	{
-		return $this->where( $condition )->where( $condition_str )->value( 'id' );
-	}
-
-	/**
-	 * 获取某个字段
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @return
-	 */
-	public function getOrderGoodsValue( $condition = [], $condition_str = '', $field = 'id' )
-	{
-		return $this->where( $condition )->where( $condition_str )->value( $field );
+		return $this->where( $condition )->value( 'id' );
 	}
 
 	/**
@@ -177,9 +133,9 @@ class OrderGoods extends Model
 	 * @param   $condition_str
 	 * @return
 	 */
-	public function getOrderGoodsColumn( $condition = [], $condition_str = '', $field = 'id' )
+	public function getOrderGoodsColumn( $condition = [], $field = 'id' )
 	{
-		return $this->where( $condition )->where( $condition_str )->column( $field );
+		return $this->where( $condition )->column( $field );
 	}
 
 	/**

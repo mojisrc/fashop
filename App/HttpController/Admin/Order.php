@@ -349,7 +349,7 @@ class Order extends Admin
 			if( count( $order_goods_ids ) != count( array_unique( $order_goods_ids ) ) ){
 				return $this->send( Code::error, [], '参数错误' );
 			}
-			$order_ids = \App\Model\OrderGoods::getOrderGoodsColumn( ['id' => ['in', $order_goods_ids]], '', 'order_id' );
+			$order_ids = \App\Model\OrderGoods::getOrderGoodsColumn( ['id' => ['in', $order_goods_ids]], 'order_id' );
 			if( !$order_ids || count( array_count_values( $order_ids ) ) != 1 ){
 				return $this->send( Code::error, [], '没有该订单' );
 			} else{

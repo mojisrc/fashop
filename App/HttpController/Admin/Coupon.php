@@ -271,7 +271,7 @@ class Coupon extends Admin
 			}
 
 			//删除优惠券
-			$coupon_result = \App\Model\Coupon::delCoupon( $condition );
+			$coupon_result = \App\Model\Coupon::init()->delCoupon( $condition );
 
 			if( !$coupon_result ){
 				\App\Model\Coupon::rollback();// 回滚事务
@@ -282,7 +282,7 @@ class Coupon extends Admin
 			//级别 默认0全店 1商品级
 			if($row['level'] == 1){
 				//删除优惠券下商品
-				$coupon_goods_result = \App\Model\CouponGoods::delCouponGoods( array('coupon_id'=>$post['id']) );
+				$coupon_goods_result = \App\Model\CouponGoods::init()->delCouponGoods( array('coupon_id'=>$post['id']) );
 
 				if( !$coupon_goods_result ){
 					\App\Model\Coupon::rollback();// 回滚事务
@@ -390,7 +390,7 @@ class Coupon extends Admin
 			$intersection_goods_ids  = array_values(array_intersect($goods_ids,$online_goods_ids));
 
 			//删除优惠券下失效商品
-			$coupon_goods_result = \App\Model\CouponGoods::delCouponGoods( array('coupon_id'=>$get['coupon_id'],'goods_id'=>array('not in',$intersection_goods_ids)) );
+			$coupon_goods_result = \App\Model\CouponGoods::init()->delCouponGoods( array('coupon_id'=>$get['coupon_id'],'goods_id'=>array('not in',$intersection_goods_ids)) );
 			if( !$coupon_goods_result ){
 				return $this->send( Code::error );
 			}
@@ -539,7 +539,7 @@ class Coupon extends Admin
 				$condition['goods_id'] = $post['goods_id'];
 
 	            //删除优惠券下商品
-	            $coupon_goods_result = \App\Model\CouponGoods::delCouponGoods( $condition );
+	            $coupon_goods_result = \App\Model\CouponGoods::init()->delCouponGoods( $condition );
 	            if( !$coupon_goods_result ){
 	            	\App\Model\CouponGoods::rollback();// 回滚事务
 	                return $this->send( Code::error );
@@ -610,7 +610,7 @@ class Coupon extends Admin
 					//差集 [已删除的sku]
 					if($difference_goods_sku_del_ids){
 						$condition['goods_sku_id'] = array('in',$difference_goods_sku_del_ids);
-						$result = \App\Model\CouponGoods::delCouponGoods($condition);
+						$result = \App\Model\CouponGoods::init()->delCouponGoods($condition);
 
 						if( !$result ){
 							\App\Model\CouponGoods::rollback();// 回滚事务

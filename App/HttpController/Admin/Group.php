@@ -529,13 +529,13 @@ class Group extends Admin
 
 				\App\Model\Group::startTransaction();
 				//删除拼团活动
-				$group_result = \App\Model\Group::delGroup( ['id' => $post['id']] );
+				$group_result = \App\Model\Group::init()->delGroup( ['id' => $post['id']] );
 				if( !$group_result ){
 					\App\Model\Group::rollback();
 					return $this->send( Code::error );
 				}
 				//删除拼团活动商品
-				$group_goods_result = \App\Model\GroupGoods::delGroupGoods( ['group_id' => $post['id']] );
+				$group_goods_result = \App\Model\GroupGoods::init()->delGroupGoods( ['group_id' => $post['id']] );
 				if( !$group_goods_result ){
 					\App\Model\Group::rollback();
 					return $this->send( Code::error );

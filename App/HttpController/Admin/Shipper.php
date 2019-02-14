@@ -142,7 +142,7 @@ class Shipper extends Admin
 			} elseif( $row['is_system'] == 1 ){
 				$this->send( Code::param_error, [], '系统数据，不可删除' );
 			} else{
-				\App\Model\Shipper::delShipper( $condition );
+				\App\Model\Shipper::init()->delShipper( $condition );
 				$this->send( Code::success );
 			}
 		}

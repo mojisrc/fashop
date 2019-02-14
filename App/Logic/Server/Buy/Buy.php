@@ -564,7 +564,7 @@ class Buy
 			// 更新商品库存
 			$this->updateGoodsStorageNum();
 			\App\Model\Cart::commit();
-			\App\Model\Cart::delCart( [
+			\App\Model\Cart::init()->delCart( [
 				'user_id' => $this->getUserId(),
 				'id'      => ['in', $cart_ids],
 			] );

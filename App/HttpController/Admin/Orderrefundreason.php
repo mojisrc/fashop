@@ -138,7 +138,7 @@ class Orderrefundreason extends Admin
 		$condition       = [];
 		$condition['id'] = $post['id'];
 
-		$result = \App\Model\OrderRefundReason::delOrderRefundReason( $condition );
+		$result = \App\Model\OrderRefundReason::init()->delOrderRefundReason( $condition );
 		if( !$result ){
 			return $this->send( Code::error );
 
