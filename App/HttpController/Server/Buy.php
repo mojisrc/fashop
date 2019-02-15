@@ -129,7 +129,7 @@ class Buy extends Server
 						$order_info = \App\Model\Order::init()->getOrderInfo( [
 							'pay_sn' => $this->post['pay_sn'],
 							'state'  => \App\Logic\Order::state_new,
-						], '', 'id,pay_sn,amount,revise_amount' );
+						], 'id,pay_sn,amount,revise_amount' );
 						if( empty( $pay_info ) || empty( $order_info ) ){
 							return $this->send( Code::error, [], '该订单不存在' );
 						} else{

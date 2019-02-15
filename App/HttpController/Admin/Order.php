@@ -170,7 +170,7 @@ class Order extends Admin
 		} else{
 			$order_id        = $this->get['id'];
 			$condition['id'] = $order_id;
-			$order_info      = \App\Model\Order::init()->getOrderInfo( $condition, '', '*', [
+			$order_info      = \App\Model\Order::init()->getOrderInfo( $condition, '*', [
 				'order_extend',
 				'order_goods',
 				'user',

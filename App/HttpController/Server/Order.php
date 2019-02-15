@@ -200,7 +200,7 @@ class Order extends Server
 				 */
 				$condition['id']      = $order_id;
 				$condition['user_id'] = ['in', \App\Model\User::init()->getUserAllIds( $user['id'] )];
-				$order_info           = \App\Model\Order::init()->getOrderInfo( $condition, '', '*', [
+				$order_info           = \App\Model\Order::init()->getOrderInfo( $condition, '*', [
 					'order_extend',
 					'order_goods',
 				] );
@@ -480,7 +480,7 @@ class Order extends Server
 // 			$order_model          = model( 'Order' );
 // 			$condition['id']      = $this->get['id'];
 // 			$condition['user_id'] = $this->user['id'];
-// 			$order_info           = \App\Model\Order::init()->getOrderInfo( $condition, '', '*', ['order_extend', 'order_goods'] );
+// 			$order_info           = \App\Model\Order::init()->getOrderInfo( $condition, '*', ['order_extend', 'order_goods'] );
 // 			if(
 // 				empty( $order_info ) || !in_array( $order_info['state'], [
 // 					OrderLogic::state_send,

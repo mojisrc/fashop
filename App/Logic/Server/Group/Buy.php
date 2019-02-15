@@ -474,7 +474,7 @@ class Buy
 		}
 
 		if( $this->getBuyWay() == 'join_group' ){
-			$captain_group_order = \App\Model\Order::init()->getOrderInfo( ['id' => $this->getOrderId(), 'group_id' => $this->getGroupId(), 'group_state' => 1], '', '*', [] );
+			$captain_group_order = \App\Model\Order::init()->getOrderInfo( ['id' => $this->getOrderId(), 'group_id' => $this->getGroupId(), 'group_state' => 1], '*', [] );
 			if( !$captain_group_order ){
 				throw new \Exception( '团长订单信息错误' );
 			}
