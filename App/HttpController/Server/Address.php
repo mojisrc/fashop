@@ -68,7 +68,7 @@ class Address extends Server
 			$this->send( Code::user_access_token_error );
 		} else{
 			if( $this->validate( $this->get, 'Server/Address.info' ) !== true ){
-				$this->send( $this->getValidate()->getError() );
+				$this->send(Code::param_error, [], $this->getValidate()->getError());
 			} else{
 				$user = $this->getRequestUser();
 				$info = model( 'Address' )->getAddressInfo( ['id' => $this->get['id'], 'user_id' => $user['id']] );
@@ -109,7 +109,7 @@ class Address extends Server
 			$this->send( Code::user_access_token_error );
 		} else{
 			if( $this->validate( $this->post, 'Server/Address.add' ) !== true ){
-				$this->send( $this->getValidate()->getError() );
+				$this->send(Code::param_error, [], $this->getValidate()->getError());
 			} else{
 				try{
 					$user          = $this->getRequestUser();
@@ -164,7 +164,7 @@ class Address extends Server
 			$this->send( Code::user_access_token_error );
 		} else{
 			if( $this->validate( $this->post, 'Server/Address.edit' ) !== true ){
-				$this->send( $this->getValidate()->getError() );
+				$this->send(Code::param_error, [], $this->getValidate()->getError());
 			} else{
 				try{
 					$user          = $this->getRequestUser();
@@ -214,7 +214,7 @@ class Address extends Server
 			$this->send( Code::user_access_token_error );
 		} else{
 			if( $this->validate( $this->post, 'Server/Address.del' ) !== true ){
-				$this->send( $this->getValidate()->getError() );
+				$this->send(Code::param_error, [], $this->getValidate()->getError());
 			} else{
 				$user = $this->getRequestUser();
 				model( 'Address' )->delAddress( ['id' => $this->post['id'], 'user_id' => $user['id']] );

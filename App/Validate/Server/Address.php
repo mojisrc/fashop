@@ -33,12 +33,12 @@ class Address extends Validate
 		];
 	protected $message
 		= [
-			'id.require'   => Code::param_error,
-			'truename'     => Code::param_error,
-			'area_id'      => Code::param_error,
-			'address'      => Code::param_error,
-			'type'         => Code::param_error,
-			'mobile_phone' => Code::param_error,
+	        'id.require'           => '参数错误',
+	        'truename.require'     => '请输入收货人姓名',
+	        'area_id.require'      => '请选择所在地区',
+	        'address.require'      => '请输入详细地址',
+	        'type.require'         => '请选择地址类型',
+	        'mobile_phone.require' => '请输入手机号码',
 		];
 	protected $scene
 		= [
