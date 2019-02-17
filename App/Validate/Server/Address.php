@@ -28,7 +28,7 @@ class Address extends Validate
 			'address'      => 'require',
 			'type'         => 'require',
 			'area_info'    => 'require',
-			'mobile_phone' => 'require',
+			'mobile_phone' => 'require|phone|checkMobilePhone',
 			'type'         => 'require',
 		];
 	protected $message
@@ -67,5 +67,12 @@ class Address extends Validate
 			],
 		];
 
+    protected function checkMobilePhone( $value, $rule, $data )
+    {
+        if( !$this->is( $value, 'phone', $data ) ){
+            return '手机号格式不对，请重新输入';
+        }
+        return true;
+    }
 
 }
