@@ -28,17 +28,17 @@ class Address extends Validator
 			'address'      => 'require',
 			'type'         => 'require',
 			'area_info'    => 'require',
-			'mobile_phone' => 'require',
+			'mobile_phone' => 'require|checkMobilePhone',
 			'type'         => 'require',
 		];
 	protected $message
 		= [
-			'id.require'   => Code::param_error,
-			'truename'     => Code::param_error,
-			'area_id'      => Code::param_error,
-			'address'      => Code::param_error,
-			'type'         => Code::param_error,
-			'mobile_phone' => Code::param_error,
+            'id.require'           => '参数错误',
+            'truename.require'     => '请输入收货人姓名',
+            'area_id.require'      => '请选择所在地区',
+            'address.require'      => '请输入详细地址',
+            'type.require'         => '请选择地址类型',
+            'mobile_phone.require' => '请输入手机号码',
 		];
 	protected $scene
 		= [
@@ -66,6 +66,14 @@ class Address extends Validator
 				'id',
 			],
 		];
+
+    protected function checkMobilePhone( $value, $rule, $data )
+    {
+        if( !$this->is( $value, 'phone', $data ) ){
+            return '手机号格式不对，请重新输入';
+        }
+        return true;
+    }
 
 
 }

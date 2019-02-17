@@ -19,6 +19,8 @@ namespace App\Model;
 class DistributionConfig extends Model
 {
 	protected $softDelete = true;
+    protected $jsonFields = ['value'];
+    protected $primaryKey = 'sign';
 
 	/**
 	 * 列表
@@ -113,7 +115,7 @@ class DistributionConfig extends Model
 	 */
 	public function editMultiDistributionConfig( $update = [] )
 	{
-		return $this->editMulti( $update );
+        return $this->editMulti( $update );
 	}
 
 	/**
