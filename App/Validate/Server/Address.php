@@ -28,7 +28,7 @@ class Address extends Validate
 			'address'      => 'require',
 			'type'         => 'require',
 			'area_info'    => 'require',
-			'mobile_phone' => 'require|phone|checkMobilePhone',
+			'mobile_phone' => 'require|checkMobilePhone',
 			'type'         => 'require',
 		];
 	protected $message
