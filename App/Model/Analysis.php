@@ -65,5 +65,8 @@ class Analysis extends Model
     {
         return $this->field($field)->where($condition)->order($order)->group($group)->select();
     }
+
+
+
 }
 ?>
