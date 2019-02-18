@@ -72,7 +72,7 @@ class AutoReply
 	}
 	public function getSubscribeReplyContent()
 	{
-		$shop = \App\Model\Shop::getShopInfo(['id'=>1,'auto_reply_status'=>1],'auto_reply_subscribe_replay_content');
+		$shop = \App\Model\Shop::init()->getShopInfo(['id'=>1,'auto_reply_status'=>1],'auto_reply_subscribe_replay_content');
 		if( $shop ){
 			return $shop['auto_reply_subscribe_replay_content'];
 		}else{

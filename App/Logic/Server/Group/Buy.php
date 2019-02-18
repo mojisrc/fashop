@@ -595,7 +595,7 @@ class Buy
 
 			$user         = $this->getUserInfo();
 			$pay_sn       = $this->makePaySn( $this->getUserId() );
-			$order_pay_id = \App\Model\Order::init()->addOrderPay( [
+			$order_pay_id = \App\Model\OrderPay::init()->addOrderPay( [
 				'pay_sn'    => $pay_sn,
 				'user_id'   => $this->getUserId(),
 				'pay_state' => 0,
@@ -725,7 +725,7 @@ class Buy
 			return new \App\Logic\Server\Buy\CreateOrderResult( ['order_id' => $order_id, 'pay_sn' => $pay_sn] );
 		} catch( \Exception $e ){
 			\App\Model\Order::rollback();
-			\ezswoole\Log::write( $this->errMsg );
+			\EasySwoole\EasySwoole\Logger::getInstance()->log( $this->errMsg );
 		}
 	}
 

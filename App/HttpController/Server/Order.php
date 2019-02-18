@@ -84,9 +84,9 @@ class Order extends Server
 
 			$result['state_success'] = $orderLogic->stateType( 'state_success' )->count();
 			// todo getUserAllIds 为什么不用同一个
-			$result['state_unevaluate'] = \App\Model\OrderGoods::init()->getOrderGoodsCount( ['user_id' => ['in', \App\Model\User::getUserAllIds( $user['id'] )], 'evaluate_state' => 0, "(SElECT state FROM $table_order where id =$table_order_goods.order_id)" => 40] );
+			$result['state_unevaluate'] = \App\Model\OrderGoods::init()->getOrderGoodsCount( ['user_id' => ['in', \App\Model\User::init()->getUserAllIds( $user['id'] )], 'evaluate_state' => 0, "(SElECT state FROM $table_order where id =$table_order_goods.order_id)" => 40] );
 
-			$result['state_refund'] = \App\Model\OrderRefund::init()->getOrderRefundCount( ['user_id' => ['in', \App\Model\User::getUserAllIds( $user['id'] )], 'handle_state' => 0] );
+			$result['state_refund'] = \App\Model\OrderRefund::init()->getOrderRefundCount( ['user_id' => ['in', \App\Model\User::init()->getUserAllIds( $user['id'] )], 'handle_state' => 0] );
 
 			return $this->send( Code::success, $result );
 		} catch( \Exception $e ){
@@ -282,7 +282,7 @@ class Order extends Server
 			} else{
 				$user                 = $this->getRequestUser();
 				$condition['id']      = $this->post['id'];
-				$condition['user_id'] = ['in', \App\Model\User::getUserAllIds( $user['id'] )];
+				$condition['user_id'] = ['in', \App\Model\User::init()->getUserAllIds( $user['id'] )];
 				$order_info           = \App\Model\Order::init()->getOrderInfo( $condition );
 				$extend_msg           = isset( $this->post['state_remark'] ) ? $this->post['state_remark'] : null;
 				$result               = \App\Model\Order::userChangeState( 'order_receive', $order_info, $user['id'], $user['username'], $extend_msg );
@@ -313,7 +313,7 @@ class Order extends Server
 				$condition['order_id'] = $this->get['id'];
 				$list                  = \App\Model\Order::getOrderGoodsList( [
 					'order_id' => $this->get['id'],
-					'user_id'  => ['in', \App\Model\User::getUserAllIds( $user['id'] )],
+					'user_id'  => ['in', \App\Model\User::init()->getUserAllIds( $user['id'] )],
 				], '*', 'id asc', [1,1000] );
 				$this->send( Code::success, ['list' => $list] );
 			}
@@ -337,7 +337,7 @@ class Order extends Server
 			} else{
 				$user                 = $this->getRequestUser();
 				$condition['id']      = $this->get['id'];
-				$condition['user_id'] = ['in', \App\Model\User::getUserAllIds( $user['id'] )];
+				$condition['user_id'] = ['in', \App\Model\User::init()->getUserAllIds( $user['id'] )];
 				$result['info']       = \App\Model\Order::getOrderGoodsInfo( $condition );
 				$this->send( Code::success, $result );
 			}
@@ -366,7 +366,7 @@ class Order extends Server
 				$condition['id']         = $order_id;
 				$condition['state']      = ['>=', 20];
 				$condition['goods_type'] = 2;
-				$condition['user_id']    = ['in', \App\Model\User::getUserAllIds( $user['id'] )];
+				$condition['user_id']    = ['in', \App\Model\User::init()->getUserAllIds( $user['id'] )];
 				$order_info              = \App\Model\Order::init()->getOrderInfo( $condition );
 				if( !$order_info ){
 					return $this->send( Code::param_error, [], '参数错误' );
@@ -434,7 +434,7 @@ class Order extends Server
 				$user                 = $this->getRequestUser();
 				$condition['id']      = $order_id;
 				$condition['state']   = ['>=', 30];
-				$condition['user_id'] = ['in', \App\Model\User::getUserAllIds( $user['id'] )];
+				$condition['user_id'] = ['in', \App\Model\User::init()->getUserAllIds( $user['id'] )];
 				$order_info           = \App\Model\Order::init()->getOrderInfo( $condition );
 				if( !$order_info ){
 					return $this->send( Code::param_error, [], '参数错误' );

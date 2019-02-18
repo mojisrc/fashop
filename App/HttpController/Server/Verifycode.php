@@ -98,14 +98,14 @@ class Verifycode extends Server
 									'expire_time'  => $now_time + 5 * 60,
 								] );
 							} catch( \Exception $e ){
-								\ezswoole\Log::write( $e->getMessage() );
+								\EasySwoole\EasySwoole\Logger::getInstance()->log( $e->getMessage() );
 							}
 //						} );
 					}
 				}
 			}
 		} catch( \Throwable $e ){
-			\ezswoole\Log::write( $e->getMessage() );
+			\EasySwoole\EasySwoole\Logger::getInstance()->log( $e->getMessage() );
 		}
 		$this->send( Code::success );
 	}

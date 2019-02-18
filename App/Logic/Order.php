@@ -457,7 +457,7 @@ class Order extends Logic
 			return true;
 		} catch( \Exception $e ){
 			$order_model->rollback();
-			\ezswoole\Log::write( "第三方支付通知成功后，更改订单状态失败：".$e->getMessage() );
+			\EasySwoole\EasySwoole\Logger::getInstance()->log( "第三方支付通知成功后，更改订单状态失败：".$e->getMessage() );
 			return false;
 		}
 	}

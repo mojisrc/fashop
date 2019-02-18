@@ -72,7 +72,7 @@ class PageGoods
                         $goods_list_order = 'create_time desc';
                         break;
                 }
-                $goods_list            = \App\Model\Goods::getGoodsList(['is_on_sale' => 1], '*', $goods_list_order, '1,' . $bodys[$value]['options']['goods_display_num']);
+                $goods_list            = \App\Model\Goods::init()->getGoodsList(['is_on_sale' => 1], '*', $goods_list_order,  [1,$bodys[$value]['options']['goods_display_num']]);
                 $bodys[$value]['data'] = $goods_list;
             }
         }
@@ -127,7 +127,7 @@ class PageGoods
                     $group_goods = \App\Model\GroupGoods::init()->getGroupGoodsSkuMoreList($condition, '', 'group_goods.*', 'group_goods.id desc', '', '');
                     if ($group_goods) {
                         $goods_ids  = array_unique(array_column($group_goods, 'goods_id'));
-                        $goods_list = \App\Model\Goods::getGoodsList(['is_on_sale' => 1, 'id' => ['in', $goods_ids]], '*', $goods_group_order, '1,' . $bodys[$value]['options']['goods_display_num']);
+                        $goods_list = \App\Model\Goods::getGoodsList(['is_on_sale' => 1, 'id' => ['in', $goods_ids]], '*', $goods_group_order, [1,$bodys[$value]['options']['goods_display_num']]);
                         if ($goods_list) {
                             $map['id']       = ['in', array_unique(array_column($group_goods, 'id'))];
                             $map['goods_id'] = ['in', array_unique(array_column($goods_list, 'id'))];

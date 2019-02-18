@@ -126,7 +126,7 @@ class Cart
 		if( isset( $options['ids'] ) ){
 			$this->setIds( $options['ids'] );
 		}
-		$this->model = model( 'Cart' );
+		$this->model = new \App\Model\Cart();
 	}
 
 	/**
@@ -189,7 +189,7 @@ class Cart
 	public function getCartList( $user_id, $condition = [] )
 	{
 		$condition['user_id'] = $user_id;
-		$cart_list            = $this->model->getCartList( $condition, '*', 'id desc', [1,1000] );
+		$cart_list            = $this->model->getCartList( $condition, '*', 'id desc', [1, 1000] );
 		$this->goodsNum       = count( $cart_list );
 		$cart_all_price       = 0;
 		if( is_array( $cart_list ) ){
@@ -202,13 +202,10 @@ class Cart
 	}
 
 	/**
-	 * @throws \ezswoole\db\exception\DataNotFoundException
-	 * @throws \ezswoole\db\exception\ModelNotFoundException
 	 * @throws \ezswoole\exception\DbException
 	 */
 	public function list( array $condition = [] )
 	{
-		$model     = $this->getModel();
 		$condition = array_merge( $condition, ['cart.user_id' => ['=', $this->getUserId()]] );
 		if( $this->ids ){
 			$condition['cart.id'] = ['in', $this->getIds()];
@@ -233,7 +230,7 @@ class Cart
 			'freight.areas as goods_freight_areas',
 		];
 		$field       = implode( ",", $field_array );
-		$list        = \App\Model\Page::alias( 'cart' )->join( 'goods_sku', 'goods_sku.id = cart.goods_sku_id', "LEFT" )->join( 'goods', 'goods_sku.goods_id = goods.id', "LEFT" )->join( 'freight', 'goods.freight_id = freight.id', "LEFT" )->field( $field )->where( $condition )->group( 'goods_sku_id' )->select();
+		$list        = \App\Model\Cart::init()->join( 'goods_sku', 'goods_sku.id = cart.goods_sku_id', "LEFT" )->join( 'goods', 'goods_sku.goods_id = goods.id', "LEFT" )->join( 'freight', 'goods.freight_id = freight.id', "LEFT" )->field( $field )->where( $condition )->group( 'goods_sku_id' )->select();
 
 		if( !$list ){
 			$list = [];
@@ -242,13 +239,10 @@ class Cart
 	}
 
 	/**
-	 * @throws \ezswoole\db\exception\DataNotFoundException
-	 * @throws \ezswoole\db\exception\ModelNotFoundException
 	 * @throws \ezswoole\exception\DbException
 	 */
 	public function info( array $condition = [] )
 	{
-		$model       = $this->getModel();
 		$condition   = array_merge( $condition, ['cart.user_id' => ['=', $this->getUserId()]] );
 		$field_array = [
 			'cart.id',
@@ -326,7 +320,7 @@ class Cart
 	public function getGoodsOnlineInfo( $goods_sku_id, $quantity )
 	{
 		//取目前在售商品
-		$goods_info = \App\Model\Goods::getGoodsOnlineInfo( ['id' => $goods_sku_id] );
+		$goods_info = \App\Model\Goods::init()->getGoodsOnlineInfo( ['id' => $goods_sku_id] );
 
 		if( empty( $goods_info ) ){
 			return null;
@@ -386,8 +380,7 @@ class Cart
 		foreach( $cart_list as $key => $cart_info ){
 			$goods_sku_id_array[] = $cart_info['goods_sku_id'];
 		}
-		$goods_model        = model( 'Goods' );
-		$goods_online_list  = \App\Model\Goods::getGoodsOnlineList( ['id' => ['in', $goods_sku_id_array]] );
+		$goods_online_list  = \App\Model\Goods::init()->getGoodsOnlineList( ['id' => ['in', $goods_sku_id_array]] );
 		$goods_online_array = [];
 		foreach( $goods_online_list as $goods ){
 			$goods_online_array[$goods['id']] = $goods;

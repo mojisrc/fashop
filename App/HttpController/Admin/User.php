@@ -151,7 +151,7 @@ class User extends Admin
 			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
 
-			$condition['user_id'] = ['in', \App\Model\User::getUserAllIds( $this->get['id'] )];
+			$condition['user_id'] = ['in', \App\Model\User::init()->getUserAllIds( $this->get['id'] )];
 			$count                = \App\Model\Order::init()->where( $condition )->count();
 			$order_list           = \App\Model\Order::init()->getOrderList( $condition, '', "*", "id desc", $this->getPageLimit(), [
 				'order_goods',

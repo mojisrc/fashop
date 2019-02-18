@@ -43,7 +43,7 @@ class Order
 	// 自动收货，完成订单
 	static function autoReceive() : void
 	{
-		$config                   = \App\Model\Shop::getShopInfo( ['id' => 1] );
+		$config                   = \App\Model\Shop::init()->getShopInfo( ['id' => 1] );
 		$condition['state']       = \App\Logic\Order::state_send;
 		$condition['lock_state'] =  0;
 		$condition['delay_time'] = ['<', time() - $config['order_auto_confirm_expires']];

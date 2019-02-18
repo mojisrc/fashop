@@ -50,7 +50,7 @@ class DiscountGoods extends Model
 	 */
 	public function getDiscountGoodsMoreList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20] )
 	{
-		$data = $this->alias( 'discount_goods' )->join( '__GOODS__ goods', 'discount_goods.goods_id = goods.id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->page( $page )->select();
+		$data = $this->join( 'goods', 'discount_goods.goods_id = goods.id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $data;
 	}
 
@@ -93,7 +93,7 @@ class DiscountGoods extends Model
 	 */
 	public function getDiscounGoodsMoretCount( $condition = [] )
 	{
-		return $this->alias( 'discount_goods' )->join( '__GOODS__ goods', 'discount_goods.goods_id = goods.id', 'LEFT' )->where( $condition )->count();
+		return $this->join( 'goods', 'discount_goods.goods_id = goods.id', 'LEFT' )->where( $condition )->count();
 	}
 
 	/**

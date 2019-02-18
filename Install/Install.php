@@ -16,7 +16,7 @@ namespace Install;
 use ezswoole\Validator;
 use EasySwoole\Utility\File;
 use ezswoole\utils\RandomKey;
-use ezswoole\Log;
+
 
 class Install
 {
@@ -234,7 +234,7 @@ class Install
 		try{
 			$db->query( $sql );
 		} catch( \Exception $e ){
-			Log::write( $e->getMessage() );
+			\EasySwoole\EasySwoole\Logger::getInstance()->log( $e->getMessage() );
 		}
 	}
 

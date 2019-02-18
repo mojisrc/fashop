@@ -15,7 +15,6 @@ namespace App\HttpController\Server;
 
 use App\Logic\Pay\Notice\Facade as PayNoticeFacade;
 use App\Utils\Code;
-use ezswoole\Log;
 use Yansongda\Pay\Pay;
 
 class Buy extends Server
@@ -178,7 +177,7 @@ class Buy extends Server
 						}
 					}
 				} catch( \Exception $e ){
-					\ezswoole\Log::write( $e->getMessage() );
+					\EasySwoole\EasySwoole\Logger::getInstance()->log( $e->getMessage() );
 					return $this->send( Code::server_error );
 				}
 			}
@@ -201,13 +200,13 @@ class Buy extends Server
 				if( $result ){
 					$this->response()->write( 'success' );
 				} else{
-					Log::write( "微信支付处理订单失败" );
+					\EasySwoole\EasySwoole\Logger::getInstance()->log( "微信支付处理订单失败" );
 				}
 			} else{
-				Log::write( "微信支付通知验证失败" );
+				\EasySwoole\EasySwoole\Logger::getInstance()->log( "微信支付通知验证失败" );
 			}
 		} catch( \Exception $e ){
-			Log::write( "微信支付通知处理失败：".$e->getMessage() );
+			\EasySwoole\EasySwoole\Logger::getInstance()->log( "微信支付通知处理失败：".$e->getMessage() );
 		}
 	}
 
@@ -228,13 +227,13 @@ class Buy extends Server
 					// todo 退款成功需要修改订单状态
 					$this->response()->write( 'success' );
 				} else{
-					Log::write( "微信支付处理订单失败" );
+					\EasySwoole\EasySwoole\Logger::getInstance()->log( "微信支付处理订单失败" );
 				}
 			} else{
-				Log::write( "微信支付通知验证失败" );
+				\EasySwoole\EasySwoole\Logger::getInstance()->log( "微信支付通知验证失败" );
 			}
 		} catch( \Exception $e ){
-			Log::write( "微信支付通知处理失败：".$e->getMessage() );
+			\EasySwoole\EasySwoole\Logger::getInstance()->log( "微信支付通知处理失败：".$e->getMessage() );
 		}
 	}
 
@@ -255,13 +254,13 @@ class Buy extends Server
 				if( $result ){
 					$this->response()->write( 'success' );
 				} else{
-					Log::write( "微信支付处理订单失败" );
+					\EasySwoole\EasySwoole\Logger::getInstance()->log( "微信支付处理订单失败" );
 				}
 			} else{
-				Log::write( "微信支付通知验证失败" );
+				\EasySwoole\EasySwoole\Logger::getInstance()->log( "微信支付通知验证失败" );
 			}
 		} catch( \Exception $e ){
-			Log::write( "微信支付通知处理失败：".$e->getMessage() );
+			\EasySwoole\EasySwoole\Logger::getInstance()->log( "微信支付通知处理失败：".$e->getMessage() );
 		}
 	}
 
@@ -281,13 +280,13 @@ class Buy extends Server
 				if( $result ){
 					$this->response()->write( 'success' );
 				} else{
-					Log::write( "支付宝支付处理订单失败" );
+					\EasySwoole\EasySwoole\Logger::getInstance()->log( "支付宝支付处理订单失败" );
 				}
 			} else{
-				Log::write( "支付宝支付通知验证失败" );
+				\EasySwoole\EasySwoole\Logger::getInstance()->log( "支付宝支付通知验证失败" );
 			}
 		} catch( \Exception $e ){
-			Log::write( "支付宝支付通知处理失败：".$e->getMessage() );
+			\EasySwoole\EasySwoole\Logger::getInstance()->log( "支付宝支付通知处理失败：".$e->getMessage() );
 		}
 	}
 

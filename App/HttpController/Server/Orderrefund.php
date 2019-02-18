@@ -91,7 +91,7 @@ class Orderrefund extends Server
 			$this->send( Code::user_access_token_error );
 		} else{
 			$user                 = $this->getRequestUser();
-			$condition['user_id'] = ['in', \App\Model\User::getUserAllIds($user['id'])];
+			$condition['user_id'] = ['in', \App\Model\User::init()->getUserAllIds($user['id'])];
 			$keyword_type         = ['order_sn', 'refund_sn', 'goods_title'];
 			if( isset( $this->get['keywords'] ) && trim( $this->get['keywords'] ) != '' && in_array( $this->get['keywords_type'], $keyword_type ) ){
 				$type             = $this->get['keywords_type'];
@@ -130,7 +130,7 @@ class Orderrefund extends Server
 			} else{
 				$info = \App\Model\OrderRefund::getOrderRefundInfo( [
 					'id'      => intval( $this->get['id'] ),
-					'user_id' => ['in', \App\Model\User::getUserAllIds($user['id'])],
+					'user_id' => ['in', \App\Model\User::init()->getUserAllIds($user['id'])],
 				] );
 				$this->send( Code::success, ['info' => $info] );
 			}
@@ -158,7 +158,7 @@ class Orderrefund extends Server
 			} else{
 				$user                  = $this->getRequestUser();
 				$condition['id']       = $this->post['id'];
-				$condition['user_id']  = ['in', \App\Model\User::getUserAllIds($user['id'])];
+				$condition['user_id']  = ['in', \App\Model\User::init()->getUserAllIds($user['id'])];
 				$condition['is_close'] = 0;
 
                 $update['tracking_company'] = $this->post['tracking_company'];

@@ -50,7 +50,7 @@ class CouponGoods extends Model
 	 */
 	public function getCouponGoodsMoreList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20] )
 	{
-		$data = $this->alias( 'coupon_goods' )->join( '__GOODS__ goods', 'coupon_goods.goods_id = goods.id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->page( $page )->select();
+		$data = $thi->join( 'goods', 'coupon_goods.goods_id = goods.id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $data;
 	}
 
@@ -93,7 +93,7 @@ class CouponGoods extends Model
 	 */
 	public function getDiscounGoodsMoretCount( $condition = [] )
 	{
-		return $this->alias( 'coupon_goods' )->join( '__GOODS__ goods', 'coupon_goods.goods_id = goods.id', 'LEFT' )->where( $condition )->count();
+		return $this->join( 'goods', 'coupon_goods.goods_id = goods.id', 'LEFT' )->where( $condition )->count();
 	}
 
 	/**
@@ -223,10 +223,10 @@ class CouponGoods extends Model
 	{
 
 		if( $page == '' ){
-			$data = $this->alias( 'goods_sku' )->join( '__COUPON_GOODS__ coupon_goods', 'goods_sku.id = coupon_goods.goods_sku_id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->select();
+			$data = $this->join( '__COUPON_GOODS__ coupon_goods', 'goods_sku.id = coupon_goods.goods_sku_id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->select();
 
 		} else{
-			$data = $this->alias( 'goods_sku' )->join( '__COUPON_GOODS__ coupon_goods', 'goods_sku.id = coupon_goods.goods_sku_id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->page( $page )->select();
+			$data = $this->join( '__COUPON_GOODS__ coupon_goods', 'goods_sku.id = coupon_goods.goods_sku_id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 
 		}
 
@@ -241,7 +241,7 @@ class CouponGoods extends Model
 	 */
 	public function getGoodsSkuMoreCount( $condition = [] )
 	{
-		return $this->alias( 'goods_sku' )->join( '__COUPON_GOODS__ coupon_goods', 'goods_sku.id = coupon_goods.goods_sku_id', 'LEFT' )->where( $condition )->count();
+		return $this->join( '__COUPON_GOODS__ coupon_goods', 'goods_sku.id = coupon_goods.goods_sku_id', 'LEFT' )->where( $condition )->count();
 
 	}
 

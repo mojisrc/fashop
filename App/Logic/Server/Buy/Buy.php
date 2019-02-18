@@ -15,6 +15,7 @@ namespace App\Logic\Server\Buy;
 
 use App\Logic\Server\Cart\Address;
 use App\Logic\Server\Cart\Item;
+use App\Model\Cart;
 
 class Buy
 {
@@ -389,7 +390,7 @@ class Buy
 
 		$this->setUserInfo( $data['user_info'] );
 
-		$address_info = \App\Model\Address::getAddressInfo( [
+		$address_info = \App\Model\Address::init()->getAddressInfo( [
 			'id'      => $this->getAddressId(),
 			'user_id' => $this->getUserId(),
 		] );
@@ -398,7 +399,7 @@ class Buy
 		if( $address_info['user_id'] != $data['user_id'] ){
 			throw new \Exception( '收货地址错误' );
 		}
-		$this->setCartModel( model( 'Cart' ) );
+		$this->setCartModel( new \App\Model\Cart );
 
 	}
 
@@ -451,21 +452,20 @@ class Buy
 	 */
 	public function createOrder() : CreateOrderResult
 	{
-		$cart_model = $this->getCartModel();
-		\App\Model\Cart::startTransaction();
+		$cartModel = new \App\Model\Cart;
+		$cartModel->startTransaction();
 
 		try{
-			$order_model  = model( 'Order' );
 			$user         = $this->getUserInfo();
 			$pay_sn       = $this->makePaySn( $this->getUserId() );
-			$order_pay_id = \App\Model\Order::init()->addOrderPay( [
+			$order_pay_id = \App\Model\OrderPay::init()->addOrderPay( [
 				'pay_sn'    => $pay_sn,
 				'user_id'   => $this->getUserId(),
 				'pay_state' => 0
 
 			] );
 			if( !$order_pay_id ){
-				\App\Model\Cart::rollback();
+				$cartModel->rollback();
 				throw new \Exception( '订单支付记录保存失败' );
 			}
 			$address         = $this->getAddressInfo();
@@ -473,9 +473,7 @@ class Buy
 			$calculateResult = $this->calculate();
 			$goods_num       = 0;
 			$cart_items      = $this->getCartItems();
-			/**
-			 * @var \App\Logic\Server\Cart\Item $cartItem ;
-			 */
+
 			foreach( $cart_items as $i => $cartItem ){
 				$goods_num += $cartItem->getGoodsNum();
 			}
@@ -500,7 +498,7 @@ class Buy
 
               ] );
 			if( !$order_id ){
-				\App\Model\Cart::rollback();
+				$cartModel->rollback();
 				throw new \Exception( '订单保存失败' );
 			} else{
 				$this->setOrderId( $order_id );
@@ -522,13 +520,11 @@ class Buy
 				'reciver_area_id'     => $address->getAreaId(),
 			] );
 			if( !$state ){
-				\App\Model\Cart::rollback();
+				$cartModel->rollback();
 				throw new \Exception( '订单拓展保存失败' );
 			}
 			$cart_ids = [];
-			/**
-			 * @var \App\Logic\Server\Cart\Item $cartItem ;
-			 */
+
 			foreach( $cart_items as $i => $cartItem ){
 				$cart_ids[]    = $cartItem->getId();
 				$order_goods[] = [
@@ -551,7 +547,7 @@ class Buy
 			// 订单商品创建
 			$order_goods_insert = \App\Model\OrderGoods::init()->addMultiOrderGoods( $order_goods );
 			if( !$order_goods_insert ){
-				\App\Model\Cart::rollback();
+				$cartModel->rollback();
 				throw new \Exception( '订单商品保存失败' );
 			}
 			// 订单日志记录
@@ -563,15 +559,15 @@ class Buy
 			] );
 			// 更新商品库存
 			$this->updateGoodsStorageNum();
-			\App\Model\Cart::commit();
+			$cartModel->commit();
 			\App\Model\Cart::init()->delCart( [
 				'user_id' => $this->getUserId(),
 				'id'      => ['in', $cart_ids],
 			] );
 			return new CreateOrderResult( ['order_id' => $order_id, 'pay_sn' => $pay_sn] );
 		} catch( \Exception $e ){
-			\App\Model\Cart::rollback();
-			\ezswoole\Log::write( $this->errMsg );
+			$cartModel->rollback();
+			\EasySwoole\EasySwoole\Logger::getInstance()->log( $e->getMessage() );
 		}
 	}
 

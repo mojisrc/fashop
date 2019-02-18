@@ -290,7 +290,6 @@ class GoodsSearch
 			if( $goods_ids ){
 				if( $this->ids ){
 					$this->condition['id'] = ['in', array_values( array_unique( array_merge( $this->ids, array_unique( $goods_ids ) ) ) )];
-
 				} else{
 					$this->condition['id'] = ['in', array_unique( $goods_ids )];
 				}

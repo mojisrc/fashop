@@ -24,8 +24,7 @@ class Voucher extends Server {
 	 */
 	public function getVoucherTemplateList() {
 		$d    = model('VoucherTemplate');
-		$list = $d->alias('template')
-			->where(array('template.end_date' => array('>', time()), 'template.state' => 1))
+		$list = $d->where(array('template.end_date' => array('>', time()), 'template.state' => 1))
 			->field('template.*,(SELECT count(*) FROM ' . \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix') . 'coupon WHERE template_id = template.id) as receive_times,
             (SELECT count(*) FROM ' . \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix') . 'coupon WHERE template_id = template.id AND owner_id ' . ($this->user['id'] ? '= ' : '<> ') . $this->user['id'] . ') as receive_state
             ')
@@ -42,7 +41,7 @@ class Voucher extends Server {
 		$get  = $this->get;
 		$list = array();
 		$d    = model('Voucher');
-		$list = $d->alias('coupon')
+		$list = $d
 			->where(array('owner_id' => $this->user['id']))
 			->field('coupon.*')
 			->select();

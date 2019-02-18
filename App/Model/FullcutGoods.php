@@ -51,7 +51,7 @@ class FullcutGoods extends Model
 	 */
 	public function getFullcutGoodsMoreList( $condition = [], $field = '*', $order = 'id desc', $page = [1, 20] )
 	{
-		$data = $this->alias( 'fullcut_goods' )->join( '__GOODS__ goods', 'fullcut_goods.goods_id = goods.id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->page( $page )->select();
+		$data = $this->alias( 'fullcut_goods' )->join( 'goods', 'fullcut_goods.goods_id = goods.id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $data;
 	}
 
@@ -94,7 +94,7 @@ class FullcutGoods extends Model
 	 */
 	public function getDiscounGoodsMoretCount( $condition = [] )
 	{
-		return $this->alias( 'fullcut_goods' )->join( '__GOODS__ goods', 'fullcut_goods.goods_id = goods.id', 'LEFT' )->where( $condition )->count();
+		return $this->alias( 'fullcut_goods' )->join( 'goods', 'fullcut_goods.goods_id = goods.id', 'LEFT' )->where( $condition )->count();
 	}
 
 	/**

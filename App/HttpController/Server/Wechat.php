@@ -16,7 +16,7 @@ namespace App\HttpController\Server;
 use App\Utils\Code;
 use App\Logic\Wechat\Factory;
 use EasyWeChat\Kernel\Messages\Text;
-use ezswoole\Log;
+
 
 class Wechat extends Server
 {
@@ -165,7 +165,7 @@ class Wechat extends Server
 			break;
 			}
 		} catch( \Exception $e ){
-			Log::write( $e->getMessage() );
+			\EasySwoole\EasySwoole\Logger::getInstance()->log( $e->getMessage() );
 		}
 	}
 

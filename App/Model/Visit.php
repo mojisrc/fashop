@@ -19,6 +19,7 @@ class Visit extends Model
 {
 	protected $softDelete = true;
 	protected $createTime = true;
+	protected $jsonFields = ['model'];
 
 	/**
 	 * 添加一条浏览记录
@@ -27,15 +28,9 @@ class Visit extends Model
 	 * @param int    $user_id           用户id
 	 *                                  todo 获得当前设备，坐标，request信息
 	 */
-	public function addVisit( $model, $model_relation_id, $user_id = 0 )
+	public function addVisit( array $data)
 	{
-		$data = [
-			'model'             => $model,
-			'model_relation_id' => $model_relation_id,
-			'create_time'       => time(),
-			'user_id'           => $user_id,
-			'ip'                => \App\Utils\Ip::getClientIp(),
-		];
+//		$data['ip'] = \App\Utils\Ip::getClientIp();
 		return $this->add( $data );
 	}
 

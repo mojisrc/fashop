@@ -17,7 +17,7 @@ use App\Utils\Code;
 
 use EasySwoole\Core\Component\SysConst;
 use EasySwoole\Config;
-use ezswoole\Log;
+
 
 class System extends Admin
 {
@@ -89,7 +89,7 @@ class System extends Admin
 			$result      = json_decode( $response->getBody() );
 			$this->send( Code::success, ['version' => $result['result']['version']] );
 		} catch( \League\OAuth2\Client\Provider\Exception\IdentityProviderException $e ){
-			Log::write( $e->getMessage() );
+			\EasySwoole\EasySwoole\Logger::getInstance()->log( $e->getMessage() );
 			$this->send( COde::server_error, [], $e->getMessage() );
 		}
 	}
@@ -149,15 +149,15 @@ class System extends Admin
 										if( $db_update_result === true ){
 											$db_query_result = db( 'System' )->where( ['name' => 'db_version'] )->update( ['value' => $version] );
 											if( !$db_query_result ){
-												Log::write( "after {$db_update_class_name}->run update system db_version fail" );
+												\EasySwoole\EasySwoole\Logger::getInstance()->log( "after {$db_update_class_name}->run update system db_version fail" );
 												return $this->send( Code::update_db_version_fail );
 											}
 										} else{
-											Log::write( "{$db_update_class_name}->run更新数据库失败" );
+											\EasySwoole\EasySwoole\Logger::getInstance()->log( "{$db_update_class_name}->run更新数据库失败" );
 											return $this->send( Code::update_db_version_fail );
 										}
 									} else{
-										Log::write( "Db Update Class must instanceof \App\Update\DB\UpdateAbstract" );
+										\EasySwoole\EasySwoole\Logger::getInstance()->log( "Db Update Class must instanceof \App\Update\DB\UpdateAbstract" );
 										return $this->send( Code::server_error, [], "Db Update Class must instanceof \App\Update\DB\UpdateAbstract" );
 									}
 								}
@@ -175,32 +175,32 @@ class System extends Admin
 											if( $pluginUpdateClass instanceof \App\Plugin\AbstractInterface\BehaviorAbstract ){
 												$state = $pluginUpdateClass->onFilesCoverComplete( $system['version'], $version );
 												if( $state !== true ){
-													Log::write( "{$plugin_class_name}->onFilesCoverComplete fail" );
+													\EasySwoole\EasySwoole\Logger::getInstance()->log( "{$plugin_class_name}->onFilesCoverComplete fail" );
 												} else{
-													Log::write( "{$plugin_class_name}->onFilesCoverComplete success" );
+													\EasySwoole\EasySwoole\Logger::getInstance()->log( "{$plugin_class_name}->onFilesCoverComplete success" );
 												}
 											} else{
-												Log::write( "{$plugin_class_name} must instanceof \App\Plugin\AbstractInterface\UpdateAbstract" );
+												\EasySwoole\EasySwoole\Logger::getInstance()->log( "{$plugin_class_name} must instanceof \App\Plugin\AbstractInterface\UpdateAbstract" );
 											}
 										} catch( \Exception $e ){
-											Log::write( $e->getMessage() );
+											\EasySwoole\EasySwoole\Logger::getInstance()->log( $e->getMessage() );
 										}
 									}
 								}
 							} else{
-								Log::write( "系统版本更改失败" );
+								\EasySwoole\EasySwoole\Logger::getInstance()->log( "系统版本更改失败" );
 								$this->send( Code::update_version_fail );
 							}
 						} else{
-							Log::write( "解压包覆盖失败" );
+							\EasySwoole\EasySwoole\Logger::getInstance()->log( "解压包覆盖失败" );
 							$this->send( Code::update_extract_zip_fail );
 						}
 					} else{
-						Log::write( "打开解压包失败" );
+						\EasySwoole\EasySwoole\Logger::getInstance()->log( "打开解压包失败" );
 						$this->send( Code::update_open_zip_fail );
 					}
 				} else{
-					Log::write( "下载升级包失败" );
+					\EasySwoole\EasySwoole\Logger::getInstance()->log( "下载升级包失败" );
 					$this->send( Code::update_download_fail );
 				}
 				$this->send( Code::success );
@@ -208,7 +208,7 @@ class System extends Admin
 				$this->send( Code::update_no_need );
 			}
 		} catch( \League\OAuth2\Client\Provider\Exception\IdentityProviderException $e ){
-			Log::write( $e->getMessage() );
+			\EasySwoole\EasySwoole\Logger::getInstance()->log( $e->getMessage() );
 			$this->send( COde::server_error, [], $e->getMessage() );
 		}
 
