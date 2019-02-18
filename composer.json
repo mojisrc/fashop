@@ -18,6 +18,7 @@
         "hanwenbo/ezswoole": "v3.x-dev",
         "easyswoole/wechat": "dev-master",
         "easyswoole/mysqli": "dev-master",
+        "easyswoole/pay": "dev-master",
         "firebase/php-jwt": "^5.0",
         "intervention/image": "^2.4",
         "overtrue/easy-sms": "^0.0.9",
@@ -51,6 +52,10 @@
         "easyswoole/mysqli":{
             "type": "vcs",
             "url": "https://github.com/hanwenbo/mysqli"
+        },
+        "easyswoole/pay":{
+            "type": "vcs",
+            "url": "https://github.com/hanwenbo/pay"
         }
     }
 }

@@ -15,7 +15,6 @@ namespace App\HttpController\Server;
 
 use App\Logic\Pay\Notice\Facade as PayNoticeFacade;
 use App\Utils\Code;
-use Yansongda\Pay\Pay;
 
 class Buy extends Server
 {
@@ -109,17 +108,17 @@ class Buy extends Server
 	{
 		var_dump($this->post);
 		if( $this->verifyResourceRequest() !== true ){
-			return $this->send( Code::user_access_token_error );
+			 $this->send( Code::user_access_token_error );
 		} else
 
 			if( $this->validator( $this->post, 'Server/Buy.pay' ) !== true ){
-				return $this->send( Code::param_error, [], $this->getValidator()->getError() );
+				 $this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				try{
 					$user    = $this->getRequestUser();
 					$payment = \App\Model\Setting::init()->getSettingInfo( ['key' => $this->post['payment_code'], 'status' => 1] );
 					if( !$payment ){
-						return $this->send( Code::error, [], '系统不支持选定的支付方式' );
+						 $this->send( Code::error, [], '系统不支持选定的支付方式' );
 					} else{
 						$pay_info   = \App\Model\OrderPay::init()->getOrderPayInfo( [
 							'pay_sn'    => $this->post['pay_sn'],
@@ -131,7 +130,7 @@ class Buy extends Server
 							'state'  => \App\Logic\Order::state_new,
 						], 'id,pay_sn,amount,revise_amount' );
 						if( empty( $pay_info ) || empty( $order_info ) ){
-							return $this->send( Code::error, [], '该订单不存在' );
+							 $this->send( Code::error, [], '该订单不存在' );
 						} else{
 							$pay_amount = ($order_info['revise_amount'] > 0) ? $order_info['revise_amount'] : $order_info['amount'];
 							$options    = [];
@@ -163,11 +162,22 @@ class Buy extends Server
 							break;
 							case 'alipay_app':
 								$amount             = $pay_amount;
-								$options['content'] = Pay::alipay( $this->getAliPayConfig( $payment['config'], $this->post['payment_channel'] ) )->app( [
-									'out_trade_no' => $order_info['pay_sn'],
-									'total_amount' => "{$amount}",
-									'subject'      => '商品购买_'.$pay_info['pay_sn'],
-								] )->getContent();
+								$order = new \EasySwoole\Pay\AliPay\RequestBean\App();
+								$order->setOutTradeNo($order_info['pay_sn']);
+								$order->setTotalAmount("{$amount}");
+								$order->setSubject("商品购买_{$pay_info['pay_sn']}");
+
+								$aliConfig = new \EasySwoole\Pay\AliPay\Config();
+								$aliConfig->setGateWay(\EasySwoole\Pay\AliPay\GateWay::NORMAL);
+								$aliConfig->setAppId($payment['config']['app_id']);
+								$aliConfig->setPublicKey($payment['config']['alipay_public_key']);
+								$aliConfig->setPrivateKey($payment['config']['merchant_private_key']);
+
+								$pay = new \EasySwoole\Pay\Pay();
+
+								$res = $pay->aliPay($aliConfig)->app($order);
+
+								$options['content'] = $res->toArray();
 							break;
 							default:
 								# code...

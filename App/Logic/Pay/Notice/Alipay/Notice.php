@@ -13,7 +13,7 @@
 
 namespace App\Logic\Pay\Notice\Alipay;
 
-use Yansongda\Pay\Pay;
+use EasySwoole\Pay;
 use App\Logic\Pay\Notice\NoticeInterface;
 
 abstract class Notice implements NoticeInterface

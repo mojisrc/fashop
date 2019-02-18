@@ -12,7 +12,7 @@
  */
 
 namespace App\Logic\Pay\Notice\Wechat;
-use Yansongda\Pay\Pay;
+use EasySwoole\Pay;
 use App\Logic\Pay\Notice\NoticeInterface;
 abstract class Notice implements NoticeInterface
 {

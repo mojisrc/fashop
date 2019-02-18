@@ -13,7 +13,7 @@
 
 namespace App\Logic;
 
-use Yansongda\Pay\Pay;
+use EasySwoole\Pay;
 
 class OrderRefund
 {
