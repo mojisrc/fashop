@@ -66,74 +66,6 @@ class Group extends Model
 	}
 
 	/**
-	 * 查询普通的数据和软删除的数据
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $field
-	 * @param   $order
-	 * @param   $page
-	 * @param   $group
-	 * @return
-	 */
-	public function getWithTrashedGroupList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
-	{
-		$data = $this->withTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
-		return $data;
-	}
-
-	/**
-	 * 查询普通的数据和软删除的数据的数量
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $distinct [去重]
-	 * @return
-	 */
-	public function getWithTrashedGroupCount( $condition = [], $condition_str = '', $distinct = '' )
-	{
-		if( $distinct == '' ){
-			return $this->withTrashed()->where( $condition )->where( $condition_str )->count();
-
-		} else{
-			return $this->withTrashed()->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
-
-		}
-	}
-
-	/**
-	 * 只查询软删除的数据
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $field
-	 * @param   $order
-	 * @param   $page
-	 * @param   $group
-	 * @return
-	 */
-	public function getOnlyTrashedGroupList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
-	{
-		$data = $this->onlyTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
-		return $data;
-	}
-
-	/**
-	 * 只查询软删除的数据的数量
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $distinct [去重]
-	 * @return
-	 */
-	public function getOnlyTrashedGroupCount( $condition = [], $condition_str = '', $distinct = '' )
-	{
-		if( $distinct == '' ){
-			return $this->onlyTrashed()->where( $condition )->where( $condition_str )->count();
-
-		} else{
-			return $this->onlyTrashed()->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
-
-		}
-	}
-
-	/**
 	 * 获得信息
 	 * @param   $condition
 	 * @param   $condition_str
@@ -143,72 +75,6 @@ class Group extends Model
 	public function getGroupInfo( $condition = [], $condition_str = '', $field = '*' )
 	{
 		$data = $this->where( $condition )->where( $condition_str )->field( $field )->find();
-		return $data;
-	}
-
-	/**
-	 * 获得排除字段的信息
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $exclude [排除]
-	 * @return
-	 */
-	public function getGroupExcludeInfo( $condition = [], $condition_str = '', $exclude = '' )
-	{
-		$data = $this->where( $condition )->where( $condition_str )->field( $exclude, true )->find();
-		return $data;
-	}
-
-	/**
-	 * 查询普通的数据和软删除的数据信息
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $field
-	 * @return
-	 */
-	public function getWithTrashedGroupInfo( $condition = [], $condition_str = '', $field = '*' )
-	{
-		$data = $this->withTrashed()->where( $condition )->where( $condition_str )->field( $field )->find();
-		return $data;
-	}
-
-	/**
-	 * 查询普通的数据和软删除的排除字段数据信息
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $exclude [排除]
-	 * @return
-	 */
-	public function getWithTrashedGroupExcludeInfo( $condition = [], $condition_str = '', $exclude = '*' )
-	{
-		$data = $this->withTrashed()->where( $condition )->where( $condition_str )->field( $exclude, true )->find();
-		return $data;
-	}
-
-
-	/**
-	 * 只查询软删除的数据信息
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $field
-	 * @return
-	 */
-	public function getOnlyTrashedGroupInfo( $condition = [], $condition_str = '', $field = '*' )
-	{
-		$data = $this->onlyTrashed()->where( $condition )->where( $condition_str )->field( $field )->find();
-		return $data;
-	}
-
-	/**
-	 * 只查询软删除的排除字段数据信息
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $exclude [排除]
-	 * @return
-	 */
-	public function getOnlyTrashedGroupExcludeInfo( $condition = [], $condition_str = '', $exclude = '*' )
-	{
-		$data = $this->onlyTrashed()->where( $condition )->where( $condition_str )->field( $exclude, true )->find();
 		return $data;
 	}
 
@@ -289,12 +155,11 @@ class Group extends Model
 	 * 修改信息
 	 * @param   $update
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
 	public function updateGroup( $condition = [], $update = [] )
 	{
-		return $this->save( $update, $condition );
+		return $this->where( $condition )->edit( $update );
 	}
 
 	/**

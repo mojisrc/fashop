@@ -22,13 +22,12 @@ class DistributionRecruit extends Model
 	/**
 	 * 获得信息
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $field
 	 * @return
 	 */
-	public function getDistributionRecruitInfo( $condition = [], $condition_str = '', $field = '*' )
+	public function getDistributionRecruitInfo( $condition = [], $field = '*' )
 	{
-		$data = $this->where( $condition )->where( $condition_str )->field( $field )->find();
+		$data = $this->where( $condition )->field( $field )->find();
 		return $data;
 	}
 
@@ -55,20 +54,10 @@ class DistributionRecruit extends Model
 	/**
 	 * 删除
 	 * @param   $condition
-	 * @param   $condition_str
 	 */
-	public function delDistributionRecruit( $condition = [], $condition_str = '' )
+	public function delDistributionRecruit( $condition = [] )
 	{
-		return $this->where( $condition )->where( $condition_str )->del();
-	}
-
-	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelDistributionRecruit( $condition = [] )
-	{
-		return $this->save( ['delete_time' => time()], $condition );
+		return $this->where( $condition )->del();
 	}
 
 }

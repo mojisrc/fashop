@@ -24,20 +24,19 @@ class DistributionGoods extends Model
 	/**
 	 * 列表
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $field
 	 * @param   $order
 	 * @param   $page
 	 * @param   $group
 	 * @return
 	 */
-	public function getDistributionGoodsList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
+	public function getDistributionGoodsList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
-			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
+			$data = $this->where( $condition )->order( $order )->field( $field )->group( $group )->select();
 
 		} else{
-			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
+			$data = $this->where( $condition )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 		}
 		return $data;
 	}
@@ -45,17 +44,16 @@ class DistributionGoods extends Model
 	/**
 	 * 获得数量
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $distinct [去重]
 	 * @return
 	 */
-	public function getDistributionGoodsCount( $condition = [], $condition_str = '', $distinct = '' )
+	public function getDistributionGoodsCount( $condition = [], $distinct = '' )
 	{
 		if( $distinct == '' ){
-			return $this->where( $condition )->where( $condition_str )->count();
+			return $this->where( $condition )->count();
 
 		} else{
-			return $this->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
+			return $this->where( $condition )->count( "DISTINCT ".$distinct );
 
 		}
 	}
@@ -64,13 +62,12 @@ class DistributionGoods extends Model
 	/**
 	 * 获得信息
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $field
 	 * @return
 	 */
-	public function getDistributionGoodsInfo( $condition = [], $condition_str = '', $field = '*' )
+	public function getDistributionGoodsInfo( $condition = [], $field = '*' )
 	{
-		$data = $this->where( $condition )->where( $condition_str )->field( $field )->find();
+		$data = $this->where( $condition )->field( $field )->find();
 		return $data;
 	}
 
@@ -78,67 +75,53 @@ class DistributionGoods extends Model
 	/**
 	 * 获取的id
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
-	public function getDistributionGoodsId( $condition = [], $condition_str = '' )
+	public function getDistributionGoodsId( $condition = [] )
 	{
-		return $this->where( $condition )->where( $condition_str )->value( 'id' );
+		return $this->where( $condition )->value( 'id' );
 	}
 
 	/**
 	 * 获取某个字段
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
-	public function getDistributionGoodsValue( $condition = [], $condition_str = '', $field = 'id' )
+	public function getDistributionGoodsValue( $condition = [], $field = 'id' )
 	{
-		return $this->where( $condition )->where( $condition_str )->value( $field );
+		return $this->where( $condition )->value( $field );
 	}
 
 	/**
 	 * 获取某个字段列
 	 * @param   $condition
-	 * @param   $condition_str
-	 * @return
-	 */
-	public function getDistributionGoodsColumn( $condition = [], $condition_str = '', $field = 'id' )
-	{
-		return $this->where( $condition )->where( $condition_str )->column( $field );
-	}
 
-	/**
-	 * 获取某个字段列 以$indexes为索引
-	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
-	public function getDistributionGoodsColumnField( $condition = [], $condition_str = '', $field = 'id', $indexes = 'id' )
+	public function getDistributionGoodsColumn( $condition = [], $field = 'id' )
 	{
-		return $this->where( $condition )->where( $condition_str )->column( $field, $indexes );
+		return $this->where( $condition )->column( $field );
 	}
 
 	/**
 	 * 某个字段+1
 	 * @param   $condition
-	 * @param   $condition_str
+
 	 * @return
 	 */
-	public function setIncDistributionGoods( $condition = [], $condition_str = '', $field, $num = 1 )
+	public function setIncDistributionGoods( $condition = [], $field, $num = 1 )
 	{
-		return $this->where( $condition )->where( $condition_str )->setInc( $field, $num );
+		return $this->where( $condition )->setInc( $field, $num );
 	}
 
 	/**
 	 * 某个字段-1
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
-	public function setDecDistributionGoods( $condition = [], $condition_str = '', $field, $num = 1 )
+	public function setDecDistributionGoods( $condition = [], $field, $num = 1 )
 	{
-		return $this->where( $condition )->where( $condition_str )->setDec( $field, $num );
+		return $this->where( $condition )->setDec( $field, $num );
 	}
 
 	/**
@@ -182,20 +165,10 @@ class DistributionGoods extends Model
 	/**
 	 * 删除
 	 * @param   $condition
-	 * @param   $condition_str
 	 */
-	public function delDistributionGoods( $condition = [], $condition_str = '' )
+	public function delDistributionGoods( $condition = [] )
 	{
-		return $this->where( $condition )->where( $condition_str )->del();
-	}
-
-	/**
-	 * 软删除
-	 * @param    array $condition
-	 */
-	public function softDelDistributionGoods( $condition = [] )
-	{
-		return $this->save( ['delete_time' => time()], $condition );
+		return $this->where( $condition )->del();
 	}
 
 }

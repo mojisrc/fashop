@@ -175,7 +175,6 @@ class Group extends Admin
 				return $this->send( Code::error );
 			}
 
-			$group_goods_model = model( 'GroupGoods' );
 			$group_goods       = [];
 
 			foreach( $post['group_goods'] as $key => $value ){

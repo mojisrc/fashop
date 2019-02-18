@@ -25,20 +25,19 @@ class DistributionConfig extends Model
 	/**
 	 * 列表
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $field
 	 * @param   $order
 	 * @param   $page
 	 * @param   $group
 	 * @return
 	 */
-	public function getDistributionConfigList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
+	public function getDistributionConfigList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
-			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
+			$data = $this->where( $condition )->order( $order )->field( $field )->group( $group )->select();
 
 		} else{
-			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
+			$data = $this->where( $condition )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 		}
 		return $data;
 	}
@@ -46,36 +45,33 @@ class DistributionConfig extends Model
 	/**
 	 * 获得信息
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $field
 	 * @return
 	 */
-	public function getDistributionConfigInfo( $condition = [], $condition_str = '', $field = '*' )
+	public function getDistributionConfigInfo( $condition = [], $field = '*' )
 	{
-		$data = $this->where( $condition )->where( $condition_str )->field( $field )->find();
+		$data = $this->where( $condition )->field( $field )->find();
 		return $data;
 	}
 
 	/**
 	 * 获取某个字段
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
-	public function getDistributionConfigValue( $condition = [], $condition_str = '', $field = 'id' )
+	public function getDistributionConfigValue( $condition = [], $field = 'id' )
 	{
-		return $this->where( $condition )->where( $condition_str )->value( $field );
+		return $this->where( $condition )->value( $field );
 	}
 
 	/**
 	 * 获取某个字段列
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
-	public function getDistributionConfigColumn( $condition = [], $condition_str = '', $field = 'id' )
+	public function getDistributionConfigColumn( $condition = [], $field = 'id' )
 	{
-		return $this->where( $condition )->where( $condition_str )->column( $field );
+		return $this->where( $condition )->column( $field );
 	}
 
 
@@ -118,12 +114,12 @@ class DistributionConfig extends Model
 	}
 
 	/**
-	 * 软删除
+	 * 删除
 	 * @param    array $condition
 	 */
-	public function softDelDistributionConfig( $condition = [] )
+	public function delDistributionConfig( $condition = [] )
 	{
-		return $this->save( ['delete_time' => time()], $condition );
+		return $this->where( $condition )->del();
 	}
 
 }

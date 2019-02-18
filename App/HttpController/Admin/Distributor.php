@@ -88,7 +88,7 @@ class Distributor extends Admin
         (SELECT CASE WHEN refund_state=0 THEN CASE WHEN revise_amount>0 THEN SUM(revise_amount) ELSE SUM(amount) END WHEN refund_state=1 THEN CASE WHEN revise_amount>0 THEN SUM(revise_amount-refund_amount) ELSE SUM(amount-refund_amount) END ELSE 0 END FROM $table_order WHERE user_id=distributor.user_id AND state>=20) AS total_consume_amount";
 
         $order = 'distributor.id desc';
-        $list  = $distributor_model->getDistributorMoreList($condition, '', $field, $order, $this->getPageLimit(), '');
+        $list  = $distributor_model->getDistributorMoreList($condition, $field, $order, $this->getPageLimit(), '');
 
         return $this->send(Code::success, [
             'total_number' => $count,
@@ -113,7 +113,7 @@ class Distributor extends Admin
             $condition         = [];
             $condition['id']   = $get['id'];
             $field             = '*';
-            $info              = $distributor_model->getDistributorInfo($condition, '', $field);
+            $info              = $distributor_model->getDistributorInfo($condition, $field);
             return $this->send(Code::success, ['info' => $info]);
         }
     }
@@ -134,7 +134,7 @@ class Distributor extends Admin
             $distributor_model = new \App\Model\Distributor;
             $condition         = [];
             $condition['id']   = $post['id'];
-            $info              = $distributor_model->getDistributorInfo($condition, '', '*');
+            $info              = $distributor_model->getDistributorInfo($condition, '*');
             if (!$info) {
                 return $this->send(Code::param_error, [], '参数错误');
             }
