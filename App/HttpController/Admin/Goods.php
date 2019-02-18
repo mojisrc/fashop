@@ -198,6 +198,7 @@ class Goods extends Admin
 		}
 	}
 
+
 }
 
 ?>
