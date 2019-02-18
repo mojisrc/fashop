@@ -37,7 +37,7 @@ class OrderGoods extends Model
 	 */
 	public function addMultiOrderGoods( array $data )
 	{
-		return $this->addMulti( $data );
+		return $this->addMulti( $data ,true);
 	}
 
 	/**

@@ -224,9 +224,9 @@ class Order extends Server
 					//显示评价
 					$order_info['if_evaluate'] = \App\Model\Order::getOrderOperateState( 'evaluate', $order_info );
 
-					$log_list    = \App\Model\OrderLog::getOrderLogList( ['order_id' => $order_id] );
-					$return_list = \App\Model\OrderRefund::getOrderRefundList( ['order_id' => $order_id, 'refund_type' => 2] );
-					$refund_list = \App\Model\OrderRefund::getOrderRefundList( ['order_id' => $order_id, 'refund_type' => 1] );
+					$log_list    = \App\Model\OrderLog::init()->getOrderLogList( ['order_id' => $order_id] );
+					$return_list = \App\Model\OrderRefund::init()->getOrderRefundList( ['order_id' => $order_id, 'refund_type' => 2] );
+					$refund_list = \App\Model\OrderRefund::init()->getOrderRefundList( ['order_id' => $order_id, 'refund_type' => 1] );
 					$this->send( Code::success, [
 						'info'        => $order_info,
 						'order_log'   => $log_list,
@@ -285,7 +285,7 @@ class Order extends Server
 				$condition['user_id'] = ['in', \App\Model\User::init()->getUserAllIds( $user['id'] )];
 				$order_info           = \App\Model\Order::init()->getOrderInfo( $condition );
 				$extend_msg           = isset( $this->post['state_remark'] ) ? $this->post['state_remark'] : null;
-				$result               = \App\Model\Order::userChangeState( 'order_receive', $order_info, $user['id'], $user['username'], $extend_msg );
+				$result               = \App\Model\Order::init()->userChangeState( 'order_receive', $order_info, $user['id'], $user['username'], $extend_msg );
 				if( $result === true ){
 					$this->send( Code::success );
 				} else{
@@ -311,7 +311,7 @@ class Order extends Server
 			} else{
 				$user                  = $this->getRequestUser();
 				$condition['order_id'] = $this->get['id'];
-				$list                  = \App\Model\Order::getOrderGoodsList( [
+				$list                  = \App\Model\Order::init()->getOrderGoodsList( [
 					'order_id' => $this->get['id'],
 					'user_id'  => ['in', \App\Model\User::init()->getUserAllIds( $user['id'] )],
 				], '*', 'id asc', [1,1000] );
@@ -338,7 +338,7 @@ class Order extends Server
 				$user                 = $this->getRequestUser();
 				$condition['id']      = $this->get['id'];
 				$condition['user_id'] = ['in', \App\Model\User::init()->getUserAllIds( $user['id'] )];
-				$result['info']       = \App\Model\Order::getOrderGoodsInfo( $condition );
+				$result['info']       = \App\Model\Order::init()->getOrderGoodsInfo( $condition );
 				$this->send( Code::success, $result );
 			}
 		}
@@ -375,7 +375,7 @@ class Order extends Server
 					$table_order        = $prefix."order";
 					$table_user_profile = $prefix."user_profile";
 					$field              = 'group_identity,user_id'.",(SELECT avatar FROM $table_user_profile WHERE user_id=$table_order.user_id) AS user_avatar";
-					$group_list         = \App\Model\Order::getOrderCommonList( ['group_sign' => $order_info['group_sign']], '', $field, 'group_identity asc', '' );
+					$group_list         = \App\Model\Order::init()->getOrderCommonList( ['group_sign' => $order_info['group_sign']], '', $field, 'group_identity asc', '' );
 					$this->send( Code::success, [
 						'list' => $group_list,
 					] );
@@ -398,7 +398,7 @@ class Order extends Server
 		$condition['group_fail_time'] = 0;               //拼团失败时间
 		$condition_string             = 'group_men_num<group_people_num';
 		$group                        = 'group_sign';
-		$list                         = \App\Model\Order::getOrderCommonList( $condition, $condition_string, '*', 'id desc', '', $group );
+		$list                         = \App\Model\Order::init()->getOrderCommonList( $condition, $condition_string, '*', 'id desc', '', $group );
 		if( $list ){
 			$group_sign_arr = array_column( $list, 'group_sign' );
 			if( $group_sign_arr && is_array( $group_sign_arr ) ){
@@ -444,7 +444,7 @@ class Order extends Server
 						return $this->send( Code::param_error, [], '参数错误' );
 					} else{
 						if( isset( $extend_info['tracking_no'] ) && intval( $extend_info['shipper_id'] ) > 0 && intval( $extend_info['express_id'] ) > 0 ){
-							$kuaidi100_code = \App\Model\Express::getExpressValue( ['id' => $extend_info['express_id']], $field = 'kuaidi100_code' );
+							$kuaidi100_code = \App\Model\Express::init()->getExpressValue( ['id' => $extend_info['express_id']], $field = 'kuaidi100_code' );
 							if( $kuaidi100_code ){
 								$info['url'] = 'https://m.kuaidi100.com/index_all.html?type='.$kuaidi100_code.'&postid='.$extend_info['tracking_no'];
 							} else{

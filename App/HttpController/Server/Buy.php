@@ -107,6 +107,7 @@ class Buy extends Server
 	 */
 	public function pay()
 	{
+		var_dump($this->post);
 		if( $this->verifyResourceRequest() !== true ){
 			return $this->send( Code::user_access_token_error );
 		} else

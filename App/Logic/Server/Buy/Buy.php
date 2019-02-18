@@ -581,9 +581,6 @@ class Buy
 		$cart_items            = $this->getCartItems();
 		$goods_sku_update_data = [];
 		$goods_data            = [];
-		/**
-		 * @var \App\Logic\Server\Cart\Item $sku_item ;
-		 */
 		foreach( $cart_items as $key => $sku_item ){
 			// 同一款产品的sku数据相加更新到主表
 			$goods_id = $sku_item->getGoodsId();
@@ -654,6 +651,5 @@ class Buy
 		}
 		return (date( 'y', time() ) % 9 + 1).sprintf( '%013d', $pay_id ).sprintf( '%02d', $num );
 	}
-
 
 }

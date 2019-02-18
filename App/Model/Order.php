@@ -365,7 +365,7 @@ class Order extends Model
 	 * @param $order_info
 	 * @return bool
 	 */
-	public function getOrderOperateState( $operate, $order_info )
+	public static function getOrderOperateState( $operate, $order_info )
 	{
 		if( !is_array( $order_info ) || empty( $order_info ) ){
 			return false;
