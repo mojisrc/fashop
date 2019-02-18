@@ -362,7 +362,7 @@ class Order extends Logic
 
 	public function count() : int
 	{
-		return $this->make()->count();
+		return $this->make()->where($this->condition)->count();
 	}
 
 	public function list() : array

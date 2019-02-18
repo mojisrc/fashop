@@ -65,6 +65,7 @@ class Distribution extends Admin
             $orderLogic->field($field);
         }
         $list = $orderLogic->list();
+
         if ($list) {
             $list = \App\Model\Order::distributionPromotionDesc($list);
         }
@@ -103,7 +104,7 @@ class Distribution extends Admin
             $condition['distributor.create_time'] = ['between', $get['create_time']];
         }
 
-        $distributor_model = model('Distributor');
+        $distributor_model = new \App\Model\Distributor;
         $count             = $distributor_model->getDistributorMoreCount($condition, '');
         $field             = 'distributor.*,user.phone';
 
@@ -182,30 +183,29 @@ class Distribution extends Admin
                 'list'         => [],
             ]);
         }
-//        var_dump($top_data);
 
-//        $top_data['state_desc'] = '有效';
-//        $top_data['reason']     = '';
-//
-//        $other_condition                        = [];
-//        $other_condition['distributor_user_id'] = $top_data['distributor_user_id'];
-//        $other_condition['user_id']             = $top_data['user_id'];
-//        $other_condition['create_time']         = ['<', $top_data['create_time']];
-//
-//        $other_count = \App\Model\DistributorCustomer::init()->getDistributorCustomerMoreCount($condition, '');
-//        if ($other_count) {
-//            $other_list = \App\Model\DistributorCustomer::init()->getDistributorCustomerMoreList($other_condition, '', $field, $order, '', '');
-//            $count      = 1 + $other_count;
-//            $list       = [0 => $top_data];
-//            foreach ($other_list as $key => $value) {
-//                $value['state_desc'] = '失效';
-//                $value['reason']     = '客户关系变更';
-//                $list[$key + 1]      = $value;
-//            }
-//        } else {
-//            $count = 1;
-//            $list  = [0 => $top_data];
-//        }
+        $top_data['state_desc'] = '有效';
+        $top_data['reason']     = '';
+
+        $other_condition                        = [];
+        $other_condition['distributor_user_id'] = $top_data['distributor_user_id'];
+        $other_condition['user_id']             = $top_data['user_id'];
+        $other_condition['create_time']         = ['<', $top_data['create_time']];
+
+        $other_count = \App\Model\DistributorCustomer::init()->getDistributorCustomerMoreCount($other_condition, '');
+        if ($other_count) {
+            $other_list = \App\Model\DistributorCustomer::init()->getDistributorCustomerMoreList($other_condition, '', $field, $order, '', '');
+            $count      = 1 + $other_count;
+            $list       = [0 => $top_data];
+            foreach ($other_list as $key => $value) {
+                $value['state_desc'] = '失效';
+                $value['reason']     = '客户关系变更';
+                $list[$key + 1]      = $value;
+            }
+        } else {
+            $count = 1;
+            $list  = [0 => $top_data];
+        }
 
         return $this->send(Code::success, [
             'total_number' => $count,
@@ -220,7 +220,7 @@ class Distribution extends Admin
      */
     public function recruitInfo()
     {
-        $distribution_recruit_model = model('DistributionRecruit');
+        $distribution_recruit_model = new \App\Model\DistributionRecruit;
         $field                      = '*';
         $info                       = $distribution_recruit_model->getDistributionRecruitInfo([], '', $field);
         return $this->send(Code::success, ['info' => $info]);
@@ -240,8 +240,9 @@ class Distribution extends Admin
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {
-            $distribution_recruit_model = model('DistributionRecruit');
+            $distribution_recruit_model = new \App\Model\DistributionRecruit;
             $info                       = $distribution_recruit_model->getDistributionRecruitInfo([], '', '*');
+
             if (!$info) {
                 $insert_data            = [];
                 $insert_data['title']   = $post['title'];

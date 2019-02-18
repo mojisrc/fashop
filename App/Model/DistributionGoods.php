@@ -160,14 +160,13 @@ class DistributionGoods extends Model
 
 	/**
 	 * 修改信息
-	 * @param   $update
+	 * @param   $update [不需要包含id]
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
 	public function updateDistributionGoods( $condition = [], $update = [] )
 	{
-		return $this->save( $update, $condition );
+		return $this->where( $condition )->edit( $update );
 	}
 
 	/**
