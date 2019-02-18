@@ -38,19 +38,18 @@ class DistributionRecruit extends Model
 	 */
 	public function insertDistributionRecruit( $insert = [] )
 	{
-		return $this->save( $insert );
+		return $this->add( $insert );
 	}
 
 	/**
 	 * 修改信息
 	 * @param   $update
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
 	public function updateDistributionRecruit( $condition = [], $update = [] )
 	{
-		return $this->save( $update, $condition );
+		return $this->where( $condition )->edit( $update );
 	}
 
 	/**

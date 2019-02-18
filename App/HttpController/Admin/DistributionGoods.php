@@ -34,7 +34,7 @@ class DistributionGoods extends Admin
     public function list()
     {
         $get                      = $this->get;
-        $distribution_goods_model = model('DistributionGoods');
+        $distribution_goods_model = new \App\Model\DistributionGoods;
         $param                    = [];
         $param['is_on_sale']      = 1;
         $param['stock']           = 1; //查询库存大于0
@@ -93,7 +93,7 @@ class DistributionGoods extends Admin
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {
-            $distribution_goods_model = model('DistributionGoods');
+            $distribution_goods_model = new \App\Model\DistributionGoods;
             $condition                = [];
             $condition['id']          = $get['id'];
             $field                    = '*';
@@ -124,12 +124,12 @@ class DistributionGoods extends Admin
             $goods_condition['is_on_sale'] = 1;
             $goods_condition['stock']      = ['>', 0]; //查询库存大于0
             $goods_condition['id']         = $post['goods_id'];
-            $goods_info                    = \App\Model\Goods::getGoodsInfo($goods_condition, '*');
+            $goods_info                    = \App\Model\Goods::init()->getGoodsInfo($goods_condition, '*');
             if (!$goods_info) {
                 return $this->send(Code::param_error, [], '商品信息不存在');
             }
 
-            $distribution_goods_model = model('DistributionGoods');
+            $distribution_goods_model = new \App\Model\DistributionGoods;
             $condition                = [];
             $condition['goods_id']    = $post['goods_id'];
             $distribution_goods_info  = $distribution_goods_model->getDistributionGoodsInfo($condition, '');

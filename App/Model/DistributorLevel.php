@@ -141,7 +141,6 @@ class DistributorLevel extends Model
 	 * 修改信息
 	 * @param   $update
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
 	public function updateDistributorLevel( $condition = [], $update = [] )

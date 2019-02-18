@@ -70,7 +70,7 @@ class Distributor extends Admin
             $condition['distributor.create_time'] = ['between', $get['create_time']];
         }
 
-        $distributor_model = model('Distributor');
+        $distributor_model = new \App\Model\Distributor;
         $count             = $distributor_model->getDistributorMoreCount($condition, '');
         $field             = 'distributor.*,user.phone,invite_user.phone AS invite_phone';
 
@@ -109,7 +109,7 @@ class Distributor extends Admin
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {
-            $distributor_model = model('Distributor');
+            $distributor_model = new \App\Model\Distributor;
             $condition         = [];
             $condition['id']   = $get['id'];
             $field             = '*';
@@ -131,7 +131,7 @@ class Distributor extends Admin
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {
-            $distributor_model = model('Distributor');
+            $distributor_model = new \App\Model\Distributor;
             $condition         = [];
             $condition['id']   = $post['id'];
             $info              = $distributor_model->getDistributorInfo($condition, '', '*');
@@ -140,8 +140,7 @@ class Distributor extends Admin
             }
             $update_data             = [];
             $update_data['nickname'] = $post['nickname'];
-            $result                  = $distributor_model->updateDistributor(['id' => $info['id']], $update_data);
-
+            $result                  = $distributor_model->updateDistributor(['id'=>$info['id']], $update_data);
             if ($result) {
                 return $this->send(Code::success);
             } else {
@@ -167,7 +166,7 @@ class Distributor extends Admin
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {
-            $distributor_model       = model('Distributor');
+            $distributor_model       = new \App\Model\Distributor;
             $condition               = [];
             $condition['id']         = $post['id'];
             $condition['state']      = 1; //默认0 待审核 1审核通过 2审核拒绝
@@ -212,7 +211,7 @@ class Distributor extends Admin
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {
-            $distributor_model       = model('Distributor');
+            $distributor_model       = new \App\Model\Distributor;
             $condition               = [];
             $condition['id']         = $post['id'];
             $condition['state']      = 0; //默认0 待审核 1审核通过 2审核拒绝
@@ -231,6 +230,5 @@ class Distributor extends Admin
 
         }
     }
-
 
 }

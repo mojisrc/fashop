@@ -101,12 +101,11 @@ class DistributionConfig extends Model
 	 * 修改信息
 	 * @param   $update
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
 	public function updateDistributionConfig( $condition = [], $update = [] )
 	{
-		return $this->save( $update, $condition );
+		return $this->where( $condition )->edit( $update );
 	}
 
 	/**
