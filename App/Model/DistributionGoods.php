@@ -19,6 +19,7 @@ namespace App\Model;
 class DistributionGoods extends Model
 {
 	protected $softDelete = true;
+	protected $createTime = true;
 
 	/**
 	 * 列表
