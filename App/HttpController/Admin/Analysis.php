@@ -483,8 +483,6 @@ class Analysis extends Admin
         ] );
     }
 
-
-
     /**
      * 访客数TOP
      * @method GET | POST
@@ -508,24 +506,221 @@ class Analysis extends Admin
         }
         $ordergoodsModel = new \App\Model\OrderGoods;
         $where['goods_id'] = ['in', $goods_id];
+        $where['order.payment_time'] = ['>', 0];
         $field = 'count(order_goods.id) as payment_num,order_goods.goods_id';
         $order = 'payment_num desc';
         $group = 'goods_id';
-        $result = $ordergoodsModel->fetchSql()->field( $field )->join( 'order', 'order_goods.order_id = order.id', 'LEFT' )->where( $where )->order( $order )->group( $group )->select();
+        $result = $ordergoodsModel->field( $field )->join( 'order', 'order_goods.order_id = order.id', 'LEFT' )->where( $where )->order( $order )->group( $group )->select();
 
+        foreach($list as $list_key => $list_val){
+            $list[$list_key]['images'] = json_decode($list_val['images']);
+            foreach($result as $key => $val){
+                if($list_val['id'] == $val['goods_id']){
+                    $list[$list_key]['conversion'] = (round($val['payment_num'] / $list_val['visitor_total'],2) * 100) . '%';
+                }else{
+                    if(!isset($list_val['conversion']) || empty($list_val['conversion'])){
+                        $list[$list_key]['conversion'] = 0;
+                    }
+                }
+            }
+        }
 
         return $this->send( Code::success, [
-            'list' => $result,
-            'goods_id' => $goods_id,
-            'time' => time(),
+            'list' => $list,
         ] );
     }
 
 
 
+    /* 交易概括 */
+
+    /**
+     * 交易概括
+     * @method GET | POST
+     * @param array  $create_time      [开始时间,结束时间]
+     */
+    public function transactionSurvey(){
+        $analysisModel = new \App\Model\Analysis;
+        $orderModel = new \App\Model\Order;
+        //计算时间差
+        $days = ceil(($this->start_date - $this->end_date) / 86400);
+
+        //获取前一日或前一个月的开始时间，结束时间用前端传过来的开始时间作为结束时间
+        $front_time =  $this->start_date - ((60 * 60 * 24) * $days);
+
+        /*当前*/
+        $condition['create_time'] = $this->create_time;
+        //访客数
+        $visitor_num = $analysisModel->where( $condition )->count( 'DISTINCT user_id' );
+
+        //下单人数
+        $people_num = $orderModel->where( $condition )->count( 'DISTINCT user_id' );
+
+        //下单笔数
+        $order_num = $orderModel->where( $condition )->count();
+
+        //下单金额
+        $order_total_price = $orderModel->where( $condition )->sum( 'amount' );
+
+        //支付人数
+        $condition['payment_time'] = ['>', 0];
+        $payment_people_num = $orderModel->where( $condition )->count( 'DISTINCT user_id' );
+
+        //支付订单数
+        $payment_order_num = $orderModel->where( $condition )->count();
+
+        //支付金额
+        $payment_total_price = $orderModel->where( $condition )->count( 'amount' );
+
+        //支付件数
+        $payment_num = $orderModel->where( $condition )->count( 'goods_num' );
+
+        //客单价
+        $unit_price = ceil($order_total_price / $visitor_num);
 
 
 
+
+
+        /*之前*/
+        $where['create_time'] = ['between', [$this->end_date, $this->start_date]];
+        //访客数
+        $front_visitor_num = $analysisModel->where( $condition )->count( 'DISTINCT user_id' );
+        $front_visitor_num = $front_visitor_num ? $front_visitor_num : 20;
+
+        //下单人数
+        $front_people_num = $orderModel->where( $condition )->count( 'DISTINCT user_id' );
+
+        //下单笔数
+        $front_order_num = $orderModel->where( $condition )->count();
+
+        //下单金额
+        $front_order_total_price = $orderModel->where( $condition )->sum( 'amount' );
+
+        //支付人数
+        $where['payment_time'] = ['>', 0];
+        $front_payment_people_num = $orderModel->where( $condition )->count( 'DISTINCT user_id' );
+
+        //支付订单数
+        $front_payment_order_num = $orderModel->where( $condition )->count();
+
+        //支付金额
+        $front_payment_total_price = $orderModel->where( $condition )->count( 'amount' );
+
+        //支付件数
+        $front_payment_num = $orderModel->where( $condition )->count( 'goods_num' );
+
+        //客单价
+        $front_unit_price = ceil($order_total_price / $visitor_num);
+
+        //访客数和下单的转化率
+        $people_visitor_current = round( $people_num / $visitor_num, 2);
+
+        //下单和付款的转化率
+        $payment_people_current = round(  $front_payment_people_num / $people_num, 2);
+
+        //访客和付款的转化率
+        $visitor_payment_people_current = round(  $front_payment_people_num / $visitor_num, 2);
+
+        return $this->send( Code::success, [
+            'people_visitor_current' => $people_visitor_current,
+            'payment_people_current' => $payment_people_current,
+            'visitor_payment_people_current' => $visitor_payment_people_current,
+            'visitor_num' => [
+                'conversion' => round(($visitor_num - $front_visitor_num) / $front_visitor_num, 2) * 100,
+                'before' => $visitor_num,
+            ],
+            'people_num' => [
+                'conversion' => round(($people_num - $front_people_num) / $front_people_num, 2) * 100,
+                'before' => $people_num,
+            ],
+            'order_num' => [
+                'conversion' => round(($order_num - $front_order_num) / $front_order_num, 2) * 100,
+                'before' => $order_num,
+            ],
+            'order_total_price' => [
+                'conversion' => round(($order_total_price - $front_order_total_price) / $front_order_total_price, 2) * 100,
+                'before' => $order_total_price,
+            ],
+            'payment_people_num' => [
+                'conversion' => round(($payment_people_num - $front_payment_people_num) / $front_payment_people_num, 2) * 100,
+                'before' => $payment_people_num,
+            ],
+            'payment_order_num' => [
+                'conversion' => round(($payment_order_num - $front_payment_order_num) / $front_payment_order_num, 2) * 100,
+                'before' => $payment_order_num,
+                'current' => $front_payment_order_num,
+            ],
+            'payment_total_price' => [
+                'conversion' => round(($payment_total_price - $front_payment_total_price) / $front_payment_total_price, 2) * 100,
+                'before' => $payment_total_price,
+            ],
+            'payment_num' => [
+                'conversion' => round(($payment_num - $front_payment_num) / $front_payment_num, 2) * 100,
+                'before' => $payment_num,
+            ],
+            'unit_price' => [
+                'conversion' => round(($unit_price - $front_unit_price) / $front_unit_price, 2) * 100,
+                'before' => $unit_price,
+            ],
+        ] );
+    }
+
+
+    /**
+     * 交易概括(曲线)
+     * @method GET | POST
+     * @param array  $create_time      [开始时间,结束时间]
+     */
+    public function curveTransactionSurvey(){
+        $analysisModel = new \App\Model\Analysis;
+        $orderModel = new \App\Model\Order;
+        $condition['create_time'] = $this->create_time;
+        //支付金额
+        $payment_time = $orderModel->field( "sum(amount) as payment_price, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )
+            ->where( $condition )
+            ->group( 'date_time' )
+            ->select();
+
+
+        //访客数
+        $condition_str = 'create_time between ' . $this->end_date . ' AND ' . $this->start_date;
+        $visitor_num = $analysisModel->rawQuery("SELECT count(distinct(user_id)) as visitor_num,FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time FROM fa_analysis WHERE create_time IN (SELECT create_time FROM fa_analysis where $condition_str) GROUP BY date_time");
+
+
+        //商品浏览量
+        $where['create_time'] = $this->create_time;
+        $where['link_id'] = 1;
+        $goods_view_num = $analysisModel->field( "count(id) as goods_view_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )
+            ->where( $where )
+            ->group( 'date_time' )
+            ->select();
+
+
+        //商品访客数
+        $where_str = 'link_id = 1 AND create_time between ' . $this->end_date . ' AND ' . $this->start_date;
+        $goods_visitor_num = $analysisModel->rawQuery("SELECT count(distinct(user_id)) as goods_visitor_num,FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time FROM fa_analysis WHERE create_time IN (SELECT create_time FROM fa_analysis where $where_str) GROUP BY date_time");
+
+
+
+        //分享访问次数
+        $where['create_time'] = $this->create_time;
+        $where['relation_user_id'] = ['>', 0];
+        $share_num = $analysisModel->field( "count(id) as share_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )
+            ->where( $where )
+            ->group( 'date_time' )
+            ->select();
+
+
+        //分享访问人数
+        $where_str = 'relation_user_id > 1 AND create_time between ' . $this->end_date . ' AND ' . $this->start_date;
+        $share_visit_people_num = $analysisModel->rawQuery("SELECT count(distinct(relation_user_id)) as share_visit_people_num,FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time FROM fa_analysis WHERE create_time IN (SELECT create_time FROM fa_analysis where $where_str) GROUP BY date_time");
+
+
+        return $this->send( Code::success, [
+            'list' => $payment_time,
+        ] );
+    }
 
 
 

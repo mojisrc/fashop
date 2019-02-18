@@ -35,7 +35,6 @@ class Distributiongoods extends Admin
 	{
 		$get                      = $this->get;
 		$distribution_goods_model = new \App\Model\DistributionGoods;
-		$param                    = [];
 		$param['is_on_sale']      = 1;
 		$param['stock']           = 1; //查询库存大于0
 		if( isset( $get['title'] ) ){
@@ -47,32 +46,43 @@ class Distributiongoods extends Admin
 		}
 
 		if( isset( $get['distribution_state'] ) ){
-			$condition['is_show'] = $get['distribution_state'];
-			$goods_ids            = $distribution_goods_model->getDistributionGoodsColumn( ['is_show' => 1], '', 'goods_id' );
-
+            //查询开启参与的分销的商品id
+			$goods_ids            = $distribution_goods_model->getDistributionGoodsColumn( ['is_show' => 1], 'goods_id' );
 			if( $goods_ids ){
 				if( intval( $get['distribution_state'] ) == 1 ){
+                    //参与的 distribution_goods表is_show为1的商品
 					$param['ids'] = $goods_ids;
 				} else{
+                    //不参与的  distribution_goods表is_show不为1 [包含distribution_goods表is_show为0的商品 和 不在distribution_goods表的商品]
 					$param['not_in_ids'] = $goods_ids;
 				}
 			}
-
 		}
-		$distribution_goods = $distribution_goods_model->getDistributionGoodsColumnField( [], '', 'is_show', 'goods_id' );
+
+        $distribution_goods_list = $distribution_goods_model->getDistributionGoodsList( [], 'is_show,goods_id', 'id desc', '');
+
 		$param['page']      = $this->getPageLimit();
 		$goodsLogic         = new \App\Logic\GoodsSearch( $param );
 		$goods_count        = $goodsLogic->count();
 		$goods_list         = $goodsLogic->list();
 
-		if( $goods_list && $distribution_goods ){
-			foreach( $goods_list as $key => $value ){
-				if( isset( $distribution_goods[$value['id']] ) ){
-					$goods_list[$key]['distribution_state'] = $distribution_goods[$value['id']];
-				} else{
-					$goods_list[$key]['distribution_state'] = 0; //0代表关闭分销或者代表没有设置分销 1开启分销
-				}
-			}
+		if( $goods_list){
+		    if($distribution_goods_list){
+		        foreach ($distribution_goods_list as $key => $value) {
+                    $distribution_goods[$value['goods_id']] = $value['is_show'];
+		        }
+                foreach( $goods_list as $key => $value ){
+                    if( isset( $distribution_goods[$value['id']] ) ){
+                        $goods_list[$key]['distribution_state'] = $distribution_goods[$value['id']];
+                    } else{
+                        $goods_list[$key]['distribution_state'] = 0; //0代表关闭分销或者代表没有设置分销 1开启分销
+                    }
+                }
+            }else{
+                foreach( $goods_list as $key => $value ){
+                    $goods_list[$key]['distribution_state'] = 0; //0代表关闭分销或者代表没有设置分销 1开启分销
+                }
+            }
 		}
 		return $this->send( Code::success, [
 			'total_number' => $goods_count,
@@ -94,10 +104,9 @@ class Distributiongoods extends Admin
 			return $this->send( Code::error, [], $error );
 		} else{
 			$distribution_goods_model = new \App\Model\DistributionGoods;
-			$condition                = [];
 			$condition['id']          = $get['id'];
 			$field                    = '*';
-			$info                     = $distribution_goods_model->getDistributionGoodsInfo( $condition, '', $field );
+			$info                     = $distribution_goods_model->getDistributionGoodsInfo( $condition, $field );
 			return $this->send( Code::success, ['info' => $info] );
 		}
 
@@ -153,8 +162,6 @@ class Distributiongoods extends Admin
 					$this->send( Code::error );
 				}
 			}
-
-
 		}
 	}
 

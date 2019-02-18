@@ -30,13 +30,12 @@ class Distributorlevel extends Admin
      */
     public function list()
     {
-        $condition_str           = '';
         $condition               = [];
-        $distributor_level_model = model('DistributorLevel');
-        $count                   = $distributor_level_model->getDistributorLevelCount($condition, $condition_str);
+        $distributor_level_model = new \App\Model\DistributorLevel;
+        $count                   = $distributor_level_model->getDistributorLevelCount($condition);
         $field                   = '*';
         $order                   = 'id asc';
-        $list                    = $distributor_level_model->getDistributorLevelList($condition, $condition_str, $field, $order, $this->getPageLimit(), '');
+        $list                    = $distributor_level_model->getDistributorLevelList($condition, $field, $order, $this->getPageLimit(), '');
         return $this->send(Code::success, [
             'total_number' => $count,
             'list'         => $list,
@@ -56,11 +55,11 @@ class Distributorlevel extends Admin
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {
-            $distributor_level_model = model('DistributorLevel');
+            $distributor_level_model = new \App\Model\DistributorLevel;
             $condition               = [];
             $condition['id']         = $get['id'];
             $field                   = '*';
-            $info                    = $distributor_level_model->getDistributorLevelInfo($condition, '', $field);
+            $info                    = $distributor_level_model->getDistributorLevelInfo($condition, $field);
             return $this->send(Code::success, ['info' => $info]);
         }
 
@@ -85,7 +84,7 @@ class Distributorlevel extends Admin
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {
-            $distributor_level_model         = model('DistributorLevel');
+            $distributor_level_model         = new \App\Model\DistributorLevel;
             $insert_data                     = [];
             $insert_data['title']            = $post['title'];
             $insert_data['ratio']            = floatval($post['ratio']);
@@ -129,10 +128,10 @@ class Distributorlevel extends Admin
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {
-            $distributor_level_model = model('DistributorLevel');
+            $distributor_level_model = new \App\Model\DistributorLevel;
             $condition               = [];
             $condition['id']         = $post['id'];
-            $level_info              = $distributor_level_model->getDistributorLevelInfo($condition, '', '*');
+            $level_info              = $distributor_level_model->getDistributorLevelInfo($condition, '*');
             if (!$level_info) {
                 return $this->send(Code::param_error, [], '参数错误');
             }
@@ -175,8 +174,8 @@ class Distributorlevel extends Admin
                 return $this->send(Code::param_error, [], '第一级不可以删除');
             }
 
-            $distributor_model       = model('Distributor');
-            $distributor_level_model = model('DistributorLevel');
+            $distributor_model       = new \App\Model\Distributor;
+            $distributor_level_model = new \App\Model\DistributorLevel;
             $condition               = [];
             $condition['id']         = $post['id'];
             $distributor_level_info  = $distributor_level_model->getDistributorLevelInfo($condition);
@@ -184,6 +183,7 @@ class Distributorlevel extends Admin
                 return $this->send(Code::param_error, [], '参数错误');
             }
             $max_level = $distributor_level_model->max('level');
+
             if ($distributor_level_info['level'] != $max_level) {
                 return $this->send(Code::param_error, [], '只能从最高级依次删除');
             }
@@ -197,9 +197,9 @@ class Distributorlevel extends Admin
             }
 
             //对应的分销员 降级
-            $distributor_ids = $distributor_model->getDistributorColumn(['level' => $distributor_level_info['level']], '', 'id');
+            $distributor_ids = $distributor_model->getDistributorColumn(['level' => $distributor_level_info['level']], 'id');
             if ($distributor_ids) {
-                $distributor_result = $distributor_model->setDecDistributor(['id' => ['in', $distributor_ids]], '', 'level', 1);
+                $distributor_result = $distributor_model->setDecDistributor(['id' => ['in', $distributor_ids]], 'level', 1);
                 if (!$distributor_result) {
                     $distributor_level_model->rollback();
                     return $this->send(Code::error);
@@ -208,7 +208,6 @@ class Distributorlevel extends Admin
 
             $distributor_level_model->commit();
             return $this->send(Code::success);
-
         }
     }
 

@@ -24,20 +24,19 @@ class Distributor extends Model
 	/**
 	 * 列表
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $field
 	 * @param   $order
 	 * @param   $page
 	 * @param   $group
 	 * @return
 	 */
-	public function getDistributorList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
+	public function getDistributorList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
-			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
+			$data = $this->where( $condition )->order( $order )->field( $field )->group( $group )->select();
 
 		} else{
-			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
+			$data = $this->where( $condition )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 		}
 		return $data;
 	}
@@ -45,16 +44,15 @@ class Distributor extends Model
 	/**
 	 * 获得数量
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $distinct [去重]
 	 * @return
 	 */
-	public function getDistributorCount( $condition = [], $condition_str = '', $distinct = '' )
+	public function getDistributorCount( $condition = [], $distinct = '' )
 	{
 		if( $distinct == '' ){
-			return $this->where( $condition )->where( $condition_str )->count();
+			return $this->where( $condition )->count();
 		} else{
-			return $this->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
+			return $this->where( $condition )->count( "DISTINCT ".$distinct );
 
 		}
 	}
@@ -62,20 +60,19 @@ class Distributor extends Model
 	/**
 	 * 列表更多
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $field
 	 * @param   $order
 	 * @param   $page
 	 * @param   $group
 	 * @return
 	 */
-	public function getDistributorMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
+	public function getDistributorMoreList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
-			$data = $this->join( 'user', 'distributor.user_id = user.id', 'LEFT' )->join( 'user AS invite_user', 'distributor.inviter_id = invite_user.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
+			$data = $this->join( 'user', 'distributor.user_id = user.id', 'LEFT' )->join( 'user AS invite_user', 'distributor.inviter_id = invite_user.id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->group( $group )->select();
 
 		} else{
-			$data = $this->join( 'user', 'distributor.user_id = user.id', 'LEFT' )->join( 'user AS invite_user', 'distributor.inviter_id = invite_user.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
+			$data = $this->join( 'user', 'distributor.user_id = user.id', 'LEFT' )->join( 'user AS invite_user', 'distributor.inviter_id = invite_user.id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 
 		}
 
@@ -93,99 +90,91 @@ class Distributor extends Model
 	/**
 	 * 获得数量
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $distinct [去重]
 	 * @return
 	 */
-	public function getDistributorMoreCount( $condition = [], $condition_str = '', $distinct = '' )
+	public function getDistributorMoreCount( $condition = [], $distinct = '' )
 	{
 		if( $distinct == '' ){
-			return $this->join( 'user', 'distributor.user_id = user.id', 'LEFT' )->join( 'user AS invite_user', 'distributor.inviter_id = invite_user.id', 'LEFT' )->where( $condition )->where( $condition_str )->count();
+			return $this->join( 'user', 'distributor.user_id = user.id', 'LEFT' )->join( 'user AS invite_user', 'distributor.inviter_id = invite_user.id', 'LEFT' )->where( $condition )->count();
 
 		} else{
-			return $this->join( 'user', 'distributor.user_id = user.id', 'LEFT' )->join( 'user AS invite_user', 'distributor.inviter_id = invite_user.id', 'LEFT' )->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
+			return $this->join( 'user', 'distributor.user_id = user.id', 'LEFT' )->join( 'user AS invite_user', 'distributor.inviter_id = invite_user.id', 'LEFT' )->where( $condition )->count( "DISTINCT ".$distinct );
 		}
 	}
 
 	/**
 	 * 获得信息
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $field
 	 * @return
 	 */
-	public function getDistributorInfo( $condition = [], $condition_str = '', $field = '*' )
+	public function getDistributorInfo( $condition = [], $field = '*' )
 	{
-		$data = $this->where( $condition )->where( $condition_str )->field( $field )->find();
+		$data = $this->where( $condition )->field( $field )->find();
 		return $data;
 	}
 
 	/**
 	 * 获得信息更多
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $field
 	 * @return
 	 */
-	public function getDistributorMoreInfo( $condition = [], $condition_str = '', $field = '*' )
+	public function getDistributorMoreInfo( $condition = [], $field = '*' )
 	{
-		$data = $this->join( 'user', 'distributor.user_id = user.id', 'LEFT' )->join( 'user AS invite_user', 'distributor.inviter_id = invite_user.id', 'LEFT' )->where( $condition )->where( $condition_str )->field( $field )->find();
+		$data = $this->join( 'user', 'distributor.user_id = user.id', 'LEFT' )->join( 'user AS invite_user', 'distributor.inviter_id = invite_user.id', 'LEFT' )->where( $condition )->field( $field )->find();
 		return $data;
 	}
 
 	/**
 	 * 获取的id
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
-	public function getDistributorId( $condition = [], $condition_str = '' )
+	public function getDistributorId( $condition = [] )
 	{
-		return $this->where( $condition )->where( $condition_str )->value( 'id' );
+		return $this->where( $condition )->value( 'id' );
 	}
 
 	/**
 	 * 获取某个字段
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
-	public function getDistributorValue( $condition = [], $condition_str = '', $field = 'id' )
+	public function getDistributorValue( $condition = [], $field = 'id' )
 	{
-		return $this->where( $condition )->where( $condition_str )->value( $field );
+		return $this->where( $condition )->value( $field );
 	}
 
 	/**
 	 * 获取某个字段列
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
-	public function getDistributorColumn( $condition = [], $condition_str = '', $field = 'id' )
+	public function getDistributorColumn( $condition = [], $field = 'id' )
 	{
-		return $this->where( $condition )->where( $condition_str )->column( $field );
+		return $this->where( $condition )->column( $field );
 	}
 
 	/**
 	 * 某个字段+1
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
-	public function setIncDistributor( $condition = [], $condition_str = '', $field, $num = 1 )
+	public function setIncDistributor( $condition = [], $field, $num = 1 )
 	{
-		return $this->where( $condition )->where( $condition_str )->setInc( $field, $num );
+		return $this->where( $condition )->setInc( $field, $num );
 	}
 
 	/**
 	 * 某个字段-1
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
-	public function setDecDistributor( $condition = [], $condition_str = '', $field, $num = 1 )
+	public function setDecDistributor( $condition = [], $field, $num = 1 )
 	{
-		return $this->where( $condition )->where( $condition_str )->setDec( $field, $num );
+		return $this->where( $condition )->setDec( $field, $num );
 	}
 
 	/**
@@ -229,20 +218,10 @@ class Distributor extends Model
 	/**
 	 * 删除
 	 * @param   $condition
-	 * @param   $condition_str
 	 */
-	public function delDistributor( $condition = [], $condition_str = '' )
+	public function delDistributor( $condition = [] )
 	{
-		return $this->where( $condition )->where( $condition_str )->del();
-	}
-
-	/**
-	 * 软删除
-	 * @param   $condition
-	 */
-	public function softDelDistributor( $condition = [] )
-	{
-		return $this->save( ['delete_time' => time()], $condition );
+		return $this->where( $condition )->del();
 	}
 
 	/**

@@ -37,7 +37,6 @@ class Distribution extends Admin
         $prefix                                  = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
         $table_distributor                       = $prefix . "distributor";
         $table_user                              = $prefix . "user";
-        $condition                               = [];
         $condition['order.distribution_user_id'] = ['>', 0];
 
         if (isset($get['distributor_phone'])) {
@@ -92,7 +91,6 @@ class Distribution extends Admin
         $prefix                              = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
         $table_order                         = $prefix . "order";
         $table_order_goods                   = $prefix . "order_goods";
-        $condition                           = [];
         $condition['distributor.state']      = 1; //默认0 待审核 1审核通过 2审核拒绝
         $condition['distributor.is_retreat'] = 0; //默认0有效 1无效（被清退）
 
@@ -105,7 +103,7 @@ class Distribution extends Admin
         }
 
         $distributor_model = new \App\Model\Distributor;
-        $count             = $distributor_model->getDistributorMoreCount($condition, '');
+        $count             = $distributor_model->getDistributorMoreCount($condition);
         $field             = 'distributor.*,user.phone';
 
         //total_deal_num        订单数   = 累计成交笔数
@@ -122,7 +120,7 @@ class Distribution extends Admin
     AND distribution_settlement=1 AND CASE WHEN revise_amount>0 THEN (revise_amount-revise_freight_fee-refund_amount)>0 ELSE (amount-freight_fee-refund_amount)>0 END))) AS settlement_amount";
 
         $order = 'distributor.id desc';
-        $list  = $distributor_model->getDistributorMoreList($condition, '', $field, $order, $this->getPageLimit(), '');
+        $list  = $distributor_model->getDistributorMoreList($condition, $field, $order, $this->getPageLimit(), '');
         if ($list) {
             foreach ($list as $key => $value) {
                 if (!floatval($value['unsettlement_amount'])) {
@@ -148,7 +146,6 @@ class Distribution extends Admin
     public function relationship()
     {
         $get       = $this->get;
-        $condition = [];
 
         if (!isset($get['sn'])) {
             return $this->send(Code::success, [
@@ -171,12 +168,11 @@ class Distribution extends Admin
         $field = 'distributor_customer.*,distributor_user.phone AS distributor_phone,user,nickname AS user_nickname';
         $order = 'distributor_customer.create_time desc';
 
-        $top_condition                                             = [];
         $top_condition['distributor_customer.distributor_user_id'] = $order_info['distribution_user_id'];
         $top_condition['distributor_customer.user_id']             = $order_info['user_id'];
         $top_condition['distributor_customer.create_time']         = ['<', $order_info['create_time']];
 
-        $top_data          = \App\Model\DistributorCustomer::init()->getDistributorCustomerMoreSortInfo($top_condition, '', $field, $order);
+        $top_data          = \App\Model\DistributorCustomer::init()->getDistributorCustomerMoreSortInfo($top_condition, $field, $order);
         if (!$top_data) {
             return $this->send(Code::success, [
                 'total_number' => 0,
@@ -187,14 +183,13 @@ class Distribution extends Admin
         $top_data['state_desc'] = '有效';
         $top_data['reason']     = '';
 
-        $other_condition                        = [];
         $other_condition['distributor_user_id'] = $top_data['distributor_user_id'];
         $other_condition['user_id']             = $top_data['user_id'];
         $other_condition['create_time']         = ['<', $top_data['create_time']];
 
-        $other_count = \App\Model\DistributorCustomer::init()->getDistributorCustomerMoreCount($other_condition, '');
+        $other_count = \App\Model\DistributorCustomer::init()->getDistributorCustomerMoreCount($other_condition);
         if ($other_count) {
-            $other_list = \App\Model\DistributorCustomer::init()->getDistributorCustomerMoreList($other_condition, '', $field, $order, '', '');
+            $other_list = \App\Model\DistributorCustomer::init()->getDistributorCustomerMoreList($other_condition, $field, $order, '', '');
             $count      = 1 + $other_count;
             $list       = [0 => $top_data];
             foreach ($other_list as $key => $value) {
@@ -222,7 +217,7 @@ class Distribution extends Admin
     {
         $distribution_recruit_model = new \App\Model\DistributionRecruit;
         $field                      = '*';
-        $info                       = $distribution_recruit_model->getDistributionRecruitInfo([], '', $field);
+        $info                       = $distribution_recruit_model->getDistributionRecruitInfo([], $field);
         return $this->send(Code::success, ['info' => $info]);
     }
 
@@ -241,17 +236,15 @@ class Distribution extends Admin
             return $this->send(Code::error, [], $error);
         } else {
             $distribution_recruit_model = new \App\Model\DistributionRecruit;
-            $info                       = $distribution_recruit_model->getDistributionRecruitInfo([], '', '*');
+            $info                       = $distribution_recruit_model->getDistributionRecruitInfo([], '*');
 
             if (!$info) {
-                $insert_data            = [];
                 $insert_data['title']   = $post['title'];
                 $insert_data['url']     = $post['url'];
                 $insert_data['content'] = $post['content'];
                 $result                 = $distribution_recruit_model->insertDistributionRecruit($insert_data);
 
             } else {
-                $update_data            = [];
                 $update_data['title']   = $post['title'];
                 $update_data['url']     = $post['url'];
                 $update_data['content'] = $post['content'];
