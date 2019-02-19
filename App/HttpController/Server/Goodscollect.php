@@ -81,11 +81,11 @@ class Goodscollect extends Server
 		if( $this->verifyResourceRequest() !== true ){
 			$this->send( Code::user_access_token_error );
 		} else{
-			if( $this->validate( $this->post, 'Server/GoodsCollect.state' ) !== true ){
+			if( $this->validate( $this->get, 'Server/GoodsCollect.state' ) !== true ){
 				$this->send( Code::param_error, [], $this->getValidate()->getError() );
 			} else{
 				$user = $this->getRequestUser();
-				$info = model( 'GoodsCollect' )->getGoodsCollectInfo( ['user_id' => $user['id']], ['goods_id' => $this->post['goods_id']] );
+				$info = model( 'GoodsCollect' )->getGoodsCollectInfo( ['user_id' => $user['id'],'goods_id' => $this->get['goods_id']]);
 				$this->send( Code::success, ['state' => $info ? 1 : 0] );
 			}
 		}
