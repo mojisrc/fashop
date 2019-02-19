@@ -37,7 +37,7 @@ class User extends Admin
 	{
 		$param = !empty( $this->post ) ? $this->post : $this->get;
 
-		$userLogic = new \App\Logic\UserSearch( (array)$param );
+		$userLogic = new \App\Biz\UserSearch( (array)$param );
 		$userLogic->page( $this->getPageLimit() );
 		$this->send( Code::success, [
 			'list'         => $userLogic->list(),
@@ -61,7 +61,7 @@ class User extends Admin
 		} else{
 			$data['name']        = $this->post['name'];
 			$data['username']    = $this->post['phone'];
-			$data['password']    = \App\Logic\User::encryptPassword( $this->post['password'] );
+			$data['password']    = \App\Biz\User::encryptPassword( $this->post['password'] );
 			$data['phone']       = $this->post['phone'];
 			$data['create_time'] = time();
 			$result              = \App\Model\User::init()->addUser( $data );
@@ -219,7 +219,7 @@ class User extends Admin
 			if( !$updata ){
 				$this->send( Code::param_error );
 			} else{
-				$updata['password'] = \App\Logic\User::encryptPassword( $this->post['password'] );
+				$updata['password'] = \App\Biz\User::encryptPassword( $this->post['password'] );
 				\App\Model\User::init()->editUser( $condition, $updata );
 				$this->send( Code::success );
 			}

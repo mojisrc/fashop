@@ -14,7 +14,7 @@
 namespace App\Validator\Server;
 
 use ezswoole\Validator;
-use App\Logic\VerifyCode;
+use App\Biz\VerifyCode;
 
 class FindPassword extends Validator
 {

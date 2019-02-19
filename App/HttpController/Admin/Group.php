@@ -413,7 +413,7 @@ class Group extends Admin
 			}
 		}
 
-		$goodsLogic = new \App\Logic\GoodsSearch( $param );
+		$goodsLogic = new \App\Biz\GoodsSearch( $param );
 		return $this->send( Code::success, [
 			'total_number' => $goodsLogic->count(),
 			'list'         => $goodsLogic->list(),
@@ -577,7 +577,7 @@ class Group extends Admin
 
 			$param['ids']  = $group_goods_ids;
 			$param['page'] = $this->getPageLimit();
-			$goodsLogic    = new \App\Logic\GoodsSearch( $param );
+			$goodsLogic    = new \App\Biz\GoodsSearch( $param );
 			$goods_count   = $goodsLogic->count();
 			$goods_list    = $goodsLogic->list();
 

@@ -15,7 +15,7 @@ namespace App\Validator\Admin;
 
 use ezswoole\Validator;
 use ezswoole\Db;
-use App\Logic\User as UserLogic;
+use App\Biz\User as UserLogic;
 
 class Login extends Validator
 {

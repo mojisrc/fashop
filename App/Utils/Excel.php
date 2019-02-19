@@ -53,7 +53,7 @@ class Excel
             throw new \Exception("表头和表头键必须匹配");
         }
 
-        $spreadsheet_logic = new \App\Logic\Office\Spreadsheet($name, $data, $head, $keys);
+        $spreadsheet_logic = new \App\Biz\Office\Spreadsheet($name, $data, $head, $keys);
         $file_name         = $spreadsheet_logic->outPut();
 
         //生成文件后，使用response输出

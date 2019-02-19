@@ -14,7 +14,7 @@
 namespace App\Broadcast\Admin;
 
 use App\Broadcast\BroadcastController;
-use App\Logic\Fd;
+use App\Biz\Fd;
 use App\Utils\WebSocketCode as Code;
 use EasySwoole\Core\Component\Logger;
 

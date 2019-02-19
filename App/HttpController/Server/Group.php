@@ -13,7 +13,7 @@
 
 namespace App\HttpController\Server;
 
-use App\Logic\Order as OrderLogic;
+use App\Biz\Order as OrderLogic;
 use App\Utils\Code;
 
 class Group extends Server
@@ -50,7 +50,7 @@ class Group extends Server
 
 			$param['ids']  = $group_goods_ids;
 			$param['page'] = $this->getPageLimit();
-			$goodsLogic    = new \App\Logic\GoodsSearch( $param );
+			$goodsLogic    = new \App\Biz\GoodsSearch( $param );
 			$goods_count   = $goodsLogic->count();
 			$goods_list    = $goodsLogic->list();
 

@@ -205,7 +205,7 @@ class Order extends Model
 	public function getOrderStateCancelCount( $condition = [] )
 	{
 		$condition['no_display']   = 0;
-		$condition['state']        = \App\Logic\Order::state_cancel;
+		$condition['state']        = \App\Biz\Order::state_cancel;
 		$condition['refund_state'] = ['=', 0];
 		$condition['lock_state']   = ['=', 0];
 		return $this->getOrderCount( $condition );
@@ -218,7 +218,7 @@ class Order extends Model
 	public function getOrderStateNewCount( $condition = [] )
 	{
 		$condition['no_display']   = 0;
-		$condition['state']        = \App\Logic\Order::state_new;
+		$condition['state']        = \App\Biz\Order::state_new;
 		$condition['refund_state'] = ['=', 0];
 		$condition['lock_state']   = ['=', 0];
 		return $this->getOrderCount( $condition );
@@ -231,7 +231,7 @@ class Order extends Model
 	public function getOrderStatePayCount( $condition = [] )
 	{
 		$condition['no_display'] = 0;
-		$condition['state']      = \App\Logic\Order::state_pay;
+		$condition['state']      = \App\Biz\Order::state_pay;
 		// $condition['refund_state'] = array('=',0);
 		// $condition['lock_state'] = array('=',0);
 		return $this->getOrderCount( $condition );
@@ -244,7 +244,7 @@ class Order extends Model
 	public function getOrderStateSendCount( $condition = [] )
 	{
 		$condition['no_display'] = 0;
-		$condition['state']      = \App\Logic\Order::state_send;
+		$condition['state']      = \App\Biz\Order::state_send;
 		// $condition['refund_state'] = array('=',0);
 		// $condition['lock_state'] = array('=',0);
 		return $this->getOrderCount( $condition );
@@ -257,8 +257,8 @@ class Order extends Model
 	public function getOrderSuccessCount( $condition = [] )
 	{
 		$condition['no_display']    = 0;
-		$condition['state']         = \App\Logic\Order::state_success;
-		$condition['finnshed_time'] = ['>', time() - \App\Logic\Order::ORDER_EVALUATE_TIME];
+		$condition['state']         = \App\Biz\Order::state_success;
+		$condition['finnshed_time'] = ['>', time() - \App\Biz\Order::ORDER_EVALUATE_TIME];
 		return $this->getOrderCount( $condition );
 	}
 
@@ -269,9 +269,9 @@ class Order extends Model
 	public function getOrderStateEvalCount( $condition = [] )
 	{
 		$condition['no_display']     = 0;
-		$condition['state']          = \App\Logic\Order::state_success;
+		$condition['state']          = \App\Biz\Order::state_success;
 		$condition['evaluate_state'] = 0;
-		$condition['finnshed_time']  = ['>', time() - \App\Logic\Order::ORDER_EVALUATE_TIME];
+		$condition['finnshed_time']  = ['>', time() - \App\Biz\Order::ORDER_EVALUATE_TIME];
 		// $condition['refund_state'] = array('=',0);
 		// $condition['lock_state'] = array('=',0);
 		return $this->getOrderCount( $condition );
@@ -283,7 +283,7 @@ class Order extends Model
 	 */
 	public function getOrderRefundCount( $condition = [] )
 	{
-		$condition['state']        = \App\Logic\Order::state_pay;
+		$condition['state']        = \App\Biz\Order::state_pay;
 		$condition['refund_state'] = ['!=', 0]; // 退款状态:0是无退款,1是部分退款,2是全部退款
 		$condition['lock_state']   = ['>', 0]; // 锁定状态:0是正常,大于0是锁定,默认是0
 		return $this->getOrderCount( $condition );
@@ -374,11 +374,11 @@ class Order extends Model
 		switch( $operate ){
 			//买家支付
 		case 'user_pay':
-			$state = ($order_info['state'] === \App\Logic\Order::state_new) && (time() < $order_info['payable_time']);
+			$state = ($order_info['state'] === \App\Biz\Order::state_new) && (time() < $order_info['payable_time']);
 		break;
 			//买家取消订单
 		case 'user_cancel':
-			$state = ($order_info['state'] == \App\Logic\Order::state_new) || ($order_info['payment_code'] == 'offline' && $order_info['state'] == \App\Logic\Order::state_pay);
+			$state = ($order_info['state'] == \App\Biz\Order::state_new) || ($order_info['payment_code'] == 'offline' && $order_info['state'] == \App\Biz\Order::state_pay);
 		break;
 
 			//买家取消订单
@@ -388,48 +388,48 @@ class Order extends Model
 
 			//商家取消订单
 		case 'cancel':
-			$state = ($order_info['state'] == \App\Logic\Order::state_new) || ($order_info['payment_code'] == 'offline' && in_array( $order_info['state'], [
-						\App\Logic\Order::state_pay,
-						\App\Logic\Order::state_send,
+			$state = ($order_info['state'] == \App\Biz\Order::state_new) || ($order_info['payment_code'] == 'offline' && in_array( $order_info['state'], [
+						\App\Biz\Order::state_pay,
+						\App\Biz\Order::state_send,
 					] ));
 		break;
 
 			//平台取消订单
 		case 'system_cancel':
-			$state = ($order_info['state'] == \App\Logic\Order::state_new) || ($order_info['payment_code'] == 'offline' && $order_info['state'] == \App\Logic\Order::state_pay);
+			$state = ($order_info['state'] == \App\Biz\Order::state_new) || ($order_info['payment_code'] == 'offline' && $order_info['state'] == \App\Biz\Order::state_pay);
 		break;
 
 			//平台收款
 		case 'system_receive_pay':
-			$state = $order_info['state'] == \App\Logic\Order::state_new && $order_info['payment_code'] == 'online';
+			$state = $order_info['state'] == \App\Biz\Order::state_new && $order_info['payment_code'] == 'online';
 		break;
 
 		break;
 
 			//调整运费
 		case 'modify_price':
-			$state = ($order_info['state'] == \App\Logic\Order::state_new) || ($order_info['payment_code'] == 'offline' && $order_info['state'] == \App\Logic\Order::state_pay);
+			$state = ($order_info['state'] == \App\Biz\Order::state_new) || ($order_info['payment_code'] == 'offline' && $order_info['state'] == \App\Biz\Order::state_pay);
 			$state = floatval( $order_info['shipping_fee'] ) > 0 && $state;
 		break;
 
 			//发货
 		case 'send':
-			$state = !$order_info['lock_state'] && $order_info['state'] == \App\Logic\Order::state_pay;
+			$state = !$order_info['lock_state'] && $order_info['state'] == \App\Biz\Order::state_pay;
 		break;
 
 			//收货
 		case 'receive':
-			$state = $order_info['state'] == \App\Logic\Order::state_send;
+			$state = $order_info['state'] == \App\Biz\Order::state_send;
 		break;
 
 			//评价
 		case 'evaluate':
-			$state = !$order_info['lock_state'] && !intval( $order_info['evaluate_state'] ) && $order_info['state'] == \App\Logic\Order::state_success && time() - intval( $order_info['finnshed_time'] ) < \App\Logic\Order::ORDER_EVALUATE_TIME;
+			$state = !$order_info['lock_state'] && !intval( $order_info['evaluate_state'] ) && $order_info['state'] == \App\Biz\Order::state_success && time() - intval( $order_info['finnshed_time'] ) < \App\Biz\Order::ORDER_EVALUATE_TIME;
 		break;
 			// 子商品是否可评价
 		case 'evaluate_goods':
 			//			&& (time() - intval( $order_info['finnshed_time'] ) < \App\Logic\Order::ORDER_EVALUATE_TIME
-			$state = $order_info['state'] === \App\Logic\Order::state_success;
+			$state = $order_info['state'] === \App\Biz\Order::state_success;
 		break;
 			//锁定
 		case 'lock':
@@ -439,13 +439,13 @@ class Order extends Model
 			//快递跟踪
 		case 'deliver':
 			$state = !empty( $order_info['tracking_no'] ) && in_array( $order_info['state'], [
-					\App\Logic\Order::state_send,
-					\App\Logic\Order::state_success,
+					\App\Biz\Order::state_send,
+					\App\Biz\Order::state_success,
 				] );
 		break;
 			//分享
 		case 'share':
-			$state = $order_info['state'] == \App\Logic\Order::state_success;
+			$state = $order_info['state'] == \App\Biz\Order::state_success;
 		break;
 
 		}
@@ -533,7 +533,7 @@ class Order extends Model
 			\App\Model\PdRecharge::init()->changePd( 'order_cancel', $pd_data );
 		}
 		//更新订单信息
-		$update_order = ['state' => \App\Logic\Order::state_cancel, 'pd_amount' => 0];
+		$update_order = ['state' => \App\Biz\Order::state_cancel, 'pd_amount' => 0];
 		$update       = $this->editOrder( ['id' => $order_id], $update_order );
 		if( !$update ){
 			throw new \Exception( '保存失败' );
@@ -547,7 +547,7 @@ class Order extends Model
 		if( $extend_msg ){
 			$data['msg'] .= ' ( '.$extend_msg.' )';
 		}
-		$data['order_state'] = \App\Logic\Order::state_cancel;
+		$data['order_state'] = \App\Biz\Order::state_cancel;
 		return OrderLog::init()->addOrderLog( $data );
 	}
 
@@ -565,7 +565,7 @@ class Order extends Model
 
 		//更新订单状态
 		$update_order['finnshed_time'] = time();
-		$update_order['state']         = \App\Logic\Order::state_success;
+		$update_order['state']         = \App\Biz\Order::state_success;
 		$update                        = $this->editOrder( ['id' => $order_id], $update_order );
 		if( !$update ){
 			throw new \Exception( '订单修改失败' );
@@ -579,7 +579,7 @@ class Order extends Model
 		if( $extend_msg ){
 			$data['msg'] .= ' ( '.$extend_msg.' )';
 		}
-		$data['order_state'] = \App\Logic\Order::state_success;
+		$data['order_state'] = \App\Biz\Order::state_success;
 		$order_log_id        = OrderLog::init()->addOrderLog( $data );
 		if( !$order_log_id ){
 			throw new \Exception( '日志保存失败' );
@@ -686,7 +686,7 @@ class Order extends Model
 	 */
 	public function getAdminOrderStateCancelCount( $condition = [] )
 	{
-		$condition['state']        = \App\Logic\Order::state_cancel;
+		$condition['state']        = \App\Biz\Order::state_cancel;
 		$condition['refund_state'] = ['=', 0];
 		$condition['lock_state']   = ['=', 0];
 		return $this->getOrderCount( $condition );
@@ -698,7 +698,7 @@ class Order extends Model
 	 */
 	public function getAdminOrderStateNewCount( $condition = [] )
 	{
-		$condition['state']        = \App\Logic\Order::state_new;
+		$condition['state']        = \App\Biz\Order::state_new;
 		$condition['refund_state'] = ['=', 0];
 		$condition['lock_state']   = ['=', 0];
 		return $this->getOrderCount( $condition );
@@ -710,7 +710,7 @@ class Order extends Model
 	 */
 	public function getAdminOrderStatePayCount( $condition = [] )
 	{
-		$condition['state']        = \App\Logic\Order::state_pay;
+		$condition['state']        = \App\Biz\Order::state_pay;
 		$condition['refund_state'] = ['=', 0];
 		$condition['lock_state']   = ['=', 0];
 		return $this->getOrderCount( $condition );
@@ -723,7 +723,7 @@ class Order extends Model
 	public function getAdminOrderStateSendCount( $condition = [] )
 	{
 
-		$condition['state']        = \App\Logic\Order::state_send;
+		$condition['state']        = \App\Biz\Order::state_send;
 		$condition['refund_state'] = ['=', 0];
 		$condition['lock_state']   = ['=', 0];
 		return $this->getOrderCount( $condition );
@@ -736,7 +736,7 @@ class Order extends Model
 	public function getAdminOrderSuccessCount( $condition = [] )
 	{
 
-		$condition['state']        = \App\Logic\Order::state_success;
+		$condition['state']        = \App\Biz\Order::state_success;
 		$condition['refund_state'] = 0;
 		return $this->getOrderCount( $condition );
 	}
@@ -747,9 +747,9 @@ class Order extends Model
 	 */
 	public function getAdminOrderStateEvalCount( $condition = [] )
 	{
-		$condition['state']          = \App\Logic\Order::state_success;
+		$condition['state']          = \App\Biz\Order::state_success;
 		$condition['evaluate_state'] = 0;
-		$condition['finnshed_time']  = ['>', time() - \App\Logic\Order::ORDER_EVALUATE_TIME];
+		$condition['finnshed_time']  = ['>', time() - \App\Biz\Order::ORDER_EVALUATE_TIME];
 		$condition['refund_state']   = ['=', 0];
 		$condition['lock_state']     = ['=', 0];
 		return $this->getOrderCount( $condition );
@@ -789,19 +789,19 @@ class Order extends Model
 	static function orderState( $order_info )
 	{
 		switch( $order_info['state'] ){
-		case \App\Logic\Order::state_cancel:
+		case \App\Biz\Order::state_cancel:
 			$order_state = '已取消';
 		break;
-		case \App\Logic\Order::state_new:
+		case \App\Biz\Order::state_new:
 			$order_state = '待付款';
 		break;
-		case \App\Logic\Order::state_pay:
+		case \App\Biz\Order::state_pay:
 			$order_state = '待发货';
 		break;
-		case \App\Logic\Order::state_send:
+		case \App\Biz\Order::state_send:
 			$order_state = '待收货';
 		break;
-		case \App\Logic\Order::state_success:
+		case \App\Biz\Order::state_success:
 			$order_state = '交易完成';
 		break;
 		}
@@ -816,16 +816,16 @@ class Order extends Model
 	static function orderGroupState( $order_info )
 	{
 		switch( $order_info['group_state'] ){
-		case \App\Logic\Order::group_state_new:
+		case \App\Biz\Order::group_state_new:
 			$order_group_state = '待付款';
 		break;
-		case \App\Logic\Order::group_state_pay:
+		case \App\Biz\Order::group_state_pay:
 			$order_group_state = '待开团';
 		break;
-		case \App\Logic\Order::group_state_success:
+		case \App\Biz\Order::group_state_success:
 			$order_group_state = '拼团成功';
 		break;
-		case \App\Logic\Order::group_state_fail:
+		case \App\Biz\Order::group_state_fail:
 			$order_group_state = '拼团失败';
 		break;
 		}

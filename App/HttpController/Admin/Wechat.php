@@ -14,14 +14,14 @@
 namespace App\HttpController\Admin;
 
 use App\Utils\Code;
-use App\Logic\Wechat\Factory as WechatFactory;
+use App\Biz\Wechat\Factory as WechatFactory;
 use EasySwoole\Utility\File;
 
 /**
  * 微信管理
  * Class Wechat
  * @package App\HttpController\Admin
- * @property \App\Logic\Wechat\Factory $wechat
+ * @property \App\Biz\Wechat\Factory $wechat
  */
 class Wechat extends Admin
 {
@@ -878,7 +878,7 @@ class Wechat extends Admin
 		} else{
 			$result = $this->wechat->userTag->userTags( $this->post['openid'] );
 			if( $result ){
-				$wechatUserLogic = new \App\Logic\WechatUser( ['wechat' => $this->wechat] );
+				$wechatUserLogic = new \App\Biz\WechatUser( ['wechat' => $this->wechat] );
 				$wechatUserLogic->updateWechatUsersInfo( [$this->post['openid']] );
 			}
 			$this->send( Code::success, $result );
@@ -920,7 +920,7 @@ class Wechat extends Admin
 		} else{
 			$result = $this->wechat->userTag->tagUsers( $this->post['openids'], $this->post['id'] );
 			if( $result ){
-				$wechatUserLogic = new \App\Logic\WechatUser( ['wechat' => $this->wechat] );
+				$wechatUserLogic = new \App\Biz\WechatUser( ['wechat' => $this->wechat] );
 				$wechatUserLogic->updateWechatUsersInfo( $this->post['openids'] );
 			}
 			$this->send( Code::success, $result );
@@ -941,7 +941,7 @@ class Wechat extends Admin
 		} else{
 			$result = $this->wechat->userTag->untagUsers( $this->post['openids'], $this->post['id'] );
 			if( $result ){
-				$wechatUserLogic = new \App\Logic\WechatUser( ['wechat' => $this->wechat] );
+				$wechatUserLogic = new \App\Biz\WechatUser( ['wechat' => $this->wechat] );
 				$wechatUserLogic->updateWechatUsersInfo( $this->post['openids'] );
 			}
 			$this->send( Code::success, $result );

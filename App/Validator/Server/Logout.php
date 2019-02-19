@@ -15,7 +15,7 @@ namespace App\Validator\Server;
 
 use ezswoole\Validator;
 use ezswoole\Db;
-use App\Logic\Server\Login as LoginLogic;
+use App\Biz\Server\Login as LoginLogic;
 
 class Logout extends Validator
 {

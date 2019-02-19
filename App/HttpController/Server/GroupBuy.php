@@ -54,7 +54,7 @@ class GroupBuy extends Server
                         'user_info'    => (array)$user,
                     ];
 
-                    $model_buy       = new \App\Logic\Server\Group\Buy($data);
+                    $model_buy       = new \App\Biz\Server\Group\Buy($data);
                     $calculateResult = $model_buy->calculate();
 
                     $this->send(Code::success, [
@@ -111,7 +111,7 @@ class GroupBuy extends Server
                         'message'      => isset($post['message']) ? $post['message'] : null,
                     ];
 
-                    $model_buy = new \App\Logic\Server\Group\Buy($data);
+                    $model_buy = new \App\Biz\Server\Group\Buy($data);
                     $result    = $model_buy->createOrder();
                     if ($model_buy->getOrderId()) {
                         $this->send(Code::success, [

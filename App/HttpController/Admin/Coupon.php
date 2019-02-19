@@ -343,7 +343,7 @@ class Coupon extends Admin
             	$param['not_in_ids'] = $goods_ids;
             }
 
-			$goodsLogic = new \App\Logic\GoodsSearch( $param );
+			$goodsLogic = new \App\Biz\GoodsSearch( $param );
 			return $this->send( Code::success, [
 				'total_number' => $goodsLogic->count(),
 				'list'         => $goodsLogic->list(),
@@ -398,7 +398,7 @@ class Coupon extends Admin
 			$param 		  = [];
             $param['ids'] = $intersection_goods_ids;
 
-			$goodsLogic = new \App\Logic\GoodsSearch( $param );
+			$goodsLogic = new \App\Biz\GoodsSearch( $param );
 			return $this->send( Code::success, [
 				'total_number' => $goodsLogic->count(),
 				'list'         => $goodsLogic->list(),

@@ -43,7 +43,7 @@ class EasySwooleEvent implements EventInterface
 					File::copyFile( $file_path, $target_path, false );
 				}
 				// 清理客户端用户记录 todo 如果未安装不执行
-				\App\Logic\Fd::clearAll();
+				\App\Biz\Fd::clearAll();
 				\ezswoole\Cron::getInstance()->run();
 			}
 		} );

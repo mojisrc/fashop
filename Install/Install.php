@@ -136,7 +136,7 @@ class Install
 		$model = model( 'User' );
 		\App\Model\Page::init()->addUser( [
 			'username' => $this->adminUsername,
-			'password' => \App\Logic\User::encryptPassword( $this->adminPassword ),
+			'password' => \App\Biz\User::encryptPassword( $this->adminPassword ),
 		] );
 	}
 

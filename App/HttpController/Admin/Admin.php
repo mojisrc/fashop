@@ -15,7 +15,7 @@
 namespace App\HttpController\Admin;
 
 use App\Utils\Code;
-use App\Logic\Admin\Auth as AuthLogic;
+use App\Biz\Admin\Auth as AuthLogic;
 use App\HttpController\AccessTokenAbstract;
 
 abstract class Admin extends AccessTokenAbstract

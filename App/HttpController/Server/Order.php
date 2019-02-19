@@ -13,7 +13,7 @@
 
 namespace App\HttpController\Server;
 
-use App\Logic\Order as OrderLogic;
+use App\Biz\Order as OrderLogic;
 use App\Utils\Code;
 
 class Order extends Server

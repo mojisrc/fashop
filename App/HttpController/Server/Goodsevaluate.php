@@ -117,7 +117,7 @@ class Goodsevaluate extends Server
                 try{
                     $user                  = $this->getRequestUser();
                     $this->post['user_id'] = $user['id'];
-                    $logic                 = new \App\Logic\Server\GoodsEvaluate( (array)$this->post );
+                    $logic                 = new \App\Biz\Server\GoodsEvaluate( (array)$this->post );
                     $result                = $logic->create();
                     if( $result === true ){
                         $this->send( Code::success );
@@ -149,7 +149,7 @@ class Goodsevaluate extends Server
                 try{
                     $user                  = $this->getRequestUser();
                     $this->post['user_id'] = $user['id'];
-                    $logic                 = new \App\Logic\Server\GoodsEvaluate( (array)$this->post );
+                    $logic                 = new \App\Biz\Server\GoodsEvaluate( (array)$this->post );
                     $result                = $logic->append();
                     if( $result === true ){
                         $this->send( Code::success );

@@ -15,7 +15,7 @@ namespace App\Validator\Server;
 
 use ezswoole\Validator;
 use ezswoole\Db;
-use App\Logic\VerifyCode;
+use App\Biz\VerifyCode;
 
 class Order extends Validator
 {

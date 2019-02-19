@@ -15,7 +15,7 @@ namespace App\HttpController;
 
 use EasySwoole\Spl\SplArray;
 use ezswoole\Controller;
-use App\Logic\AccessToken as AccessTokenLogic;
+use App\Biz\AccessToken as AccessTokenLogic;
 
 /**
  * Class AccessTokenAbstract

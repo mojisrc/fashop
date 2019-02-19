@@ -13,7 +13,7 @@
 
 namespace App\HttpController\Admin;
 
-use App\Logic\Wechat\Factory as WechatFactory;
+use App\Biz\Wechat\Factory as WechatFactory;
 use App\Utils\Code;
 use ezswoole\utils\image\Image as ImageClass;
 
@@ -21,7 +21,7 @@ use ezswoole\utils\image\Image as ImageClass;
  * 图片管理
  * Class Image
  * @package App\HttpController\Admin
- * @property \App\Logic\Wechat\Factory $wechat
+ * @property \App\Biz\Wechat\Factory $wechat
  */
 class Image extends Admin
 {

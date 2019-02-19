@@ -13,12 +13,12 @@
 
 namespace App\HttpController\Server;
 
-use App\Logic\AccessToken;
-use App\Logic\Server\Binding as BindingLogic;
-use App\Logic\Server\Login as LoginLogic;
-use App\Logic\Server\Register as RegisterLogic;
-use App\Logic\Server\Untie as UntieLogic;
-use App\Logic\User as UserLogic;
+use App\Biz\AccessToken;
+use App\Biz\Server\Binding as BindingLogic;
+use App\Biz\Server\Login as LoginLogic;
+use App\Biz\Server\Register as RegisterLogic;
+use App\Biz\Server\Untie as UntieLogic;
+use App\Biz\User as UserLogic;
 use App\Utils\Code;
 
 class User extends Server

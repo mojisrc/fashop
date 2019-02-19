@@ -280,7 +280,7 @@ class Auth extends Admin
 					$sql .= "('{$name}','{$type}','{$item['title']}',0,1,1),";
 				}
 				$pid = 1;
-				$node_add = array_merge(\App\Logic\Admin\Auth::$notAuthAction,\App\Logic\Admin\Auth::$noNeedAuthActionCheck);
+				$node_add = array_merge(\App\Biz\Admin\Auth::$notAuthAction,\App\Biz\Admin\Auth::$noNeedAuthActionCheck);
 				foreach( $action_list as $index => $item ){
 					foreach( $item['actions'] as $sub ){
 						$sign = strtolower($item['name']."/".$sub['name']);

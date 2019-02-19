@@ -14,7 +14,7 @@
 
 namespace App\HttpController\Admin;
 
-use App\Logic\Order as OrderLogic;
+use App\Biz\Order as OrderLogic;
 use App\Utils\Code;
 
 /**

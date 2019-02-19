@@ -18,8 +18,8 @@ use App\Utils\Code;
 use Hashids\Hashids;
 use ezswoole\Db;
 use ezswoole\Validator;
-use App\Logic\Page\BodyFormat as PageBodyFormat;
-use App\Logic\Page\PageGoods as PageGoodsLogic;
+use App\Biz\Page\BodyFormat as PageBodyFormat;
+use App\Biz\Page\PageGoods as PageGoodsLogic;
 
 /**
  * 页面

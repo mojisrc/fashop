@@ -13,7 +13,7 @@
 
 namespace App\HttpController\Admin;
 
-use App\Logic\OrderRefund as RefundLogic;
+use App\Biz\OrderRefund as RefundLogic;
 use App\Utils\Code;
 
 /**
@@ -37,7 +37,7 @@ class Orderrefund extends Admin
 	 */
 	public function list()
 	{
-		$refundLogic = new \App\Logic\OrderRefundSearch( (array)$this->get );
+		$refundLogic = new \App\Biz\OrderRefundSearch( (array)$this->get );
 		$refundLogic->page( $this->getPageLimit() );
 		$this->send( Code::success, [
 			'total_number' => $refundLogic->count(),

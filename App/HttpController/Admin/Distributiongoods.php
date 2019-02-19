@@ -62,7 +62,7 @@ class Distributiongoods extends Admin
         $distribution_goods_list = $distribution_goods_model->getDistributionGoodsList( [], 'is_show,goods_id', 'id desc', '');
 
 		$param['page']      = $this->getPageLimit();
-		$goodsLogic         = new \App\Logic\GoodsSearch( $param );
+		$goodsLogic         = new \App\Biz\GoodsSearch( $param );
 		$goods_count        = $goodsLogic->count();
 		$goods_list         = $goodsLogic->list();
 

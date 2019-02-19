@@ -14,7 +14,7 @@
 namespace App\HttpController\Server;
 
 use App\Utils\Code;
-use App\Logic\Page\PageGoods as PageGoodsLogic;
+use App\Biz\Page\PageGoods as PageGoodsLogic;
 
 class Page extends Server
 {

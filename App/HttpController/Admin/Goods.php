@@ -35,7 +35,7 @@ class Goods extends Admin
 	{
 		$param         = !empty( $this->post ) ? $this->post : $this->get;
 		$param['page'] = $this->getPageLimit();
-		$goodsLogic    = new \App\Logic\GoodsSearch( $param );
+		$goodsLogic    = new \App\Biz\GoodsSearch( $param );
 		$list          = $goodsLogic->withTotalCount()->list();
 		$this->send( Code::success, [
 			'total_number' => $goodsLogic->getTotalCount(),
@@ -61,7 +61,7 @@ class Goods extends Admin
 		if( $this->validator( $this->post, 'Admin/Goods.add' ) !== true ){
 			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
-			$goodsLogic = new \App\Logic\Goods( $this->post );
+			$goodsLogic = new \App\Biz\Goods( $this->post );
 			$state      = $goodsLogic->add();
 			if( $state === true ){
 				$this->send( Code::success );
@@ -87,7 +87,7 @@ class Goods extends Admin
 		if( $this->validator( $this->post, 'Admin/Goods.edit' ) !== true ){
 			return $this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
-			$goodsLogic = new \App\Logic\Goods( $this->post );
+			$goodsLogic = new \App\Biz\Goods( $this->post );
 			$state      = $goodsLogic->edit();
 			if( $state === true ){
 				$this->send( Code::success );
@@ -123,7 +123,7 @@ class Goods extends Admin
 		if( $this->validator( $this->post, 'Admin/Goods.del' ) !== true ){
 			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
-			$goodsLogic = new \App\Logic\Goods();
+			$goodsLogic = new \App\Biz\Goods();
 			$result     = $goodsLogic->del( $this->post['ids'] );
 			if( $result ){
 				$this->send( Code::success );
@@ -143,7 +143,7 @@ class Goods extends Admin
 		if( $this->validator( $this->post, 'Admin/Goods.offSale' ) !== true ){
 			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
-			$goodsLogic = new \App\Logic\Goods();
+			$goodsLogic = new \App\Biz\Goods();
 			$result     = $goodsLogic->offSale( $this->post['ids'] );
 			if( $result === true ){
 				$this->send( Code::success );
@@ -163,7 +163,7 @@ class Goods extends Admin
 		if( $this->validator( $this->post, 'Admin/Goods.onSale' ) !== true ){
 			$this->send( Code::error, [], $this->getValidator()->getError() );
 		} else{
-			$goodsLogic = new \App\Logic\Goods();
+			$goodsLogic = new \App\Biz\Goods();
 			$result     = $goodsLogic->onSale( $this->post['ids'] );
 			if( $result === true ){
 				$this->send( Code::success );

@@ -14,7 +14,7 @@
 namespace App\HttpController\Server;
 
 use App\Utils\Code;
-use App\Logic\Wechat\Factory;
+use App\Biz\Wechat\Factory;
 use EasyWeChat\Kernel\Messages\Text;
 
 
@@ -131,7 +131,7 @@ class Wechat extends Server
 			case 'event':
 				// 关注自动回复
 				if( $message['Event'] === 'subscribe' ){
-					$autoReplyLogic = new \App\Logic\Wechat\AutoReply();
+					$autoReplyLogic = new \App\Biz\Wechat\AutoReply();
 					$replyMessage   = $autoReplyLogic->getSubscribeReplyContent();
 					if($replyMessage){
 						$xml            = $server->buildResponse( $message['FromUserName'], $message['ToUserName'], $autoReplyLogic->buildMessage( $replyMessage ) );
@@ -149,7 +149,7 @@ class Wechat extends Server
 				$xml  = $server->buildResponse( $message['FromUserName'], $message['ToUserName'], $text );
 				$this->response()->write( $xml );
 				// 检查是否有能匹配的关键词
-				$autoReplyLogic   = new \App\Logic\Wechat\AutoReply( ['key' => $message['Content']] );
+				$autoReplyLogic   = new \App\Biz\Wechat\AutoReply( ['key' => $message['Content']] );
 				$replyContentList = $autoReplyLogic->getReplyContentList();
 				if( $replyContentList ){
 					$customerService = $this->wechat->customerService->instance();

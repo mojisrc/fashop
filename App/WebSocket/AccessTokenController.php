@@ -14,7 +14,7 @@
 namespace App\WebSocket;
 
 use EasySwoole\Core\Component\Spl\SplArray;
-use App\Logic\AccessToken as AccessTokenLogic;
+use App\Biz\AccessToken as AccessTokenLogic;
 
 /**
  * Class AccessTokenController

@@ -60,7 +60,7 @@ class Orderrefund extends Server
 				try{
 					$user                  = $this->getRequestUser();
 					$this->post['user_id'] = $user['id'];
-					$refound_logic         = new \App\Logic\Server\OrderRefund( (array)$this->post );
+					$refound_logic         = new \App\Biz\Server\OrderRefund( (array)$this->post );
 					$result                = $refound_logic->create();
 					if( $result === true ){
 						$this->send( Code::success );

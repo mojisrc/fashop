@@ -102,7 +102,7 @@ class Goodscollect extends Server
 
 			if( $in_goods_ids ){
 				// TODO
-				$goods_search_logic = new \App\Logic\GoodsSearch( ['ids' => $in_goods_ids] );
+				$goods_search_logic = new \App\Biz\GoodsSearch( ['ids' => $in_goods_ids] );
 				$list               = $goods_search_logic->list();
 				$count              = $goods_search_logic->count();
 				$this->send( Code::success, ['list' => $list, 'total_number' => $count] );

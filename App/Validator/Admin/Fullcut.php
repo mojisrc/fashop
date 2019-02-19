@@ -15,7 +15,7 @@ namespace App\Validator\Admin;
 
 use ezswoole\Validator;
 use ezswoole\Db;
-use App\Logic\VerifyCode;
+use App\Biz\VerifyCode;
 
 class Fullcut extends Validator
 {

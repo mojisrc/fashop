@@ -52,11 +52,11 @@ class Trade extends Model
 	public function getOrderState( $type = 'all' )
 	{
 		$state_data = [
-			'order_cancel'    => \App\Logic\Order::state_cancel, //0:已取消
-			'order_default'   => \App\Logic\Order::state_new, //10:未付款
-			'order_paid'      => \App\Logic\Order::state_pay, //20:已付款
-			'order_shipped'   => \App\Logic\Order::state_send, //30:已发货
-			'order_completed' => \App\Logic\Order::state_success, //40:已收货
+			'order_cancel'    => \App\Biz\Order::state_cancel, //0:已取消
+			'order_default'   => \App\Biz\Order::state_new, //10:未付款
+			'order_paid'      => \App\Biz\Order::state_pay, //20:已付款
+			'order_shipped'   => \App\Biz\Order::state_send, //30:已发货
+			'order_completed' => \App\Biz\Order::state_success, //40:已收货
 		];
 		if( $type == 'all' ){
 			return $state_data;

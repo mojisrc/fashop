@@ -14,7 +14,7 @@
 namespace App\WebSocket\Admin;
 
 use App\Utils\WebSocketCode as Code;
-use App\Logic\Fd;
+use App\Biz\Fd;
 use App\WebSocket\AccessTokenController;
 
 class Member extends AccessTokenController

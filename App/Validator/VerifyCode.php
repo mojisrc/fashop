@@ -14,7 +14,7 @@
 namespace App\Validator;
 
 use ezswoole\Validator;
-use App\Logic\VerifyCode as VerifyCodeLogic;
+use App\Biz\VerifyCode as VerifyCodeLogic;
 use ezswoole\Db;
 use App\Utils\Ip;
 

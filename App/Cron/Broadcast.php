@@ -20,7 +20,7 @@ use EasyWeChat\Kernel\Messages\News;
 use EasyWeChat\Kernel\Messages\NewsItem;
 use EasyWeChat\Kernel\Messages\Video;
 use EasyWeChat\Kernel\Messages\Media;
-use App\Logic\Wechat\Factory as WechatFactory;
+use App\Biz\Wechat\Factory as WechatFactory;
 
 /**
  * 微信群发

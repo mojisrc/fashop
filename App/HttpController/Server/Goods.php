@@ -32,7 +32,7 @@ class Goods extends Server
 		$param['page']       = $this->getPageLimit();
 		$param['sale_time']  = ['<', time()];
 		$param['is_on_sale'] = 1;
-		$goodsLogic          = new \App\Logic\GoodsSearch( $param );
+		$goodsLogic          = new \App\Biz\GoodsSearch( $param );
 		$list                = $goodsLogic->withTotalCount()->list();
 		$this->send( Code::success, [
 			'total_number' => $goodsLogic->getTotalCount(),

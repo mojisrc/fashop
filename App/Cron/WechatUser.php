@@ -13,7 +13,7 @@
 
 namespace App\Cron;
 
-use App\Logic\Wechat\Factory as WechatFactory;
+use App\Biz\Wechat\Factory as WechatFactory;
 
 class WechatUser
 {

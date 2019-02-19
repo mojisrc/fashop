@@ -14,8 +14,8 @@
 namespace App\HttpController\Admin;
 
 use App\Utils\Code;
-use App\Logic\User as UserLogic;
-use App\Logic\AccessToken;
+use App\Biz\User as UserLogic;
+use App\Biz\AccessToken;
 
 /**
  * 成员
@@ -190,7 +190,7 @@ class Member extends Admin
 	 */
 	public function login()
 	{
-		$loginLogic = new \App\Logic\Admin\Login();
+		$loginLogic = new \App\Biz\Admin\Login();
 		if( $this->validator( $this->post, 'Admin/Login.pcPassword' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
@@ -241,7 +241,7 @@ class Member extends Admin
 				$rules = \App\Model\AuthRule::init()->where( ['id' => ['in', $group['rule_ids']]] )->column( 'sign' );
 			}
 		}
-		$rules = array_merge( $rules, \App\Logic\Admin\Auth::$noNeedAuthActionCheck );
+		$rules = array_merge( $rules, \App\Biz\Admin\Auth::$noNeedAuthActionCheck );
 		$this->send( Code::success, [
 			'info'  => $this->getRequestUser(),
 			'group' => $group,

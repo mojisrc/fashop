@@ -15,7 +15,7 @@ namespace App\Validator\Server;
 
 use ezswoole\Validator;
 use ezswoole\Db;
-use App\Logic\User as UserLogic;
+use App\Biz\User as UserLogic;
 use App\Utils\Code;
 
 class Login extends Validator

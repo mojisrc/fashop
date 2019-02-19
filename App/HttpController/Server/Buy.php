@@ -13,7 +13,7 @@
 
 namespace App\HttpController\Server;
 
-use App\Logic\Pay\Notice\Facade as PayNoticeFacade;
+use App\Biz\Pay\Notice\Facade as PayNoticeFacade;
 use App\Utils\Code;
 
 class Buy extends Server
@@ -38,7 +38,7 @@ class Buy extends Server
 					'user_info'  => (array)$user,
 				];
 
-				$model_buy       = new \App\Logic\Server\Buy\Buy( $data );
+				$model_buy       = new \App\Biz\Server\Buy\Buy( $data );
 				$calculateResult = $model_buy->calculate();
 
 				$this->send( Code::success, [
@@ -71,7 +71,7 @@ class Buy extends Server
 		} else{
 			try{
 				$user      = $this->getRequestUser();
-				$model_buy = new \App\Logic\Server\Buy\Buy( [
+				$model_buy = new \App\Biz\Server\Buy\Buy( [
 					'user_id'    => $user['id'],
 					'cart_ids'   => $this->post['cart_ids'],
 					'address_id' => $this->post['address_id'],
@@ -110,7 +110,6 @@ class Buy extends Server
 		if( $this->verifyResourceRequest() !== true ){
 			 $this->send( Code::user_access_token_error );
 		} else
-
 			if( $this->validator( $this->post, 'Server/Buy.pay' ) !== true ){
 				 $this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
@@ -127,7 +126,7 @@ class Buy extends Server
 						] );
 						$order_info = \App\Model\Order::init()->getOrderInfo( [
 							'pay_sn' => $this->post['pay_sn'],
-							'state'  => \App\Logic\Order::state_new,
+							'state'  => \App\Biz\Order::state_new,
 						], 'id,pay_sn,amount,revise_amount' );
 						if( empty( $pay_info ) || empty( $order_info ) ){
 							 $this->send( Code::error, [], '该订单不存在' );
@@ -161,6 +160,7 @@ class Buy extends Server
 
 							break;
 							case 'alipay_app':
+								$config = $payment['config'];
 								$amount             = $pay_amount;
 								$order = new \EasySwoole\Pay\AliPay\RequestBean\App();
 								$order->setOutTradeNo($order_info['pay_sn']);
@@ -169,9 +169,9 @@ class Buy extends Server
 
 								$aliConfig = new \EasySwoole\Pay\AliPay\Config();
 								$aliConfig->setGateWay(\EasySwoole\Pay\AliPay\GateWay::NORMAL);
-								$aliConfig->setAppId($payment['config']['app_id']);
-								$aliConfig->setPublicKey($payment['config']['alipay_public_key']);
-								$aliConfig->setPrivateKey($payment['config']['merchant_private_key']);
+								$aliConfig->setAppId($config['app_id']);
+								$aliConfig->setPublicKey($config['alipay_public_key']);
+								$aliConfig->setPrivateKey($config['merchant_private_key']);
 
 								$pay = new \EasySwoole\Pay\Pay();
 
@@ -184,7 +184,7 @@ class Buy extends Server
 							break;
 							}
 
-							return $this->send( Code::success, $options );
+							 $this->send( Code::success, $options );
 						}
 					}
 				} catch( \Exception $e ){
@@ -206,7 +206,7 @@ class Buy extends Server
 			$notice  = PayNoticeFacade::wechat( $this->getWechatPayConfig( $payment['config'], 'wechat' ) );
 			if( $notice->check() === true ){
 				$data       = $notice->getData();
-				$orderLogic = new \App\Logic\Order();
+				$orderLogic = new \App\Biz\Order();
 				$result     = $orderLogic->pay( (string)$data->out_trade_no, 'wechat', (string)$data->transaction_id );
 				if( $result ){
 					$this->response()->write( 'success' );
@@ -232,7 +232,7 @@ class Buy extends Server
 			$notice  = PayNoticeFacade::wechat( $this->getWechatPayConfig( $payment['config'], 'wechat_mini' ) );
 			if( $notice->check() === true ){
 				$data       = $notice->getData();
-				$orderLogic = new \App\Logic\Order();
+				$orderLogic = new \App\Biz\Order();
 				$result     = $orderLogic->pay( (string)$data->out_trade_no, 'wechat_mini', (string)$data->transaction_id );
 				if( $result ){
 					// todo 退款成功需要修改订单状态
@@ -260,7 +260,7 @@ class Buy extends Server
 			$notice  = PayNoticeFacade::wechat( $this->getWechatPayConfig( $payment['config'], 'wechat_app' ) );
 			if( $notice->check() === true ){
 				$data       = $notice->getData();
-				$orderLogic = new \App\Logic\Order();
+				$orderLogic = new \App\Biz\Order();
 				$result     = $orderLogic->pay( (string)$data->out_trade_no, 'wechat_app', (string)$data->transaction_id );
 				if( $result ){
 					$this->response()->write( 'success' );
@@ -286,7 +286,7 @@ class Buy extends Server
 			$notice  = PayNoticeFacade::alipay( $this->getAliPayConfig( $payment['config'], 'alipay_app' ) );
 			if( $notice->check() === true ){
 				$data       = $notice->getData();
-				$orderLogic = new \App\Logic\Order();
+				$orderLogic = new \App\Biz\Order();
 				$result     = $orderLogic->pay( (string)$data->out_trade_no, 'alipay_app', (string)$data->trade_no );
 				if( $result ){
 					$this->response()->write( 'success' );

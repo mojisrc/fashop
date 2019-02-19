@@ -33,7 +33,7 @@ class Cart extends Server
 			if( isset( $params['ids'] ) ){
 				$options['ids'] = $params['ids'];
 			}
-			$cart = new \App\Logic\Server\Cart\Cart( $options );
+			$cart = new \App\Biz\Server\Cart\Cart( $options );
 			try{
 				$this->send( Code::success, ['list' => $cart->list()] );
 			} catch( \Exception $e ){
@@ -179,7 +179,7 @@ class Cart extends Server
 			$this->send( Code::user_access_token_error );
 		} else{
 			$user = $this->getRequestUser();
-			$cart = new \App\Logic\Server\Cart\Cart( ['user_id' => $user['id']] );
+			$cart = new \App\Biz\Server\Cart\Cart( ['user_id' => $user['id']] );
 			try{
 				$info = $cart->info( [
 					'cart.goods_sku_id' => $this->get['goods_sku_id'],
