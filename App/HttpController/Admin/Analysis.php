@@ -26,6 +26,7 @@ class Analysis extends Admin
     public $create_time;
     public $start_date;
     public $end_date;
+    public $date_arr;//用于曲线数组合并
 
     public function _initialize() {
         parent::_initialize();
@@ -39,13 +40,20 @@ class Analysis extends Admin
             $this->start_date = strtotime($param[0]);
             $this->end_date = strtotime($param[1]);
         }else{
-            $this->start_date = time();
-            $this->end_date = strtotime("-7days",strtotime(date('Y-m-d', $this->start_date)));
+            $this->end_date = time();
+            $this->start_date = strtotime("-6days",strtotime(date('Y-m-d', $this->end_date)));
             $this->create_time = [
                 'between',
-                [$this->end_date, $this->start_date],
+                [$this->start_date, $this->end_date],
             ];
         }
+        // 计算日期段内有多少天
+        $days = intval(($this->end_date - $this->start_date)  / 86400) + 1;
+        // 保存每天日期
+        for($i = 0; $i < $days; $i++){
+            $this->date_arr[]['date_time'] = date('Y-m-d', $this->start_date + (86400 * $i));
+        }
+
     }
 
 
@@ -675,141 +683,72 @@ class Analysis extends Admin
     public function curveTransactionSurvey(){
         $orderModel = new \App\Model\Order;
         $analysisModel = new \App\Model\Analysis;
-//        $condition['create_time'] = $this->create_time;
+
+        $condition['create_time'] = $this->create_time;
+
+        $list = $this->date_arr;
+
         $condition['payment_time'] = ['>', 0];
+
         //支付金额
-        $payment_total_price = $orderModel->field( "sum(amount) as total_price, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )
-            ->where( $condition )
-            ->group( 'date_time' )
-            ->select();
+        $payment_total_price = $orderModel->field( "sum(amount) as $payment_total_price, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )
+                                            ->where( $condition )
+                                            ->group( 'date_time' )
+                                            ->select();
+        $list = \App\Utils\Analysis::conver($list, $payment_total_price, 'date_time', 'payment_total_price');
 
         //支付人数
-        $payment_people_num = $orderModel->field( "count(distinct(user_id)) as people_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )
-            ->where( $condition )
-            ->group( 'date_time' )
-            ->select();
-
+        $payment_people_num = $orderModel->field( "count(distinct(user_id)) as payment_people_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )
+                                            ->where( $condition )
+                                            ->group( 'date_time' )
+                                            ->select();
+        $list = \App\Utils\Analysis::conver($list, $payment_piece_num, 'date_time', 'payment_people_num');
 
         //支付件数
-        $payment_piece_num = $orderModel->field( "sum(goods_num) as piece_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )
-            ->where( $condition )
-            ->group( 'date_time' )
-            ->select();
-
+        $payment_piece_num = $orderModel->field( "sum(goods_num) as payment_piece_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )
+                                            ->where( $condition )
+                                            ->group( 'date_time' )
+                                            ->select();
+        $list = \App\Utils\Analysis::conver($list, $payment_piece_num, 'date_time', 'payment_piece_num');
 
         //访问数
-        //$where['create_time'] = $this->create_time;
-        $where = [];
-        $visitor_num = $analysisModel->field( "count(id) as total_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )->where( $where )->group('date_time')->select();
+        $where['create_time'] = $this->create_time;
+        $visitor_num = $analysisModel->field( "count(id) as visitor_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )
+                                            ->where( $where )
+                                            ->group('date_time')
+                                            ->select();
+        $list = \App\Utils\Analysis::conver($list, $visitor_num, 'date_time', 'visitor_num');
 
         //下单笔数
-        $order_num = $orderModel->field( "count(id) as total_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )->where( $where )->group('date_time')->select();
+        $order_num = $orderModel->field( "count(id) as order_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )
+                                            ->where( $where )
+                                            ->group('date_time')
+                                            ->select();
+        $list = \App\Utils\Analysis::conver($list, $order_num, 'date_time', 'order_num');
 
         //支付数
         $where['payment_time'] = ['>', 0];
-        $payment_num = $orderModel->field( "count(id) as total_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )->where( $where )->group('date_time')->select();
+        $payment_num = $orderModel->field( "count(id) as payment_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )
+                                            ->where( $where )
+                                            ->group('date_time')
+                                            ->select();
+        $list = \App\Utils\Analysis::conver($list, $payment_num, 'date_time', 'payment_num');
 
-        //访问下单的转化率
-        //$visitor_order_conversion = conversion($visitor_num, $order_num);//函数加载不进来，先注释使用下面的循环
-        $visitor_order_conversion = [];
-        if(!empty($order_num)){
-            foreach($order_num as $key => $val){
-                foreach($visitor_num as $k => $v){
-                    if($val['date_time'] == $v['date_time']){
-                        $order_num[$key]['conversion'] = round($v['total_num'] / $val['total_num'], 2) * 100;
-                    }else{
-                        if(empty($order_num[$key]['conversion'])){
-                            $order_num[$key]['conversion'] = 0;
-                        }
-                    }
-                }
-            }
-            $visitor_order_conversion = $order_num;
-        }
-
-
-        //下单和付款的转化率
-        //$people_visitor_conversion = conversion($visitor_num, $order_num);//函数加载不进来，先注释使用下面的循环
-        $payment_order_current = [];
-        if(!empty($payment_num)){
-            foreach($payment_num as $key => $val){
-                foreach($order_num as $k => $v){
-                    if($val['date_time'] == $v['date_time']){
-                        $payment_num[$key]['conversion'] = round($v['total_num'] / $val['total_num'], 2) * 100;
-                    }else{
-                        if(empty($payment_num[$key]['conversion'])){
-                            $payment_num[$key]['conversion'] = 0;
-                        }
-                    }
-                }
-            }
-            $payment_order_current = $payment_num;
-        }
-//
-//      //访客和付款的转化率
-        //$people_visitor_conversion = conversion($visitor_num, $order_num);//函数加载不进来，先注释使用下面的循环
-        $people_visitor_conversion = [];
-        if(!empty($payment_num)){
-            foreach($payment_num as $key => $val){
-                foreach($visitor_num as $k => $v){
-                    if($val['date_time'] == $v['date_time']){
-                        $payment_num[$key]['conversion'] = round($v['total_num'] / $val['total_num'], 2) * 100;
-                    }else{
-                        if(empty($payment_num[$key]['conversion'])){
-                            $payment_num[$key]['conversion'] = 0;
-                        }
-                    }
-                }
-            }
-            $people_visitor_conversion = $payment_num;
-        }
 
         return $this->send( Code::success, [
-            'payment_total_price' => $payment_total_price,
-            'payment_people_num' => $payment_people_num,
-            'payment_piece_num' => $payment_piece_num,
-            'visitor_order_conversion' => $visitor_order_conversion,
-            'payment_order_current' => $payment_order_current,
-            'people_visitor_conversion' => $people_visitor_conversion,
-        ] );
-//
-//
-//        //访客数
-//        $condition_str = 'create_time between ' . $this->end_date . ' AND ' . $this->start_date;
-//        $visitor_num = $analysisModel->rawQuery("SELECT count(distinct(user_id)) as visitor_num,FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time FROM fa_analysis WHERE create_time IN (SELECT create_time FROM fa_analysis where $condition_str) GROUP BY date_time");
-//
-//
-//        //商品浏览量
-//        $where['create_time'] = $this->create_time;
-//        $where['link_id'] = 1;
-//        $goods_view_num = $analysisModel->field( "count(id) as goods_view_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )
-//            ->where( $where )
-//            ->group( 'date_time' )
-//            ->select();
-//
-//
-//        //商品访客数
-//        $where_str = 'link_id = 1 AND create_time between ' . $this->end_date . ' AND ' . $this->start_date;
-//        $goods_visitor_num = $analysisModel->rawQuery("SELECT count(distinct(user_id)) as goods_visitor_num,FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time FROM fa_analysis WHERE create_time IN (SELECT create_time FROM fa_analysis where $where_str) GROUP BY date_time");
-//
-//
-//        $list = array_map(function($view_num, $visitor_num, $goods_view_num, $goods_visitor_num)
-//        {
-//            return([
-//                'date_time' => $visitor_num['date_time'],
-//                'visitor_num' => $visitor_num['visitor_num'],
-//                'view_num' => $view_num['view_num'],
-//                'goods_view_num' => $goods_view_num['goods_view_num'],
-//                'goods_visitor_num' => $goods_visitor_num['goods_visitor_num']
-//            ]);
-//        }, $view_num, $visitor_num, $goods_view_num, $goods_visitor_num);
-//
-
-        $this->send( Code::success, [
-            'list' => $view_num,
+            'list' => $list,
         ] );
     }
 
+
+    /**
+     * 交易构成（如何界定为新老客户呢？）
+     * @method GET | POST
+     * @param array  $create_time      [开始时间,结束时间]
+     */
+    public function constitute(){
+
+    }
 
 
 }

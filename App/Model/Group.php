@@ -23,7 +23,6 @@ class Group extends Model
 	/**
 	 * 列表
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $field
 	 * @param   $order
 	 * @param   $page
@@ -32,8 +31,7 @@ class Group extends Model
 	 */
 	public function getGroupList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20] )
 	{
-
-			$data = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
+		$data = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 
 		if( !$data ){
 			return [];
@@ -44,23 +42,21 @@ class Group extends Model
 
 		}
 		return $data;
-
 	}
 
 	/**
 	 * 获得数量
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $distinct [去重]
 	 * @return
 	 */
-	public function getGroupCount( $condition = [], $condition_str = '', $distinct = '' )
+	public function getGroupCount( $condition = [], $distinct = '' )
 	{
 		if( $distinct == '' ){
-			return $this->where( $condition )->where( $condition_str )->count();
+			return $this->where( $condition )->count();
 
 		} else{
-			return $this->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
+			return $this->where( $condition )->count( "DISTINCT ".$distinct );
 
 		}
 	}
@@ -68,69 +64,63 @@ class Group extends Model
 	/**
 	 * 获得信息
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $field
 	 * @return
 	 */
-	public function getGroupInfo( $condition = [], $condition_str = '', $field = '*' )
+	public function getGroupInfo( $condition = [], $field = '*' )
 	{
-		$data = $this->where( $condition )->where( $condition_str )->field( $field )->find();
+		$data = $this->where( $condition )->field( $field )->find();
 		return $data;
 	}
 
 	/**
 	 * 获取的id
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
-	public function getGroupId( $condition = [], $condition_str = '' )
+	public function getGroupId( $condition = [] )
 	{
-		return $this->where( $condition )->where( $condition_str )->value( 'id' );
+		return $this->where( $condition )->value( 'id' );
 	}
 
 	/**
 	 * 获取某个字段
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
-	public function getGroupValue( $condition = [], $condition_str = '', $field = 'id' )
+	public function getGroupValue( $condition = [], $field = 'id' )
 	{
-		return $this->where( $condition )->where( $condition_str )->value( $field );
+		return $this->where( $condition )->value( $field );
 	}
 
 	/**
 	 * 获取某个字段列
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
-	public function getGroupColumn( $condition = [], $condition_str = '', $field = 'id' )
+	public function getGroupColumn( $condition = [], $field = 'id' )
 	{
-		return $this->where( $condition )->where( $condition_str )->column( $field );
+		return $this->where( $condition )->column( $field );
 	}
 
 	/**
 	 * 某个字段+1
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
-	public function setIncGroup( $condition = [], $condition_str = '', $field, $num = 1 )
+	public function setIncGroup( $condition = [], $field, $num = 1 )
 	{
-		return $this->where( $condition )->where( $condition_str )->setInc( $field, $num );
+		return $this->where( $condition )->setInc( $field, $num );
 	}
 
 	/**
 	 * 某个字段-1
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
-	public function setDecGroup( $condition = [], $condition_str = '', $field, $num = 1 )
+	public function setDecGroup( $condition = [], $field, $num = 1 )
 	{
-		return $this->where( $condition )->where( $condition_str )->setDec( $field, $num );
+		return $this->where( $condition )->setDec( $field, $num );
 	}
 
 	/**
@@ -174,11 +164,11 @@ class Group extends Model
 	/**
 	 * 删除
 	 * @param   $condition
-	 * @param   $condition_str
+
 	 */
-	public function delGroup( $condition = [], $condition_str = '' )
+	public function delGroup( $condition = [] )
 	{
-		return $this->where( $condition )->where( $condition_str )->del();
+        return $this->where( $condition )->del();
 	}
 
 	/**
