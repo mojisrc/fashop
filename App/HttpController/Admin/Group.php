@@ -114,8 +114,8 @@ class Group extends Admin
      */
     public function add()
     {
-        $post                      = $this->post;
-        $error                     = $this->validator($post, 'Admin/Group.add');
+        $post  = $this->post;
+        $error = $this->validator($post, 'Admin/Group.add');
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {
@@ -470,7 +470,7 @@ class Group extends Admin
     }
 
     /**
-     * 拼团活动设置
+     * 拼团活动设置 [使失效]
      * @method POST
      * @param int id 拼团活动id
      */
@@ -502,7 +502,6 @@ class Group extends Admin
 
         }
     }
-
 
     /**
      * 删除拼团活动
@@ -577,9 +576,18 @@ class Group extends Admin
         } else {
             $group_ids                   = array_column($group_list, 'id');
             $group_goods_ids             = array_column($group_list, 'goods_id');
-            $map                         = [];
             $map['group_goods.group_id'] = ['in', $group_ids];
-            $min_group_price             = $group_goods_model->join('goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT')->where($map)->group('goods_id')->column('group_goods.goods_id,min(group_goods.group_price)');
+            $group_goods_list            = $group_goods_model->join('goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT')->where($map)->group('goods_id')->field('group_goods.goods_id,min(group_goods.group_price) AS min_group_price')->select();
+            if (!$group_goods_list) {
+                return $this->send(Code::success, [
+                    'total_number' => 0,
+                    'list'         => [],
+                ]);
+            }
+
+            foreach ($group_goods_list as $key => $value) {
+                $min_group_price[$value['goods_id']] = $value['min_group_price'];
+            }
 
             $param['ids']  = $group_goods_ids;
             $param['page'] = $this->getPageLimit();
