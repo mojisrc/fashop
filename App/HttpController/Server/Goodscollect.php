@@ -76,11 +76,11 @@ class Goodscollect extends Server
 		if( $this->verifyResourceRequest() !== true ){
 			$this->send( Code::user_access_token_error );
 		} else{
-			if( $this->validator( $this->post, 'Server/GoodsCollect.state' ) !== true ){
+			if( $this->validator( $this->get, 'Server/GoodsCollect.state' ) !== true ){
 				$this->send( Code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				$user = $this->getRequestUser();
-				$info = \App\Model\GoodsCollect::init()->getGoodsCollectInfo( ['user_id' => $user['id']], ['goods_id' => $this->post['goods_id']] );
+                $info = \App\Model\GoodsCollect::init()->getGoodsCollectInfo( ['user_id' => $user['id'],'goods_id' => $this->get['goods_id']]);
 				$this->send( Code::success, ['state' => $info ? 1 : 0] );
 			}
 		}

@@ -24,20 +24,19 @@ class GroupGoods extends Model
 	/**
 	 * 列表
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $field
 	 * @param   $order
 	 * @param   $page
 	 * @param   $group
 	 * @return
 	 */
-	public function getGroupGoodsList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
+	public function getGroupGoodsList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
-			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
+			$data = $this->where( $condition )->order( $order )->field( $field )->group( $group )->select();
 
 		} else{
-			$data = $this->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
+			$data = $this->where( $condition )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 		}
 		return $data;
 	}
@@ -45,39 +44,34 @@ class GroupGoods extends Model
 	/**
 	 * 获得数量
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $distinct [去重]
 	 * @return
 	 */
-	public function getGroupGoodsCount( $condition = [], $condition_str = '', $distinct = '' )
+	public function getGroupGoodsCount( $condition = [], $distinct = '' )
 	{
 		if( $distinct == '' ){
-			return $this->where( $condition )->where( $condition_str )->count();
-
+			return $this->where( $condition )->count();
 		} else{
-			return $this->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
-
+			return $this->where( $condition )->count( "DISTINCT ".$distinct );
 		}
 	}
 
 	/**
 	 * 列表更多
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $field
 	 * @param   $order
 	 * @param   $page
 	 * @param   $group
 	 * @return
 	 */
-	public function getGroupGoodsMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
+	public function getGroupGoodsMoreList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
-			$data = $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
+			$data = $this->join( 'group', 'group_goods.group_id = group.id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->group( $group )->select();
 
 		} else{
-			$data = $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
-
+			$data = $this->join( 'group', 'group_goods.group_id = group.id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 		}
 		return $data;
 	}
@@ -85,388 +79,101 @@ class GroupGoods extends Model
 	/**
 	 * 获得数量
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $distinct [去重]
 	 * @return
 	 */
-	public function getGroupGoodsMoreCount( $condition = [], $condition_str = '', $distinct = '' )
+	public function getGroupGoodsMoreCount( $condition = [], $distinct = '' )
 	{
 		if( $distinct == '' ){
-			return $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->where( $condition )->where( $condition_str )->count();
+			return $this->join( 'group', 'group_goods.group_id = group.id', 'LEFT' )->where( $condition )->count();
 
 		} else{
-			return $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
-		}
-	}
-
-	/**
-	 * 查询普通的数据和软删除的数据
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $field
-	 * @param   $order
-	 * @param   $page
-	 * @param   $group
-	 * @return
-	 */
-	public function getWithTrashedGroupGoodsList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
-	{
-		$data = $this->withTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
-		return $data;
-	}
-
-	/**
-	 * 查询普通的数据和软删除的数据的数量
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $distinct [去重]
-	 * @return
-	 */
-	public function getWithTrashedGroupGoodsCount( $condition = [], $condition_str = '', $distinct = '' )
-	{
-		if( $distinct == '' ){
-			return $this->withTrashed()->where( $condition )->where( $condition_str )->count();
-
-		} else{
-			return $this->withTrashed()->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
-
-		}
-	}
-
-	/**
-	 * 查询普通的数据和软删除的数据更多
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $field
-	 * @param   $order
-	 * @param   $page
-	 * @param   $group
-	 * @return
-	 */
-	public function getWithTrashedGroupGoodsMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
-	{
-		if( $page == '' ){
-			$data = $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->withTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
-
-		} else{
-			$data = $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->withTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
-
-		}
-		return $data;
-	}
-
-	/**
-	 * 查询普通的数据和软删除的数据的数量
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $distinct [去重]
-	 * @return
-	 */
-	public function getWithTrashedGroupGoodsMoreCount( $condition = [], $condition_str = '', $distinct = '' )
-	{
-		if( $distinct == '' ){
-			return $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->withTrashed()->where( $condition )->where( $condition_str )->count();
-
-		} else{
-			return $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->withTrashed()->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
-		}
-	}
-
-	/**
-	 * 只查询软删除的数据
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $field
-	 * @param   $order
-	 * @param   $page
-	 * @param   $group
-	 * @return
-	 */
-	public function getOnlyTrashedGroupGoodsList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
-	{
-		$data = $this->onlyTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
-		return $data;
-	}
-
-	/**
-	 * 只查询软删除的数据的数量
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $distinct [去重]
-	 * @return
-	 */
-	public function getOnlyTrashedGroupGoodsCount( $condition = [], $condition_str = '', $distinct = '' )
-	{
-		if( $distinct == '' ){
-			return $this->onlyTrashed()->where( $condition )->where( $condition_str )->count();
-
-		} else{
-			return $this->onlyTrashed()->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
-
-		}
-	}
-
-	/**
-	 * 只查询软删除的数据更多
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $field
-	 * @param   $order
-	 * @param   $page
-	 * @param   $group
-	 * @return
-	 */
-	public function getOnlyTrashedGroupGoodsMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
-	{
-		if( $page == '' ){
-			$data = $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->onlyTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
-
-		} else{
-			$data = $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->onlyTrashed()->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
-
-		}
-		return $data;
-	}
-
-	/**
-	 * 只查询软删除的数据的数量
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $distinct [去重]
-	 * @return
-	 */
-	public function getOnlyTrashedGroupGoodsMoreCount( $condition = [], $condition_str = '', $distinct = '' )
-	{
-		if( $distinct == '' ){
-			return $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->onlyTrashed()->where( $condition )->where( $condition_str )->count();
-
-		} else{
-			return $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->onlyTrashed()->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
+			return $this->join( 'group', 'group_goods.group_id = group.id', 'LEFT' )->where( $condition )->count( "DISTINCT ".$distinct );
 		}
 	}
 
 	/**
 	 * 获得信息
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $field
 	 * @return
 	 */
-	public function getGroupGoodsInfo( $condition = [], $condition_str = '', $field = '*' )
+	public function getGroupGoodsInfo( $condition = [], $field = '*' )
 	{
-		$data = $this->where( $condition )->where( $condition_str )->field( $field )->find();
-		return $data;
-	}
-
-	/**
-	 * 获得排除字段的信息
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $exclude [排除]
-	 * @return
-	 */
-	public function getGroupGoodsExcludeInfo( $condition = [], $condition_str = '', $exclude = '' )
-	{
-		$data = $this->where( $condition )->where( $condition_str )->field( $exclude, true )->find();
+		$data = $this->where( $condition )->field( $field )->find();
 		return $data;
 	}
 
 	/**
 	 * 获得信息更多
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $field
 	 * @return
 	 */
-	public function getGroupGoodsMoreInfo( $condition = [], $condition_str = '', $field = '*' )
+	public function getGroupGoodsMoreInfo( $condition = [], $field = '*' )
 	{
-		$data = $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->where( $condition )->where( $condition_str )->field( $field )->find();
-		return $data;
-	}
-
-	/**
-	 * 获得排除字段的信息更多
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $exclude [排除]
-	 * @return
-	 */
-	public function getGroupGoodsExcludeMoreInfo( $condition = [], $condition_str = '', $exclude = '*' )
-	{
-		$data = $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->where( $condition )->where( $condition_str )->field( $exclude, true )->find();
-		return $data;
-	}
-
-	/**
-	 * 查询普通的数据和软删除的数据信息
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $field
-	 * @return
-	 */
-	public function getWithTrashedGroupGoodsInfo( $condition = [], $condition_str = '', $field = '*' )
-	{
-		$data = $this->withTrashed()->where( $condition )->where( $condition_str )->field( $field )->find();
-		return $data;
-	}
-
-	/**
-	 * 查询普通的数据和软删除的数据信息更多
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $field
-	 * @return
-	 */
-	public function getWithTrashedGroupGoodsMoreInfo( $condition = [], $condition_str = '', $field = '*' )
-	{
-		$data = $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->withTrashed()->where( $condition )->where( $condition_str )->field( $field )->find();
-		return $data;
-	}
-
-	/**
-	 * 查询普通的数据和软删除的排除字段数据信息
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $exclude [排除]
-	 * @return
-	 */
-	public function getWithTrashedGroupGoodsExcludeInfo( $condition = [], $condition_str = '', $exclude = '*' )
-	{
-		$data = $this->withTrashed()->where( $condition )->where( $condition_str )->field( $exclude, true )->find();
-		return $data;
-	}
-
-
-	/**
-	 * 查询普通的数据和软删除的排除字段数据信息更多
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $exclude [排除]
-	 * @return
-	 */
-	public function getWithTrashedGroupGoodsExcludeMoreInfo( $condition = [], $condition_str = '', $exclude = '*' )
-	{
-		$data = $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->withTrashed()->where( $condition )->where( $condition_str )->field( $exclude, true )->find();
-		return $data;
-	}
-
-	/**
-	 * 只查询软删除的数据信息
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $field
-	 * @return
-	 */
-	public function getOnlyTrashedGroupGoodsInfo( $condition = [], $condition_str = '', $field = '*' )
-	{
-		$data = $this->onlyTrashed()->where( $condition )->where( $condition_str )->field( $field )->find();
-		return $data;
-	}
-
-	/**
-	 * 只查询软删除的数据信息更多
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $field
-	 * @return
-	 */
-	public function getOnlyTrashedGroupGoodsMoreInfo( $condition = [], $condition_str = '', $field = '*' )
-	{
-		$data = $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->onlyTrashed()->where( $condition )->where( $condition_str )->field( $field )->find();
-		return $data;
-	}
-
-	/**
-	 * 只查询软删除的排除字段数据信息
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $exclude [排除]
-	 * @return
-	 */
-	public function getOnlyTrashedGroupGoodsExcludeInfo( $condition = [], $condition_str = '', $exclude = '*' )
-	{
-		$data = $this->onlyTrashed()->where( $condition )->where( $condition_str )->field( $exclude, true )->find();
-		return $data;
-	}
-
-
-	/**
-	 * 只查询软删除的排除字段数据信息更多
-	 * @param   $condition
-	 * @param   $condition_str
-	 * @param   $exclude [排除]
-	 * @return
-	 */
-	public function getOnlyTrashedGroupGoodsExcludeMoreInfo( $condition = [], $condition_str = '', $exclude = '*' )
-	{
-		$data = $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->onlyTrashed()->where( $condition )->where( $condition_str )->field( $exclude, true )->find();
+		$data = $this->join( 'group', 'group_goods.group_id = group.id', 'LEFT' )->where( $condition )->field( $field )->find();
 		return $data;
 	}
 
 	/**
 	 * 获取的id
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
-	public function getGroupGoodsId( $condition = [], $condition_str = '' )
+	public function getGroupGoodsId( $condition = [] )
 	{
-		return $this->where( $condition )->where( $condition_str )->value( 'id' );
+		return $this->where( $condition )->value( 'id' );
 	}
 
 	/**
 	 * 获取某个字段
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
-	public function getGroupGoodsValue( $condition = [], $condition_str = '', $field = 'id' )
+	public function getGroupGoodsValue( $condition = [], $field = 'id' )
 	{
-		return $this->where( $condition )->where( $condition_str )->value( $field );
+		return $this->where( $condition )->value( $field );
 	}
 
 	/**
 	 * 获取某个字段列
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
-	public function getGroupGoodsColumn( $condition = [], $condition_str = '', $field = 'id' )
+	public function getGroupGoodsColumn( $condition = [], $field = 'id' )
 	{
-		return $this->where( $condition )->where( $condition_str )->column( $field );
+		return $this->where( $condition )->column( $field );
 	}
 
 	/**
-	 * 获取某个字段列[指定索引]
+	 * 获取某个字段列[指定索引] TODO：一会优化
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
-	public function getGroupGoodsIndexesColumn( $condition = [], $condition_str = '', $field = 'id', $indexes = 'id' )
+	public function getGroupGoodsIndexesColumn( $condition = [], $field = 'id', $indexes = 'id' )
 	{
-		return $this->where( $condition )->where( $condition_str )->column( $field, $indexes );
+		return $this->where( $condition )->column( $field, $indexes );
 	}
 
 	/**
 	 * 某个字段+1
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
-	public function setIncGroupGoods( $condition = [], $condition_str = '', $field, $num = 1 )
+	public function setIncGroupGoods( $condition = [], $field, $num = 1 )
 	{
-		return $this->where( $condition )->where( $condition_str )->setInc( $field, $num );
+		return $this->where( $condition )->setInc( $field, $num );
 	}
 
 	/**
 	 * 某个字段-1
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
-	public function setDecGroupGoods( $condition = [], $condition_str = '', $field, $num = 1 )
+	public function setDecGroupGoods( $condition = [], $field, $num = 1 )
 	{
-		return $this->where( $condition )->where( $condition_str )->setDec( $field, $num );
+		return $this->where( $condition )->setDec( $field, $num );
 	}
 
 	/**
@@ -491,12 +198,11 @@ class GroupGoods extends Model
 	 * 修改信息
 	 * @param   $update
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @return
 	 */
 	public function updateGroupGoods( $condition = [], $update = [] )
 	{
-		return $this->save( $update, $condition );
+		return $this->where( $condition )->edit( $update );
 	}
 
 	/**
@@ -511,49 +217,44 @@ class GroupGoods extends Model
 	/**
 	 * 删除
 	 * @param   $condition
-	 * @param   $condition_str
 	 */
-	public function delGroupGoods( $condition = [], $condition_str = '' )
+	public function delGroupGoods( $condition = [] )
 	{
-		return $this->where( $condition )->where( $condition_str )->del();
+        return $this->where( $condition )->del();
 	}
-
-
 
 	/**
 	 * 获得商品sku数量
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $distinct [去重]
 	 * @return
 	 */
-	public function getGoodsSkuMoreCount( $condition = [], $condition_str = '', $distinct = '' )
+	public function getGoodsSkuMoreCount( $condition = [], $distinct = '' )
 	{
 		if( $distinct == '' ){
-			return $this->join( '__GOODS_SKU__ goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->count();
+			return $this->join( 'goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->count();
 
 		} else{
-			return $this->join( '__GOODS_SKU__ goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
+			return $this->join( 'goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->count( "DISTINCT ".$distinct );
 		}
 	}
 
 	/**
 	 * 获得商品sku列表
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $field
 	 * @param   $order
 	 * @param   $page
 	 * @param   $group
 	 * @return
 	 */
-	public function getGoodsSkuMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
+	public function getGoodsSkuMoreList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
-			$data = $this->join( '__GOODS_SKU__ goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
+			$data = $this->join( 'goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->group( $group )->select();
 
 		} else{
-			$data = $this->join( '__GOODS_SKU__ goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
+			$data = $this->join( 'goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 		}
 		return $data;
 	}
@@ -561,21 +262,18 @@ class GroupGoods extends Model
 	/**
 	 * 列表更多
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $field
 	 * @param   $order
 	 * @param   $page
 	 * @param   $group
 	 * @return
 	 */
-	public function getGroupGoodsSkuMoreList( $condition = [], $condition_str = '', $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
+	public function getGroupGoodsSkuMoreList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
 	{
 		if( $page == '' ){
-			$data = $this->join( 'group', 'group_goods.group_id = group.id', 'LEFT' )->join( 'goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->group( $group )->select();
-
+			$data = $this->join( 'group', 'group_goods.group_id = group.id', 'LEFT' )->join( 'goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->group( $group )->select();
 		} else{
-			$data = $this->join( 'group', 'group_goods.group_id = group.id', 'LEFT' )->join( 'goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->order( $order )->field( $field )->page( $page )->group( $group )->select();
-
+			$data = $this->join( 'group', 'group_goods.group_id = group.id', 'LEFT' )->join( 'goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 		}
 		return $data;
 	}
@@ -583,17 +281,16 @@ class GroupGoods extends Model
 	/**
 	 * 获得数量
 	 * @param   $condition
-	 * @param   $condition_str
 	 * @param   $distinct [去重]
 	 * @return
 	 */
-	public function getGroupGoodsSkuMoreCount( $condition = [], $condition_str = '', $distinct = '' )
+	public function getGroupGoodsSkuMoreCount( $condition = [], $distinct = '' )
 	{
 		if( $distinct == '' ){
-			return $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->join( '__GOODS_SKU__ goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->count();
+			return $this->join( 'group', 'group_goods.group_id = group.id', 'LEFT' )->join( 'goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->count();
 
 		} else{
-			return $this->join( '__GROUP__ group', 'group_goods.group_id = group.id', 'LEFT' )->join( '__GOODS_SKU__ goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->where( $condition_str )->count( "DISTINCT ".$distinct );
+			return $this->join( 'group', 'group_goods.group_id = group.id', 'LEFT' )->join( 'goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $condition )->count( "DISTINCT ".$distinct );
 		}
 	}
 
@@ -604,10 +301,10 @@ class GroupGoods extends Model
 	 */
 	public function checkGoods( $group_id = 0, $condition = [] )
 	{
-		$goods_model = model( 'Goods' );
+		$goods_model = new \App\Model\Goods;
 		$goods_ids   = $this->getGroupGoodsColumn( $condition, '', 'goods_id' );
 		if( $goods_ids ){
-			$online_goods_ids = \App\Model\Goods::getGoodsColumn( ['id' => ['in', $goods_ids], 'is_on_sale' => 1], 'id' );
+			$online_goods_ids = $goods_model->getGoodsColumn( ['id' => ['in', $goods_ids], 'is_on_sale' => 1], 'id' );
 
 			//返回出现在第一个数组中但其他数组中没有的值 [将要删除的商品]
 			$difference_goods_del_ids = array_diff( $goods_ids, $online_goods_ids );
@@ -630,11 +327,11 @@ class GroupGoods extends Model
 	 */
 	public function checkGoodsSku( $group_id = 0, $condition = [] )
 	{
-		$goods_sku_model = model( 'GoodsSku' );
+		$goods_sku_model = new \App\Model\GoodsSku;
 		$goods_sku_ids   = $this->where( $condition)->column('goods_sku_id' );
 
 		if( $goods_sku_ids ){
-			$online_goods_sku_ids = \App\Model\GoodsSku::init()->where( ['id' => ['in', $goods_sku_ids]])->column( 'id' );
+			$online_goods_sku_ids = $goods_sku_model->where( ['id' => ['in', $goods_sku_ids]])->column( 'id' );
 
 			//返回出现在第一个数组中但其他数组中没有的值 [将要删除的sku]
 			$difference_goods_sku_del_ids = array_diff( $goods_sku_ids, $online_goods_sku_ids );
