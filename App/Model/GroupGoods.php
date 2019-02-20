@@ -147,16 +147,6 @@ class GroupGoods extends Model
 	}
 
 	/**
-	 * 获取某个字段列[指定索引] TODO：一会优化
-	 * @param   $condition
-	 * @return
-	 */
-	public function getGroupGoodsIndexesColumn( $condition = [], $field = 'id', $indexes = 'id' )
-	{
-		return $this->where( $condition )->column( $field, $indexes );
-	}
-
-	/**
 	 * 某个字段+1
 	 * @param   $condition
 	 * @return

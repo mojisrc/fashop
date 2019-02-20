@@ -260,9 +260,12 @@ class Group extends Admin
             $group_goods     = [];
             $map['group_id'] = $post['id'];
             //查询活动商品sku ids
-            $group_goods_sku_ids = $group_goods_model->getGroupGoodsIndexesColumn($map, 'goods_sku_id', 'id');
-            if (!$group_goods_sku_ids) {
+            $group_goods_sku_list = $group_goods_model->where($map)->field('id,goods_sku_id')->select();
+            if (!$group_goods_sku_list) {
                 return $this->send(Code::error, [], '参数错误');
+            }
+            foreach ($group_goods_sku_list as $key => $value) {
+                $group_goods_sku_ids[$value['id']] = $value['goods_sku_id'];
             }
 
             $post_sku_ids = array_column($post['group_goods'], 'goods_sku_id');
@@ -574,10 +577,10 @@ class Group extends Admin
                 'list'         => [],
             ]);
         } else {
-            $group_ids                   = array_column($group_list, 'id');
-            $group_goods_ids             = array_column($group_list, 'goods_id');
-            $map['group_goods.group_id'] = ['in', $group_ids];
-            $group_goods_list            = $group_goods_model->join('goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT')->where($map)->group('goods_id')->field('group_goods.goods_id,min(group_goods.group_price) AS min_group_price')->select();
+            $group_ids        = array_column($group_list, 'id');
+            $group_goods_ids  = array_column($group_list, 'goods_id');
+            $map['group_id']  = ['in', $group_ids];
+            $group_goods_list = $group_goods_model->where($map)->group('goods_id')->field('goods_id,min(group_price) AS min_group_price')->select();
             if (!$group_goods_list) {
                 return $this->send(Code::success, [
                     'total_number' => 0,

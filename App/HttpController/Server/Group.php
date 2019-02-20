@@ -26,15 +26,16 @@ class Group extends Server
 	 */
 	public function list()
 	{
+        $group_model             = new \App\Model\Group;
+        $group_goods_model       = new \App\Model\GroupGoods;
 		$param                   = $this->get;
-		$condition               = [];
 		$time                    = time();
 		$condition['start_time'] = ['<=', $time];
 		$condition['end_time']   = ['>=', $time];
 		$condition['is_show']    = 1;
 
 		//查询正在进行的拼团
-		$group_list = \App\Model\Group::init()->getGroupList( $condition,  '*', 'id desc', [1,1000] );
+		$group_list = $group_model->getGroupList( $condition,  '*', 'id desc', [1,1000] );
 		if( !$group_list ){
 			$this->send( Code::success, [
 				'total_number' => 0,
@@ -44,9 +45,18 @@ class Group extends Server
 			$group_ids                   = array_column( $group_list, 'id' );
 			$group_goods_ids             = array_column( $group_list, 'goods_id' );
 			$map                         = [];
-			$map['group_goods.group_id'] = ['in', $group_ids];
-			//            $map_str                     = 'group_goods.group_price<goods_sku.price';
-			$min_group_price = \App\Model\GroupGoods::init()->join( 'goods_sku', 'group_goods.goods_sku_id = goods_sku.id', 'LEFT' )->where( $map )->group( 'goods_id' )->column( 'group_goods.goods_id,min(group_goods.group_price)' );
+			$map['group_id'] = ['in', $group_ids];
+            $group_goods_list            = $group_goods_model->where($map)->group('goods_id')->field('goods_id,min(group_price) AS min_group_price')->select();
+            if (!$group_goods_list) {
+                return $this->send(Code::success, [
+                    'total_number' => 0,
+                    'list'         => [],
+                ]);
+            }
+
+            foreach ($group_goods_list as $key => $value) {
+                $min_group_price[$value['goods_id']] = $value['min_group_price'];
+            }
 
 			$param['ids']  = $group_goods_ids;
 			$param['page'] = $this->getPageLimit();
@@ -61,7 +71,6 @@ class Group extends Server
 						$goods_list[$key]['limit_buy_num'] = $v['limit_buy_num'];
 					}
 				}
-
 			}
 			$this->send( Code::success, [
 				'total_number' => $goods_count,
@@ -118,7 +127,7 @@ class Group extends Server
 		} else{
 			$group_id            = $get['group_id'];
 			$goods_id            = $get['goods_id'];
-			$group_goods['skus'] = \App\Model\GroupGoods::init()->getGroupGoodsList( ['group_id' => $group_id, 'goods_id' => $goods_id], '', 'goods_sku_id,group_price,captain_price', 'goods_sku_id desc', [1, 100] );
+			$group_goods['skus'] = \App\Model\GroupGoods::init()->getGroupGoodsList( ['group_id' => $group_id, 'goods_id' => $goods_id], 'goods_sku_id,group_price,captain_price', 'goods_sku_id desc', [1, 100] );
 
 			$this->send( Code::success, ['info' => $group_goods] );
 		}
@@ -155,9 +164,7 @@ class Group extends Server
 				'total_number' => $count,
 				'list'         => $list,
 			] );
-
 		}
-
 	}
 
 	/**
@@ -199,7 +206,6 @@ class Group extends Server
 					] );
 				}
 			}
-
 		}
 	}
 

@@ -145,7 +145,7 @@ class Distribution extends Admin
      */
     public function relationship()
     {
-        $get       = $this->get;
+        $get = $this->get;
 
         if (!isset($get['sn'])) {
             return $this->send(Code::success, [
@@ -172,7 +172,7 @@ class Distribution extends Admin
         $top_condition['distributor_customer.user_id']             = $order_info['user_id'];
         $top_condition['distributor_customer.create_time']         = ['<', $order_info['create_time']];
 
-        $top_data          = \App\Model\DistributorCustomer::init()->getDistributorCustomerMoreSortInfo($top_condition, $field, $order);
+        $top_data = \App\Model\DistributorCustomer::init()->getDistributorCustomerMoreSortInfo($top_condition, $field, $order);
         if (!$top_data) {
             return $this->send(Code::success, [
                 'total_number' => 0,
@@ -259,6 +259,18 @@ class Distribution extends Admin
     }
 
     /**
+     * 配置信息详细
+     * @method GET
+     * @author 孙泉
+     */
+    public function configInfo()
+    {
+        $distribution_config_model = new \App\Model\DistributionConfig;
+        $list                      = $distribution_config_model->select();
+        return $this->send(Code::success, ['info' => $list]);
+    }
+
+    /**
      * 配置信息设置
      * @method POST
      * @param string config     参数名称
@@ -266,7 +278,7 @@ class Distribution extends Admin
      * name和remark已经在数据库中标注好了 无需更改
      * 数据库表已经初始化了content的值，此处是作为修改功能使用
      */
-    public function configSet()
+    public function configEdit()
     {
         $post  = $this->post;
         $error = $this->validator($post, 'Admin/DistributionConfig.edit');

@@ -51,7 +51,7 @@ class PageGoods
             foreach ($goods_key as $key => $value) {
                 $goods_ids = $bodys[$value]['data'] ? array_column($bodys[$value]['data'], 'id') : [];
                 if ($goods_ids) {
-                    $goods_list            = \App\Model\Goods::init()->getGoodsList(['is_on_sale' => 1, 'id' => ['in', $goods_ids]], '*', 'sale_time desc', [1,10000]);
+                    $goods_list            = \App\Model\Goods::init()->getGoodsList(['is_on_sale' => 1, 'id' => ['in', $goods_ids]], '*', 'sale_time desc', [1, 10000]);
                     $bodys[$value]['data'] = $goods_list;
                 } else {
                     $bodys[$value]['data'] = [];
@@ -72,7 +72,7 @@ class PageGoods
                         $goods_list_order = 'create_time desc';
                         break;
                 }
-                $goods_list            = \App\Model\Goods::init()->getGoodsList(['is_on_sale' => 1], '*', $goods_list_order,  [1,$bodys[$value]['options']['goods_display_num']]);
+                $goods_list            = \App\Model\Goods::init()->getGoodsList(['is_on_sale' => 1], '*', $goods_list_order, [1, $bodys[$value]['options']['goods_display_num']]);
                 $bodys[$value]['data'] = $goods_list;
             }
         }
@@ -86,7 +86,6 @@ class PageGoods
             $condition['group.start_time'] = ['<=', $time];
             $condition['group.end_time']   = ['>=', $time];
             $condition['group.is_show']    = 1;
-
 
             foreach ($goods_group_key as $key => $value) {
                 switch ($bodys[$value]['options']['goods_sort']) {
@@ -108,14 +107,17 @@ class PageGoods
                 if ($bodys[$value]['options']['source_type'] == 'choose') {
                     if ($goods_ids) {
                         $condition['group_goods.goods_id'] = ['in', $goods_ids];
-                        $group_goods                       = \App\Model\GroupGoods::init()->getGroupGoodsSkuMoreList($condition, '', 'group_goods.*', 'group_goods.id desc', '', '');
+                        $group_goods                       = \App\Model\GroupGoods::init()->getGroupGoodsSkuMoreList($condition, 'group_goods.*', 'group_goods.id desc', '', '');
                         if ($group_goods) {
                             $goods_ids  = array_unique(array_column($group_goods, 'goods_id'));
                             $goods_list = \App\Model\Goods::init()->getGoodsList(['is_on_sale' => 1, 'id' => ['in', $goods_ids]], '*', $goods_group_order, '1,' . $bodys[$value]['options']['goods_display_num']);
                             if ($goods_list) {
-                                $map['id']       = ['in', array_unique(array_column($group_goods, 'id'))];
-                                $map['goods_id'] = ['in', array_unique(array_column($goods_list, 'id'))];
-                                $min_group_price = \App\Model\GroupGoods::init()->where($map)->group('goods_id')->column('goods_id,min(group_price)');
+                                $map['id']        = ['in', array_unique(array_column($group_goods, 'id'))];
+                                $map['goods_id']  = ['in', array_unique(array_column($goods_list, 'id'))];
+                                $group_goods_list = \App\Model\GroupGoods::init()->where($map)->group('goods_id')->field('goods_id,min(group_price) AS min_group_price')->select();
+                                foreach ($group_goods_list as $key => $value) {
+                                    $min_group_price[$value['goods_id']] = $value['min_group_price'];
+                                }
                                 foreach ($goods_list as $k => $v) {
                                     $goods_list[$k]['group_price'] = $min_group_price[$v['id']];
                                 }
@@ -127,11 +129,14 @@ class PageGoods
                     $group_goods = \App\Model\GroupGoods::init()->getGroupGoodsSkuMoreList($condition, '', 'group_goods.*', 'group_goods.id desc', '', '');
                     if ($group_goods) {
                         $goods_ids  = array_unique(array_column($group_goods, 'goods_id'));
-                        $goods_list = \App\Model\Goods::getGoodsList(['is_on_sale' => 1, 'id' => ['in', $goods_ids]], '*', $goods_group_order, [1,$bodys[$value]['options']['goods_display_num']]);
+                        $goods_list = \App\Model\Goods::getGoodsList(['is_on_sale' => 1, 'id' => ['in', $goods_ids]], '*', $goods_group_order, [1, $bodys[$value]['options']['goods_display_num']]);
                         if ($goods_list) {
-                            $map['id']       = ['in', array_unique(array_column($group_goods, 'id'))];
-                            $map['goods_id'] = ['in', array_unique(array_column($goods_list, 'id'))];
-                            $min_group_price = \App\Model\GroupGoods::init()->where($map)->group('goods_id')->column('goods_id,min(group_price)');
+                            $map['id']        = ['in', array_unique(array_column($group_goods, 'id'))];
+                            $map['goods_id']  = ['in', array_unique(array_column($goods_list, 'id'))];
+                            $group_goods_list = \App\Model\GroupGoods::init()->where($map)->group('goods_id')->field('goods_id,min(group_price) AS min_group_price')->select();
+                            foreach ($group_goods_list as $key => $value) {
+                                $min_group_price[$value['goods_id']] = $value['min_group_price'];
+                            }
                             foreach ($goods_list as $k => $v) {
                                 $goods_list[$k]['group_price'] = $min_group_price[$v['id']];
                             }
