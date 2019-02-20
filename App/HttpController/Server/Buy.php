@@ -161,6 +161,9 @@ class Buy extends Server
 							break;
 							case 'alipay_app':
 								$config = $payment['config'];
+								$configInfo = new \App\MOdel\Bean\SettingAliPayConfig($config);
+								$configInfo->setAlipayPublicKey(111);
+
 								$amount             = $pay_amount;
 								$order = new \EasySwoole\Pay\AliPay\RequestBean\App();
 								$order->setOutTradeNo($order_info['pay_sn']);

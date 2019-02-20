@@ -12,12 +12,10 @@
  */
 
 namespace App\Model;
-
-
-
 class Auth extends Model
 {
-	protected $createTime = true;
+
+	protected $jsonFields = ['structure'];
 
 	/**
 	 * @param array $data

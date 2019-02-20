@@ -18,8 +18,6 @@ namespace App\Model;
 class AuthGroup extends Model
 {
 
-	protected $arrayFields = ['rule_ids'];
-
 	/**
 	 * @param array $data
 	 * @return bool|int

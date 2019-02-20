@@ -178,5 +178,4 @@ class Goods extends Server
 		}
 
 	}
-
 }

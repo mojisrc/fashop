@@ -26,7 +26,8 @@
         "yansongda/pay": "v2.6.1",
         "guzzlehttp/guzzle": "~6.0",
         "phpoffice/phpspreadsheet":"^1.6.0",
-        "easyswoole/curl": "^1.0"
+        "easyswoole/curl": "^1.0",
+        "hanwenbo/policy": "^1.0"
     },
     "autoload": {
         "psr-4": {
@@ -56,6 +57,10 @@
         "easyswoole/pay":{
             "type": "vcs",
             "url": "https://github.com/hanwenbo/pay"
+        },
+        "hanwenbo/policy":{
+            "type": "vcs",
+            "url": "https://github.com/hanwenbo/policy"
         }
     }
 }
