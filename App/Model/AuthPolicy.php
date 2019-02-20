@@ -1,6 +1,6 @@
 <?php
 /**
- * 权限数据模型
+ * 权限策略数据模型
  *
  *
  *
@@ -12,7 +12,7 @@
  */
 
 namespace App\Model;
-class Auth extends Model
+class AuthPolicy extends Model
 {
 
 	protected $jsonFields = ['structure'];
@@ -21,7 +21,7 @@ class Auth extends Model
 	 * @param array $data
 	 * @return bool|int
 	 */
-	public function addAuth( array $data )
+	public function addAuthPolicy( array $data )
 	{
 		return $this->add( $data );
 	}
@@ -31,7 +31,7 @@ class Auth extends Model
 	 * @param array $data
 	 * @return bool|mixed
 	 */
-	public function editAuth( $condition = [], $data = [] )
+	public function editAuthPolicy( $condition = [], $data = [] )
 	{
 		return $this->where( $condition )->edit( $data );
 	}
@@ -40,7 +40,7 @@ class Auth extends Model
 	 * @param array $condition
 	 * @return bool|null
 	 */
-	public function delAuth( $condition = [] )
+	public function delAuthPolicy( $condition = [] )
 	{
 		return $this->where( $condition )->del();
 	}
@@ -50,7 +50,7 @@ class Auth extends Model
 	 * @param string $field
 	 * @return array|bool
 	 */
-	public function getAuthInfo( $condition = [], $field = '*' )
+	public function getAuthPolicyInfo( $condition = [], $field = '*' )
 	{
 		return $this->where( $condition )->field( $field )->find();
 	}
@@ -62,7 +62,7 @@ class Auth extends Model
 	 * @param array  $page
 	 * @return array|bool|false|null
 	 */
-	public function getAuthList( $condition = [], $field = '*', $order = 'id desc', $page = [1, 10] )
+	public function getAuthPolicyList( $condition = [], $field = '*', $order = 'id desc', $page = [1, 10] )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $list;

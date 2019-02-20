@@ -17,7 +17,6 @@ namespace App\Model;
 
 class AuthGroup extends Model
 {
-
 	/**
 	 * @param array $data
 	 * @return bool|int

@@ -2,301 +2,277 @@
 
 namespace App\HttpController\Admin;
 
-use ezswoole\Db;
+use App\Model\AuthGroupPolicy;
 use App\Utils\Code;
-use EasySwoole\Config;
 
-/**
- * 权限管理
- * Class Auth
- * @package App\HttpController\Admin
- */
 class Auth extends Admin
 {
-	/**
-	 * 角色组授权
-	 * @method POST
-	 * @param array $rule_ids 节点id数组
-	 * @param int   $id       组id
-	 */
-	public function groupAuthorise()
+	public function policyList()
 	{
-		if( $this->validator( $this->post, 'Admin/AuthGroup.groupAuthorise' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
-		} else{
-			$auth_group_model = model( 'AuthGroup' );
-			$auth_group_model->editAuthGroup( ['id' => $this->post['id']], ['rule_ids' => $this->post['rule_ids']] );
-			return $this->send();
-		}
+		$policyModel = new \App\Model\AuthPolicy;
+		$list        = $policyModel->withTotalCount()->getAuthPolicyList( [], '*', 'id desc', $this->getPageLimit() );
+		$this->send( Code::success, [
+			'list'         => $list,
+			'total_number' => $policyModel->getTotalCount(),
+		] );
 	}
 
 	/**
-	 * 角色组列表
-	 * @method GET
-	 */
-	public function groupList()
-	{
-		$model                  = model( 'AuthGroup' );
-		$result['list']         = \App\Model\Page::getAuthGroupList( [], '*', 'id desc', $this->getPageLimit() );
-		$result['total_number'] = \App\Model\Page::count();
-		return $this->send( Code::success, $result );
-	}
-
-	/**
-	 * 角色组的信息
-	 * 包含了这个组的节点权限id
-	 * @method  GET
 	 * @param int $id
 	 */
-	public function groupInfo()
+	public function policyInfo()
 	{
-		if( $this->validator( $this->get, 'Admin/AuthGroup.groupInfo' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
+		if( $this->validator( $this->get, 'Admin/AuthPolicy.info' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			$info = \App\Model\AuthGroup::getAuthGroupInfo( ['id' => $this->get['id']] );
-			return $this->send( Code::success, ['info' => $info] );
-		}
-	}
-
-	/**
-	 * 角色组内成员
-	 * @method     GET
-	 * @param int $id
-	 */
-	public function groupMemberList()
-	{
-		if( $this->validator( $this->get, 'Admin/AuthGroup.groupMemberList' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
-		} else{
-			$user_ids     = model( 'AuthGroupAccess' )->where( ['group_id' => $this->get['id']] )->column( 'uid' );
-			$list         = [];
-			if( !empty( $user_ids ) ){
-				$condition['id'] = ['in', $user_ids];
-				$userModel       = model( 'User' );
-				$list            = $userModel->getUserList( $condition, 'id,nickname,phone,name,avatar,email,sex', 'id asc',[1,1000]);
-			}
-			return $this->send( Code::success, [
-				'list'         => $list,
+			$policyModel = new \App\Model\AuthPolicy;
+			$info        = $policyModel->getAuthPolicyInfo( ['id' => $this->get['id']] );
+			$this->send( Code::success, [
+				'info' => $info,
 			] );
 		}
 	}
 
 	/**
-	 * 组内成员修改
-	 * @param array $member_ids 所有成员id
-	 * @param int   $id         组ID
-	 * @method POST
+	 * 策略添加
+	 * @param string $name
+	 * @param array  $structure
 	 */
-	public function groupMemberEdit()
+	public function policyAdd()
 	{
-		if( $this->validator( $this->post, 'Admin/AuthGroupAccess.groupMemberEdit' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
+		if( $this->validator( $this->post, 'Admin/AuthPolicy.add' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			$post  = $this->post;
-			$model = model( 'AuthGroupAccess' );
-			\App\Model\AuthGroupAccess::init()->delAuthGroupAccess( ['group_id' => $this->post['id']] );
-			\App\Model\AuthGroupAccess::init()->addMultiAuthGroupAccess( collect( $this->post['member_ids'] )->map( function( $uid ) use ( $post ){
-				return [
-					'uid'      => $uid,
-					'group_id' => $post['id'],
-				];
-			} ) );
-			return $this->send();
+			\App\Model\AuthPolicy::init()->addAuthPolicy( [
+				'name'      => $this->post['name'],
+				'structure' => $this->post['structure'],
+			] );
+			$this->send( Code::success );
 		}
 	}
 
 	/**
-	 * 角色组添加
-	 * @method POST
+	 * 策略添加
+	 * @param int    $id
 	 * @param string $name
+	 * @param array  $structure
+	 */
+	public function policyEdit()
+	{
+		if( $this->validator( $this->post, 'Admin/AuthPolicy.edit' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
+		} else{
+			\App\Model\AuthPolicy::init()->editAuthPolicy( [
+				'id' => $this->post['id'],
+			], [
+				'name'      => $this->post['name'],
+				'structure' => $this->post['structure'],
+			] );
+			$this->send( Code::success );
+		}
+	}
+
+	/**
+	 * 策略删除
+	 * @param int $id
+	 */
+	public function policyDel()
+	{
+		if( $this->validator( $this->post, 'Admin/AuthPolicy.del' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
+		} else{
+			\App\Model\AuthPolicy::init()->delAuthPolicy( [
+				'id' => $this->post['id'],
+			] );
+			$this->send( Code::success );
+		}
+	}
+
+	public function groupList()
+	{
+		$groupModel = new \App\Model\AuthGroup;
+		$list       = $groupModel->withTotalCount()->getAuthGroupList( [], '*', 'id desc', $this->getPageLimit() );
+		$this->send( Code::success, [
+			'list'         => $list,
+			'total_number' => $groupModel->getTotalCount(),
+		] );
+	}
+
+	/**
+	 * @param int $id
+	 */
+	public function groupInfo()
+	{
+		if( $this->validator( $this->get, 'Admin/AuthGroup.info' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
+		} else{
+			$groupModel = new \App\Model\AuthGroup;
+			$info       = $groupModel->getAuthGroupInfo( ['id' => $this->get['id']] );
+			$this->send( Code::success, [
+				'info' => $info,
+			] );
+		}
+	}
+
+	/**
+	 * 组添加
+	 * @param string $name
+	 * @param int    $status
 	 */
 	public function groupAdd()
 	{
 		if( $this->validator( $this->post, 'Admin/AuthGroup.add' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			\App\Model\AuthGroup::init()->addAuthGroup( $this->post );
-			return $this->send();
+			\App\Model\AuthPolicy::init()->addAuthPolicy( [
+				'name'   => $this->post['name'],
+				'status' => $this->post['status'] ? 1 : 0,
+			] );
+			$this->send( Code::success );
 		}
 	}
 
 	/**
-	 * 角色组修改
-	 * @method POST
+	 * 组修改
 	 * @param int    $id
-	 * @param string $title
+	 * @param string $name
+	 * @param int    $status
 	 */
 	public function groupEdit()
 	{
 		if( $this->validator( $this->post, 'Admin/AuthGroup.edit' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			\App\Model\AuthGroup::init()->editAuthGroup( ['id' => $this->post['id']], $this->post );
-			return $this->send();
+			\App\Model\AuthGroup::init()->editAuthGroup( [
+				'id' => $this->post['id'],
+			], [
+				'name'   => $this->post['name'],
+				'status' => $this->post['status'] ? 1 : 0,
+			] );
+			$this->send( Code::success );
 		}
 	}
 
 	/**
-	 * 角色组删除
-	 * @method POST
+	 * 组删除
 	 * @param int $id
 	 */
 	public function groupDel()
 	{
 		if( $this->validator( $this->post, 'Admin/AuthGroup.del' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			\App\Model\AuthGroup::init()->delAuthGroup( ['id' => $this->post['id']] );
-			model( 'AuthGroupAccess' )->delAuthGroupAccess( ['group_id' => $this->post['id']] );
-			return $this->send();
-		}
-	}
-
-	/**
-	 * 节点树形结构
-	 * @method     GET
-	 */
-	public function ruleTree()
-	{
-		$list = \App\Model\AuthRule::getAuthRuleList( [], 'id,sign,title,status,type,pid,is_system,sort,is_display', 'sort asc', '1,5000' );
-		$tree = \App\Utils\Tree::listToTree( $list, 'id', 'pid', '_child' );
-		return $this->send( Code::success, ['tree' => $tree] );
-	}
-
-	/**
-	 * 节点详情
-	 * @method     GET
-	 * @param int $id
-	 */
-	public function ruleInfo()
-	{
-		if( $this->validator( $this->get, 'Admin/AuthRule.info' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
-		} else{
-			$info = \App\Model\AuthRule::getAuthRuleInfo( ['id' => $this->get['id']] );
-			return $this->send( Code::success, ['data' => ['info' => $info]] );
-		}
-	}
-
-	/**
-	 * 节点规则添加
-	 * @method POST
-	 * @param string $sign       节点标识
-	 * @param string $title      名称
-	 * @param string $pid        父级id
-	 * @param int    $is_display 0不显示1显示
-	 */
-	public function ruleAdd()
-	{
-		if( $this->validator( $this->post, 'Admin/AuthRule.add' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
-		} else{
-			\App\Model\AuthRule::init()->addAuthRule( $this->post );
-			return $this->send();
-		}
-	}
-
-	/**
-	 * 节点规则修改
-	 * @method POST
-	 * @param string $id         节点id
-	 * @param string $sign       节点标识
-	 * @param string $title      名称
-	 * @param string $pid        父级id
-	 * @param int    $is_display 0不显示1显示
-	 */
-	public function ruleEdit()
-	{
-		if( $this->validator( $this->post, 'Admin/AuthRule.edit' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
-		} else{
-			\App\Model\AuthRule::init()->editAuthRule( ['id' => $this->post['id']], $this->post );
-			return $this->send();
-		}
-	}
-
-	/**
-	 * 节点规则删除
-	 * @method POST
-	 * @param array $id
-	 */
-	public function ruleDel()
-	{
-		if( $this->validator( $this->post, 'Admin/AuthRule.del' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
-		} else{
-			$model        = model( 'AuthRule' );
-			$exsist_child = \App\Model\Page::init()->where( ['pid' => $this->post['id']] )->column( 'id' );
-			if( $exsist_child )
-				return $this->send( Code::error, [], '存在子项不可删除' );
-			if( \App\Model\Page::init()->delAuthRule( ['id' => $this->post['id'], 'is_system' => 0] ) ){
-				return $this->send();
-			} else{
-				return $this->send( Code::error, [], '系统节点不可删除或者不存在该节点' );
-			}
-		}
-	}
-
-	/**
-	 * 节点排序
-	 * @method POST
-	 * @param array $sorts [{id:d,index:d}]
-	 */
-	public function ruleSort()
-	{
-		if( $this->validator( $this->post, 'Admin/AuthRule.sort' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
-		} else{
-			$is_display_order = $this->post['sorts'];
-			$sql              = "UPDATE ".Config::getInstance()->getConf( 'database.prefix' )."auth_rule SET sort = CASE id ";
-			$ids              = [];
-			foreach( $is_display_order as $sort ){
-				$ids[] = $sort['id'];
-				$sql   .= sprintf( "WHEN %d THEN %d ", $sort['id'], $sort['index'] ); // 拼接SQL语句
-			}
-			$ids_string = implode( ',', $ids );
-			$sql        .= "END WHERE id IN ($ids_string)";
-			Db::query( $sql );
-			return $this->send();
-		}
-	}
-
-	/**
-	 * 生成权限
-	 */
-	public function genRule()
-	{
-		try{
-			$doc         = new \App\Utils\ControllerAction( 'Admin' );
-			$action_list = $doc->getAllFunctionList();
-			$db = Db::name('AuthRule');
-			if( $action_list ){
-				// 清理表
-				Db::query( 'truncate table ez_auth_rule' );
-				$type = 'admin';
-				$sql = "INSERT INTO ez_auth_rule (sign,type,title,pid,is_system,is_display) VALUES ";
-				foreach( $action_list as $index => $item ){
-					$name = strtolower($item['name']);
-					$sql .= "('{$name}','{$type}','{$item['title']}',0,1,1),";
-				}
-				$pid = 1;
-				$node_add = array_merge(\App\Biz\Admin\Auth::$notAuthAction,\App\Biz\Admin\Auth::$noNeedAuthActionCheck);
-				foreach( $action_list as $index => $item ){
-					foreach( $item['actions'] as $sub ){
-						$sign = strtolower($item['name']."/".$sub['name']);
-						// 去掉不需要验证的节点
-						if(!in_array($sign,$node_add)){
-							$sql .= "('{$sign}','{$type}','{$sub['title']}',{$pid},1,1),";
-						}
-					}
-					$pid ++;
-				}
-				$sql = rtrim($sql,",");
-				$db->query($sql);
-			}
+			\App\Model\AuthPolicy::init()->delAuthGroup( [
+				'id' => $this->post['id'],
+			] );
 			$this->send( Code::success );
-		} catch( \Exception $e ){
-			$this->send( Code::error, [], $e->getMessage() );
 		}
+	}
+
+	/**
+	 * @param int $group_id
+	 */
+	public function groupPolicyList()
+	{
+		if( $this->validator( $this->get, 'Admin/AuthGroup.id' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
+		} else{
+			$groupPolicyModel = new  \App\Model\AuthGroupPolicy;
+			$list             = $groupPolicyModel->withTotalCount()->join( 'auth_policy', 'auth_policy.id = auth_group_policy.policy_id' )->where( [
+				'auth_group_policy.group_id' => $this->get['group_id'],
+			] )->page( $this->getPageLimit() )->select();
+			$list             = $list ?? [];
+			if( count( $list ) > 0 ){
+				foreach( $list as $key => $item ){
+					$list[$key]['structure'] = json_decode( $item['structure'], true );
+				}
+			}
+			$this->send( Code::success, [
+				'list'         => $list,
+				'total_number' => $groupPolicyModel->getTotalCount(),
+			] );
+
+		}
+	}
+
+	/**
+	 * 组策略添加
+	 * @param int $policy_id
+	 * @param int $group_id
+	 */
+	public function groupPolicyAdd()
+	{
+		if( $this->validator( $this->post, 'Admin/AuthGroupPolicy.add' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
+		} else{
+			$authGroupPolicyModel = new \App\Model\AuthGroupPolicy;
+
+			$data = [
+				'policy_id' => $this->post['policy_id'],
+				'group_id'  => $this->post['group_id'],
+
+			];
+
+			$find = $authGroupPolicyModel->where( $data )->find();
+
+			if( !$find ){
+				\App\Model\AuthGroupPolicy::init()->addAuthGroupPolicy();
+				$this->send( Code::success );
+			} else{
+				$this->send( Code::error );
+			}
+
+		}
+	}
+
+	/**
+	 * 组策略删除
+	 * @param int $policy_id
+	 * @param int $group_id
+	 */
+	public function groupPolicyDel()
+	{
+		if( $this->validator( $this->post, 'Admin/AuthGroupPolicy.del' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
+		} else{
+			$authGroupPolicyModel = new \App\Model\AuthGroupPolicy;
+
+			$condition = [
+				'policy_id' => $this->post['policy_id'],
+				'group_id'  => $this->post['group_id'],
+			];
+
+			$authGroupPolicyModel->where( $condition )->delete();
+
+			$this->send( Code::success );
+		}
+	}
+
+	// todo 组详情接口
+	// policy 详情文档  ，所有详情的文档    ，明天尽量把权限部分完成
+
+	public function memberList()
+	{
+
+	}
+
+	/**
+	 * 成员添加
+	 * @param int $user_id
+	 * @param int $group_id
+	 */
+	public function memberAdd()
+	{
+
+	}
+
+	/**
+	 * 成员删除
+	 * @param int $user_id
+	 * @param int $group_id
+	 */
+	public function memberDel()
+	{
+
 	}
 }

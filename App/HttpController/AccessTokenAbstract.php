@@ -30,6 +30,7 @@ abstract class AccessTokenAbstract extends Controller
 	protected $acceessTokenLogic;
 	protected $request;
 
+	// todo 设置RequestUserBean
 	final protected function getRequestUser()
 	{
 		if( empty( $this->user ) ){

@@ -15,7 +15,7 @@
 namespace App\HttpController\Admin;
 
 use App\Utils\Code;
-use App\Biz\Admin\Auth as AuthLogic;
+use App\Biz\Admin\Auth;
 use App\HttpController\AccessTokenAbstract;
 
 abstract class Admin extends AccessTokenAbstract
@@ -34,24 +34,34 @@ abstract class Admin extends AccessTokenAbstract
 		} else{
 			$this->_initialize();
 			// 不需要验证的模块
-			$authLogic = new AuthLogic();
+			$auth = new Auth();
 			$rulePath  = strtolower( "{$this->request->controller()}/$actionName" );
-			if( !in_array( $rulePath, $authLogic::$notAuthAction ) ){
+			if( !in_array( $rulePath, $auth::$notAuthAction ) ){
+				// 令牌通过
 				if( $this->verifyResourceRequest() ){
+					// 验证该用户的权限
 					$user = $this->getRequestUser();
-					$authLogic->setUserId( $user['id'] );
-					if( $authLogic->checkUserNodeAuth( $rulePath ) !== true ){
+
+					$auth->setUserId( $user['id'] );
+					$auth->setActionName($rulePath);
+
+					// 没有权限
+					if( $auth->verify() !== true ){
 						$this->send( Code::admin_user_no_auth );
 						$this->response()->end();
 						return false;
+					}else{
+						return true;
 					}
 				} else{
+					// 令牌错误
 					$this->send( Code::user_access_token_error );
 					$this->response()->end();
 					return false;
 				}
+			}else{
+				return true;
 			}
-			return true;
 		}
 
 	}
