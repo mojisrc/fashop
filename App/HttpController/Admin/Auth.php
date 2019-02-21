@@ -6,11 +6,10 @@ use App\Utils\Code;
 
 class Auth extends Admin
 {
-	// todo
-	// 生成权限的库
-	// 需求：
-	// 本类public function
-	// 生成 所有的列表 requir dev 里加 通过 命令行生成 有个配置文件
+	/**
+	 * 策略列表
+	 * @throws \EasySwoole\Mysqli\Exceptions\Option
+	 */
 	public function policyList()
 	{
 		$policyModel = new \App\Model\AuthPolicy;
@@ -22,6 +21,7 @@ class Auth extends Admin
 	}
 
 	/**
+	 * 策略详情
 	 * @param int $id
 	 */
 	public function policyInfo()
@@ -105,6 +105,10 @@ class Auth extends Admin
 		}
 	}
 
+	/**
+	 * 组列表
+	 * @throws \EasySwoole\Mysqli\Exceptions\Option
+	 */
 	public function groupList()
 	{
 		$groupModel = new \App\Model\AuthGroup;
@@ -116,6 +120,7 @@ class Auth extends Admin
 	}
 
 	/**
+	 * 组详情
 	 * @param int $id
 	 */
 	public function groupInfo()
@@ -205,6 +210,7 @@ class Auth extends Admin
 	}
 
 	/**
+	 * 组策略列表
 	 * @param int $group_id
 	 */
 	public function groupPolicyList()
@@ -215,7 +221,7 @@ class Auth extends Admin
 			$groupPolicyModel = new  \App\Model\AuthGroupPolicy;
 			$list             = $groupPolicyModel->withTotalCount()->join( 'auth_policy', 'auth_policy.id = auth_group_policy.policy_id' ,'LEFT')->where( [
 				'auth_group_policy.group_id' => $this->get['group_id'],
-			] )->page( $this->getPageLimit() )->select();
+			] )->filed(['auth_policy.id','auth_policy.name'])->page( $this->getPageLimit() )->select();
 			$list             = $list ?? [];
 			if( count( $list ) > 0 ){
 				foreach( $list as $key => $item ){
@@ -283,14 +289,39 @@ class Auth extends Admin
 	}
 
 	/**
+	 * 用户列表
+	 * 用于搜索用户
+	 * @param string $keywords
+	 * @throws \EasySwoole\Mysqli\Exceptions\JoinFail
+	 * @throws \EasySwoole\Mysqli\Exceptions\Option
+	 */
+	public function userList(){
+		$userModel = new \App\Model\User();
+		if(isset($this->get['keywords'])){
+			$userModel->where("(username like %{$this->get['keywords']}% OR phone like %{$this->get['keywords']}%)");
+		}
+		$list        = $userModel->withTotalCount()->join('user','user.id = auth_group_user.user_id','LEFT')->getUserList( [], '*', 'id desc', $this->getPageLimit() );
+
+		$this->send( Code::success, [
+			'list'         => $list,
+			'total_number' => $userModel->getTotalCount(),
+		] );
+	}
+	/**
 	 * 组成员列表
+	 * @param int $group_id 可选
 	 * @throws \EasySwoole\Mysqli\Exceptions\JoinFail
 	 * @throws \EasySwoole\Mysqli\Exceptions\Option
 	 */
 	public function groupMemberList()
 	{
 		$groupUserModel = new \App\Model\AuthGroupUser();
-		$list        = $groupUserModel->withTotalCount()->join('user','user.id = auth_group_user.user_id','LEFT')->getAuthGroupUserList( [], '*', 'id desc', $this->getPageLimit() );
+		if(isset($this->get['group_id'])){
+			$condition['auth_group_user.group_id'] = $this->get['group_id'];
+		}else{
+			$condition = [];
+		}
+		$list        = $groupUserModel->withTotalCount()->join('user','user.id = auth_group_user.user_id','LEFT')->getAuthGroupUserList( $condition, '*', 'id desc', $this->getPageLimit() );
 
 		$this->send( Code::success, [
 			'list'         => $list,
