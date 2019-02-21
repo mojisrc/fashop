@@ -16,7 +16,7 @@ use hanwenbo\policy\Policy;
  * @link       http://www.fashop.cn
  * @since      File available since Release v1.1
  */
-class Auth extends Validator
+class AuthPolicy extends Validator
 {
 
 	protected $rule
@@ -27,15 +27,18 @@ class Auth extends Validator
 
 	protected $scene
 		= [
-			'policyAdd'             => [
+			'add'             => [
 				'name','structure'
 			],
-			'policyEdit'            => [
+			'edit'            => [
 				'id',
 				'name',
 				'structure'
 			],
-			'policyDel'             => [
+			'info'             => [
+				'id',
+			],
+			'del'             => [
 				'id',
 			],
 		];

@@ -14,20 +14,27 @@ namespace App\Model;
 
 class AuthGroupPolicy extends Model
 {
-	public function addAuthGroupPolicys( int $group_id, array $policy_ids )
+	/**
+	 * @param array $data
+	 * @return bool|int
+	 */
+	public function addAuthGroupPolicy( array $data )
 	{
-		// 先删除所有
-		$this->where( ['group_id' => $group_id] )->delete();
-		$data = [];
-		foreach( $policy_ids as $policy_id ){
-			$data[] = [
-				'group_id'  => $group_id,
-				'policy_id' => $policy_id,
-			];
-		}
-		return $this->addMulti( $data );
+		return $this->add( $data );
 	}
 
+	/**
+	 * @param array $condition
+	 * @return bool|null
+	 */
+	/**
+	 * @param array $condition
+	 * @return bool|null
+	 */
+	public function delAuthGroupPolicy( $condition = [] )
+	{
+		return $this->where( $condition )->del();
+	}
 }
 
 ?>

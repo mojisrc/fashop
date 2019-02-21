@@ -2,11 +2,15 @@
 
 namespace App\HttpController\Admin;
 
-use App\Model\AuthGroupPolicy;
 use App\Utils\Code;
 
 class Auth extends Admin
 {
+	// todo
+	// 生成权限的库
+	// 需求：
+	// 本类public function
+	// 生成 所有的列表 requir dev 里加 通过 命令行生成 有个配置文件
 	public function policyList()
 	{
 		$policyModel = new \App\Model\AuthPolicy;
@@ -81,10 +85,23 @@ class Auth extends Admin
 		if( $this->validator( $this->post, 'Admin/AuthPolicy.del' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			\App\Model\AuthPolicy::init()->delAuthPolicy( [
-				'id' => $this->post['id'],
-			] );
-			$this->send( Code::success );
+			$policyModel = new \App\Model\AuthPolicy;
+			$policyModel->startTrace();
+			try{
+				// 删除策略
+				$policyModel->delAuthPolicy( [
+					'id' => $this->post['id'],
+				] );
+				// 删除组策略
+				\App\Model\AuthGroupPolicy::init()->delAuthGroupPolicy( [
+					'policy_id' => $this->post['id'],
+				] );
+				$policyModel->commit();
+				$this->send( Code::success );
+			} catch( \Exception $e ){
+				$policyModel->rollback();
+				$this->send( Code::server_error, [], $e->getMessage() );
+			}
 		}
 	}
 
@@ -162,10 +179,28 @@ class Auth extends Admin
 		if( $this->validator( $this->post, 'Admin/AuthGroup.del' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			\App\Model\AuthPolicy::init()->delAuthGroup( [
-				'id' => $this->post['id'],
-			] );
-			$this->send( Code::success );
+			$groupModel = new \App\Model\AuthGroup;
+			$groupModel->startTrace();
+			try{
+				// 删除组
+				$groupModel->delAuthGroup( [
+					'id' => $this->post['id'],
+				] );
+				// 删除组相关的用户
+				\App\Model\AuthGroupUser::init()->delAuthGroupUser( [
+					'group_id' => $this->post['id'],
+				] );
+				// 删除组所的策略
+				\App\Model\AuthGroupPolicy::init()->delAuthGroupPolicy( [
+					'group_id' => $this->post['id'],
+				] );
+				$groupModel->commit();
+				$this->send( Code::success );
+			} catch( \Exception $e ){
+				$groupModel->rollback();
+				$this->send( Code::server_error, [], $e->getMessage() );
+			}
+
 		}
 	}
 
@@ -174,11 +209,11 @@ class Auth extends Admin
 	 */
 	public function groupPolicyList()
 	{
-		if( $this->validator( $this->get, 'Admin/AuthGroup.id' ) !== true ){
+		if( $this->validator( $this->get, 'Admin/AuthGroupPolicy.list' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$groupPolicyModel = new  \App\Model\AuthGroupPolicy;
-			$list             = $groupPolicyModel->withTotalCount()->join( 'auth_policy', 'auth_policy.id = auth_group_policy.policy_id' )->where( [
+			$list             = $groupPolicyModel->withTotalCount()->join( 'auth_policy', 'auth_policy.id = auth_group_policy.policy_id' ,'LEFT')->where( [
 				'auth_group_policy.group_id' => $this->get['group_id'],
 			] )->page( $this->getPageLimit() )->select();
 			$list             = $list ?? [];
@@ -210,13 +245,12 @@ class Auth extends Admin
 			$data = [
 				'policy_id' => $this->post['policy_id'],
 				'group_id'  => $this->post['group_id'],
-
 			];
 
 			$find = $authGroupPolicyModel->where( $data )->find();
 
 			if( !$find ){
-				\App\Model\AuthGroupPolicy::init()->addAuthGroupPolicy();
+				$authGroupPolicyModel->addAuthGroupPolicy($data);
 				$this->send( Code::success );
 			} else{
 				$this->send( Code::error );
@@ -248,12 +282,20 @@ class Auth extends Admin
 		}
 	}
 
-	// todo 组详情接口
-	// policy 详情文档  ，所有详情的文档    ，明天尽量把权限部分完成
-
-	public function memberList()
+	/**
+	 * 组成员列表
+	 * @throws \EasySwoole\Mysqli\Exceptions\JoinFail
+	 * @throws \EasySwoole\Mysqli\Exceptions\Option
+	 */
+	public function groupMemberList()
 	{
+		$groupUserModel = new \App\Model\AuthGroupUser();
+		$list        = $groupUserModel->withTotalCount()->join('user','user.id = auth_group_user.user_id','LEFT')->getAuthGroupUserList( [], '*', 'id desc', $this->getPageLimit() );
 
+		$this->send( Code::success, [
+			'list'         => $list,
+			'total_number' => $groupUserModel->getTotalCount(),
+		] );
 	}
 
 	/**
@@ -261,9 +303,27 @@ class Auth extends Admin
 	 * @param int $user_id
 	 * @param int $group_id
 	 */
-	public function memberAdd()
+	public function groupMemberAdd()
 	{
+		if( $this->validator( $this->post, 'Admin/AuthGroupUser.add' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
+		} else{
+			$authGroupUserModel = new \App\Model\AuthGroupUser;
 
+			$data = [
+				'policy_id' => $this->post['policy_id'],
+				'group_id'  => $this->post['group_id'],
+			];
+
+			$find = $authGroupUserModel->where( $data )->find();
+
+			if( !$find ){
+				$authGroupUserModel->addAuthGroupUser($data);
+				$this->send( Code::success );
+			} else{
+				$this->send( Code::error );
+			}
+		}
 	}
 
 	/**
@@ -271,8 +331,21 @@ class Auth extends Admin
 	 * @param int $user_id
 	 * @param int $group_id
 	 */
-	public function memberDel()
+	public function groupMemberDel()
 	{
+		if( $this->validator( $this->post, 'Admin/AuthGroupUser.del' ) !== true ){
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
+		} else{
+			$authGroupUserModel = new \App\Model\AuthGroupPolicy;
 
+			$condition = [
+				'user_id' => $this->post['user_id'],
+				'group_id'  => $this->post['group_id'],
+			];
+
+			$authGroupUserModel->where( $condition )->delete();
+
+			$this->send( Code::success );
+		}
 	}
 }
