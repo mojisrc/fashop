@@ -25,16 +25,16 @@ class Analysis
         foreach($pardon_date as $key => $val){
             if(!empty($data)){
                 foreach($data as $data_key => $data_val){
-                    if($val[$subscript] == $data_val[$subscript]){
-                        $pardon_date[$key][$compare] = $data_val[$compare];
+                    if($val[$compare] == $data_val[$compare]){
+                        $pardon_date[$key][$subscript] = $data_val[$subscript];
                     }else{
-                        if(!isset($pardon_date[$key][$compare]) || empty($pardon_date[$key][$compare])){
-                            $pardon_date[$key][$compare] = 0;
+                        if(!isset($pardon_date[$key][$subscript]) || empty($pardon_date[$key][$subscript])){
+                            $pardon_date[$key][$subscript] = 0;
                         }
                     }
                 }
             }else{
-                $pardon_date[$key][$compare] = 0;
+                $pardon_date[$key][$subscript] = 0;
             }
         }
         return $pardon_date;

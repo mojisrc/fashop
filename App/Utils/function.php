@@ -272,27 +272,5 @@ function check_date($date, $formats = array("Y-m-d", "Y/m/d")){
     return false;
 }
 
-/**
- * 转换率
- *
- * @param array $data
- * @param array $datas
- * @return boolean
- */
-function conversion($data = [], $datas = []){
-    if(!empty($data)){
-        foreach($data as $key => $val){
-            foreach($datas as $k => $v){
-                if($val['date_time'] == $v['date_time']){
-                    $data[$key]['conversion'] = round($v['total_num'] / $val['total_num'], 2) * 100;
-                }else{
-                    if(empty($data[$key]['conversion'])){
-                        $data[$key]['conversion'] = 0;
-                    }
-                }
-            }
-        }
-    }
-    return $$data;
-}
+
 ?>
