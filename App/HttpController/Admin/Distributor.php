@@ -17,7 +17,7 @@ namespace App\HttpController\Admin;
 use App\Utils\Code;
 
 /**
- * 分销员
+ * 分销员 改版了.....TODO 看看是有优化[待优化]
  * Class Distributor
  * @package App\HttpController\Admin
  */
@@ -76,13 +76,60 @@ class Distributor extends Admin
 
         //total_deal_num        累计成交笔数
         //total_deal_amount     累计成交金额
-        //total_consume_num     累计消费笔数
-        //total_consume_amount  累计消费金额
         $field = $field . ",
         (SELECT COUNT(id) FROM $table_order WHERE (distribution_user_id=distributor.user_id AND state>=20) OR (user_id=distributor.user_id AND state>=20)) AS total_deal_num,
         
-        (SELECT CASE WHEN refund_state=0 THEN CASE WHEN revise_amount>0 THEN SUM(revise_amount-revise_freight_fee) ELSE SUM(amount-freight_fee) END WHEN refund_state=1 THEN CASE WHEN revise_amount>0 THEN CASE WHEN SUM(revise_amount-revise_freight_fee-refund_amount)>0 THEN SUM(revise_amount-revise_freight_fee-refund_amount) ELSE 0 END ELSE CASE WHEN SUM(amount-freight_fee-refund_amount)>0 THEN SUM(amount-freight_fee-refund_amount) ELSE 0 END END ELSE 0 END FROM $table_order WHERE (distribution_user_id=distributor.user_id AND state>=20) OR (user_id=distributor.user_id AND state>=20)) AS total_deal_amount,
-        
+        (SELECT CASE WHEN refund_state=0 THEN CASE WHEN revise_amount>0 THEN SUM(revise_amount-revise_freight_fee) ELSE SUM(amount-freight_fee) END WHEN refund_state=1 THEN CASE WHEN revise_amount>0 THEN CASE WHEN SUM(revise_amount-revise_freight_fee-refund_amount)>0 THEN SUM(revise_amount-revise_freight_fee-refund_amount) ELSE 0 END ELSE CASE WHEN SUM(amount-freight_fee-refund_amount)>0 THEN SUM(amount-freight_fee-refund_amount) ELSE 0 END END ELSE 0 END FROM $table_order WHERE (distribution_user_id=distributor.user_id AND state>=20) OR (user_id=distributor.user_id AND state>=20)) AS total_deal_amount";
+
+        $order = 'distributor.id desc';
+        $list  = $distributor_model->getDistributorMoreList($condition, $field, $order, $this->getPageLimit(), '');
+
+        return $this->send(Code::success, [
+            'total_number' => $count,
+            'list'         => $list,
+        ]);
+    }
+
+    /**
+     * 分销员审核列表
+     * @method GET
+     * @param string phone          分销员手机号
+     * @param string invite_phone   邀请方手机
+     * @param string state          0待审核 1审核通过 2审核拒绝
+     * @param array  create_time    申请时间[开始时间,结束时间]
+     */
+    public function examineList()
+    {
+        $get                            = $this->get;
+        $prefix                         = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
+        $table_order                    = $prefix . "order";
+        $condition                      = [];
+        $condition['distributor.state'] = 1; //默认0 待审核 1审核通过 2审核拒绝
+
+        if ($get['state'] != '' && in_array(intval($get['state']), [0, 1, 2])) {
+            $condition['distributor.state'] = intval($get['state']); //默认0 待审核 1审核通过 2审核拒绝
+        }
+
+        $condition['distributor.is_retreat'] = 0; //默认0有效 1无效（被清退）
+        if (isset($get['phone'])) {
+            $condition['user.phone'] = $get['phone'];
+        }
+
+        if (isset($get['invite_phone'])) {
+            $condition['invite_user.phone'] = $get['invite_phone'];
+        }
+
+        if ($get['create_time'] != '' && is_array($get['create_time'])) {
+            $condition['distributor.create_time'] = ['between', $get['create_time']];
+        }
+
+        $distributor_model = new \App\Model\Distributor;
+        $count             = $distributor_model->getDistributorMoreCount($condition, '');
+        $field             = 'distributor.*,user.phone,invite_user.phone AS invite_phone';
+
+        //total_consume_num     累计消费笔数
+        //total_consume_amount  累计消费金额
+        $field = $field . ",
         (SELECT COUNT(id) FROM $table_order WHERE user_id=distributor.user_id AND state>=20 AND CASE WHEN revise_amount>0 THEN revise_amount>refund_amount ELSE amount>refund_amount END) AS total_consume_num,
         
         (SELECT CASE WHEN refund_state=0 THEN CASE WHEN revise_amount>0 THEN SUM(revise_amount) ELSE SUM(amount) END WHEN refund_state=1 THEN CASE WHEN revise_amount>0 THEN SUM(revise_amount-refund_amount) ELSE SUM(amount-refund_amount) END ELSE 0 END FROM $table_order WHERE user_id=distributor.user_id AND state>=20) AS total_consume_amount";

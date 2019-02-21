@@ -97,7 +97,7 @@ class Group extends Server
 			$condition['end_time']   = ['>=', $time];
 			$condition['is_show']    = 1;
 			$condition['goods_id']   = $get['goods_id'];
-			$group_data              = \App\Model\Group::init()->getGroupInfo( $condition, '', '*' );
+			$group_data              = \App\Model\Group::init()->getGroupInfo( $condition, '*' );
 			if( !$group_data ){
 				return $this->send( Code::error, [], '参数错误' );
 			}
@@ -273,7 +273,7 @@ class Group extends Server
 			if( $get['group_id'] ){
 				$condition['id'] = $get['group_id'];
 			}
-			$group_data = \App\Model\Group::init()->getGroupInfo( $condition, '', '*' );
+			$group_data = \App\Model\Group::init()->getGroupInfo( $condition, '*' );
 			if( !$group_data ){
 				$this->send( Code::success, ['info' => ['state' => 0]] );
 			} else{
@@ -304,7 +304,7 @@ class Group extends Server
 			if( $get['group_id'] ){
 				$condition['id'] = $get['group_id'];
 			}
-			$group_data = \App\Model\Group::init()->getGroupInfo( $condition, '', '*' );
+			$group_data = \App\Model\Group::init()->getGroupInfo( $condition, '*' );
 			if( !$group_data ){
 				$this->send( Code::success, ['info' => ['state' => 0]] );
 			} else{
