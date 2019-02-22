@@ -52,7 +52,6 @@ class Distributor extends Server
                 $map['id']                 = $distributor_info['id'];
                 $update_data['inviter_id'] = $inviter_id;
                 $update_data['state']      = 0;
-                $update_data['is_retreat'] = 0;
                 $result                    = $distributor_model->updateDistributor(['id' => $distributor_info['id']], $update_data);
 
             } else {
@@ -73,6 +72,49 @@ class Distributor extends Server
             }
         }
     }
+
+    /**
+     * 分销员邀请客户成为下线
+     * @method GET
+     * @param int distributor_user_id   分销员用户id
+     * @param int user_id               用户id
+     * @author 孙泉
+     */
+    public function inviteCustomer(){
+        if ($this->verifyResourceRequest() !== true) {
+            return $this->send(Code::user_access_token_error);
+        } else {
+            $post = $this->post;
+            if ($this->validator($post, 'Server/Distributor.inviteCustomer') !== true) {
+                return $this->send(Code::param_error, [], $this->getValidator()->getError());
+            } else {
+                $distributor_model          = new \App\Model\Distributor;
+                $distributor_customer = $distributor_customer_model->getDistributorCustomerInfo(['user_id' => $value, 'state' => 0]);
+
+
+        //TODO 没写完
+//        distributor_user_id 分销员用户id
+//        user_id 用户id
+//        state 默认1 0失效 1有效
+//        create_time 创建时间
+//        invalid_time失效时间
+
+
+
+
+//        如果您之前不是其他分销员的客户，或没有设置保护期的话 -------------扫码后会成为分销员的客户，同时后台设置有分销员保护期的话在保护期间客户关系不会因为扫其他分销员的码变更
+//        我之前没有分销员 同时后台设置了分销员的保护期 结果是什么-----------正常成为分销员的用户并且享有分销员保护期
+//
+//        保护期是指客户关系在多久内受到保护，即使客户点了其他分销员的链接，也不会改变客户关系。您可以点此链接了解
+//        https://j.youzan.com/xySygY
+//
+//        存在前提，已经绑定客户关系才会有保护期
+//假如 客户A 绑定了分销员A  然后 他俩绑定关系失效了 客户A就可以再次绑定分销员A  分销员A看见累计客户是显示两条还是一条？-----------在的呢，您说的情况只显示1条记录的呢，显示最新的哦
+
+            }
+        }
+    }
+
 
 
 }

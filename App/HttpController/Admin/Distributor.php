@@ -29,7 +29,6 @@ class Distributor extends Admin
      * @method GET
      * @param string phone          分销员手机号
      * @param string invite_phone   邀请方手机
-     * @param string state          0待审核 1审核通过 2审核拒绝
      * @param array  create_time    申请时间[开始时间,结束时间]
      * 成为分销员必须绑定手机号（如有该手机号则不用注册新账号 无该手机号需要注册新账号）
      * 分销员累计成交笔数 累计成交金额 分销员A邀请分销员B B推广客户C  C下单付款后  给B计算 和A没有关系
@@ -47,16 +46,11 @@ class Distributor extends Admin
      */
     public function list()
     {
-        $get                            = $this->get;
-        $prefix                         = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
-        $table_order                    = $prefix . "order";
-        $condition                      = [];
-        $condition['distributor.state'] = 1; //默认0 待审核 1审核通过 2审核拒绝
-
-        if ($get['state'] != '' && in_array(intval($get['state']), [0, 1, 2])) {
-            $condition['distributor.state'] = intval($get['state']); //默认0 待审核 1审核通过 2审核拒绝
-        }
-
+        $get                                 = $this->get;
+        $prefix                              = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
+        $table_order                         = $prefix . "order";
+        $condition                           = [];
+        $condition['distributor.state']      = 1; //默认0 待审核 1审核通过 2审核拒绝
         $condition['distributor.is_retreat'] = 0; //默认0有效 1无效（被清退）
         if (isset($get['phone'])) {
             $condition['user.phone'] = $get['phone'];
@@ -97,6 +91,7 @@ class Distributor extends Admin
      * @param string invite_phone   邀请方手机
      * @param string state          0待审核 1审核通过 2审核拒绝
      * @param array  create_time    申请时间[开始时间,结束时间]
+     * 默认显示待审核 不管清不清退 这里都会显示 因为这是审核记录信息
      */
     public function examineList()
     {
@@ -104,13 +99,12 @@ class Distributor extends Admin
         $prefix                         = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
         $table_order                    = $prefix . "order";
         $condition                      = [];
-        $condition['distributor.state'] = 1; //默认0 待审核 1审核通过 2审核拒绝
+        $condition['distributor.state'] = 0; //默认0 待审核 1审核通过 2审核拒绝
 
         if ($get['state'] != '' && in_array(intval($get['state']), [0, 1, 2])) {
             $condition['distributor.state'] = intval($get['state']); //默认0 待审核 1审核通过 2审核拒绝
         }
 
-        $condition['distributor.is_retreat'] = 0; //默认0有效 1无效（被清退）
         if (isset($get['phone'])) {
             $condition['user.phone'] = $get['phone'];
         }
@@ -187,7 +181,7 @@ class Distributor extends Admin
             }
             $update_data             = [];
             $update_data['nickname'] = $post['nickname'];
-            $result                  = $distributor_model->updateDistributor(['id'=>$info['id']], $update_data);
+            $result                  = $distributor_model->updateDistributor(['id' => $info['id']], $update_data);
             if ($result) {
                 return $this->send(Code::success);
             } else {
@@ -241,7 +235,6 @@ class Distributor extends Admin
 
             $distributor_model->commit();
             return $this->send(Code::success);
-
         }
     }
 
@@ -262,19 +255,21 @@ class Distributor extends Admin
             $condition               = [];
             $condition['id']         = $post['id'];
             $condition['state']      = 0; //默认0 待审核 1审核通过 2审核拒绝
-            $condition['is_retreat'] = 0; //默认0有效 1无效（被清退）
             $distributor_info        = $distributor_model->getDistributorInfo($condition);
             if (!$distributor_info) {
                 return $this->send(Code::param_error, [], '参数错误');
             }
+            $update_data['state'] = $post['state'];
+            if ($post['state'] == 1) {
+                $update_data['is_retreat'] = 0;
+            }
 
-            $distributor_result = $distributor_model->updateDistributor(['id' => $distributor_info['id']], ['state' => $post['state']]);
+            $distributor_result = $distributor_model->updateDistributor(['id' => $distributor_info['id']], $update_data);
             if (!$distributor_result) {
                 return $this->send(Code::error);
             }
 
             return $this->send(Code::success);
-
         }
     }
 

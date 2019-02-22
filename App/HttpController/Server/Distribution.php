@@ -101,4 +101,47 @@ class Distribution extends Server
         $list                      = $distribution_config_model->getDistributionConfigSimpleList();
         return $this->send(Code::success, ['info' => $list]);
     }
+
+    /**
+     * 分销商品[推广商品]
+     * @method GET
+     * @param  int sort_type  1佣金（从大到小）2最新 3最热（销量从高到低）4价格低到高 5商品价格高到低
+     * @author 孙泉
+     */
+    public function goodsSearch()
+    {
+        $get                                     = $this->get;
+        $distribution_goods_model                = new \App\Model\DistributionGoods;
+        $condition['goods.is_on_sale']           = 1;
+        $condition['goods.stock']                = ['>', 0]; //查询库存大于0
+        $condition['distribution_goods.is_show'] = 1;
+        $field                                   = 'distribution_goods.*,goods.title AS goods_title,goods.img AS goods_img,goods.price AS goods_price,TRUNCATE(goods.price*distribution_goods.ratio/100,2) AS commission';
+        $order                                   = 'commission desc';
+        if (isset($get['sort_type'])) {
+            switch ($get['sort_type']) {
+                case 1:
+                    $order = 'commission desc';
+                    break;
+                case 2:
+                    $order = 'goods.create_time desc';
+                    break;
+                case 3:
+                    $order = 'goods.sale_num desc';
+                    break;
+                case 4:
+                    $order = 'goods.price asc';
+                    break;
+                case 5:
+                    $order = 'goods.price desc';
+                    break;
+            }
+        }
+        $count = $distribution_goods_model->getDistributionGoodsMoreCount($condition);
+        $list  = $distribution_goods_model->getDistributionGoodsMoreList($condition, $field, $order);
+        return $this->send(Code::success, [
+            'total_number' => $count,
+            'list'         => $list,
+        ]);
+    }
+
 }

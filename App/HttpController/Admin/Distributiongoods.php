@@ -119,7 +119,7 @@ class Distributiongoods extends Admin
 	 * @param int ratio             佣金比例
 	 * @param int invite_ratio      邀请奖励佣金比例
 	 * @param int is_show           是否正在执行 0未执行 1执行
-	 * @param int type              0默认结算方式 1商品自定义
+	 * @param int type              0默认佣金比例 1自定义佣金比例
 	 * 如果没有设置分销 则会创建一条数据
 	 */
 	public function edit()
