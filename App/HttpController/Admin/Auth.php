@@ -146,7 +146,7 @@ class Auth extends Admin
 		if( $this->validator( $this->post, 'Admin/AuthGroup.add' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			\App\Model\AuthPolicy::init()->addAuthPolicy( [
+			\App\Model\AuthGroup::init()->addAuthGroup( [
 				'name'   => $this->post['name'],
 				'status' => $this->post['status'] ? 1 : 0,
 			] );

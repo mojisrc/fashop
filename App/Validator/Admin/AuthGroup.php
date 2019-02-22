@@ -31,6 +31,9 @@ class AuthGroup extends Validator
 				'name',
 				'status',
 			],
+			'info'=>[
+				'id'
+			],
 			'edit' => [
 				'id',
 				'name',

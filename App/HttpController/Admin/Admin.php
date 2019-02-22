@@ -41,15 +41,19 @@ abstract class Admin extends AccessTokenAbstract
 				if( $this->verifyResourceRequest() ){
 					// 验证该用户的权限
 					$user = $this->getRequestUser();
+					// 如果是超级管理员 不需要
+					if($user['id'] !== 1){
+						$auth->setUserId( $user['id'] );
+						$auth->setActionName($rulePath);
 
-					$auth->setUserId( $user['id'] );
-					$auth->setActionName($rulePath);
-
-					// 没有权限
-					if( $auth->verify() !== true ){
-						$this->send( Code::admin_user_no_auth );
-						$this->response()->end();
-						return false;
+						// 没有权限
+						if( $auth->verify() !== true ){
+							$this->send( Code::admin_user_no_auth );
+							$this->response()->end();
+							return false;
+						}else{
+							return true;
+						}
 					}else{
 						return true;
 					}
