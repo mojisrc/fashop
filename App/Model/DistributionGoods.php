@@ -58,7 +58,41 @@ class DistributionGoods extends Model
 		}
 	}
 
+    /**
+     * 列表更多
+     * @param   $condition
+     * @param   $field
+     * @param   $order
+     * @param   $page
+     * @param   $group
+     * @return
+     */
+    public function getDistributionGoodsMoreList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
+    {
+        if( $page == '' ){
+            return $this->join( 'goods', 'distribution_goods.goods_id = goods.id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->group( $group )->select();
 
+        } else{
+            return $this->join( 'goods', 'distribution_goods.goods_id = goods.id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->page( $page )->group( $group )->select();
+
+        }
+    }
+
+    /**
+     * 获得数量
+     * @param   $condition
+     * @param   $distinct [去重]
+     * @return
+     */
+    public function getDistributionGoodsMoreCount( $condition = [], $distinct = '' )
+    {
+        if( $distinct == '' ){
+            return $this->join( 'goods', 'distribution_goods.goods_id = goods.id', 'LEFT' )->where( $condition )->count();
+
+        } else{
+            return $this->join( 'goods', 'distribution_goods.goods_id = goods.id', 'LEFT' )->where( $condition )->count( "DISTINCT ".$distinct );
+        }
+    }
 	/**
 	 * 获得信息
 	 * @param   $condition
