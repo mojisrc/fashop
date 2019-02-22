@@ -46,7 +46,7 @@ class User extends Model
 	}
 
 
-	public function getUserList( $condition = [], $field = '*', $order = 'id desc', $page = "1,10" )
+	public function getUserList( $condition = [], $field = '*', $order = 'id desc', $page = [1,10] )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $list;

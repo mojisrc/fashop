@@ -440,7 +440,7 @@ class Buy
 		$this->setAddressId( $data['address_id'] );
 		$this->setUserId( $data['user_id'] );
 		$this->setUserInfo( $data['user_info'] );
-		$address_info = model( 'Address' )->getAddressInfo( [
+		$address_info = \App\Model\Address::init()->getAddressInfo( [
 			'id'      => $this->getAddressId(),
 			'user_id' => $this->getUserId(),
 		] );
@@ -451,7 +451,7 @@ class Buy
 		}
 
 		//拼团活动
-		$group = \App\Model\Group::getGroupInfo( ['id' => $this->getGroupId(), 'is_show' => 1, 'start_time' => ['<=', time()]] );
+		$group = \App\Model\Group::init()->getGroupInfo( ['id' => $this->getGroupId(), 'is_show' => 1, 'start_time' => ['<=', time()]] );
 		if( !$group ){
 			throw new \Exception( '拼团活动错误' );
 		}
@@ -461,14 +461,15 @@ class Buy
 		$this->setGroup( $group );
 
 		//拼团商品
-		$group_goods = \App\Model\GroupGoods::getGroupGoodsInfo( ['group_id' => $this->getGroupId(), 'goods_id' => $this->getGoodsId(), 'goods_sku_id' => $this->getGoodsSkuId()], '', '*' );
+		$group_goods = \App\Model\GroupGoods::init()->getGroupGoodsInfo( ['group_id' => $this->getGroupId(), 'goods_id' => $this->getGoodsId(), 'goods_sku_id' => $this->getGoodsSkuId()], '', '*' );
 		if( !$group_goods ){
 			throw new \Exception( '拼团商品错误' );
 		}
 		$this->setGroupGoods( $group_goods );
 
 		//拼团订单
-		$group_order_num = \App\Model\Order::init()->getOrderInfo( ['user_id' => $this->getUserId(), 'group_id' => $this->getGroupId(), 'group_state' => ['in', '0,1,2']], 'COUNT(id) AS group_num', [] );
+		$group_order_num = \App\Model\Order::init()->where(['user_id' => $this->getUserId(), 'group_id' => $this->getGroupId(), 'group_state' => ['in', [0,1,2]]])->count();
+
 		if( $group['limit_group_num'] > 0 && $group_order_num > $group['limit_group_num'] ){
 			throw new \Exception( '此活动每位用户最多拼团'.$group['limit_group_num'].'次' );
 		}
@@ -592,7 +593,6 @@ class Buy
 				$group_end_time      = $captain_group_order['group_end_time']; //团购结束时间
 			break;
 			}
-
 			$user         = $this->getUserInfo();
 			$pay_sn       = $this->makePaySn( $this->getUserId() );
 			$order_pay_id = \App\Model\OrderPay::init()->addOrderPay( [
@@ -686,7 +686,8 @@ class Buy
 				\App\Model\Order::rollback();
 				throw new \Exception( '订单拓展保存失败' );
 			}
-			$order_goods[] = [
+
+            $order_goods[] = [
 				'order_id'          => $order_id,
 				'goods_id'          => $goods->getGoodsId(),
 				'goods_sku_id'      => $goods->getGoodsSkuId(),
@@ -707,21 +708,24 @@ class Buy
 			];
 
 			// 订单商品创建
-			$order_goods_insert = model( 'OrderGoods' )->addOrderGoods( $order_goods );
-			if( !$order_goods_insert ){
+			$order_goods_insert = \App\Model\OrderGoods::init()->addMultiOrderGoods( $order_goods );
+
+            if( !$order_goods_insert ){
 				\App\Model\Order::rollback();
 				throw new \Exception( '订单商品保存失败' );
 			}
-			// 订单日志记录
+            // 订单日志记录
 			\App\Model\OrderLog::init()->addOrderLog( [
 				'order_id'    => $this->getOrderId(),
 				'msg'         => '买家下单',
 				'role'        => 'buyer',
 				'order_state' => \App\Biz\Order::state_pay,
 			] );
-			// 更新商品库存
+
+            // 更新商品库存
 			$this->updateGoodsStorageNum();
-			\App\Model\Order::commit();
+
+            \App\Model\Order::commit();
 			return new \App\Biz\Server\Buy\CreateOrderResult( ['order_id' => $order_id, 'pay_sn' => $pay_sn] );
 		} catch( \Exception $e ){
 			\App\Model\Order::rollback();
@@ -740,23 +744,19 @@ class Buy
 		$goods_sku_id = $goods->getGoodsSkuId();
 		$goods_num    = $goods->getGoodsNum();
 
-		// sku数据
-		$goods_sku_condition['id'] = $goods_sku_id;
-		$goods_sku_update_data     = [
-			'stock'    => ['exp', 'stock-'.$goods_num],
-			'sale_num' => ['exp', 'sale_num+'.$goods_num],
-		];
-		$goods_result              = \App\Model\GoodsSku::init()->editGoodsSku( $goods_sku_condition, $goods_sku_update_data );
-		if( !$goods_result ){
+        $prefix          = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
+        $table_goods_sku = $prefix.'goods_sku';
+        $table_goods     = $prefix.'goods';
+
+        // sku数据
+        $goods_sku_result = \App\Model\GoodsSku::init()->rawQuery("UPDATE $table_goods_sku SET stock=stock-$goods_num,sale_num=sale_num+$goods_num WHERE id=$goods_sku_id;");
+
+		if( !$goods_sku_result ){
 			throw new \Exception( '更新库存GoodsSku失败' );
 		} else{
-			$goods_condition['id'] = $goods_id;
-			$goods_update_data     = [
-				'stock'    => ['exp', 'stock-'.$goods_num],
-				'sale_num' => ['exp', 'sale_num+'.$goods_num],
-			];
-			$goods_sku_result      = \App\Model\Goods::init()->editGoods( $goods_condition, $goods_update_data );
-			if( !$goods_sku_result ){
+		    // goods数据
+            $goods_result = \App\Model\GoodsSku::init()->rawQuery("UPDATE $table_goods SET stock=stock-$goods_num,sale_num=sale_num+$goods_num WHERE id=$goods_id;");
+			if( !$goods_result ){
 				throw new \Exception( '更新Goods库存失败' );
 			}
 		}
@@ -793,9 +793,6 @@ class Buy
 	}
 
 	/**
-	 * @throws \ezswoole\db\exception\DataNotFoundException
-	 * @throws \ezswoole\db\exception\ModelNotFoundException
-	 * @throws \ezswoole\exception\DbException
 	 * @author 孙泉
 	 */
 	public function goodsInfo( array $condition = [] )
@@ -818,7 +815,7 @@ class Buy
 			'freight.areas as goods_freight_areas',
 		];
 		$field                     = implode( ",", $field_array );
-		$info                      = \App\Model\GoodsSku::alias( 'goods_sku' )->join( 'goods', 'goods_sku.goods_id = goods.id', "LEFT" )->join( 'freight', 'goods.freight_id = freight.id', "LEFT" )->field( $field )->where( $condition )->group( 'goods_sku_id' )->find();
+		$info                      = \App\Model\GoodsSku::join( 'goods', 'goods_sku.goods_id = goods.id', "LEFT" )->join( 'freight', 'goods.freight_id = freight.id', "LEFT" )->field( $field )->where( $condition )->group( 'goods_sku_id' )->find();
 		return $info;
 	}
 

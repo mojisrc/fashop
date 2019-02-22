@@ -27,12 +27,14 @@ class Analysis extends Admin
     public $start_date;
     public $end_date;
     public $date_arr;//用于曲线数组合并
+    public $front_time;//当前时间的之前时间
 
     public function _initialize() {
         parent::_initialize();
 
         $param = !empty( $this->post ) ? $this->post : $this->get;
         if( isset( $param['create_time'] ) ){
+            //当前时间条件
             $this->create_time = [
                 'between',
                 $param['create_time'],
@@ -42,18 +44,24 @@ class Analysis extends Admin
         }else{
             $this->end_date = time();
             $this->start_date = strtotime("-6days",strtotime(date('Y-m-d', $this->end_date)));
+            //当前时间条件
             $this->create_time = [
                 'between',
                 [$this->start_date, $this->end_date],
             ];
         }
+
         // 计算日期段内有多少天
         $days = intval(($this->end_date - $this->start_date)  / 86400) + 1;
         // 保存每天日期
         for($i = 0; $i < $days; $i++){
             $this->date_arr[]['date_time'] = date('Y-m-d', $this->start_date + (86400 * $i));
         }
-
+        //当前时间之前的时间条件
+        $this->front_time = [
+            'between',
+            [$this->start_date - ( $days * 86400 ), $this->start_date],
+        ];
     }
 
 
@@ -64,7 +72,7 @@ class Analysis extends Admin
 	 */
 	public function list()
 	{
-        $analysisModel = \App\Model\Analysis;
+        $analysisModel = new \App\Model\Analysis;
         //访客数
         $visitor_num['create_time'] = $this->create_time;
 		$visitor_num = $analysisModel->where( $visitor_num )->count( 'DISTINCT user_id' );
@@ -117,7 +125,7 @@ class Analysis extends Admin
      */
     public function pageType()
     {
-        $analysisModel = \App\Model\Analysis;
+        $analysisModel = new \App\Model\Analysis;
         //访客数
         $condition['create_time'] = $this->create_time;
         $condition['page_type'] = ['>', 0];
@@ -139,7 +147,7 @@ class Analysis extends Admin
      */
     public function source()
     {
-        $analysisModel = \App\Model\Analysis;
+        $analysisModel = new \App\Model\Analysis;
         //访客数
         $condition['create_time'] = $this->create_time;
         $condition['source'] = ['>=', 0];
@@ -161,7 +169,7 @@ class Analysis extends Admin
      */
     public function flow()
     {
-        $analysisModel = \App\Model\Analysis;
+        $analysisModel = new \App\Model\Analysis;
         //访客数
         $condition['create_time'] = $this->create_time;
 
@@ -180,7 +188,7 @@ class Analysis extends Admin
      */
     public function depth()
     {
-        $analysisModel = \App\Model\Analysis;
+        $analysisModel = new \App\Model\Analysis;
         //访客数
         $condition['create_time'] = $this->create_time;
         $condition['page_depth'] = ['>', 0];
@@ -205,48 +213,30 @@ class Analysis extends Admin
      */
     public function region()
     {
-        $analysisModel = \App\Model\Analysis;
+        $analysisModel = new \App\Model\Analysis;
+
         //浏览量
         $condition['create_time'] = $this->create_time;
         $condition = 'city is not null';
-        $view_num = $analysisModel->field( "count(id) as view_num, city" )
-                                                ->where( $condition )
-                                                ->group( 'city' )
-                                                ->select();
+        $list = $analysisModel->field( "count(id) as view_num, city" )->where( $condition )->group( 'city' )->select();
 
         //访客数
-        $condition_str = 'city is not null AND create_time between ' . $this->end_date . ' AND ' . $this->start_date;
-        $visitor_num = $analysisModel->rawQuery("SELECT count(distinct(user_id)) as visitor_num,city FROM fa_analysis WHERE create_time IN (SELECT create_time FROM fa_analysis where $condition_str) GROUP BY city");
+        $visitor_num = $analysisModel->field('count(distinct(user_id)) as visitor_num,city')->where($condition)->group('city')->select();
+        $list = \App\Utils\Analysis::conver($list, $visitor_num, 'visitor_num', 'city');
 
 
-        //商品浏览量
         $where['create_time'] = $this->create_time;
         $where['link_id'] = 1;
         $where = 'city is not null';
-        $goods_view_num = $analysisModel->field( "count(id) as goods_view_num,city" )
-            ->where( $where )
-            ->group( 'city' )
-            ->select();
-
+        //商品浏览量
+        $goods_view_num = $analysisModel->field( "count(id) as goods_view_num,city" )->where( $where )->group( 'city' )->select();
+        $list = \App\Utils\Analysis::conver($list, $goods_view_num, 'goods_view_num', 'city');
 
         //商品访客数
-        $where_str = 'city is not null AND link_id = 1 AND create_time between ' . $this->end_date . ' AND ' . $this->start_date;
-        $goods_visitor_num = $analysisModel->rawQuery("SELECT count(distinct(user_id)) as goods_visitor_num,city FROM fa_analysis WHERE create_time IN (SELECT create_time FROM fa_analysis where $where_str) GROUP BY city");
+        $goods_visitor_num = $analysisModel->field('count(distinct(user_id)) as goods_visitor_num,city')->where($where)->group('city')->select();
+        $list = \App\Utils\Analysis::conver($list, $goods_visitor_num, 'goods_visitor_num', 'city');
 
-
-
-        $list = array_map(function($view_num, $visitor_num, $goods_view_num, $goods_visitor_num)
-        {
-            return([
-                'city' => $view_num['city'],
-                'visitor_num' => $view_num['view_num'],
-                'view_num' => $visitor_num['visitor_num'],
-                'goods_view_num' => $goods_view_num['goods_view_num'],
-                'goods_visitor_num' => $goods_visitor_num['goods_visitor_num']
-            ]);
-        }, $view_num, $visitor_num, $goods_view_num, $goods_visitor_num);
-
-        $this->send( Code::success, [
+        return $this->send( Code::success, [
             'list' => $list,
         ] );
     }
@@ -264,45 +254,25 @@ class Analysis extends Admin
      */
     public function dailyDischarge()
     {
-        $analysisModel = \App\Model\Analysis;
+        $analysisModel = new \App\Model\Analysis;
         $condition['create_time'] = $this->create_time;
         //浏览量
-        $view_num = $analysisModel->field( "count(id) as view_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )
-                                           ->where( $condition )
-                                           ->group( 'date_time' )
-                                           ->select();
-
+        $list = $analysisModel->field( "count(id) as view_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )->where( $condition )->group( 'date_time' )->select();
 
         //访客数
-        $condition_str = 'create_time between ' . $this->end_date . ' AND ' . $this->start_date;
-        $visitor_num = $analysisModel->rawQuery("SELECT count(distinct(user_id)) as visitor_num,FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time FROM fa_analysis WHERE create_time IN (SELECT create_time FROM fa_analysis where $condition_str) GROUP BY date_time");
+        $visitor_num = $analysisModel->field("count(distinct(user_id)) as visitor_num,FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time")->where($condition)->group('date_time')->select();
+        $list = \App\Utils\Analysis::conver($list, $visitor_num, 'visitor_num', 'date_time');
 
 
         //商品浏览量
         $where['create_time'] = $this->create_time;
         $where['link_id'] = 1;
-        $goods_view_num = $analysisModel->field( "count(id) as goods_view_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )
-                                            ->where( $where )
-                                            ->group( 'date_time' )
-                                            ->select();
-
+        $goods_view_num = $analysisModel->field( "count(id) as goods_view_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )->where( $where )->group( 'date_time' )->select();
+        $list = \App\Utils\Analysis::conver($list, $goods_view_num, 'goods_view_num', 'date_time');
 
         //商品访客数
-        $where_str = 'link_id = 1 AND create_time between ' . $this->end_date . ' AND ' . $this->start_date;
-        $goods_visitor_num = $analysisModel->rawQuery("SELECT count(distinct(user_id)) as goods_visitor_num,FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time FROM fa_analysis WHERE create_time IN (SELECT create_time FROM fa_analysis where $where_str) GROUP BY date_time");
-
-
-        $list = array_map(function($view_num, $visitor_num, $goods_view_num, $goods_visitor_num)
-        {
-            return([
-                'date_time' => $visitor_num['date_time'],
-                'visitor_num' => $visitor_num['visitor_num'],
-                'view_num' => $view_num['view_num'],
-                'goods_view_num' => $goods_view_num['goods_view_num'],
-                'goods_visitor_num' => $goods_visitor_num['goods_visitor_num']
-            ]);
-        }, $view_num, $visitor_num, $goods_view_num, $goods_visitor_num);
-
+        $goods_visitor_num = $analysisModel->field('count(distinct(user_id)) as goods_visitor_num,city')->where($where)->group('date_time')->select();
+        $list = \App\Utils\Analysis::conver($list, $goods_visitor_num, 'goods_visitor_num', 'date_time');
 
         $this->send( Code::success, [
             'list' => $list,
@@ -319,63 +289,36 @@ class Analysis extends Admin
      */
     public function detailedData()
     {
-        $analysisModel = \App\Model\Analysis;
+        $analysisModel = new \App\Model\Analysis;
         $condition['create_time'] = $this->create_time;
         //浏览量
-        $view_num = $analysisModel->field( "count(id) as view_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )
-            ->where( $condition )
-            ->group( 'date_time' )
-            ->select();
-
+        $list = $analysisModel->field( "count(id) as view_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )->where( $condition )->group( 'date_time' )->select();
 
         //访客数
-        $condition_str = 'create_time between ' . $this->end_date . ' AND ' . $this->start_date;
-        $visitor_num = $analysisModel->rawQuery("SELECT count(distinct(user_id)) as visitor_num,FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time FROM fa_analysis WHERE create_time IN (SELECT create_time FROM fa_analysis where $condition_str) GROUP BY date_time");
+        $visitor_num = $analysisModel->field("count(distinct(user_id)) as visitor_num,FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time")->where($condition)->group('date_time')->select();
+        $list = \App\Utils\Analysis::conver($list, $visitor_num, 'visitor_num', 'date_time');
 
 
         //商品浏览量
         $where['create_time'] = $this->create_time;
         $where['link_id'] = 1;
-        $goods_view_num = $analysisModel->field( "count(id) as goods_view_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )
-                                                    ->where( $where )
-                                                    ->group( 'date_time' )
-                                                    ->select();
-
+        $goods_view_num = $analysisModel->field( "count(id) as goods_view_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )->where( $where )->group( 'date_time' )->select();
+        $list = \App\Utils\Analysis::conver($list, $goods_view_num, 'goods_view_num', 'date_time');
 
         //商品访客数
-        $where_str = 'link_id = 1 AND create_time between ' . $this->end_date . ' AND ' . $this->start_date;
-        $goods_visitor_num = $analysisModel->rawQuery("SELECT count(distinct(user_id)) as goods_visitor_num,FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time FROM fa_analysis WHERE create_time IN (SELECT create_time FROM fa_analysis where $where_str) GROUP BY date_time");
-
+        $goods_visitor_num = $analysisModel->field('count(distinct(user_id)) as goods_visitor_num,city')->where($where)->group('date_time')->select();
+        $list = \App\Utils\Analysis::conver($list, $goods_visitor_num, 'goods_visitor_num', 'date_time');
 
 
         //分享访问次数
-        $where['create_time'] = $this->create_time;
-        $where['relation_user_id'] = ['>', 0];
-        $share_num = $analysisModel->field( "count(id) as share_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )
-                                                ->where( $where )
-                                                ->group( 'date_time' )
-                                                ->select();
-
+        $share_where['create_time'] = $this->create_time;
+        $share_where['relation_user_id'] = ['>', 0];
+        $share_num = $analysisModel->field( "count(id) as share_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )->where( $share_where )->group( 'date_time' )->select();
+        $list = \App\Utils\Analysis::conver($list, $share_num, 'share_num', 'date_time');
 
         //分享访问人数
-        $where_str = 'relation_user_id > 1 AND create_time between ' . $this->end_date . ' AND ' . $this->start_date;
-        $share_visit_people_num = $analysisModel->rawQuery("SELECT count(distinct(relation_user_id)) as share_visit_people_num,FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time FROM fa_analysis WHERE create_time IN (SELECT create_time FROM fa_analysis where $where_str) GROUP BY date_time");
-
-
-
-
-        $list = array_map(function($view_num, $visitor_num, $goods_view_num, $goods_visitor_num, $share_num, $share_visit_people_num)
-        {
-            return([
-                'date_time' => $visitor_num['date_time'],
-                'visitor_num' => $visitor_num['visitor_num'],
-                'view_num' => $view_num['view_num'],
-                'goods_view_num' => $goods_view_num['goods_view_num'],
-                'goods_visitor_num' => $goods_visitor_num['goods_visitor_num'],
-                'share_num' => $share_num['share_num'],
-                'share_visit_people_num' => $share_visit_people_num['share_visit_people_num'],
-            ]);
-        }, $view_num, $visitor_num, $goods_view_num, $goods_visitor_num, $share_num, $share_visit_people_num);
+        $goods_visitor_num = $analysisModel->field('count(distinct(user_id)) as goods_visitor_num,city')->where($share_where)->group('date_time')->select();
+        $list = \App\Utils\Analysis::conver($list, $goods_visitor_num, 'goods_visitor_num', 'date_time');
 
 
         $this->send( Code::success, [
@@ -391,76 +334,7 @@ class Analysis extends Admin
      * @method GET | POST
      * @param array  $create_time      [开始时间,结束时间]
      */
-//    public function goodsWhole()
-//    {
-//        $goods_where['is_on_sale'] = 1;
-//        //在架商品数(不能根据时间条件查询在家商品数，只能查当前时间)
-//        $goods_num = \App\Model\goods::init()->field( "count(id) as goods_num" )->where( $condition )
-//            ->count();
-//
-//
-//        //被访问商品数
-//        $goods_visitor_where['create_time'] = $this->create_time;
-//        $goods_visitor_where['link_id'] = 1;
-//        $goods_visitor_num = \App\Model\Analysis::init()->where( $goods_visitor_where )->count( 'DISTINCT user_id' );
-//
-//
-//
-//
-//        //动销商品数
-//        $goods_where['is_on_sale'] = 1;
-//        $goods_movable_num = \App\Model\Goods::init()->join('order_goods', 'goods.id = order_goods.goods_id', 'LEFT')
-//                                                    ->where( $goods_where )
-//                                                    ->count();
-//        return $this->send( Code::success, [
-//            'list' => $goods_movable_num,
-//        ] );
-//
-//        //商品曝光数
-//        $where_str = 'link_id = 1 AND create_time between ' . $this->end_date . ' AND ' . $this->start_date;
-//        $goods_visitor_num = \App\Model\Analysis::init()->rawQuery("SELECT count(distinct(user_id)) as goods_visitor_num,FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time FROM fa_analysis WHERE create_time IN (SELECT create_time FROM fa_analysis where $where_str) GROUP BY date_time");
-//
-//
-//
-//        //商品浏览量
-//        $where['create_time'] = $this->create_time;
-//        $where['relation_user_id'] = ['>', 0];
-//        $share_num = \App\Model\Analysis::init()->field( "count(id) as share_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )
-//            ->where( $where )
-//            ->group( 'date_time' )
-//            ->select();
-//
-//
-//        //商品访客数
-//        $where_str = 'relation_user_id > 1 AND create_time between ' . $this->end_date . ' AND ' . $this->start_date;
-//        $share_visit_people_num = \App\Model\Analysis::init()->rawQuery("SELECT count(distinct(relation_user_id)) as share_visit_people_num,FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time FROM fa_analysis WHERE create_time IN (SELECT create_time FROM fa_analysis where $where_str) GROUP BY date_time");
-//
-//
-//        //加购件数
-//
-//
-//        //下单件数
-//
-//        //支付件数
-//
-//        $list = array_map(function($view_num, $visitor_num, $goods_view_num, $goods_visitor_num, $share_num, $share_visit_people_num)
-//        {
-//            return([
-//                'date_time' => $visitor_num['date_time'],
-//                'visitor_num' => $visitor_num['visitor_num'],
-//                'view_num' => $view_num['view_num'],
-//                'goods_view_num' => $goods_view_num['goods_view_num'],
-//                'goods_visitor_num' => $goods_visitor_num['goods_visitor_num'],
-//                'share_num' => $share_num['share_num'],
-//                'share_visit_people_num' => $share_visit_people_num['share_visit_people_num'],
-//            ]);
-//        }, $view_num, $visitor_num, $goods_view_num, $goods_visitor_num, $share_num, $share_visit_people_num);
-//
-//
-//        $this->send( Code::success, [
-//            'list' => $list,
-//        ] );
-//    }
+
 
 
 
@@ -550,11 +424,6 @@ class Analysis extends Admin
     public function transactionSurvey(){
         $analysisModel = new \App\Model\Analysis;
         $orderModel = new \App\Model\Order;
-        //计算时间差
-        $days = ceil(($this->start_date - $this->end_date) / 86400);
-
-        //获取前一日或前一个月的开始时间，结束时间用前端传过来的开始时间作为结束时间
-        $front_time =  $this->start_date - ((60 * 60 * 24) * $days);
 
         /*当前*/
         $condition['create_time'] = $this->create_time;
@@ -589,34 +458,33 @@ class Analysis extends Admin
 
 
 
-
         /*之前*/
-        $where['create_time'] = ['between', [$this->end_date, $this->start_date]];
+        $where['create_time'] = $this->front_time;//当前时间的之前时间
         //访客数
-        $front_visitor_num = $analysisModel->where( $condition )->count( 'DISTINCT user_id' );
+        $front_visitor_num = $analysisModel->where( $where )->count( 'DISTINCT user_id' );
         $front_visitor_num = $front_visitor_num ? $front_visitor_num : 20;
 
         //下单人数
-        $front_people_num = $orderModel->where( $condition )->count( 'DISTINCT user_id' );
+        $front_people_num = $orderModel->where( $where )->count( 'DISTINCT user_id' );
 
         //下单笔数
-        $front_order_num = $orderModel->where( $condition )->count();
+        $front_order_num = $orderModel->where( $where )->count();
 
         //下单金额
-        $front_order_total_price = $orderModel->where( $condition )->sum( 'amount' );
+        $front_order_total_price = $orderModel->where( $where )->sum( 'amount' );
 
         //支付人数
         $where['payment_time'] = ['>', 0];
-        $front_payment_people_num = $orderModel->where( $condition )->count( 'DISTINCT user_id' );
+        $front_payment_people_num = $orderModel->where( $where )->count( 'DISTINCT user_id' );
 
         //支付订单数
-        $front_payment_order_num = $orderModel->where( $condition )->count();
+        $front_payment_order_num = $orderModel->where( $where )->count();
 
         //支付金额
-        $front_payment_total_price = $orderModel->where( $condition )->count( 'amount' );
+        $front_payment_total_price = $orderModel->where( $where )->count( 'amount' );
 
         //支付件数
-        $front_payment_num = $orderModel->where( $condition )->count( 'goods_num' );
+        $front_payment_num = $orderModel->where( $where )->count( 'goods_num' );
 
         //客单价
         $front_unit_price = ceil($order_total_price / $visitor_num);
@@ -630,6 +498,7 @@ class Analysis extends Admin
         //访客和付款的转化率
         $visitor_payment_people_current = round(  $front_payment_people_num / $visitor_num, 2);
 
+        //修改下：不在返回里面去计算转换率，让前端去转换。利于代码整洁
         return $this->send( Code::success, [
             'people_visitor_current' => $people_visitor_current,
             'payment_people_current' => $payment_people_current,
@@ -691,48 +560,30 @@ class Analysis extends Admin
         $condition['payment_time'] = ['>', 0];
 
         //支付金额
-        $payment_total_price = $orderModel->field( "sum(amount) as $payment_total_price, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )
-                                            ->where( $condition )
-                                            ->group( 'date_time' )
-                                            ->select();
-        $list = \App\Utils\Analysis::conver($list, $payment_total_price, 'date_time', 'payment_total_price');
+        $payment_total_price = $orderModel->field( "sum(amount) as payment_total_price, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )->where( $condition )->group( 'date_time' )->select();
+        $list = \App\Utils\Analysis::conver($list, $payment_total_price, 'payment_total_price', 'date_time');
 
         //支付人数
-        $payment_people_num = $orderModel->field( "count(distinct(user_id)) as payment_people_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )
-                                            ->where( $condition )
-                                            ->group( 'date_time' )
-                                            ->select();
-        $list = \App\Utils\Analysis::conver($list, $payment_piece_num, 'date_time', 'payment_people_num');
+        $payment_people_num = $orderModel->field( "count(distinct(user_id)) as payment_people_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )->where( $condition )->group( 'date_time' )->select();
+        $list = \App\Utils\Analysis::conver($list, $payment_people_num, 'payment_people_num', 'date_time');
 
         //支付件数
-        $payment_piece_num = $orderModel->field( "sum(goods_num) as payment_piece_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )
-                                            ->where( $condition )
-                                            ->group( 'date_time' )
-                                            ->select();
-        $list = \App\Utils\Analysis::conver($list, $payment_piece_num, 'date_time', 'payment_piece_num');
+        $payment_piece_num = $orderModel->field( "sum(goods_num) as payment_piece_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )->where( $condition )->group( 'date_time' )->select();
+        $list = \App\Utils\Analysis::conver($list, $payment_piece_num, 'payment_piece_num', 'date_time');
 
         //访问数
         $where['create_time'] = $this->create_time;
-        $visitor_num = $analysisModel->field( "count(id) as visitor_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )
-                                            ->where( $where )
-                                            ->group('date_time')
-                                            ->select();
-        $list = \App\Utils\Analysis::conver($list, $visitor_num, 'date_time', 'visitor_num');
+        $visitor_num = $analysisModel->field( "count(id) as visitor_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )->where( $where )->group('date_time')->select();
+        $list = \App\Utils\Analysis::conver($list, $visitor_num, 'visitor_num', 'date_time');
 
         //下单笔数
-        $order_num = $orderModel->field( "count(id) as order_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )
-                                            ->where( $where )
-                                            ->group('date_time')
-                                            ->select();
-        $list = \App\Utils\Analysis::conver($list, $order_num, 'date_time', 'order_num');
+        $order_num = $orderModel->field( "count(id) as order_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )->where( $where )->group('date_time')->select();
+        $list = \App\Utils\Analysis::conver($list, $order_num, 'order_num', 'date_time');
 
         //支付数
         $where['payment_time'] = ['>', 0];
-        $payment_num = $orderModel->field( "count(id) as payment_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )
-                                            ->where( $where )
-                                            ->group('date_time')
-                                            ->select();
-        $list = \App\Utils\Analysis::conver($list, $payment_num, 'date_time', 'payment_num');
+        $payment_num = $orderModel->field( "count(id) as payment_num, FROM_UNIXTIME(create_time,'%Y-%m-%d') as date_time" )->where( $where )->group('date_time')->select();
+        $list = \App\Utils\Analysis::conver($list, $payment_num, 'payment_num', 'date_time');
 
 
         return $this->send( Code::success, [
@@ -750,6 +601,31 @@ class Analysis extends Admin
 
     }
 
+
+
+    /**
+     * 地域分布（问了泉哥，用户貌似没有绑定城市这个功能，那么访客数就没法实现，商定是否需要去掉访问数和转换率问题）
+     * @method GET | POST
+     * @param array  $create_time      [开始时间,结束时间]
+     */
+    public function distribution(){
+        $orderextendModel = new \App\Model\OrderExtend;
+
+    }
+
+
+    /* 客户概览 */
+
+
+    /**
+     * 客户概括及趋势
+     * @method GET | POST
+     * @param array  $create_time      [开始时间,结束时间]
+     */
+    public function trend(){
+        $orderextendModel = new \App\Model\OrderExtend;
+
+    }
 
 }
 

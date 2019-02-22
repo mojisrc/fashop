@@ -266,7 +266,7 @@ class Distribution extends Admin
     public function configInfo()
     {
         $distribution_config_model = new \App\Model\DistributionConfig;
-        $list                      = $distribution_config_model->select();
+        $list                      = $distribution_config_model->getDistributionConfigSimpleList();
         return $this->send(Code::success, ['info' => $list]);
     }
 

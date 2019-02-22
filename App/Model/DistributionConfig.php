@@ -19,7 +19,7 @@ namespace App\Model;
 class DistributionConfig extends Model
 {
 	protected $softDelete = true;
-    protected $jsonFields = ['value'];
+    protected $jsonFields = ['content'];
     protected $primaryKey = 'sign';
 
 	/**
@@ -121,5 +121,15 @@ class DistributionConfig extends Model
 	{
 		return $this->where( $condition )->del();
 	}
+    /**
+     * 列表 简易查询
+     * @return
+     */
+    public function getDistributionConfigSimpleList()
+    {
+        $data = $this->select();
+        return $data;
+    }
+
 
 }
