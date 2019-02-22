@@ -9,20 +9,63 @@ class User extends Model
 {
 	protected $softDelete = true;
 	protected $createTime = true;
-	protected $hiddenFields = ['password', 'pay_password','salt'];
+	protected $hiddenFields = ['password', 'pay_password', 'salt'];
 
 	public function addUser( array $data )
 	{
 		$this->startTransaction();
 		try{
-			$now_time = time();
-			$user_id  = $this->add( array_merge( $data, [
-				//				'invitation_code' => $this->getInvitationCode(),
-				'salt'        => $this->createSalt( 0 ),
-				'create_time' => $now_time,
+			$user_id = $this->add( array_merge( $data, [
+				'salt' => $this->createSalt( 0 ),
 			] ) );
 			$this->commit();
 			return $user_id;
+		} catch( \Exception $e ){
+			$this->rollback();
+			Logger::getInstance()->log( $e->getMessage(), 'sql' );
+			return false;
+		}
+	}
+
+	/**
+	 * 添加后台用户
+	 * @param array $data
+	 * @return bool|int
+	 */
+	public function addAdminUser( array $data )
+	{
+		$this->startTransaction();
+		try{
+			$user_id       = $this->add( [
+				'username' => $data['username'],
+				'password' => $data['password'],
+			] );
+			if($user_id){
+				$edit = $this->where(['id'=>$user_id])->edit([
+					'salt'     => $this->createSalt( $user_id ),
+				]);
+				if($edit){
+					$user_admin_id = UserAdmin::init()->addUserAdmin( [
+						'user_id' => $user_id,
+						'name'    => $data['name'],
+						'status'  => $data['status'],
+					] );
+					if( $user_admin_id > 0 ){
+						$this->commit();
+						return $user_id;
+					} else{
+						$this->rollback();
+						return false;
+					}
+				}else{
+					$this->rollback();
+					return false;
+				}
+			}else{
+				$this->rollback();
+				return false;
+			}
+
 		} catch( \Exception $e ){
 			$this->rollback();
 			Logger::getInstance()->log( $e->getMessage(), 'sql' );
@@ -46,7 +89,7 @@ class User extends Model
 	}
 
 
-	public function getUserList( $condition = [], $field = '*', $order = 'id desc', $page = [1,10] )
+	public function getUserList( $condition = [], $field = '*', $order = 'id desc', $page = [1, 10] )
 	{
 		$list = $this->where( $condition )->order( $order )->field( $field )->page( $page )->select();
 		return $list;

@@ -878,8 +878,8 @@ class Wechat extends Admin
 		} else{
 			$result = $this->wechat->userTag->userTags( $this->post['openid'] );
 			if( $result ){
-				$wechatUserLogic = new \App\Biz\WechatUser( ['wechat' => $this->wechat] );
-				$wechatUserLogic->updateWechatUsersInfo( [$this->post['openid']] );
+				$wechatUserBiz = new \App\Biz\WechatUser( ['wechat' => $this->wechat] );
+				$wechatUserBiz->updateWechatUsersInfo( [$this->post['openid']] );
 			}
 			$this->send( Code::success, $result );
 		}
@@ -920,8 +920,8 @@ class Wechat extends Admin
 		} else{
 			$result = $this->wechat->userTag->tagUsers( $this->post['openids'], $this->post['id'] );
 			if( $result ){
-				$wechatUserLogic = new \App\Biz\WechatUser( ['wechat' => $this->wechat] );
-				$wechatUserLogic->updateWechatUsersInfo( $this->post['openids'] );
+				$wechatUserBiz = new \App\Biz\WechatUser( ['wechat' => $this->wechat] );
+				$wechatUserBiz->updateWechatUsersInfo( $this->post['openids'] );
 			}
 			$this->send( Code::success, $result );
 		}
@@ -941,8 +941,8 @@ class Wechat extends Admin
 		} else{
 			$result = $this->wechat->userTag->untagUsers( $this->post['openids'], $this->post['id'] );
 			if( $result ){
-				$wechatUserLogic = new \App\Biz\WechatUser( ['wechat' => $this->wechat] );
-				$wechatUserLogic->updateWechatUsersInfo( $this->post['openids'] );
+				$wechatUserBiz = new \App\Biz\WechatUser( ['wechat' => $this->wechat] );
+				$wechatUserBiz->updateWechatUsersInfo( $this->post['openids'] );
 			}
 			$this->send( Code::success, $result );
 		}

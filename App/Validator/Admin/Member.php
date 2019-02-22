@@ -14,7 +14,7 @@
 namespace App\Validator\Admin;
 
 use ezswoole\Validator;
-use App\Biz\User as UserLogic;
+use App\Biz\User as UserBiz;
 use ezswoole\Db;
 
 class Member extends Validator
@@ -24,7 +24,8 @@ class Member extends Validator
 			'id'          => 'require|checkId',
 			'username'    => 'require|checkUsername',
 			'avatar'      => 'require',
-			'nickname'    => 'require',
+			'name'        => 'require',
+			'status'       => 'require',
 			'phone'       => 'require',
 			'email'       => 'require',
 			'password'    => 'checkPassword',
@@ -41,9 +42,9 @@ class Member extends Validator
 		];
 	protected $scene
 		= [
-			'add'          => ['username', 'password'],
-			'edit'         => ['id'],
-			'selfEdit'     => ['avatar', 'nickname'],
+			'add'          => ['username', 'password','name','status'],
+			'edit'         => ['id','password','name','status'],
+			'selfEdit'     => ['avatar', 'name'],
 			'info'         => ['id'],
 			'selfPassword' => ['id', 'oldpassword', 'password'],
 			'del'          => ['id'],
@@ -55,7 +56,7 @@ class Member extends Validator
 	 * @param mixed $rule  验证规则
 	 * @return bool
 	 */
-	protected function checkId( $value, $rule, $data )
+	protected function checkId( $value )
 	{
 		$scene = $this->getCurrentSceneName();
 		if( $scene == 'del' && $value == 1 ){
@@ -70,14 +71,12 @@ class Member extends Validator
 
 	/**
 	 * @access protected
-	 * @param mixed $value 字段值
-	 * @param mixed $rule  验证规则
 	 * @return bool
 	 */
-	protected function checkUsername( $value, $rule, $data )
+	protected function checkUsername( $value )
 	{
-		$condition['username|phone|email'] = $value;
-		$find                              = Db::name( 'User' )->where( $condition )->count();
+		$condition[] = "username = '{$value}' OR phone = '{$value}' OR email = '{$value}'";
+		$find        = \App\Model\User::init()->where( $condition )->field( 'id' )->find();
 		return $find ? "该账号已存在" : true;
 	}
 
@@ -85,11 +84,11 @@ class Member extends Validator
 	{
 		$scene = $this->getCurrentSceneName();
 		// 修改用户资料password 不是必填
-		if( ($scene == 'edit' && isset( $data['password'] )) || $scene == 'add' || $scene == 'selfPassword' ){
-			if( Validate::min( $value, 6 ) !== true ){
+		if( ($scene === 'edit' && isset( $data['password'] ) && $data['password']) || $scene == 'add' || $scene == 'selfPassword' ){
+			if( Validator::min( $value, 6 ) !== true ){
 				return '密码不得小于6位';
 			}
-			if( Validate::max( $value, 32 ) !== true ){
+			if( Validator::max( $value, 32 ) !== true ){
 				return '密码不得大于32位';
 			}
 		}
@@ -102,8 +101,8 @@ class Member extends Validator
 			return '新密码和老密码一样';
 		}
 		$condition['id']       = $data['id'];
-		$condition['password'] = UserLogic::encryptPassword( $value );
-		$find                  = Db::name( 'User' )->where( $condition )->count();
+		$condition['password'] = UserBiz::encryptPassword( $value );
+		$find                  = \App\Model\User::init()->where( $condition )->field( 'id' )->find();
 		return $find ? true : "老密码错误";
 	}
 }

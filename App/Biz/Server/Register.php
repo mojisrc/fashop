@@ -12,7 +12,7 @@
  */
 namespace App\Biz\Server;
 
-use App\Biz\User as UserLogic;
+use App\Biz\User as UserBiz;
 use App\Utils\Code;
 use ezswoole\utils\RandomKey;
 use ezswoole\Validator;
@@ -173,7 +173,7 @@ class Register
         $this->setPassword($this->options['password']);
         $username                                       = $this->getUsername();
         $data['username']                               = $username;
-        $data['password']                               = UserLogic::encryptPassword($this->getPassword());
+        $data['password']                               = UserBiz::encryptPassword($this->getPassword());
         $data[$this->getAccountRegisterType($username)] = $username;
 
         if (is_numeric($username)) {
@@ -181,7 +181,6 @@ class Register
         } else {
             $condition['username'] = $username;
         }
-        $user_model = model('User');
         \App\Model\User::startTransaction();
 
         $user = \App\Model\User::init()->getUserInfo($condition, 'id');
@@ -231,7 +230,6 @@ class Register
      */
     private function byWechatOpenid()
     {
-        $user_model      = model('User');
         $user_open_model = model('UserOpen');
         $wechat_openid   = $this->options['wechat_openid'];
         $register_type   = $this->options['register_type'];
@@ -349,7 +347,6 @@ class Register
      */
     private function byWechatMini()
     {
-        $user_model      = model('User');
         $user_open_model = model('UserOpen');
         try {
             $wechat_mini_param = $this->options['wechat_mini_param'];

@@ -16,9 +16,9 @@ namespace App\HttpController\Server;
 use App\Biz\AccessToken;
 use App\Biz\Server\Binding as BindingLogic;
 use App\Biz\Server\Login as LoginLogic;
-use App\Biz\Server\Register as RegisterLogic;
+use App\Biz\Server\Register as RegisterBiz;
 use App\Biz\Server\Untie as UntieLogic;
-use App\Biz\User as UserLogic;
+use App\Biz\User as UserBiz;
 use App\Utils\Code;
 
 class User extends Server
@@ -130,7 +130,7 @@ class User extends Server
 				$this->send( code::param_error, [], $this->getValidator()->getError() );
 			} else{
 				try{
-					$this->send( (new RegisterLogic( (array)$this->post ))->register() ? Code::success : Code::error );
+					$this->send( (new RegisterBiz( (array)$this->post ))->register() ? Code::success : Code::error );
 				} catch( \App\Utils\Exception $e ){
 					$this->send( $e->getCode() );
 				}
@@ -197,7 +197,7 @@ class User extends Server
 			\App\Model\User::init()->editUser( [
 				'id' => $user_info['id'],
 			], [
-				'password' => UserLogic::encryptPassword( $this->post['password'] ),
+				'password' => UserBiz::encryptPassword( $this->post['password'] ),
 			] );
 			$this->send( Code::success );
 		}
@@ -221,9 +221,9 @@ class User extends Server
 			} else{
 				$result = \App\Model\User::init()->editUser( [
 					'id'       => $user['id'],
-					'password' => UserLogic::encryptPassword( $this->post['oldpassword'] ),
+					'password' => UserBiz::encryptPassword( $this->post['oldpassword'] ),
 				], [
-					'password' => UserLogic::encryptPassword( $this->post['password'] ),
+					'password' => UserBiz::encryptPassword( $this->post['password'] ),
 				] );
 				$this->send( $result ? Code::success : Code::error );
 			}

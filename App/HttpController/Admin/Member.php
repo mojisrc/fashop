@@ -14,7 +14,7 @@
 namespace App\HttpController\Admin;
 
 use App\Utils\Code;
-use App\Biz\User as UserLogic;
+use App\Biz\User as UserBiz;
 use App\Biz\AccessToken;
 
 /**
@@ -31,51 +31,55 @@ class Member extends Admin
 	 */
 	public function list()
 	{
-		$condition['is_member'] = ['=', 1];
-		$field                  = [
-			'id',
-			'username',
-			'avatar',
-			'nickname',
-			'phone',
-			'email',
-			'sex',
+		$field      = [
+			'user.id',
+			'user.username',
+			'user.phone',
+			'user.email',
+			'user_admin.name',
+			'user_admin.avatar',
+			'user_admin.status',
+			'user_admin.create_time',
 		];
-		$list                   = \App\Model\User::init()->getUserList( $condition, $field, 'id desc', $this->getPageLimit() );
-		return $this->send( Code::success, ['list' => $list] );
+		$adminModel = new  \App\Model\UserAdmin;
+		$list       = $adminModel->withTotalCount()->join( 'user', 'user.id = user_admin.user_id', 'LEFT' )->getUserAdminList( [], $field, 'id desc', $this->getPageLimit() );
+		$this->send( Code::success, ['list' => $list, 'total_number' => $adminModel->getTotalCount()] );
 	}
 
 	/**
 	 * 添加成员
-	 * @param string $username 登陆账号
+	 * @param string $username 登陆账号 ，一旦注册不可修改，为了保障后台用户操作记录的唯一性
 	 * @param string $password 密码
-	 * @param string $nickname 昵称  非必填
+	 * @param string $name     昵称或者姓名 user_admin表
+	 * @param int    $status   状态 1开启 0 禁止
 	 * @method POST
 	 */
 	public function add()
 	{
 		if( $this->validator( $this->post, 'Admin/Member.add' ) !== true ){
-			return $this->send( Code::param_error, [], $this->getValidator()->getError() );
+			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			$data = [
-				'is_member' => 1,
-				'username'  => $this->post['username'],
-				'password'  => UserLogic::encryptPassword( $this->post['password'] ),
-			];
-			if( isset( $this->post['nickname'] ) ){
-				$data['nickname'] = $this->post['nickname'];
+			$result = \App\Model\User::init()->addAdminUser( [
+				'username' => $this->post['username'],
+				'password' => UserBiz::encryptPassword( $this->post['password'] ),
+				'name'     => $this->post['name'],
+				'status'   => $this->post['status'],
+			] );
+
+			if( $result > 0 ){
+				$this->send( Code::success );
+			} else{
+				$this->send( Code::error );
 			}
-			\App\Model\User::init()->addUser( $data );
-			return $this->send();
 		}
 	}
 
 	/**
 	 * 修改
-	 * @param int    $id       用户id
-	 * @param string $avatar   头像 [非必填]
-	 * @param string $nickname 昵称 [非必填]
-	 * @param string $password 密码 [非必填]
+	 * @param int    $id       require 用户id
+	 * @param string $name     require 昵称或者姓名 user_admin表
+	 * @param string $password 密码 非必填
+	 * @param int    $status   require 状态 1开启 0 禁止
 	 * @method POST
 	 */
 	public function edit()
@@ -83,18 +87,21 @@ class Member extends Admin
 		if( $this->validator( $this->post, 'Admin/Member.edit' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			$data = [];
-			if( isset( $this->post['avatar'] ) ){
-				$data['avatar'] = $this->post['avatar'];
+
+			if( isset($this->post['password']) && $this->post['password'] ){
+				\App\Model\User::init()->editUser( ['id' => $this->post['id']], ['password' => UserBiz::encryptPassword( $this->post['password'] )] );
 			}
-			if( isset( $this->post['nickname'] ) ){
-				$data['nickname'] = $this->post['nickname'];
+
+			$result = \App\Model\UserAdmin::init()->editUserAdmin( ['user_id' => $this->post['id']], [
+				'name'   => $this->post['name'],
+				'status' => $this->post['status'],
+			] );
+
+			if( $result === true ){
+				$this->send( Code::success );
+			} else{
+				$this->send( Code::error );
 			}
-			if( isset( $this->post['password'] ) ){
-				$data['password'] = UserLogic::encryptPassword( $this->post['password'] );
-			}
-			\App\Model\User::init()->editUser( ['id' => $this->post['id']], $data );
-			$this->send();
 		}
 	}
 
@@ -109,17 +116,18 @@ class Member extends Admin
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$field = [
-				'id',
-				'username',
-				'avatar',
-				'nickname',
-				'name',
-				'phone',
-				'sex',
+				'user.id',
+				'user.username',
+				'user.phone',
+				'user.email',
+				'user_admin.name',
+				'user_admin.avatar',
+				'user_admin.status',
+				'user_admin.create_time',
 			];
-			$info  = \App\Model\User::init()->getUserInfo( [
-				'id' => $this->get['id'],
-			], $field );
+
+			$info = \App\Model\UserAdmin::init()->where( ['user_id' => $this->get['id']] )->join( 'user', 'user.id = user_admin.user_id', 'LEFT' )->field( $field )->find();
+
 			$this->send( Code::success, ['info' => $info] );
 		}
 	}
@@ -157,7 +165,7 @@ class Member extends Admin
 		if( $this->validator( $this->post, 'Admin/Member.del' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			\App\Model\User::init()->delUser( ['id' => $this->post['id']] );
+			\App\Model\UserAdmin::init()->delUserAdmin( ['id' => $this->post['id']] );
 			$this->send( Code::success );
 		}
 	}
@@ -175,7 +183,7 @@ class Member extends Admin
 		if( $this->validator( $this->post, 'Admin/Member.selfPassword' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			\App\Model\User::init()->editUser( ['id' => $user['id']], ['password' => UserLogic::encryptPassword( $this->post['password'] )] );
+			\App\Model\User::init()->editUser( ['id' => $user['id']], ['password' => UserBiz::encryptPassword( $this->post['password'] )] );
 			$this->send( Code::success );
 		}
 	}
@@ -229,23 +237,8 @@ class Member extends Admin
 	 */
 	public function self()
 	{
-		$user  = $this->getRequestUser();
-		$group = [];
-		$rules = [];
-		if( $user['id'] == 1 ){
-			$rules = \App\Model\AuthRule::column( 'sign' );
-		} else{
-			$group_id = \ezswoole\Db::name( 'AuthGroupAccess' )->where( ['uid' => $user['id']] )->value( 'group_id' );
-			if( $group_id > 0 ){
-				$group = \App\Model\AuthGroup::init()->getAuthGroupInfo( ['id' => $group_id] );
-				$rules = \App\Model\AuthRule::init()->where( ['id' => ['in', $group['rule_ids']]] )->column( 'sign' );
-			}
-		}
-		$rules = array_merge( $rules, \App\Biz\Admin\Auth::$noNeedAuthActionCheck );
 		$this->send( Code::success, [
-			'info'  => $this->getRequestUser(),
-			'group' => $group,
-			'rules' => $rules,
+			'info' => $this->getRequestUser(),
 		] );
 	}
 
@@ -304,34 +297,34 @@ class Member extends Admin
 	 */
 	public function verifyCode()
 	{
-//		$Conf = new Conf();
-//		$Conf->setCharset( '123456ABCD' );
-//		$Conf->setBackColor( '#FFFFFF' );
-//		// 开启或关闭混淆曲线
-//		$Conf->setUseCurve();
-//		// 开启或关闭混淆噪点
-//		$Conf->setUseNoise();
-//
-//		// 设置图片的宽度
-//		$Conf->setImageWidth( 150 );
-//		// 设置图片的高度
-//		$Conf->setImageHeight( 50 );
-//		// 设置生成字体大小
-//		$Conf->setFontSize( 18 );
-//		// 设置生成验证码位数
-//		$Conf->setLength( 4 );
-//
-//		$VCode = new VerifyCode( $Conf );
-//		// 随机生成验证码
-//		$result = $VCode->drawCode();
-//
-//		session( 'verify_code', $result->getImageStr() );
-//
-//		$body = $result->getImageBody();
-//
-//		$this->response()->withHeader( 'Content-type', 'image/jpg' );
-//
-//		$this->response()->write( $body );
+		//		$Conf = new Conf();
+		//		$Conf->setCharset( '123456ABCD' );
+		//		$Conf->setBackColor( '#FFFFFF' );
+		//		// 开启或关闭混淆曲线
+		//		$Conf->setUseCurve();
+		//		// 开启或关闭混淆噪点
+		//		$Conf->setUseNoise();
+		//
+		//		// 设置图片的宽度
+		//		$Conf->setImageWidth( 150 );
+		//		// 设置图片的高度
+		//		$Conf->setImageHeight( 50 );
+		//		// 设置生成字体大小
+		//		$Conf->setFontSize( 18 );
+		//		// 设置生成验证码位数
+		//		$Conf->setLength( 4 );
+		//
+		//		$VCode = new VerifyCode( $Conf );
+		//		// 随机生成验证码
+		//		$result = $VCode->drawCode();
+		//
+		//		session( 'verify_code', $result->getImageStr() );
+		//
+		//		$body = $result->getImageBody();
+		//
+		//		$this->response()->withHeader( 'Content-type', 'image/jpg' );
+		//
+		//		$this->response()->write( $body );
 	}
 }
 

@@ -12,7 +12,7 @@
  */
 namespace App\Biz\Server;
 
-use App\Biz\User as UserLogic;
+use App\Biz\User as UserBiz;
 use fashop\Validate;
 use fashop\Db;
 use App\Utils\Code;
@@ -169,7 +169,7 @@ class Relevance
 		$username                                         = $this->getUsername();
 		$userModel                                        = model( 'User' );
 		$data['username']                                 = $username;
-		$data['password']                                 = UserLogic::encryptPassword( $this->getPassword() );
+		$data['password']                                 = UserBiz::encryptPassword( $this->getPassword() );
 		$data[$this->getAccountRegisterType( $username )] = $username;
 
         if( is_numeric( $username ) ){

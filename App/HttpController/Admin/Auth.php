@@ -7,6 +7,31 @@ use App\Utils\Code;
 class Auth extends Admin
 {
 	/**
+	 * 权限模块列表
+	 */
+	public function moduleList(){
+		$this->send(Code::success,[
+			'list'=>[
+				['name'=>'订单模块','value'=>'order'],
+				['name'=>'商品模块','value'=>'goods'],
+				['name'=>'退款模块','value'=>'refund'],
+			]
+		]);
+	}
+	/**
+	 * 权限节点列表
+	 * @param string $module 模块 ，如：order,goods
+	 */
+	public function actionList(){
+		$this->send(Code::success,[
+			'list'=>[
+				['name'=>'列表','value'=>'order/list'],
+				['name'=>'详情','value'=>'order/info'],
+				['name'=>'发货','value'=>'order/send'],
+			]
+		]);
+	}
+	/**
 	 * 策略列表
 	 * @throws \EasySwoole\Mysqli\Exceptions\Option
 	 */

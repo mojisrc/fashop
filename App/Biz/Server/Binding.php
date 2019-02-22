@@ -13,7 +13,7 @@
  */
 namespace App\Biz\Server;
 
-use App\Biz\User as UserLogic;
+use App\Biz\User as UserBiz;
 use ezswoole\Validator;
 use ezswoole\Db;
 use App\Utils\Code;
@@ -221,7 +221,7 @@ class Binding
 
                 $data['phone']    = $phone;
                 $data['username'] = $phone;
-                $data['password'] = UserLogic::encryptPassword($this->getPassword());
+                $data['password'] = UserBiz::encryptPassword($this->getPassword());
                 $user_result      = \App\Model\User::init()->editUser($condition, $data );
                 if(!$user_result ){
                     \App\Model\User::rollback();

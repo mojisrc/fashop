@@ -13,7 +13,7 @@
  */
 namespace App\Biz\Server;
 
-use App\Biz\User as UserLogic;
+use App\Biz\User as UserBiz;
 use ezswoole\Validator;
 use ezswoole\Db;
 use App\Utils\Code;

@@ -15,7 +15,7 @@ namespace App\Validator\Admin;
 
 use ezswoole\Validator;
 use ezswoole\Db;
-use App\Biz\User as UserLogic;
+use App\Biz\User as UserBiz;
 
 class Login extends Validator
 {
@@ -80,7 +80,7 @@ class Login extends Validator
 	protected function checkPassword( $value, $rule, $data )
 	{
 		$condition['username'] = $data['username'];
-		$condition['password'] = UserLogic::encryptPassword( $value );
+		$condition['password'] = UserBiz::encryptPassword( $value );
 		$find                  = Db::name( 'User' )->where( $condition )->count();
 		return $find ? true : "账号或密码错误";
 	}
