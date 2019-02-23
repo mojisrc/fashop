@@ -9,36 +9,57 @@ class Auth extends Admin
 	/**
 	 * 权限模块列表
 	 */
-	public function moduleList(){
-		$this->send(Code::success,[
-			'list'=>[
-				['name'=>'订单模块','value'=>'order'],
-				['name'=>'商品模块','value'=>'goods'],
-				['name'=>'退款模块','value'=>'refund'],
-			]
-		]);
+	public function moduleList()
+	{
+		$this->send( Code::success, [
+			'list' => [
+				['name' => '订单模块', 'value' => 'order'],
+				['name' => '商品模块', 'value' => 'goods'],
+				['name' => '退款模块', 'value' => 'refund'],
+			],
+		] );
 	}
+
 	/**
 	 * 权限节点列表
 	 * @param string $module 模块 ，如：order,goods
 	 */
-	public function actionList(){
-		$this->send(Code::success,[
-			'list'=>[
-				['name'=>'列表','value'=>'order/list'],
-				['name'=>'详情','value'=>'order/info'],
-				['name'=>'发货','value'=>'order/send'],
-			]
-		]);
+	public function actionList()
+	{
+		$this->send( Code::success, [
+			'list' => [
+				['name' => '列表', 'value' => 'order/list'],
+				['name' => '详情', 'value' => 'order/info'],
+				['name' => '发货', 'value' => 'order/send'],
+			],
+		] );
 	}
+
 	/**
 	 * 策略列表
+	 * @param string $keywords         关键词
+	 * @param int    $exclude_group_id 排除group_id的权限
 	 * @throws \EasySwoole\Mysqli\Exceptions\Option
 	 */
 	public function policyList()
 	{
 		$policyModel = new \App\Model\AuthPolicy;
-		$list        = $policyModel->withTotalCount()->getAuthPolicyList( [], '*', 'id desc', $this->getPageLimit() );
+
+		if( isset( $this->get['exclude_group_id'] ) ){
+			$group_policy_ids = \App\Model\AuthGroupPolicy::init()->where( 'group_id', $this->get['exclude_group_id'] )->column( 'policy_id' );
+			// 排除某个小组的权限
+			if( $group_policy_ids ){
+				$policyModel->where( ['id' => ['NOT IN', $group_policy_ids]] );
+			}
+		}
+
+
+		if( isset( $this->get['keywords'] ) ){
+			$policyModel->where( "name LIKE '%{$this->get['keywords']}%'" );
+		}
+
+		// 系统级的排下面
+		$list = $policyModel->withTotalCount()->getAuthPolicyList( [], '*', 'is_system asc,id desc', $this->getPageLimit() );
 		$this->send( Code::success, [
 			'list'         => $list,
 			'total_number' => $policyModel->getTotalCount(),
@@ -244,10 +265,12 @@ class Auth extends Admin
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
 			$groupPolicyModel = new  \App\Model\AuthGroupPolicy;
-			$list             = $groupPolicyModel->withTotalCount()->join( 'auth_policy', 'auth_policy.id = auth_group_policy.policy_id' ,'LEFT')->where( [
+
+			$list = $groupPolicyModel->withTotalCount()->join( 'auth_policy', 'auth_policy.id = auth_group_policy.policy_id', 'LEFT' )->where( [
 				'auth_group_policy.group_id' => $this->get['group_id'],
-			] )->filed(['auth_policy.id','auth_policy.name'])->page( $this->getPageLimit() )->select();
-			$list             = $list ?? [];
+			] )->field( ['auth_policy.id', 'auth_policy.name'] )->page( $this->getPageLimit() )->select();
+
+			$list = $list ?? [];
 			if( count( $list ) > 0 ){
 				foreach( $list as $key => $item ){
 					$list[$key]['structure'] = json_decode( $item['structure'], true );
@@ -281,7 +304,7 @@ class Auth extends Admin
 			$find = $authGroupPolicyModel->where( $data )->find();
 
 			if( !$find ){
-				$authGroupPolicyModel->addAuthGroupPolicy($data);
+				$authGroupPolicyModel->addAuthGroupPolicy( $data );
 				$this->send( Code::success );
 			} else{
 				$this->send( Code::error );
@@ -317,21 +340,42 @@ class Auth extends Admin
 	 * 用户列表
 	 * 用于搜索用户
 	 * @param string $keywords
+	 * @param int    $exclude_group_id 排除group_id的用户
 	 * @throws \EasySwoole\Mysqli\Exceptions\JoinFail
 	 * @throws \EasySwoole\Mysqli\Exceptions\Option
 	 */
-	public function userList(){
-		$userModel = new \App\Model\User();
-		if(isset($this->get['keywords'])){
-			$userModel->where("(username like %{$this->get['keywords']}% OR phone like %{$this->get['keywords']}%)");
+	public function userList()
+	{
+		$userAdminModel = new \App\Model\UserAdmin;
+
+		if( isset( $this->get['exclude_group_id'] ) ){
+			$group_user_ids = \App\Model\AuthGroupUser::init()->where( 'group_id', $this->get['exclude_group_id'] )->column( 'user_id' );
+			if( $group_user_ids ){
+				$userAdminModel->where( ['user.id' => ['NOT IN', $group_user_ids]] );
+			}
 		}
-		$list        = $userModel->withTotalCount()->join('user','user.id = auth_group_user.user_id','LEFT')->getUserList( [], '*', 'id desc', $this->getPageLimit() );
+
+
+		if( isset( $this->get['keywords'] ) ){
+			$userAdminModel->where( "(user.username LIKE '%{$this->get['keywords']}%' OR phone LIKE '%{$this->get['keywords']}%')" );
+		}
+
+		$field = [
+			'user.id',
+			'user.username',
+			'user_admin.name',
+		];
+
+		$list = $userAdminModel->withTotalCount()->join( [
+			['user', 'user.id = user_admin.user_id', 'LEFT'],
+		] )->getUserAdminList( [], $field, 'user.id desc', $this->getPageLimit() );
 
 		$this->send( Code::success, [
 			'list'         => $list,
-			'total_number' => $userModel->getTotalCount(),
+			'total_number' => $userAdminModel->getTotalCount(),
 		] );
 	}
+
 	/**
 	 * 组成员列表
 	 * @param int $group_id 可选
@@ -341,12 +385,15 @@ class Auth extends Admin
 	public function groupMemberList()
 	{
 		$groupUserModel = new \App\Model\AuthGroupUser();
-		if(isset($this->get['group_id'])){
+		if( isset( $this->get['group_id'] ) ){
 			$condition['auth_group_user.group_id'] = $this->get['group_id'];
-		}else{
+		} else{
 			$condition = [];
 		}
-		$list        = $groupUserModel->withTotalCount()->join('user','user.id = auth_group_user.user_id','LEFT')->getAuthGroupUserList( $condition, '*', 'id desc', $this->getPageLimit() );
+		$list = $groupUserModel->withTotalCount()->join( [
+			['user', 'user.id = auth_group_user.user_id', 'LEFT'],
+			['user_admin', 'auth_group_user.user_id = user_admin.user_id', 'LEFT'],
+		] )->getAuthGroupUserList( $condition, ['user.id', 'user.username', 'user_admin.name'], 'user.id desc', $this->getPageLimit() );
 
 		$this->send( Code::success, [
 			'list'         => $list,
@@ -367,14 +414,14 @@ class Auth extends Admin
 			$authGroupUserModel = new \App\Model\AuthGroupUser;
 
 			$data = [
-				'policy_id' => $this->post['policy_id'],
-				'group_id'  => $this->post['group_id'],
+				'user_id'  => $this->post['user_id'],
+				'group_id' => $this->post['group_id'],
 			];
 
 			$find = $authGroupUserModel->where( $data )->find();
 
 			if( !$find ){
-				$authGroupUserModel->addAuthGroupUser($data);
+				$authGroupUserModel->addAuthGroupUser( $data );
 				$this->send( Code::success );
 			} else{
 				$this->send( Code::error );
@@ -392,11 +439,11 @@ class Auth extends Admin
 		if( $this->validator( $this->post, 'Admin/AuthGroupUser.del' ) !== true ){
 			$this->send( Code::param_error, [], $this->getValidator()->getError() );
 		} else{
-			$authGroupUserModel = new \App\Model\AuthGroupPolicy;
+			$authGroupUserModel = new \App\Model\AuthGroupUser;
 
 			$condition = [
-				'user_id' => $this->post['user_id'],
-				'group_id'  => $this->post['group_id'],
+				'user_id'  => $this->post['user_id'],
+				'group_id' => $this->post['group_id'],
 			];
 
 			$authGroupUserModel->where( $condition )->delete();
