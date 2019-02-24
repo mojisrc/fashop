@@ -27,7 +27,8 @@
         "guzzlehttp/guzzle": "~6.0",
         "phpoffice/phpspreadsheet":"^1.6.0",
         "easyswoole/curl": "^1.0",
-        "hanwenbo/policy": "dev-master"
+        "hanwenbo/policy": "dev-master",
+        "hanwenbo/reflect": "dev-master"
     },
     "autoload": {
         "psr-4": {
@@ -61,6 +62,10 @@
         "hanwenbo/policy":{
             "type": "vcs",
             "url": "https://github.com/hanwenbo/policy"
+        },
+        "hanwenbo/reflect":{
+            "type": "vcs",
+            "url": "https://github.com/hanwenbo/reflect"
         }
     }
 }

@@ -1,0 +1,926 @@
+[
+    {
+        "name": "流量统计",
+        "value": "analysis",
+        "action_list": [
+            {
+                "value": "analysis\/list",
+                "name": "流量概览(访客数，分享访问人数，商品访客数，浏览量，分享访问次数，商品浏览量)"
+            },
+            {
+                "value": "analysis\/pageType",
+                "name": "页面类型"
+            },
+            {
+                "value": "analysis\/source",
+                "name": "访问来源"
+            },
+            {
+                "value": "analysis\/flow",
+                "name": "单页面流量数据（待定，没想好查询写法）"
+            },
+            {
+                "value": "analysis\/depth",
+                "name": "访问深度"
+            },
+            {
+                "value": "analysis\/region",
+                "name": "访客地域分布"
+            },
+            {
+                "value": "analysis\/dailyDischarge",
+                "name": "按天流量查看"
+            },
+            {
+                "value": "analysis\/detailedData",
+                "name": "详细数据"
+            },
+            {
+                "value": "analysis\/goodsPriceRank",
+                "name": "商品支付金额top"
+            },
+            {
+                "value": "analysis\/visitorRank",
+                "name": "访客数TOP"
+            },
+            {
+                "value": "analysis\/transactionSurvey",
+                "name": "交易概括"
+            },
+            {
+                "value": "analysis\/curveTransactionSurvey",
+                "name": "交易概括(曲线)"
+            },
+            {
+                "value": "analysis\/constitute",
+                "name": "交易构成（如何界定为新老客户呢？）"
+            },
+            {
+                "value": "analysis\/distribution",
+                "name": "地域分布（问了泉哥，用户貌似没有绑定城市这个功能，那么访客数就没法实现，商定是否需要去掉访问数和转换率问题）"
+            },
+            {
+                "value": "analysis\/trend",
+                "name": "客户概括及趋势"
+            }
+        ]
+    },
+    {
+        "name": "地区",
+        "value": "area",
+        "action_list": [
+            {
+                "value": "area\/list",
+                "name": "地区列表"
+            }
+        ]
+    },
+    {
+        "name": "权限",
+        "value": "auth",
+        "action_list": [
+            {
+                "value": "auth\/moduleList",
+                "name": "权限模块列表"
+            },
+            {
+                "value": "auth\/actionList",
+                "name": "权限节点列表"
+            },
+            {
+                "value": "auth\/policyList",
+                "name": "策略列表"
+            },
+            {
+                "value": "auth\/policyInfo",
+                "name": "策略详情"
+            },
+            {
+                "value": "auth\/policyAdd",
+                "name": "策略添加"
+            },
+            {
+                "value": "auth\/policyEdit",
+                "name": "策略添加"
+            },
+            {
+                "value": "auth\/policyDel",
+                "name": "策略删除"
+            },
+            {
+                "value": "auth\/groupList",
+                "name": "组列表"
+            },
+            {
+                "value": "auth\/groupInfo",
+                "name": "组详情"
+            },
+            {
+                "value": "auth\/groupAdd",
+                "name": "组添加"
+            },
+            {
+                "value": "auth\/groupEdit",
+                "name": "组修改"
+            },
+            {
+                "value": "auth\/groupDel",
+                "name": "组删除"
+            },
+            {
+                "value": "auth\/groupPolicyList",
+                "name": "组策略列表"
+            },
+            {
+                "value": "auth\/groupPolicyAdd",
+                "name": "组策略添加"
+            },
+            {
+                "value": "auth\/groupPolicyDel",
+                "name": "组策略删除"
+            },
+            {
+                "value": "auth\/userList",
+                "name": "用户列表"
+            },
+            {
+                "value": "auth\/groupMemberList",
+                "name": "组成员列表"
+            },
+            {
+                "value": "auth\/groupMemberAdd",
+                "name": "成员添加"
+            },
+            {
+                "value": "auth\/groupMemberDel",
+                "name": "成员删除"
+            }
+        ]
+    },
+    {
+        "name": "分销",
+        "value": "distribution",
+        "action_list": [
+            {
+                "value": "distribution\/promotion",
+                "name": "推广效果"
+            },
+            {
+                "value": "distribution\/achievement",
+                "name": "业绩统计"
+            },
+            {
+                "value": "distribution\/relationship",
+                "name": "关系查询"
+            },
+            {
+                "value": "distribution\/recruitInfo",
+                "name": "招募计划详情"
+            },
+            {
+                "value": "distribution\/recruitEdit",
+                "name": "招募计划编辑"
+            },
+            {
+                "value": "distribution\/configInfo",
+                "name": "配置信息详细"
+            },
+            {
+                "value": "distribution\/configEdit",
+                "name": "配置信息设置"
+            }
+        ]
+    },
+    {
+        "name": "分销商品",
+        "value": "distributiongoods",
+        "action_list": [
+            {
+                "value": "distributiongoods\/list",
+                "name": "分销商品---有效的商品列表（库存大于0并且上架状态）"
+            },
+            {
+                "value": "distributiongoods\/info",
+                "name": "分销商品信息"
+            },
+            {
+                "value": "distributiongoods\/edit",
+                "name": "分销商品编辑"
+            }
+        ]
+    },
+    {
+        "name": "分销招募计划模板",
+        "value": "distributionrecruittemplate",
+        "action_list": [
+            {
+                "value": "distributionrecruittemplate\/list",
+                "name": "模板列表"
+            },
+            {
+                "value": "distributionrecruittemplate\/info",
+                "name": "模板信息"
+            }
+        ]
+    },
+    {
+        "name": "分销员",
+        "value": "distributor",
+        "action_list": [
+            {
+                "value": "distributor\/list",
+                "name": "分销员"
+            },
+            {
+                "value": "distributor\/examineList",
+                "name": "分销员审核列表"
+            },
+            {
+                "value": "distributor\/info",
+                "name": "分销员信息"
+            },
+            {
+                "value": "distributor\/edit",
+                "name": "分销员编辑（修改昵称）"
+            },
+            {
+                "value": "distributor\/retreat",
+                "name": "清退分销员"
+            },
+            {
+                "value": "distributor\/review",
+                "name": "分销员审核"
+            }
+        ]
+    },
+    {
+        "name": "分销员等级",
+        "value": "distributorlevel",
+        "action_list": [
+            {
+                "value": "distributorlevel\/list",
+                "name": "分销员等级"
+            },
+            {
+                "value": "distributorlevel\/info",
+                "name": "分销员等级信息"
+            },
+            {
+                "value": "distributorlevel\/add",
+                "name": "分销员等级添加"
+            },
+            {
+                "value": "distributorlevel\/edit",
+                "name": "分销员等级编辑"
+            },
+            {
+                "value": "distributorlevel\/del",
+                "name": "删除等级"
+            }
+        ]
+    },
+    {
+        "name": "物流公司",
+        "value": "express",
+        "action_list": [
+            {
+                "value": "express\/add",
+                "name": "添加物流公司"
+            },
+            {
+                "value": "express\/edit",
+                "name": "编辑物流公司"
+            },
+            {
+                "value": "express\/setCommonlyUse",
+                "name": "设置为常用物流状态"
+            },
+            {
+                "value": "express\/list",
+                "name": "物流公司列表"
+            },
+            {
+                "value": "express\/info",
+                "name": "物流信息"
+            },
+            {
+                "value": "express\/del",
+                "name": "删除物流公司"
+            }
+        ]
+    },
+    {
+        "name": "运费模板",
+        "value": "freight",
+        "action_list": [
+            {
+                "value": "freight\/add",
+                "name": "添加运费模板"
+            },
+            {
+                "value": "freight\/edit",
+                "name": "编辑运费模板"
+            },
+            {
+                "value": "freight\/list",
+                "name": "运费列表"
+            },
+            {
+                "value": "freight\/info",
+                "name": "运费模板信息"
+            },
+            {
+                "value": "freight\/del",
+                "name": "删除运费模板"
+            }
+        ]
+    },
+    {
+        "name": "满减优惠",
+        "value": "fullcut",
+        "action_list": [
+            {
+                "value": "fullcut\/list",
+                "name": "满减优惠活动列表"
+            },
+            {
+                "value": "fullcut\/info",
+                "name": "满减优惠活动详情"
+            },
+            {
+                "value": "fullcut\/add",
+                "name": "添加满减活动"
+            },
+            {
+                "value": "fullcut\/edit",
+                "name": "编辑满减活动"
+            },
+            {
+                "value": "fullcut\/del",
+                "name": "删除满减活动"
+            },
+            {
+                "value": "fullcut\/selectableGoods",
+                "name": "满减优惠活动可选择商品列表"
+            },
+            {
+                "value": "fullcut\/selectedGoods",
+                "name": "满减优惠活动已选择商品列表"
+            },
+            {
+                "value": "fullcut\/choiceGoods",
+                "name": "满减优惠活动选择商品"
+            },
+            {
+                "value": "fullcut\/goodsSkuList",
+                "name": "满减优惠活动已选择商品sku列表"
+            },
+            {
+                "value": "fullcut\/editGoodsSku",
+                "name": "修改满减优惠活动已选择商品sku"
+            }
+        ]
+    },
+    {
+        "name": "商品",
+        "value": "goods",
+        "action_list": [
+            {
+                "value": "goods\/list",
+                "name": "商品列表"
+            },
+            {
+                "value": "goods\/add",
+                "name": "添加商品"
+            },
+            {
+                "value": "goods\/edit",
+                "name": "修改商品"
+            },
+            {
+                "value": "goods\/info",
+                "name": "商品信息"
+            },
+            {
+                "value": "goods\/del",
+                "name": "删除商品"
+            },
+            {
+                "value": "goods\/offSale",
+                "name": "下架商品"
+            },
+            {
+                "value": "goods\/onSale",
+                "name": "上架"
+            },
+            {
+                "value": "goods\/skuList",
+                "name": "根据商品id获得商品sku列表"
+            }
+        ]
+    },
+    {
+        "name": "商品分类",
+        "value": "goodscategory",
+        "action_list": [
+            {
+                "value": "goodscategory\/list",
+                "name": "商品分类列表"
+            },
+            {
+                "value": "goodscategory\/add",
+                "name": "添加商品分类"
+            },
+            {
+                "value": "goodscategory\/edit",
+                "name": "修改商品分类"
+            },
+            {
+                "value": "goodscategory\/info",
+                "name": "商品分类详情"
+            },
+            {
+                "value": "goodscategory\/del",
+                "name": "删除商品分类"
+            },
+            {
+                "value": "goodscategory\/sort",
+                "name": "分类排序"
+            }
+        ]
+    },
+    {
+        "name": "商品评价",
+        "value": "goodsevaluate",
+        "action_list": [
+            {
+                "value": "goodsevaluate\/list",
+                "name": "评价列表"
+            },
+            {
+                "value": "goodsevaluate\/reply",
+                "name": "添加回复"
+            },
+            {
+                "value": "goodsevaluate\/display",
+                "name": "是否展示"
+            }
+        ]
+    },
+    {
+        "name": "商品规格",
+        "value": "goodsspec",
+        "action_list": [
+            {
+                "value": "goodsspec\/list",
+                "name": "商品规格列表"
+            },
+            {
+                "value": "goodsspec\/add",
+                "name": "添加商品规格"
+            },
+            {
+                "value": "goodsspec\/edit",
+                "name": "修改商品规格"
+            },
+            {
+                "value": "goodsspec\/del",
+                "name": "删除商品规格"
+            }
+        ]
+    },
+    {
+        "name": "商品规格值",
+        "value": "goodsspecvalue",
+        "action_list": [
+            {
+                "value": "goodsspecvalue\/list",
+                "name": "商品规格值列表"
+            },
+            {
+                "value": "goodsspecvalue\/add",
+                "name": "添加商品规格值"
+            },
+            {
+                "value": "goodsspecvalue\/del",
+                "name": "删除商品规格值"
+            }
+        ]
+    },
+    {
+        "name": "拼团活动",
+        "value": "group",
+        "action_list": [
+            {
+                "value": "group\/list",
+                "name": "拼团活动列表"
+            },
+            {
+                "value": "group\/info",
+                "name": "拼团活动信息"
+            },
+            {
+                "value": "group\/add",
+                "name": "添加拼团活动"
+            },
+            {
+                "value": "group\/edit",
+                "name": "编辑拼团活动"
+            },
+            {
+                "value": "group\/selectableGoods",
+                "name": "拼团活动可选择商品列表"
+            },
+            {
+                "value": "group\/goodsSkuList",
+                "name": "拼团活动已选择商品sku列表"
+            },
+            {
+                "value": "group\/showSet",
+                "name": "拼团活动设置"
+            },
+            {
+                "value": "group\/del",
+                "name": "删除拼团活动"
+            },
+            {
+                "value": "group\/pageGoods",
+                "name": "商品列表"
+            }
+        ]
+    },
+    {
+        "name": "图片管理",
+        "value": "image",
+        "action_list": [
+            {
+                "value": "image\/list",
+                "name": "应用图片列表"
+            },
+            {
+                "value": "image\/wechat",
+                "name": "微信图片列表"
+            },
+            {
+                "value": "image\/add",
+                "name": "上传图片"
+            },
+            {
+                "value": "image\/del",
+                "name": "删除图片"
+            },
+            {
+                "value": "image\/remoteGrab",
+                "name": "提取网络图片"
+            },
+            {
+                "value": "image\/goodsImageList",
+                "name": "商品图列表"
+            }
+        ]
+    },
+    {
+        "name": "成员",
+        "value": "member",
+        "action_list": [
+            {
+                "value": "member\/list",
+                "name": "后台用户"
+            },
+            {
+                "value": "member\/add",
+                "name": "添加成员"
+            },
+            {
+                "value": "member\/edit",
+                "name": "修改"
+            },
+            {
+                "value": "member\/info",
+                "name": "获得详情"
+            },
+            {
+                "value": "member\/loginInfo",
+                "name": "登陆信息"
+            },
+            {
+                "value": "member\/del",
+                "name": "删除后台用户"
+            },
+            {
+                "value": "member\/selfPassword",
+                "name": "修改自己的密码"
+            },
+            {
+                "value": "member\/token",
+                "name": "@method"
+            },
+            {
+                "value": "member\/self",
+                "name": "当前用户信息"
+            },
+            {
+                "value": "member\/selfEdit",
+                "name": "修改当前用户的信息"
+            },
+            {
+                "value": "member\/verifyCode",
+                "name": "验证码"
+            }
+        ]
+    },
+    {
+        "name": "消息",
+        "value": "message",
+        "action_list": [
+            {
+                "value": "message\/add",
+                "name": "通知添加"
+            },
+            {
+                "value": "message\/messageTypeIndex",
+                "name": "消息类型列表"
+            },
+            {
+                "value": "message\/messageTypeAdd",
+                "name": "消息类型添加"
+            },
+            {
+                "value": "message\/messageTypeEdit",
+                "name": "消息类型添加"
+            },
+            {
+                "value": "message\/getMessageRelationModelDataSearch",
+                "name": "获得消息关联数据的搜索接口"
+            }
+        ]
+    },
+    {
+        "name": "订单",
+        "value": "order",
+        "action_list": [
+            {
+                "value": "order\/list",
+                "name": "订单列表"
+            },
+            {
+                "value": "order\/stateNum",
+                "name": "订单数量"
+            },
+            {
+                "value": "order\/info",
+                "name": "订单详情"
+            },
+            {
+                "value": "order\/groupInfo",
+                "name": "拼团订单团信息[适用于订单详情]"
+            },
+            {
+                "value": "order\/setSend",
+                "name": "设置发货"
+            },
+            {
+                "value": "order\/logisticsQuery",
+                "name": "物流查询"
+            },
+            {
+                "value": "order\/changePrice",
+                "name": "修改订单价格"
+            }
+        ]
+    },
+    {
+        "name": "退款退货",
+        "value": "orderrefund",
+        "action_list": [
+            {
+                "value": "orderrefund\/list",
+                "name": "TODO"
+            },
+            {
+                "value": "orderrefund\/info",
+                "name": "退款详情"
+            },
+            {
+                "value": "orderrefund\/handle",
+                "name": "退款审核"
+            },
+            {
+                "value": "orderrefund\/receive",
+                "name": "退款退货的订单"
+            },
+            {
+                "value": "orderrefund\/refund",
+                "name": "退款操作"
+            }
+        ]
+    },
+    {
+        "name": "退款\\退款退货原因控制器",
+        "value": "orderrefundreason",
+        "action_list": [
+            {
+                "value": "orderrefundreason\/add",
+                "name": "添加"
+            },
+            {
+                "value": "orderrefundreason\/detail",
+                "name": "详情"
+            },
+            {
+                "value": "orderrefundreason\/edit",
+                "name": "修改"
+            },
+            {
+                "value": "orderrefundreason\/del",
+                "name": "删除"
+            }
+        ]
+    },
+    {
+        "name": "店铺装修页面管理",
+        "value": "page",
+        "action_list": [
+            {
+                "value": "page\/list",
+                "name": "模板列表"
+            },
+            {
+                "value": "page\/add",
+                "name": "模板添加"
+            },
+            {
+                "value": "page\/edit",
+                "name": "模板编辑"
+            },
+            {
+                "value": "page\/info",
+                "name": ""
+            },
+            {
+                "value": "page\/setPortal",
+                "name": "设为首页"
+            }
+        ]
+    },
+    {
+        "name": "配置",
+        "value": "setting",
+        "action_list": [
+            {
+                "value": "setting\/info",
+                "name": "配置信息"
+            },
+            {
+                "value": "setting\/add",
+                "name": "添加配置"
+            },
+            {
+                "value": "setting\/edit",
+                "name": "编辑配置"
+            }
+        ]
+    },
+    {
+        "name": "物流地址",
+        "value": "shipper",
+        "action_list": [
+            {
+                "value": "shipper\/list",
+                "name": "物流地址列表"
+            },
+            {
+                "value": "shipper\/info",
+                "name": "物流地址信息"
+            },
+            {
+                "value": "shipper\/add",
+                "name": "新增物流地址"
+            },
+            {
+                "value": "shipper\/edit",
+                "name": "修改物流地址"
+            },
+            {
+                "value": "shipper\/del",
+                "name": "删除物流地址"
+            },
+            {
+                "value": "shipper\/setDefault",
+                "name": "设置默认地址"
+            },
+            {
+                "value": "shipper\/setRefundDefault",
+                "name": "设置默认退货地址"
+            }
+        ]
+    },
+    {
+        "name": "店铺",
+        "value": "shop",
+        "action_list": [
+            {
+                "value": "shop\/setBaseInfo",
+                "name": "店铺基础信息设置"
+            },
+            {
+                "value": "shop\/setColorScheme",
+                "name": "店铺配色方案设置"
+            },
+            {
+                "value": "shop\/setPortalTemplate",
+                "name": "店铺首页模板选择【废弃】"
+            },
+            {
+                "value": "shop\/info",
+                "name": "店铺信息"
+            },
+            {
+                "value": "shop\/setGoodsCategoryStyle",
+                "name": "店铺分类页风格设置"
+            },
+            {
+                "value": "shop\/setOrderExpires",
+                "name": "设置订单相关过期时间"
+            }
+        ]
+    },
+    {
+        "name": "数据统计",
+        "value": "statistics",
+        "action_list": [
+            {
+                "value": "statistics\/quantity",
+                "name": "数量统计"
+            },
+            {
+                "value": "statistics\/monthSalesHistogram",
+                "name": "柱状图-月销售额"
+            },
+            {
+                "value": "statistics\/monthOrderCountHistogram",
+                "name": "柱状图-月订单量"
+            },
+            {
+                "value": "statistics\/monthUserAddCountHistogram",
+                "name": "柱状图-客户增量"
+            },
+            {
+                "value": "statistics\/monthNewUserSalesHistogram",
+                "name": "柱状图-新客户消费"
+            },
+            {
+                "value": "statistics\/saleAccumulativeAmount",
+                "name": "销售累计"
+            },
+            {
+                "value": "statistics\/dayAverage",
+                "name": "销售日均"
+            }
+        ]
+    },
+    {
+        "name": "上传",
+        "value": "upload",
+        "action_list": [
+            {
+                "value": "upload\/addCert",
+                "name": "证书上传"
+            }
+        ]
+    },
+    {
+        "name": "客户",
+        "value": "user",
+        "action_list": [
+            {
+                "value": "user\/list",
+                "name": "客户管理"
+            },
+            {
+                "value": "user\/add",
+                "name": "新增客户"
+            },
+            {
+                "value": "user\/info",
+                "name": "客户详情-客户信息"
+            },
+            {
+                "value": "user\/statistics",
+                "name": "客户详情-交易概况-统计"
+            },
+            {
+                "value": "user\/order",
+                "name": "客户详情-交易概况-用户订单"
+            },
+            {
+                "value": "user\/address",
+                "name": "客户详情-交易概况-收货信息"
+            },
+            {
+                "value": "user\/edit",
+                "name": "修改用户"
+            }
+        ]
+    }
+]

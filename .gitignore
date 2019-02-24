@@ -25,3 +25,6 @@ src/swoole_log.txt
 dev.php
 produce.php
 naer.php
+
+# 本地运行的一些脚本
+script.php

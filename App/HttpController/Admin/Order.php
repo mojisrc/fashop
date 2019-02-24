@@ -241,7 +241,7 @@ class Order extends Admin
 		} else{
 			$order_id = $this->post['id'];
 
-			$order_info = \App\Model\Order::init()->getOrderInfo( ['id' => $order_id],  '*', [
+			$order_info = \App\Model\Order::init()->getOrderInfo( ['id' => $order_id], '*', [
 				'order_extend',
 				'order_goods',
 			] );
@@ -311,7 +311,8 @@ class Order extends Admin
 	}
 
 	/**
-	 * 物流查询 根据快递100提供接口进行查询
+	 * 物流查询
+	 * 根据快递100提供接口进行查询
 	 * @method GET
 	 * @param int    $express_id  物流公司ID
 	 * @param string $tracking_no 物流单号
@@ -333,7 +334,8 @@ class Order extends Admin
 	}
 
 	/**
-	 * 修改订单价格[目前不适用于拼团]
+	 * 修改订单价格
+	 * [目前不适用于拼团]
 	 * @method     POST
 	 * @param array revise_goods 订单商品 数组 格式 [['id'=>1,'difference_price'=>8], ['id'=>1,'difference_price'=>-8].......]
 	 * id 为 order_goods表id，difference_price为差价 可正可负

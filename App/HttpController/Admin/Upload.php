@@ -17,6 +17,11 @@ use ezswoole\utils\image\Image;
 use App\Utils\Code;
 use EasySwoole\Utility\File;
 
+/**
+ * 上传
+ * Class Upload
+ * @package App\HttpController\Admin
+ */
 class Upload extends Admin
 {
 	/**

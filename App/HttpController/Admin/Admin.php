@@ -33,46 +33,49 @@ abstract class Admin extends AccessTokenAbstract
 			return false;
 		} else{
 			$this->_initialize();
-			// 不需要验证的模块
 			$auth = new Auth();
-			$rulePath  = strtolower( "{$this->request->controller()}/$actionName" );
-			if( !in_array( $rulePath, $auth::$notAuthAction ) ){
-				// 令牌通过
-				if( $this->verifyResourceRequest() ){
-					// 验证该用户的权限
-					$user = $this->getRequestUser();
-					// 如果是超级管理员 不需要
-					if($user['id'] !== 1){
-						$auth->setUserId( $user['id'] );
-						$auth->setActionName($rulePath);
-
-						// 没有权限
-						if( $auth->verify() !== true ){
-							$this->send( Code::admin_user_no_auth );
-							$this->response()->end();
-							return false;
-						}else{
-							return true;
-						}
-					}else{
-						return true;
-					}
-				} else{
-					// 令牌错误
-					$this->send( Code::user_access_token_error );
-					$this->response()->end();
-					return false;
-				}
-			}else{
+			// 不需要验证的模块
+			$rulePath = strtolower( "{$this->request->controller()}/$actionName" );
+			if( in_array( $rulePath, $auth::notAuthAction ) ){
 				return true;
 			}
-		}
+			// 令牌通过
+			if( $this->verifyResourceRequest() ){
+				// 是否属于用户默认权限
+				if( in_array( $rulePath, $auth::userDefaultAuthAction ) ){
+					return true;
+				}
+				// 验证该用户的权限
+				$user = $this->getRequestUser();
+				// 超级管理员
+				if( $user === 1 ){
+					return true;
+				}
 
+				// 验证用当前组所拥有的权限
+				$auth->setUserId( $user['id'] );
+				$auth->setActionName( $rulePath );
+
+				// 没有权限
+				if( $auth->verify() !== true ){
+					$this->send( Code::admin_user_no_auth );
+					$this->response()->end();
+					return false;
+				} else{
+					return true;
+				}
+			} else{
+				// 令牌错误
+				$this->send( Code::user_access_token_error );
+				$this->response()->end();
+				return false;
+			}
+		}
 	}
 
 	protected function onException( \Throwable $throwable ) : void
 	{
-		var_dump($throwable->getTraceAsString());
+		var_dump( $throwable->getTraceAsString() );
 		var_dump( "文件：".$throwable->getFile()."第：".$throwable->getLine()."行" );
 		var_dump( "错误原因".$throwable->getMessage() );
 		$this->send( Code::server_error, [], $throwable->getTraceAsString() );

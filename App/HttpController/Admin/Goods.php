@@ -17,7 +17,7 @@ namespace App\HttpController\Admin;
 use App\Utils\Code;
 
 /**
- * 商品管理
+ * 商品
  * Class Goods
  * @package App\HttpController\Admin
  */

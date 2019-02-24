@@ -22,14 +22,12 @@ class AuthGroup extends Validator
 		= [
 			'id'     => 'require',
 			'name'   => 'require',
-			'status' => 'require',
 		];
 
 	protected $scene
 		= [
 			'add'  => [
 				'name',
-				'status',
 			],
 			'info'=>[
 				'id'
@@ -37,7 +35,6 @@ class AuthGroup extends Validator
 			'edit' => [
 				'id',
 				'name',
-				'status',
 			],
 			'del'  => [
 				'id',

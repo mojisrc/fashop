@@ -17,7 +17,8 @@ namespace App\HttpController\Admin;
 use App\Utils\Code;
 
 /**
- * 分销员 改版了.....TODO 看看是有优化[待优化]
+ * 分销员
+ * 改版了.....TODO 看看是有优化[待优化]
  * Class Distributor
  * @package App\HttpController\Admin
  */

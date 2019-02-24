@@ -2,7 +2,6 @@
 <?php
 
 use \EasySwoole\Utility\File;
-use EasySwoole\Core\Core;
 use EasySwoole\Config as Conf;
 
 define( 'EASYSWOOLE_ROOT', realpath( getcwd() ) );

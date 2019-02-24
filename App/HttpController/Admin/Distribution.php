@@ -18,7 +18,7 @@ use App\Biz\Order as OrderLogic;
 use App\Utils\Code;
 
 /**
- * 分销相关
+ * 分销
  * Class Distributor
  * @package App\HttpController\Admin
  */

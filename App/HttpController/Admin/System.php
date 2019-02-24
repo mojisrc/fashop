@@ -19,6 +19,11 @@ use EasySwoole\Core\Component\SysConst;
 use EasySwoole\Config;
 
 
+/**
+ * 系统信息
+ * Class System
+ * @package App\HttpController\Admin
+ */
 class System extends Admin
 {
 	/**

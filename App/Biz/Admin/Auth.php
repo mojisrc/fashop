@@ -32,7 +32,22 @@ class Auth
 	 * @var array
 	 */
 	protected $user_policy_list = [];
-
+	/**
+	 * 不需要验证的节点
+	 */
+	const notAuthAction = [
+		'member/login'
+	];
+	/**
+	 * 用户默认拥有的权限节点
+	 */
+	const userDefaultAuthAction=[
+		'user/logout',
+		'member/logout',
+		'member/refreshToken',
+		'upload/addImage',
+		'area/list'
+	];
 	/**
 	 * 不需要验证的节点
 	 */

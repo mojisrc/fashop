@@ -27,6 +27,7 @@ class EasySwooleEvent implements Event
 
     public static function mainServerCreate(EventRegister $register)
     {
+    	define('APP_PATH',__DIR__.DIRECTORY_SEPARATOR.'App');
 	    \ezswoole\Core::register();
 	    /**
 	     * **************** websocket控制器 **********************

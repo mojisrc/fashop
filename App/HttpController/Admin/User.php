@@ -16,7 +16,7 @@ namespace App\HttpController\Admin;
 use App\Utils\Code;
 
 /**
- * 会员
+ * 客户
  * Class User
  * @package App\HttpController\Admin
  */

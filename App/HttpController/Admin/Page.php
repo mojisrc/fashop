@@ -22,7 +22,7 @@ use App\Biz\Page\BodyFormat as PageBodyFormat;
 use App\Biz\Page\PageGoods as PageGoodsLogic;
 
 /**
- * 页面
+ * 店铺装修页面管理
  */
 class Page extends Admin
 {

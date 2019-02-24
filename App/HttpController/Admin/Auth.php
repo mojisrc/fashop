@@ -4,35 +4,50 @@ namespace App\HttpController\Admin;
 
 use App\Utils\Code;
 
+/**
+ * 权限
+ * Class Auth
+ * @package App\HttpController\Admin
+ */
 class Auth extends Admin
 {
+	private function getAuthJsonPath(){
+		return ROOT_PATH.'App/Utils/assets/admin_auth.json';
+	}
 	/**
 	 * 权限模块列表
+	 * @method GET
 	 */
 	public function moduleList()
 	{
-		$this->send( Code::success, [
-			'list' => [
-				['name' => '订单模块', 'value' => 'order'],
-				['name' => '商品模块', 'value' => 'goods'],
-				['name' => '退款模块', 'value' => 'refund'],
-			],
-		] );
+		$list = json_decode( file_get_contents( $this->getAuthJsonPath() ), true );
+		foreach( $list as $key => $row ){
+			unset( $list[$key]['action_list'] );
+		}
+		$this->send( Code::success, ['list' => $list] );
 	}
 
 	/**
 	 * 权限节点列表
 	 * @param string $module 模块 ，如：order,goods
+	 * @method GET
 	 */
 	public function actionList()
 	{
-		$this->send( Code::success, [
-			'list' => [
-				['name' => '列表', 'value' => 'order/list'],
-				['name' => '详情', 'value' => 'order/info'],
-				['name' => '发货', 'value' => 'order/send'],
-			],
-		] );
+		$module     = strtolower( $this->get['module'] );
+		$authList   = json_decode( file_get_contents( $this->getAuthJsonPath() ), true );
+		$moduleList = [];
+		foreach( $authList as $key => $authModule ){
+			array_push( $moduleList, $authModule['value'] );
+			if( $authModule['value'] === $module ){
+				$actionList = $authModule['action_list'];
+			}
+		}
+		if( !in_array( $module, $moduleList ) ){
+			$this->send( Code::success, [] );
+		} else{
+			$this->send( Code::success, ['list' => $actionList] );
+		}
 	}
 
 	/**

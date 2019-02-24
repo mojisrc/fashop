@@ -14,7 +14,6 @@
 namespace App\HttpController\Admin;
 
 use App\Utils\Code;
-use ezswoole\Validator;
 
 /**
  * 满减优惠

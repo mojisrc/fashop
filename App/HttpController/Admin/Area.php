@@ -16,7 +16,7 @@ namespace App\HttpController\Admin;
 use App\Utils\Code;
 
 /**
- * 地区管理
+ * 地区
  * Class Area
  * @package App\HttpController\Admin
  */
