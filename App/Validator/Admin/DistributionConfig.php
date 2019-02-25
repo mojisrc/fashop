@@ -69,7 +69,7 @@ class DistributionConfig extends Validator
                 }
             }
 
-            //保护期设置 state:0关闭  1开启[days:15十五天  32000永久]
+            //保护期设置 state:0关闭  1开启[days:15十五天  32000永久] 要小于有效期
             if ($v['sign'] == 'protect_term') {
                 if (!isset($v['content']['state']) || !in_array(intval($v['content']['state']), [0, 1])) {
                     return '保护期设置参数信息错误';

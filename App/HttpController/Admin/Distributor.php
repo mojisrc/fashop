@@ -252,14 +252,18 @@ class Distributor extends Admin
         if ($error !== true) {
             return $this->send(Code::error, [], $error);
         } else {
-            $distributor_model       = new \App\Model\Distributor;
-            $condition               = [];
-            $condition['id']         = $post['id'];
-            $condition['state']      = 0; //默认0 待审核 1审核通过 2审核拒绝
-            $distributor_info        = $distributor_model->getDistributorInfo($condition);
+            $distributor_model = new \App\Model\Distributor;
+
+            $condition          = [];
+            $condition['id']    = $post['id'];
+            $condition['state'] = 0; //默认0 待审核 1审核通过 2审核拒绝
+            $distributor_info   = $distributor_model->getDistributorInfo($condition);
             if (!$distributor_info) {
                 return $this->send(Code::param_error, [], '参数错误');
             }
+
+            $distributor_model->startTransaction();
+
             $update_data['state'] = $post['state'];
             if ($post['state'] == 1) {
                 $update_data['is_retreat'] = 0;
@@ -267,9 +271,44 @@ class Distributor extends Admin
 
             $distributor_result = $distributor_model->updateDistributor(['id' => $distributor_info['id']], $update_data);
             if (!$distributor_result) {
+                $distributor_model->rollback();
                 return $this->send(Code::error);
             }
 
+            $distribution_config_model = new \App\Model\DistributionConfig;
+            //分销员自购分佣
+            $distributor_purchase_commission = $distribution_config_model->getDistributionConfigInfo(['sign' => 'distributor_purchase_commission'], '*');
+
+            //开启分销员自购后 分销员自己和自己绑定客户关系 后台成为分销员审核通过就绑定的哦
+            if ($distributor_purchase_commission['content']['state'] == 1 && $post['state'] == 1) {
+                //查询用户有没有绑定过分销员
+                $distributor_customer = $distributor_customer_model->getDistributorCustomerInfo(['user_id' => $distributor_info['user_id']]);
+                if ($distributor_customer) {
+                    //设置失效
+                    $update_data                 = [];
+                    $update_data['state']        = 0;
+                    $update_data['invalid_time'] = time();
+                    $result                      = $distributor_customer_model->updateDistributorCustomer(['id' => $distributor_customer['id']], $update_data);
+                    if (!$result) {
+                        $distributor_model->rollback();
+                        return $this->send(Code::error);
+                    }
+                }
+
+                //自己绑自己
+                $insert_data['distributor_user_id'] = $distributor_info['user_id'];
+                $insert_data['user_id']             = $distributor_info['user_id'];
+                $insert_data['state']               = 1;
+                $insert_data['create_time']         = time();
+                $insert_data['update_time']         = time();
+                $result                             = $distributor_customer_model->insertDistributorCustomer($insert_data);
+                if (!$result) {
+                    $distributor_model->rollback();
+                    return $this->send(Code::error);
+                }
+            }
+
+            $distributor_model->commit();
             return $this->send(Code::success);
         }
     }
