@@ -228,6 +228,7 @@ class Distributor extends Server
     {
         $get                        = $this->get;
         $distributor_customer_model = new \App\Model\DistributorCustomer;
+        $condition                  = [];
 
         if (isset($get['type']) && in_array($get['type'], [0, 1])) {
             $condition['state'] = $get['state'];
@@ -252,7 +253,7 @@ class Distributor extends Server
             ];
         }
 
-        $list = $distributor_customer_model->fetchSql()->withTotalCount()->getDistributorCustomerList($condition, '*', 'create_time desc');
+        $list = $distributor_customer_model->withTotalCount()->getDistributorCustomerList($condition, '*', 'create_time desc');
         return $this->send(Code::success, [
             'total_number' => $distributor_customer_model->getTotalCount(),
             'list'         => $list,
