@@ -68,10 +68,11 @@ class Auth extends Admin
 			}
 		}
 
-
 		if( isset( $this->get['keywords'] ) ){
 			$policyModel->where( "name LIKE '%{$this->get['keywords']}%'" );
 		}
+
+
 
 		// 系统级的排下面
 		$list = $policyModel->withTotalCount()->getAuthPolicyList( [], '*', 'is_system asc,id desc', $this->getPageLimit() );
@@ -79,6 +80,37 @@ class Auth extends Admin
 			'list'         => $list,
 			'total_number' => $policyModel->getTotalCount(),
 		] );
+	}
+
+	/**
+	 * 当前成员权限策略
+	 */
+	public function selfPolicy(){
+		$policyModel = new \App\Model\AuthPolicy;
+
+		$user = $this->getRequestUser();
+		// 获得所在小组
+		$group_ids = \App\Model\AuthGroupUser::init()->where('user_id',$user['id'])->column('group_id');
+		if( $group_ids ){
+			$group_policy_ids = \App\Model\AuthGroupPolicy::init()->where( ['group_id'=>['IN',$group_ids]] )->column( 'policy_id' );
+			if( $group_policy_ids ){
+				$policyModel->where( ['id' => ['IN', $group_policy_ids]] );
+				$list = $policyModel->getAuthPolicyList( [], '*', 'is_system asc,id desc', [1,1000] );
+				$this->send( Code::success, [
+					'list'         => $list,
+				] );
+			}else{
+				$this->send( Code::success, [
+					'list'         => [],
+				] );
+			}
+		}else{
+			$this->send( Code::success, [
+				'list'         => [],
+			] ,'请先选择选择小组');
+		}
+
+
 	}
 
 	/**

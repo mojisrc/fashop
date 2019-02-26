@@ -35,7 +35,7 @@ abstract class Admin extends AccessTokenAbstract
 			$this->_initialize();
 			$auth = new Auth();
 			// 不需要验证的模块
-			$rulePath = strtolower( "{$this->request->controller()}/$actionName" );
+			$rulePath = strtolower( "{$this->request->controller()}/" ).$actionName;
 			if( in_array( $rulePath, $auth::notAuthAction ) ){
 				return true;
 			}
@@ -48,7 +48,7 @@ abstract class Admin extends AccessTokenAbstract
 				// 验证该用户的权限
 				$user = $this->getRequestUser();
 				// 超级管理员
-				if( $user === 1 ){
+				if( $user['id'] === 1 ){
 					return true;
 				}
 
