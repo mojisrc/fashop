@@ -243,23 +243,8 @@ class Member extends Admin
 	 */
 	public function self()
 	{
-		$user  = $this->getRequestUser();
-		$group = [];
-		$rules = [];
-		if( $user['id'] == 1 ){
-			$rules = model( 'AuthRule' )->column( 'sign' );
-		} else{
-			$group_id = \ezswoole\Db::name( 'AuthGroupAccess' )->where( ['uid' => $user['id']] )->value( 'group_id' );
-			if( $group_id > 0 ){
-				$group = model( 'AuthGroup' )->getAuthGroupInfo( ['id' => $group_id] );
-				$rules = model( 'AuthRule' )->where( ['id' => ['in', $group['rule_ids']]] )->column( 'sign' );
-			}
-		}
-		$rules = array_merge( $rules, \App\Logic\Admin\Auth::$noNeedAuthActionCheck );
 		$this->send( Code::success, [
 			'info'  => $this->getRequestUser(),
-			'group' => $group,
-			'rules' => $rules,
 		] );
 	}
 
