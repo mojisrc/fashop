@@ -50,9 +50,8 @@ class Distributor extends Validator
         if ($value <= 0) {
             return '参数错误';
         } else {
-            $user_model                 = new \App\Model\User;
-            $distributor_model          = new \App\Model\Distributor;
-            $distributor_customer_model = new \App\Model\DistributorCustomer;
+            $user_model        = new \App\Model\User;
+            $distributor_model = new \App\Model\Distributor;
 
             $user = $user_model->getUserInfo(['id' => $value, 'phone IS NOT NULL'], '*');
             if (!$user) {
@@ -62,11 +61,6 @@ class Distributor extends Validator
             $distributor = $distributor_model->getDistributorInfo(['user_id' => $value, 'state' => 1, 'is_retreat' => 0]);
             if (!$distributor) {
                 return '分销员信息异常';
-            }
-
-            $distributor_customer = $distributor_customer_model->getDistributorCustomerInfo(['distributor_user_id' => $value, 'user_id' => $data['user_id'], 'state' => 1]);
-            if ($distributor_customer) {
-                return '此用户已经绑定该分销员';
             }
         }
 
@@ -85,19 +79,11 @@ class Distributor extends Validator
             $result = '参数错误';
 
         } else {
-            $user_model                 = new \App\Model\User;
-            $distributor_customer_model = new \App\Model\DistributorCustomer;
-
-            $user = $user_model->getUserInfo(['id' => $value], '*');
+            $user_model = new \App\Model\User;
+            $user       = $user_model->getUserInfo(['id' => $value], '*');
             if (!$user) {
                 return '用户信息异常';
             }
-
-            $distributor_customer = $distributor_customer_model->getDistributorCustomerInfo(['user_id' => $value, 'state' => 1]);
-            if ($distributor_customer) {
-                return '此用户已经绑定其他分销员,绑定关系并未失效';
-            }
-
         }
         return true;
     }
