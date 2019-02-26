@@ -165,7 +165,7 @@ class Distribution extends Admin
             ]);
         }
 
-        $field = 'distributor_customer.*,distributor_user.phone AS distributor_phone,user,nickname AS user_nickname';
+        $field = 'distributor_customer.*,distributor_user.phone AS distributor_phone,user_profile.nickname AS user_nickname';
         $order = 'distributor_customer.create_time desc';
 
         $top_condition['distributor_customer.distributor_user_id'] = $order_info['distribution_user_id'];

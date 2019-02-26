@@ -68,10 +68,10 @@ class DistributorCustomer extends Model
     public function getDistributorCustomerMoreList( $condition = [], $field = '*', $order = 'id desc', $page = [1,20], $group = '' )
     {
         if( $page == '' ){
-            return $this->join( 'user AS distributor_user', 'distributor_customer.distributor_user_id = distributor_user.id', 'LEFT' )->join( 'user', 'distributor_customer.user_id = user.id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->group( $group )->select();
+            return $this->join( 'user AS distributor_user', 'distributor_customer.distributor_user_id = distributor_user.id', 'LEFT' )->join( 'user', 'distributor_customer.user_id = user.id', 'LEFT' )->join( 'user_profile', 'user.id = user_profile.user_id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->group( $group )->select();
 
         } else{
-            return $this->join( 'user AS distributor_user', 'distributor_customer.distributor_user_id = distributor_user.id', 'LEFT' )->join( 'user', 'distributor_customer.user_id = user.id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->page( $page )->group( $group )->select();
+            return $this->join( 'user AS distributor_user', 'distributor_customer.distributor_user_id = distributor_user.id', 'LEFT' )->join( 'user', 'distributor_customer.user_id = user.id', 'LEFT' )->join( 'user_profile', 'user.id = user_profile.user_id', 'LEFT' )->where( $condition )->order( $order )->field( $field )->page( $page )->group( $group )->select();
 
         }
     }
@@ -85,10 +85,10 @@ class DistributorCustomer extends Model
     public function getDistributorCustomerMoreCount( $condition = [], $distinct = '' )
     {
         if( $distinct == '' ){
-            return $this->join( 'user AS distributor_user', 'distributor_customer.distributor_user_id = distributor_user.id', 'LEFT' )->join( 'user', 'distributor_customer.user_id = user.id', 'LEFT' )->where( $condition )->count();
+            return $this->join( 'user AS distributor_user', 'distributor_customer.distributor_user_id = distributor_user.id', 'LEFT' )->join( 'user', 'distributor_customer.user_id = user.id', 'LEFT' )->join( 'user_profile', 'user.id = user_profile.user_id', 'LEFT' )->where( $condition )->count();
 
         } else{
-            return $this->join( 'user AS distributor_user', 'distributor_customer.distributor_user_id = distributor_user.id', 'LEFT' )->join( 'user', 'distributor_customer.user_id = user.id', 'LEFT' )->where( $condition )->count( "DISTINCT ".$distinct );
+            return $this->join( 'user AS distributor_user', 'distributor_customer.distributor_user_id = distributor_user.id', 'LEFT' )->join( 'user', 'distributor_customer.user_id = user.id', 'LEFT' )->join( 'user_profile', 'user.id = user_profile.user_id', 'LEFT' )->where( $condition )->count( "DISTINCT ".$distinct );
         }
     }
 
@@ -112,7 +112,7 @@ class DistributorCustomer extends Model
      */
     public function getDistributorCustomerMoreInfo( $condition = [], $field = '*' )
     {
-        $data = $this->join( 'user AS distributor_user', 'distributor_customer.distributor_user_id = distributor_user.id', 'LEFT' )->join( 'user', 'distributor_customer.user_id = user.id', 'LEFT' )->where( $condition )->field( $field )->find();
+        $data = $this->join( 'user AS distributor_user', 'distributor_customer.distributor_user_id = distributor_user.id', 'LEFT' )->join( 'user', 'distributor_customer.user_id = user.id', 'LEFT' )->join( 'user_profile', 'user.id = user_profile.user_id', 'LEFT' )->where( $condition )->field( $field )->find();
         return $data;
     }
 
@@ -124,7 +124,7 @@ class DistributorCustomer extends Model
      */
     public function getDistributorCustomerMoreSortInfo( $condition = [], $field = 'distributor_customer.*', $order = 'distributor_customer.create_time desc' )
     {
-        $data = $this->join( 'user AS distributor_user', 'distributor_customer.distributor_user_id = distributor_user.id', 'LEFT' )->join( 'user', 'distributor_customer.user_id = user.id', 'LEFT' )->where( $condition )->order($order)->field( $field )->find();
+        $data = $this->join( 'user AS distributor_user', 'distributor_customer.distributor_user_id = distributor_user.id', 'LEFT' )->join( 'user', 'distributor_customer.user_id = user.id', 'LEFT' )->join( 'user_profile', 'user.id = user_profile.user_id', 'LEFT' )->where( $condition )->order($order)->field( $field )->find();
         return $data;
     }
     /**

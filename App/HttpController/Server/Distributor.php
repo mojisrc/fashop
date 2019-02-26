@@ -20,7 +20,7 @@ class Distributor extends Server
     /**
      * 申请成为分销员
      * @method POST
-     * @param int inviter_id 邀请人用户id [必须为撞他正常的分销员]
+     * @param int inviter_id 邀请人用户id [必须为状态正常的分销员]
      */
     public function applly()
     {
@@ -176,10 +176,13 @@ class Distributor extends Server
                             return $this->send(Code::error, [], '客户在保护期内，不能变更');
                         }
 
-                        $update_data                 = [];
-                        $update_data['state']        = 0;
-                        $update_data['invalid_time'] = time();
-                        $result                      = $distributor_customer_model->updateDistributorCustomer(['id' => $distributor_customer['id']], $update_data);
+                        $update_data                   = [];
+                        $update_data['state']          = 0;
+                        $update_data['invalid_time']   = time();
+                        $update_data['invalid_reason'] = '客户绑定其他分销员';
+                        $update_data['invalid_type']   = 3;//失效类型 1保护期过期 2客户与自己绑定了客户关系 3客户绑定其他分销员
+
+                        $result = $distributor_customer_model->updateDistributorCustomer(['id' => $distributor_customer['id']], $update_data);
                         if (!$result) {
                             $distributor_customer_model->rollback();
                             return $this->send(Code::error);
@@ -223,15 +226,41 @@ class Distributor extends Server
      * @param  string  time_type       时间类型查询 1昨天 2近七天 如果create_time不为空 time_type失效
      * @param array    create_time     [开始时间,结束时间]
      * @author 孙泉
+     * 成交额：  实付的金额，会剔除退款金额，剔除运费
+     * 订单数量：下单的订单数，如果全额退款会剔除 未付款不会统计
      */
     public function customers()
     {
         $get                        = $this->get;
+        $prefix                     = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
+        $table_order                = $prefix . "order";
+        $table_distributor          = $prefix . "distributor";
+        $table_distributor_customer = $prefix . "distributor_customer";
+        $table_user_profile         = $prefix . "user_profile";
         $distributor_customer_model = new \App\Model\DistributorCustomer;
         $condition                  = [];
 
+        $distribution_config_model = new \App\Model\DistributionConfig;
+
+        //保护期设置
+        $protect_term = $distribution_config_model->getDistributionConfigInfo(['sign' => 'protect_term'], '*');
+
+        //有效期设置
+        $valid_term = $distribution_config_model->getDistributionConfigInfo(['sign' => 'valid_term'], '*');
+
+
         if (isset($get['type']) && in_array($get['type'], [0, 1])) {
-            $condition['state'] = $get['state'];
+            if ($get['type'] == 0) {
+                if ($valid_term['content']['days'] == 15) {
+                    $condition[] = "state=0 OR (state=1 AND DATE_SUB(CURDATE(), INTERVAL 15 DAY) > DATE(FROM_UNIXTIME(create_time, '%Y-%m-%d')))";
+
+                } else {
+                    $condition[] = "state=0";
+                }
+
+            } else {
+                $condition[] = "state=1 AND DATE_SUB(CURDATE(), INTERVAL 15 DAY) < DATE(FROM_UNIXTIME(create_time, '%Y-%m-%d'))";
+            }
         }
 
         if (isset($get['time_type']) && in_array($get['time_type'], [1, 2])) {
@@ -253,11 +282,184 @@ class Distributor extends Server
             ];
         }
 
-        $list = $distributor_customer_model->withTotalCount()->getDistributorCustomerList($condition, '*', 'create_time desc');
+        //is_distributor 0不是分销员 1分销员
+        //成交额：  实付的金额，会剔除退款金额，剔除运费
+        //订单数量：下单的订单数，如果全额退款会剔除 未付款不会统计
+        $field = '*,' . "
+        (SELECT avatar FROM $table_user_profile WHERE user_id=$table_distributor_customer.user_id) AS user_avatar,
+                    
+        (SELECT nickname FROM $table_user_profile WHERE user_id=$table_distributor_customer.user_id) AS user_nickname,
+        
+        IF((SELECT id FROM $table_distributor WHERE user_id=$table_distributor_customer.distributor_user_id AND state=1 AND is_retreat=0)>0,'1','0') AS is_distributor,
+            
+        (SELECT COUNT(id) FROM $table_order WHERE (refund_state=0 OR (refund_state=1 AND CASE WHEN revise_amount>0 THEN (revise_amount-revise_freight_fee-refund_amount)>0 ELSE (amount-freight_fee-refund_amount)>0 END)) AND distribution_user_id=$table_distributor_customer.distributor_user_id AND user_id=$table_distributor_customer.user_id AND state>=20) AS total_deal_num,
+        
+        (SELECT CASE WHEN refund_state=0 THEN CASE WHEN revise_amount>0 THEN SUM(revise_amount-revise_freight_fee) ELSE SUM(amount-freight_fee) END WHEN refund_state=1 THEN CASE WHEN revise_amount>0 THEN CASE WHEN SUM(revise_amount-revise_freight_fee-refund_amount)>0 THEN SUM(revise_amount-revise_freight_fee-refund_amount) ELSE 0 END ELSE CASE WHEN SUM(amount-freight_fee-refund_amount)>0 THEN SUM(amount-freight_fee-refund_amount) ELSE 0 END END ELSE 0 END FROM $table_order WHERE distribution_user_id=$table_distributor_customer.distributor_user_id AND user_id=$table_distributor_customer.user_id AND state>=20) AS total_deal_amount";
+
+        $list = $distributor_customer_model->withTotalCount()->getDistributorCustomerList($condition, $field, 'create_time desc');
+        if ($list) {
+
+            foreach ($list as $key => $value) {
+                $protect_term_desc = null;
+                $valid_term_desc   = null;
+
+                //是否失效判断
+                if ($value['state'] == 1) {
+                    if ($valid_term['content']['days'] == 15 && ($valid_term['content']['days'] - sprintf("%.2f", (time() - $value['create_time']) / 86400)) <= 0) {//invalid_type 1
+                        //有效期已过 动态显示客户失效
+                        $list[$key]['state']          = 0;
+                        $list[$key]['invalid_time']   = $value['create_time'] + 86400 * 15;
+                        $list[$key]['invalid_reason'] = '推广有效期已过期';
+                        $list[$key]['invalid_type']   = 1;
+                    }
+                }
+
+                //不失效的才显示保护期和有效期
+                if ($list[$key]['state'] != 0) {
+
+                    //保护期判断
+                    if ($protect_term['content']['state'] == 0) {//保护期已关闭
+                        $protect_term_desc = '允许抢客';
+                    } else {
+                        if ($protect_term['content']['days'] == 32000) {//保护期为永久
+                            $protect_term_desc = '永久不会被抢客';
+                        } else {
+                            if (($protect_term['content']['days'] - sprintf("%.2f", (time() - $value['update_time']) / 86400)) <= 0) {
+                                $protect_term_desc = '允许抢客';
+                            } else {
+                                $protect_term_desc = ceil($protect_term['content']['days'] - sprintf("%.2f", (time() - $value['update_time']) / 86400)) . '天内不会被抢客';//过”完“一天才减1
+                            }
+                        }
+                    }
+                    $list[$key]['protect_term_desc'] = $protect_term_desc;
+
+
+                    //有效期判断
+                    if ($valid_term['content']['days'] == 15) {
+                        $valid_term_desc = '关系' . ceil($valid_term['content']['days'] - sprintf("%.2f", (time() - $value['create_time']) / 86400)) . '天后过期';//过”完“一天才减1
+                    } else {
+                        $valid_term_desc = '关系长期有效';
+                    }
+                    $list[$key]['valid_term_desc'] = $valid_term_desc;
+                }
+            }
+        }
         return $this->send(Code::success, [
             'total_number' => $distributor_customer_model->getTotalCount(),
             'list'         => $list,
         ]);
+    }
+
+    /**
+     * 客户详情
+     * @method GET
+     * @param  int customer_id 分销员客户id
+     * @author 孙泉
+     */
+    public function customerDetail()
+    {
+        $get = $this->get;
+        if ($this->validator($get, 'Server/Distributor.customerDetail') !== true) {
+            return $this->send(Code::param_error, [], $this->getValidator()->getError());
+        } else {
+            $prefix                     = \EasySwoole\EasySwoole\Config::getInstance()->getConf('MYSQL.prefix');
+            $table_order                = $prefix . "order";
+            $table_distributor          = $prefix . "distributor";
+            $table_distributor_customer = $prefix . "distributor_customer";
+            $table_user_profile         = $prefix . "user_profile";
+            $distributor_customer_model = new \App\Model\DistributorCustomer;
+            $condition                  = [];
+
+            $distribution_config_model = new \App\Model\DistributionConfig;
+
+            //保护期设置
+            $protect_term = $distribution_config_model->getDistributionConfigInfo(['sign' => 'protect_term'], '*');
+
+            //有效期设置
+            $valid_term = $distribution_config_model->getDistributionConfigInfo(['sign' => 'valid_term'], '*');
+
+            //is_distributor 0不是分销员 1分销员
+            //成交额：  实付的金额，会剔除退款金额，剔除运费
+            //订单数量：下单的订单数，如果全额退款会剔除 未付款不会统计
+            $field = '*,' . "
+        (SELECT avatar FROM $table_user_profile WHERE user_id=$table_distributor_customer.user_id) AS user_avatar,
+                    
+        (SELECT nickname FROM $table_user_profile WHERE user_id=$table_distributor_customer.user_id) AS user_nickname,
+        
+        IF((SELECT id FROM $table_distributor WHERE user_id=$table_distributor_customer.distributor_user_id AND state=1 AND is_retreat=0)>0,'1','0') AS is_distributor,
+            
+        (SELECT COUNT(id) FROM $table_order WHERE (refund_state=0 OR (refund_state=1 AND CASE WHEN revise_amount>0 THEN (revise_amount-revise_freight_fee-refund_amount)>0 ELSE (amount-freight_fee-refund_amount)>0 END)) AND distribution_user_id=$table_distributor_customer.distributor_user_id AND user_id=$table_distributor_customer.user_id AND state>=20) AS total_deal_num,
+        
+        (SELECT CASE WHEN refund_state=0 THEN CASE WHEN revise_amount>0 THEN SUM(revise_amount-revise_freight_fee) ELSE SUM(amount-freight_fee) END WHEN refund_state=1 THEN CASE WHEN revise_amount>0 THEN CASE WHEN SUM(revise_amount-revise_freight_fee-refund_amount)>0 THEN SUM(revise_amount-revise_freight_fee-refund_amount) ELSE 0 END ELSE CASE WHEN SUM(amount-freight_fee-refund_amount)>0 THEN SUM(amount-freight_fee-refund_amount) ELSE 0 END END ELSE 0 END FROM $table_order WHERE distribution_user_id=$table_distributor_customer.distributor_user_id AND user_id=$table_distributor_customer.user_id AND state>=20) AS total_deal_amount";
+
+            $info = $distributor_customer_model->getDistributorCustomerInfo($condition, $field);
+
+            if ($info) {
+                $protect_term_desc = null;
+                $valid_term_desc   = null;
+
+                //是否失效判断
+                if ($info['state'] == 1) {
+                    if ($valid_term['content']['days'] == 15 && ($valid_term['content']['days'] - sprintf("%.2f", (time() - $info['create_time']) / 86400)) <= 0) {//invalid_type 1
+                        //有效期已过 动态显示客户失效
+                        $info['state']          = 0;
+                        $info['invalid_time']   = $info['create_time'] + 86400 * 15;
+                        $info['invalid_reason'] = '推广有效期已过期';
+                        $info['invalid_type']   = 1;
+                    }
+                }
+
+                //不失效的才显示保护期和有效期
+                if ($info['state'] != 0) {
+
+                    //保护期判断
+                    if ($protect_term['content']['state'] == 0) {//保护期已关闭
+                        $protect_term_desc = '0天';
+                    } else {
+                        if ($protect_term['content']['days'] == 32000) {//保护期为永久
+                            $protect_term_desc = '永久';
+                        } else {
+                            if (($protect_term['content']['days'] - sprintf("%.2f", (time() - $info['update_time']) / 86400)) <= 0) {
+                                $protect_term_desc = '0天';
+                            } else {
+                                $protect_term_desc = ceil($protect_term['content']['days'] - sprintf("%.2f", (time() - $info['update_time']) / 86400)) . '天';//过”完“一天才减1
+                            }
+                        }
+                    }
+                    $info['protect_term_desc'] = $protect_term_desc;
+
+                    //有效期判断
+                    if ($valid_term['content']['days'] == 15) {
+                        $valid_term_desc = ceil($valid_term['content']['days'] - sprintf("%.2f", (time() - $info['create_time']) / 86400)) . '天';//过”完“一天才减1
+                    } else {
+                        $valid_term_desc = '关系长期有效';
+                    }
+                    $info['valid_term_desc'] = $valid_term_desc;
+                }
+            }
+
+            return $this->send(Code::success, ['info' => $info]);
+        }
+    }
+
+    /**
+//     * 邀请用户注册为分销员自动成为我的下级
+//     * @method GET
+//     * @param int user_id 用户id
+//     * @author 孙泉
+//     * 扫码后 只能邀请非分销员用户(普通用户)  让他们注册成分销员 然后注册完自动成为我的下线
+//     */
+//    public function inviteDistributor(){
+//
+//    }
+    /**
+     * 累计邀请(已邀请的分销员)
+     * @method GET
+     * @author 孙泉
+     * 注释：我是分销员，点击邀请好友齐推广会显示邀请卡，之后分享其他人扫描，他扫描申请分销员，我是他上级，我的分销员中心累计邀请里会显示数字1，点击进入是显示的他
+     */
+    public function distributors(){
+
     }
 
 }

@@ -23,12 +23,14 @@ class Distributor extends Validator
         = [
             'distributor_user_id' => 'require|checkDistributor',
             'user_id'             => 'require|checkUser',
+            'customer_id'         => 'require',
         ];
     //提示
     protected $message
         = [
             'distributor_user_id.require' => '分销员用户id必须',
-            'user_id.require'             => '用户id必填',
+            'user_id.require'             => '用户id必须',
+            'customer_id.require'         => '客户id必须',
         ];
     //场景
     protected $scene
@@ -36,6 +38,9 @@ class Distributor extends Validator
             'inviteCustomer' => [
                 'distributor_user_id',
                 'user_id',
+            ],
+            'customerDetail' => [
+                'customer_id',
             ],
         ];
 

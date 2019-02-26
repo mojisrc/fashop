@@ -279,6 +279,8 @@ class Distributor extends Admin
             //分销员自购分佣
             $distributor_purchase_commission = $distribution_config_model->getDistributionConfigInfo(['sign' => 'distributor_purchase_commission'], '*');
 
+            $distributor_customer_model = new \App\Model\DistributorCustomer;
+
             //开启分销员自购后 分销员自己和自己绑定客户关系 后台成为分销员审核通过就绑定的哦
             if ($distributor_purchase_commission['content']['state'] == 1 && $post['state'] == 1) {
                 //查询用户有没有绑定过分销员
@@ -288,6 +290,9 @@ class Distributor extends Admin
                     $update_data                 = [];
                     $update_data['state']        = 0;
                     $update_data['invalid_time'] = time();
+                    $update_data['invalid_reason'] = '客户与自己绑定了客户关系';
+                    $update_data['invalid_type']   = 2;//失效类型 1保护期过期 2客户与自己绑定了客户关系 3客户绑定其他分销员
+
                     $result                      = $distributor_customer_model->updateDistributorCustomer(['id' => $distributor_customer['id']], $update_data);
                     if (!$result) {
                         $distributor_model->rollback();
