@@ -110,7 +110,7 @@ class Page extends Validate
 //					if( $goods_result !== true ){
 //						return '商品列表'.$goods_result;
 //					}
-					if( empty( $body['options'] ) || !is_array( $body['options'] ) || count( $body['options'] ) != 4 ){
+					if( empty( $body['options'] ) || !is_array( $body['options'] )  ){
 						return '商品列表配置项有误';
 					}
 					if( !isset( $body['options']['goods_sort'] ) ){
