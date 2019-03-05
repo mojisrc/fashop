@@ -73,7 +73,7 @@ class Distributor extends Admin
         //total_deal_amount     累计成交金额
         $field = $field . ",
         (SELECT COUNT(id) FROM $table_order WHERE (distribution_user_id=distributor.user_id AND state>=20) OR (user_id=distributor.user_id AND state>=20)) AS total_deal_num,
-        
+
         (SELECT CASE WHEN refund_state=0 THEN CASE WHEN revise_amount>0 THEN SUM(revise_amount-revise_freight_fee) ELSE SUM(amount-freight_fee) END WHEN refund_state=1 THEN CASE WHEN revise_amount>0 THEN CASE WHEN SUM(revise_amount-revise_freight_fee-refund_amount)>0 THEN SUM(revise_amount-revise_freight_fee-refund_amount) ELSE 0 END ELSE CASE WHEN SUM(amount-freight_fee-refund_amount)>0 THEN SUM(amount-freight_fee-refund_amount) ELSE 0 END END ELSE 0 END FROM $table_order WHERE (distribution_user_id=distributor.user_id AND state>=20) OR (user_id=distributor.user_id AND state>=20)) AS total_deal_amount";
 
         $order = 'distributor.id desc';
@@ -126,7 +126,7 @@ class Distributor extends Admin
         //total_consume_amount  累计消费金额
         $field = $field . ",
         (SELECT COUNT(id) FROM $table_order WHERE user_id=distributor.user_id AND state>=20 AND CASE WHEN revise_amount>0 THEN revise_amount>refund_amount ELSE amount>refund_amount END) AS total_consume_num,
-        
+
         (SELECT CASE WHEN refund_state=0 THEN CASE WHEN revise_amount>0 THEN SUM(revise_amount) ELSE SUM(amount) END WHEN refund_state=1 THEN CASE WHEN revise_amount>0 THEN SUM(revise_amount-refund_amount) ELSE SUM(amount-refund_amount) END ELSE 0 END FROM $table_order WHERE user_id=distributor.user_id AND state>=20) AS total_consume_amount";
 
         $order = 'distributor.id desc';
@@ -280,36 +280,58 @@ class Distributor extends Admin
             $distributor_purchase_commission = $distribution_config_model->getDistributionConfigInfo(['sign' => 'distributor_purchase_commission'], '*');
 
             $distributor_customer_model = new \App\Model\DistributorCustomer;
+            //查询用户有没有绑定过分销员
+            $distributor_customer = $distributor_customer_model->where(['user_id' => $distributor_info['user_id']])->field('*')->order('id desc')->find();
 
             //开启分销员自购后 分销员自己和自己绑定客户关系 后台成为分销员审核通过就绑定的哦
-            if ($distributor_purchase_commission['content']['state'] == 1 && $post['state'] == 1) {
-                //查询用户有没有绑定过分销员
-                $distributor_customer = $distributor_customer_model->getDistributorCustomerInfo(['user_id' => $distributor_info['user_id']]);
-                if ($distributor_customer) {
-                    //设置失效
-                    $update_data                 = [];
-                    $update_data['state']        = 0;
-                    $update_data['invalid_time'] = time();
-                    $update_data['invalid_reason'] = '客户与自己绑定了客户关系';
-                    $update_data['invalid_type']   = 2;//失效类型 1保护期过期 2客户与自己绑定了客户关系 3客户绑定其他分销员
+            if ($post['state'] == 1) {
+                if ($distributor_purchase_commission['content']['state'] == 1) {
 
-                    $result                      = $distributor_customer_model->updateDistributorCustomer(['id' => $distributor_customer['id']], $update_data);
+                    if ($distributor_customer) {
+                        //设置失效
+                        $update_data                   = [];
+                        $update_data['state']          = 0;
+                        $update_data['invalid_time']   = time();
+                        $update_data['invalid_reason'] = '客户与自己绑定了客户关系';
+                        $update_data['invalid_type']   = 2;
+
+                        $result = $distributor_customer_model->updateDistributorCustomer(['id' => $distributor_customer['id']], $update_data);
+                        if (!$result) {
+                            $distributor_model->rollback();
+                            return $this->send(Code::error);
+                        }
+                    }
+
+                    //自己绑自己
+                    $insert_data['distributor_user_id'] = $distributor_info['user_id'];
+                    $insert_data['user_id']             = $distributor_info['user_id'];
+                    $insert_data['state']               = 1;
+                    $insert_data['create_time']         = time();
+                    $insert_data['update_time']         = time();
+                    $result                             = $distributor_customer_model->insertDistributorCustomer($insert_data);
                     if (!$result) {
                         $distributor_model->rollback();
                         return $this->send(Code::error);
                     }
-                }
+                } else {
+                    //分销员建立客户关系
+                    $distributor_establish_customer_relation = $distribution_config_model->getDistributionConfigInfo(['sign' => 'distributor_establish_customer_relation'], '*');
+                    if ($distributor_establish_customer_relation['content']['state'] == 0) {
+                        if ($distributor_customer) {
+                            //设置失效
+                            $update_data                   = [];
+                            $update_data['state']          = 0;
+                            $update_data['invalid_time']   = time();
+                            $update_data['invalid_reason'] = '后台关闭分销员建立客户关系，客户自己成为分销员，关系失效';
+                            $update_data['invalid_type']   = 4;
 
-                //自己绑自己
-                $insert_data['distributor_user_id'] = $distributor_info['user_id'];
-                $insert_data['user_id']             = $distributor_info['user_id'];
-                $insert_data['state']               = 1;
-                $insert_data['create_time']         = time();
-                $insert_data['update_time']         = time();
-                $result                             = $distributor_customer_model->insertDistributorCustomer($insert_data);
-                if (!$result) {
-                    $distributor_model->rollback();
-                    return $this->send(Code::error);
+                            $result = $distributor_customer_model->updateDistributorCustomer(['id' => $distributor_customer['id']], $update_data);
+                            if (!$result) {
+                                $distributor_model->rollback();
+                                return $this->send(Code::error);
+                            }
+                        }
+                    }
                 }
             }
 

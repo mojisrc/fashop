@@ -21,7 +21,11 @@ class Distributor extends Server
      * 申请成为分销员
      * a,b都是分销员，b没有上级，b扫a的码   不会成为他的下级   是必须要普通用户才可以的 所以只有在此接口才可以绑上级
      * @method POST
-     * @param int inviter_id 邀请人用户id [必须为状态正常的分销员]
+     * @param int   inviter_id  邀请人用户id [必须为状态正常的分销员]
+     * @param array message     申请成为分销员时，买家需填写信息，最多支持5条。 非必须 看配置要求
+     * 现在普通客户A和分销员B绑定了客户关系 那么普通客户A可以申请成为分销员吗-----可以的
+     *
+     * 现在普通客户A和分销员B绑定了客户关系，那么A可以申请成为分销员，如果您没有开启允许分销员之间建立客户关系，那么A成了分销员以后，和B就没有客户关系了。开启了允许分销员之间建立客户关系，那么我还是B的客户 我成为了分销员
      */
     public function applly()
     {
@@ -33,6 +37,41 @@ class Distributor extends Server
             if (!$user['phone']) {
                 return $this->send(Code::error, [], '绑定手机号，成为分销员');
             }
+            $distribution_config_model = new \App\Model\DistributionConfig;
+
+            $distributor_recruit = $distribution_config_model->getDistributionConfigInfo(['sign' => 'distributor_recruit'], '*');
+            if ($distributor_recruit['content']['state'] == 0) {
+                return $this->send(Code::error, [], '商家未开启分销员招募');
+            }
+
+            $message                   = null;
+            $distributor_write_message = $distribution_config_model->getDistributionConfigInfo(['sign' => 'distributor_write_message'], '*');
+            if ($distributor_write_message['content']['state'] == 1) {
+                if (!isset($post['message'])) {
+                    if (count($post['message']) > 5) {
+                        return $this->apiReturn(array('errmsg' => '信息最多5条'), -1);
+                    }
+                    $message = $post['message'];
+                } else {
+                    return $this->apiReturn(array('errmsg' => '信息必须'), -1);
+                }
+            }
+
+            //分销员审核 state:0关闭  1开启
+            $distributor_review = $distribution_config_model->getDistributionConfigInfo(['sign' => 'distributor_review'], '*');
+            if ($distributor_review['content']['state'] == 0) {
+                $state = 1;//0 待审核 1审核通过 2审核拒绝
+
+            } else {
+                //审核方式 state:0 automatic自动审核  1 artificial人工审核
+                $distributor_review_mode = $distribution_config_model->getDistributionConfigInfo(['sign' => 'distributor_review_mode'], '*');
+                if ($distributor_review_mode['content']['state'] == 0) {
+                    $state = 1;//0 待审核 1审核通过 2审核拒绝
+                } else {
+                    $state = 1;//0 待审核 1审核通过 2审核拒绝
+                }
+            }
+
             $distributor_model = new \App\Model\Distributor;
             $inviter_id        = 0;
             if ($post['inviter_id']) {
@@ -41,6 +80,8 @@ class Distributor extends Server
                     $inviter_id = $invite_distributor['user_id'];
                 }
             }
+
+            $distributor_model->startTransaction();
 
             $condition['user_id'] = $user['id'];
             $distributor_info     = $distributor_model->getDistributorInfo($condition, '*');
@@ -56,25 +97,90 @@ class Distributor extends Server
                     $update_data['inviter_id'] = $inviter_id;
                 }
 
-                $update_data['state'] = 0;
-                $result               = $distributor_model->updateDistributor(['id' => $distributor_info['id']], $update_data);
+                $update_data['state']   = $state;
+                $update_data['message'] = $message;
+
+                $result = $distributor_model->updateDistributor(['id' => $distributor_info['id']], $update_data);
 
             } else {
                 $insert_data['user_id']     = $user['id'];
                 $insert_data['nickname']    = $user['phone'];
                 $insert_data['inviter_id']  = $inviter_id;
-                $insert_data['state']       = 0;
+                $insert_data['state']       = $state;
                 $insert_data['is_retreat']  = 0;
                 $insert_data['level']       = 1;
+                $insert_data['message']     = $message;
                 $insert_data['create_time'] = time();
                 $result                     = $distributor_model->insertDistributor($insert_data);
             }
-
-            if ($result) {
-                return $this->send(Code::success);
-            } else {
+            if (!$result) {
+                $distributor_model->rollback();
                 return $this->send(Code::error);
             }
+
+            if ($state == 1) {
+                //分销员自购分佣
+                $distributor_purchase_commission = $distribution_config_model->getDistributionConfigInfo(['sign' => 'distributor_purchase_commission'], '*');
+
+                $distributor_customer_model = new \App\Model\DistributorCustomer;
+                //查询用户有没有绑定过分销员
+                $distributor_customer = $distributor_customer_model->where(['user_id' => $user['id']])->field('*')->order('id desc')->find();
+
+                //开启分销员自购后 就算开启了分销员建立客户关系，下级成为分销员的时候也会立即和自己绑定客户关系，只能自己绑自己！
+                if ($distributor_purchase_commission['content']['state'] == 1) {
+
+                    if ($distributor_customer) {
+                        //设置失效
+                        $update_data                   = [];
+                        $update_data['state']          = 0;
+                        $update_data['invalid_time']   = time();
+                        $update_data['invalid_reason'] = '客户与自己绑定了客户关系';
+                        $update_data['invalid_type']   = 2;
+
+                        $result = $distributor_customer_model->updateDistributorCustomer(['id' => $distributor_customer['id']], $update_data);
+                        if (!$result) {
+                            $distributor_model->rollback();
+                            return $this->send(Code::error);
+                        }
+                    }
+
+                    //自己绑自己
+                    $insert_data                        = [];
+                    $insert_data['distributor_user_id'] = $distributor_info['user_id'];
+                    $insert_data['user_id']             = $distributor_info['user_id'];
+                    $insert_data['state']               = 1;
+                    $insert_data['create_time']         = time();
+                    $insert_data['update_time']         = time();
+                    $result                             = $distributor_customer_model->insertDistributorCustomer($insert_data);
+                    if (!$result) {
+                        $distributor_model->rollback();
+                        return $this->send(Code::error);
+                    }
+
+                } else {
+                    //分销员建立客户关系
+                    $distributor_establish_customer_relation = $distribution_config_model->getDistributionConfigInfo(['sign' => 'distributor_establish_customer_relation'], '*');
+                    if ($distributor_establish_customer_relation['content']['state'] == 0) {
+                        if ($distributor_customer) {
+                            //设置失效
+                            $update_data                   = [];
+                            $update_data['state']          = 0;
+                            $update_data['invalid_time']   = time();
+                            $update_data['invalid_reason'] = '后台关闭分销员建立客户关系，客户自己成为分销员，关系失效';
+                            $update_data['invalid_type']   = 4;
+
+                            $result = $distributor_customer_model->updateDistributorCustomer(['id' => $distributor_customer['id']], $update_data);
+                            if (!$result) {
+                                $distributor_model->rollback();
+                                return $this->send(Code::error);
+                            }
+                        }
+                    }
+                }
+            }
+
+            $distributor_model->commit();
+            return $this->send(Code::success);
         }
     }
 
@@ -101,6 +207,10 @@ class Distributor extends Server
      * 还是这个逻辑  只不过是可能会被别人抢走而已？
      * 1.保护期大于有效期的时候：有效期外，允许别的分销员抢客；2.保护期小于有效期的情况下，保护期外是允许抢客的呢
      * 您好， 开启分销员自购后 分销员自己和自己绑定客户关系  ，是 后台成为分销员审核通过就绑定的哦
+     * 分销员建立客户关系 是指俩分销员之间建立客户关系
+     *
+     * 如果是因为和别人绑定，就会显示 已绑定其他分销员 ，过期的显示是指，没有绑定其他分销员
+     * 是说客户如果本来和A绑定了，但是过了保护期和有效期，这个时候会显示已过期。  但是在过期后，又和别的分销员绑定了，A看到这个客户，就会看到已绑定其他分销员
      */
     public function inviteCustomer()
     {
@@ -152,7 +262,7 @@ class Distributor extends Server
                 $distributor_customer_model = new \App\Model\DistributorCustomer;
 
                 //查询用户有没有绑定过分销员[不区分有效无效]
-                $distributor_customer = $distributor_customer_model->getDistributorCustomerInfo(['user_id' => $post['user_id']]);
+                $distributor_customer = $distributor_customer_model->where(['user_id' => $post['user_id']])->field('*')->order('id desc')->find();
 
                 $distributor_customer->startTransaction();
                 if ($distributor_customer) {
@@ -161,11 +271,9 @@ class Distributor extends Server
                     //过了保护期，客户点击哪个分销员的链接，也是按照最新的规则进行保护的 只不过是可能会被别人抢走而已
                     //如果是同一个分销员的话 直接改 不是的话新增一条 同时把原来的数据更新成失效
                     if ($distributor_customer['distributor_user_id'] == $post['distributor_user_id']) {
-                        $update_data['distributor_user_id'] = $post['distributor_user_id'];
-                        $update_data['user_id']             = $post['user_id'];
-                        $update_data['state']               = 1;
-                        $update_data['update_time']         = time();
-                        $result                             = $distributor_customer_model->updateDistributorCustomer(['id' => $distributor_customer['id']], $update_data);
+                        $update_data['state']       = 1;
+                        $update_data['update_time'] = time();
+                        $result                     = $distributor_customer_model->updateDistributorCustomer(['id' => $distributor_customer['id']], $update_data);
                         if (!$result) {
                             $distributor_customer_model->rollback();
                             return $this->send(Code::error);
@@ -185,7 +293,7 @@ class Distributor extends Server
                         $update_data['state']          = 0;
                         $update_data['invalid_time']   = time();
                         $update_data['invalid_reason'] = '客户绑定其他分销员';
-                        $update_data['invalid_type']   = 3;//失效类型 1保护期过期 2客户与自己绑定了客户关系 3客户绑定其他分销员
+                        $update_data['invalid_type']   = 3;
 
                         $result = $distributor_customer_model->updateDistributorCustomer(['id' => $distributor_customer['id']], $update_data);
                         if (!$result) {
@@ -298,13 +406,13 @@ class Distributor extends Server
             //订单数量：下单的订单数，如果全额退款会剔除 未付款不会统计
             $field = '*,' . "
         (SELECT avatar FROM $table_user_profile WHERE user_id=$table_distributor_customer.user_id) AS user_avatar,
-                    
+
         (SELECT nickname FROM $table_user_profile WHERE user_id=$table_distributor_customer.user_id) AS user_nickname,
-        
+
         IF((SELECT id FROM $table_distributor WHERE user_id=$table_distributor_customer.distributor_user_id AND state=1 AND is_retreat=0)>0,'1','0') AS is_distributor,
-            
+
         (SELECT COUNT(id) FROM $table_order WHERE (refund_state=0 OR (refund_state=1 AND CASE WHEN revise_amount>0 THEN (revise_amount-revise_freight_fee-refund_amount)>0 ELSE (amount-freight_fee-refund_amount)>0 END)) AND distribution_user_id=$table_distributor_customer.distributor_user_id AND user_id=$table_distributor_customer.user_id AND state>=20) AS total_deal_num,
-        
+
         (SELECT CASE WHEN refund_state=0 THEN CASE WHEN revise_amount>0 THEN SUM(revise_amount-revise_freight_fee) ELSE SUM(amount-freight_fee) END WHEN refund_state=1 THEN CASE WHEN revise_amount>0 THEN CASE WHEN SUM(revise_amount-revise_freight_fee-refund_amount)>0 THEN SUM(revise_amount-revise_freight_fee-refund_amount) ELSE 0 END ELSE CASE WHEN SUM(amount-freight_fee-refund_amount)>0 THEN SUM(amount-freight_fee-refund_amount) ELSE 0 END END ELSE 0 END FROM $table_order WHERE distribution_user_id=$table_distributor_customer.distributor_user_id AND user_id=$table_distributor_customer.user_id AND state>=20) AS total_deal_amount";
 
             $list = $distributor_customer_model->withTotalCount()->getDistributorCustomerList($condition, $field, 'create_time desc');
@@ -395,13 +503,13 @@ class Distributor extends Server
             //订单数量：下单的订单数，如果全额退款会剔除 未付款不会统计
             $field = '*,' . "
         (SELECT avatar FROM $table_user_profile WHERE user_id=$table_distributor_customer.user_id) AS user_avatar,
-                    
+
         (SELECT nickname FROM $table_user_profile WHERE user_id=$table_distributor_customer.user_id) AS user_nickname,
-        
+
         IF((SELECT id FROM $table_distributor WHERE user_id=$table_distributor_customer.distributor_user_id AND state=1 AND is_retreat=0)>0,'1','0') AS is_distributor,
-            
+
         (SELECT COUNT(id) FROM $table_order WHERE (refund_state=0 OR (refund_state=1 AND CASE WHEN revise_amount>0 THEN (revise_amount-revise_freight_fee-refund_amount)>0 ELSE (amount-freight_fee-refund_amount)>0 END)) AND distribution_user_id=$table_distributor_customer.distributor_user_id AND user_id=$table_distributor_customer.user_id AND state>=20) AS total_deal_num,
-        
+
         (SELECT CASE WHEN refund_state=0 THEN CASE WHEN revise_amount>0 THEN SUM(revise_amount-revise_freight_fee) ELSE SUM(amount-freight_fee) END WHEN refund_state=1 THEN CASE WHEN revise_amount>0 THEN CASE WHEN SUM(revise_amount-revise_freight_fee-refund_amount)>0 THEN SUM(revise_amount-revise_freight_fee-refund_amount) ELSE 0 END ELSE CASE WHEN SUM(amount-freight_fee-refund_amount)>0 THEN SUM(amount-freight_fee-refund_amount) ELSE 0 END END ELSE 0 END FROM $table_order WHERE distribution_user_id=$table_distributor_customer.distributor_user_id AND user_id=$table_distributor_customer.user_id AND state>=20) AS total_deal_amount";
 
             $info = $distributor_customer_model->getDistributorCustomerInfo($condition, $field);
@@ -505,7 +613,7 @@ class Distributor extends Server
             //total_deal_amount     累计成交金额
             $field = $field . ",
         (SELECT COUNT(id) FROM $table_order WHERE (distribution_user_id=distributor.user_id AND state>=20) OR (user_id=distributor.user_id AND state>=20) AND distribution_invite_user_id=$user_id) AS total_deal_num,
-        
+
         (SELECT CASE WHEN refund_state=0 THEN CASE WHEN revise_amount>0 THEN SUM(revise_amount-revise_freight_fee) ELSE SUM(amount-freight_fee) END WHEN refund_state=1 THEN CASE WHEN revise_amount>0 THEN CASE WHEN SUM(revise_amount-revise_freight_fee-refund_amount)>0 THEN SUM(revise_amount-revise_freight_fee-refund_amount) ELSE 0 END ELSE CASE WHEN SUM(amount-freight_fee-refund_amount)>0 THEN SUM(amount-freight_fee-refund_amount) ELSE 0 END END ELSE 0 END FROM $table_order WHERE (distribution_user_id=distributor.user_id AND state>=20) OR (user_id=distributor.user_id AND state>=20) AND distribution_invite_user_id=$user_id) AS total_deal_amount";
 
             $order = 'distributor.id desc';
@@ -568,11 +676,11 @@ class Distributor extends Server
             //商品佣金 和 邀请奖励
             $field = $field . ",
         (SELECT (CASE WHEN goods_revise_price>0 THEN TRUNCATE(SUM((goods_revise_price-refund_amount)*distribution_ratio/100),2) ELSE TRUNCATE(SUM((goods_pay_price-refund_amount)*distribution_ratio/100),2) END) FROM $table_order_goods WHERE CASE WHEN goods_revise_price>0 THEN (goods_revise_price-refund_amount)>0 ELSE (goods_pay_price-refund_amount)>0 END AND order_id IN (SELECT group_concat(id) FROM $table_order WHERE distribution_user_id=$user_id AND state>=20 AND pay_name='online' AND id=order.id AND CASE WHEN revise_amount>0 THEN (revise_amount-revise_freight_fee-refund_amount)>0 ELSE (amount-freight_fee-refund_amount)>0 END)) AS goods_commission,
-        
+
               (SELECT (CASE WHEN goods_revise_price>0 THEN TRUNCATE(SUM((goods_revise_price-refund_amount)*distribution_invite_ratio/100),2) ELSE TRUNCATE(SUM((goods_pay_price-refund_amount)*distribution_invite_ratio/100),2) END) FROM $table_order_goods WHERE CASE WHEN goods_revise_price>0 THEN (goods_revise_price-refund_amount)>0 ELSE (goods_pay_price-refund_amount)>0 END AND order_id IN (SELECT group_concat(id) FROM $table_order WHERE distribution_invite_user_id=$user_id AND state>=20 AND pay_name='online' AND id=order.id AND CASE WHEN revise_amount>0 THEN (revise_amount-revise_freight_fee-refund_amount)>0 ELSE (amount-freight_fee-refund_amount)>0 END)) AS invite_amount," .
                 "
         (SELECT phone FROM $table_user WHERE id=order.distribution_user_id) AS distributor_phone,
-        
+
         (SELECT nickname FROM $table_distributor WHERE user_id=order.distribution_user_id) AS distributor_nickname";
 
 
