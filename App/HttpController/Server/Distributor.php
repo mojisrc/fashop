@@ -63,6 +63,12 @@ class Distributor extends Server
                 $state = 1;//0 待审核 1审核通过 2审核拒绝
 
             } else {
+                //TODO distributor_join_threshold 分销员加入门槛  差一个分销员门槛没写
+                //不管自动审核还是人工审核 只要开启了分销员审核 申请时都必须验证门槛
+
+                $distributor_join_threshold = $distribution_config_model->getDistributionConfigInfo(['sign' => 'distributor_join_threshold'], '*');
+
+
                 //审核方式 state:0 automatic自动审核  1 artificial人工审核
                 $distributor_review_mode = $distribution_config_model->getDistributionConfigInfo(['sign' => 'distributor_review_mode'], '*');
                 if ($distributor_review_mode['content']['state'] == 0) {
