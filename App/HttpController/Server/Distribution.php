@@ -116,7 +116,28 @@ class Distribution extends Server
         $condition['goods.stock']                = ['>', 0]; //查询库存大于0
         $condition['distribution_goods.is_show'] = 1;
         $field                                   = 'distribution_goods.*,goods.title AS goods_title,goods.img AS goods_img,goods.price AS goods_price,TRUNCATE(goods.price*distribution_goods.ratio/100,2) AS commission';
-        $order                                   = 'commission desc';
+
+        $distribution_config_model = new \App\Model\DistributionConfig;
+        //商品默认排序 sort:1商品佣金越高越靠前 2商品价格越高越靠前 3商品销量越高越靠前 4商品上架越晚越靠前
+        $goods_default_sort = $distribution_config_model->getDistributionConfigInfo(['sign' => 'goods_default_sort'], '*');
+        switch ($goods_default_sort) {
+            case 1:
+                $order = 'commission desc';
+                break;
+            case 2:
+                $order = 'goods.price desc';
+                break;
+            case 3:
+                $order = 'goods.sale_num desc';
+                break;
+            case 4:
+                $order = 'goods.create_time desc';
+                break;
+            default:
+                $order = 'commission desc';
+                break;
+        }
+
         if (isset($get['sort_type'])) {
             switch ($get['sort_type']) {
                 case 1:

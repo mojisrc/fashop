@@ -19,7 +19,7 @@ namespace App\Model;
 class Distributor extends Model
 {
 	protected $softDelete = true;
-	protected $jsonFields = ['upgrade_rules'];
+	protected $jsonFields = ['upgrade_rules','message'];
 
 	/**
 	 * 列表
