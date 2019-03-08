@@ -63,11 +63,58 @@ class Distributor extends Server
                 $state = 1;//0 待审核 1审核通过 2审核拒绝
 
             } else {
-                //TODO distributor_join_threshold 分销员加入门槛  差一个分销员门槛没写
                 //不管自动审核还是人工审核 只要开启了分销员审核 申请时都必须验证门槛
-
+                //分销员加入门槛 type:1购买商品 2消费金额大于 XXX元 3消费笔数大于 XXX笔 多选
+                //[cost_amount:消费金额]  [cost_num:消费笔数]
                 $distributor_join_threshold = $distribution_config_model->getDistributionConfigInfo(['sign' => 'distributor_join_threshold'], '*');
+                if (in_array(1, $distributor_join_threshold['content']['type'])) {
+                    $distributor_threshold_goods_model = new \App\Model\DistributorThresholdGoods;
+                    $goods_model                       = new \App\Model\Goods;
+                    $order_goods_model                 = new \App\Model\OrderGoods;
 
+                    $have_goods_ids = $distributor_threshold_goods_model->getDistributorThresholdGoodsColumn([], 'goods_id');
+                    if ($have_goods_ids) {
+                        //只查询了再门槛商品里的同时此时在线销售的商品
+                        $goods_condition['id']         = ['in', $have_goods_ids];
+                        $goods_condition['is_on_sale'] = 1;
+                        $goods_condition['stock']      = ['>', 0];
+                        $goods_ids                     = $goods_model->getGoodsColumn($goods_condition, 'id');
+                        if ($goods_ids) {
+                            //退过款的都不算达到门槛
+                            $order_goods_condition['order_goods.goods_id'] = ['in', $goods_ids];
+                            $order_goods_condition['order.state']          = 40;
+                            $order_goods_condition['order.refund_amount']  = 0;
+                            $order_goods_condition['order.lock_state']     = 0;
+                            $order_goods_condition['order.user_id']        = $user['id'];
+                            $bug_goods_ids                                 = $order_goods_model->join('order', 'order_goods.order_id = order.id', 'LEFT')->where($order_goods_condition)->group('order_goods.goods_id')->column('goods_id');
+                            if (!$bug_goods_ids || count($goods_ids) != count($bug_goods_ids)) {
+                                return $this->send(Code::error, [], '申请成为分销员，需要购买指定商品');
+                            }
+                        }
+                    }
+                }
+
+                $order_model = new \App\Model\Order;
+                if (in_array(2, $distributor_join_threshold['content']['type'])) {
+                    $distributor_join_threshold['content']['cost_amount'];
+                    //不区分退不退款  分销员加入门槛中消费金额指的是支付的实际金额
+                    $order_condition['order.state']   = ['>=', 20];
+                    $order_condition['order.user_id'] = $user['id'];
+                    $cost_amount                      = $order_model->where($order_condition)->sum('amount');
+                    if ($cost_amount < $distributor_join_threshold['content']['cost_amount']) {
+                        return $this->send(Code::error, [], '申请成为分销员，消费金额需大于等于' . $distributor_join_threshold['content']['cost_amount'] . '元');
+                    }
+                }
+
+                if (in_array(3, $distributor_join_threshold['content']['type'])) {
+                    $order_condition['order.state']   = ['>=', 20];
+                    $order_condition['order.user_id'] = $user['id'];
+                    $cost_num                         = $order_model->where($order_condition)->count();
+
+                    if ($cost_num < $distributor_join_threshold['content']['cost_num']) {
+                        return $this->send(Code::error, [], '申请成为分销员，消费笔数需大于等于' . $distributor_join_threshold['content']['cost_num'] . '笔');
+                    }
+                }
 
                 //审核方式 state:0 automatic自动审核  1 artificial人工审核
                 $distributor_review_mode = $distribution_config_model->getDistributionConfigInfo(['sign' => 'distributor_review_mode'], '*');

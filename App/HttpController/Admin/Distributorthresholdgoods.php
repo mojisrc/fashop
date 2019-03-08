@@ -110,8 +110,7 @@ class Distributorthresholdgoods extends Admin
 
             $have_goods_ids = $distributor_threshold_goods_model->getDistributorThresholdGoodsColumn([], 'goods_id');
             if ($have_goods_ids) {
-                $exclude_goods_ids = array_column($distributor_threshold_goods_list, 'goods_id');
-                $goods_ids         = array_diff($post['goods_ids'], $exclude_goods_ids);
+                $goods_ids = array_diff($post['goods_ids'], $have_goods_ids);
                 if (!$goods_ids) {
                     return $this->send(Code::param_error, [], '所选商品全部已存在');
                 }
