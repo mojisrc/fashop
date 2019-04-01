@@ -71,7 +71,7 @@ class Buy extends Server
 		} else{
 			try{
 				$user      = $this->getRequestUser();
-				$model_buy = new \App\Biz\Server\Buy\Buy( [
+                $model_buy = new \App\Biz\Server\Buy\Buy( [
 					'user_id'    => $user['id'],
 					'cart_ids'   => $this->post['cart_ids'],
 					'address_id' => $this->post['address_id'],

@@ -145,7 +145,8 @@ class Distributiongoods extends Admin
 					$insert_data['invite_ratio'] = floatval( $post['invite_ratio'] );
 					$insert_data['is_show']      = intval( $post['is_show'] );
 					$insert_data['type']         = intval( $post['type'] );
-					$insert_data['update_time']  = time();
+                    $insert_data['create_time']  = time();
+                    $insert_data['update_time']  = time();
 					$result                      = $distribution_goods_model->insertDistributionGoods( $insert_data );
 				} else{
 					$update_data['ratio']        = floatval( $post['ratio'] );

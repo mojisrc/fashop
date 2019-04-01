@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpunit bootstrap="vendor/autoload.php">
+	<!--<php>-->
+	<!--<var name="DB_DSN" value="mysql:dbname=fashop;host=" />-->
+	<!--<var name="DB_USER" value="" />-->
+	<!--<var name="DB_PASSWD" value='' />-->
+	<!--<var name="DB_NAME" value="" />-->
+	<!--</php>-->
+	<testsuite>
+		<directory suffix="Test.php">./tests</directory>
+	</testsuite>
+	<filter>
+		<whitelist processUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">./App</directory>
+		</whitelist>
+	</filter>
+	<logging>
+		<!--<log type="coverage-html" target="./tests/tmp" charset="UTF-8"/>-->
+		<!--<log type="testdox-html" target="tests/tmp/testdox.html"/>-->
+		<log type="junit" target="tests/tmp/logfile.xml" logIncompleteSkipped="false"/>
+	</logging>
+
+</phpunit>

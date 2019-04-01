@@ -108,15 +108,16 @@ class Distribution extends Admin
 
         //total_deal_num        订单数   = 累计成交笔数
         //total_deal_amount     订单金额  = 累计成交金额
+
         $field = $field . ",
         (SELECT COUNT(id) FROM $table_order WHERE (distribution_user_id=distributor.user_id AND state>=20) OR (user_id=distributor.user_id AND state>=20)) AS total_deal_num,
         
         (SELECT CASE WHEN refund_state=0 THEN CASE WHEN revise_amount>0 THEN SUM(revise_amount-revise_freight_fee) ELSE SUM(amount-freight_fee) END WHEN refund_state=1 THEN CASE WHEN revise_amount>0 THEN CASE WHEN SUM(revise_amount-revise_freight_fee-refund_amount)>0 THEN SUM(revise_amount-revise_freight_fee-refund_amount) ELSE 0 END ELSE CASE WHEN SUM(amount-freight_fee-refund_amount)>0 THEN SUM(amount-freight_fee-refund_amount) ELSE 0 END END ELSE 0 END FROM $table_order WHERE (distribution_user_id=distributor.user_id AND state>=20) OR (user_id=distributor.user_id AND state>=20)) AS total_deal_amount,
         
-        (SELECT CASE WHEN goods_revise_price>0 THEN TRUNCATE((goods_revise_price-refund_amount)*distribution_ratio/100,2) ELSE TRUNCATE((goods_pay_price-refund_amount)*distribution_ratio/100,2) END FROM $table_order_goods WHERE CASE WHEN goods_revise_price>0 THEN (goods_revise_price-refund_amount)>0 ELSE (goods_pay_price-refund_amount)>0 END AND order_id IN (SELECT group_concat(id) FROM $table_order WHERE distribution_user_id=distributor.user_id AND state>=20 AND pay_name='online'
+        (SELECT CASE WHEN goods_revise_price>0 THEN TRUNCATE(SUM((goods_revise_price-refund_amount)*distribution_ratio/100),2) ELSE TRUNCATE(SUM((goods_pay_price-refund_amount)*distribution_ratio/100),2) END FROM $table_order_goods WHERE CASE WHEN goods_revise_price>0 THEN (goods_revise_price-refund_amount)>0 ELSE (goods_pay_price-refund_amount)>0 END AND order_id IN (SELECT group_concat(id) FROM $table_order WHERE distribution_user_id=distributor.user_id AND state>=20 AND pay_name='online'
     AND distribution_settlement=0 AND CASE WHEN revise_amount>0 THEN (revise_amount-revise_freight_fee-refund_amount)>0 ELSE (amount-freight_fee-refund_amount)>0 END)) AS unsettlement_amount,
     
-        ((SELECT CASE WHEN goods_revise_price>0 THEN TRUNCATE((goods_revise_price-refund_amount)*distribution_ratio/100,2) ELSE TRUNCATE((goods_pay_price-refund_amount)*distribution_ratio/100,2) END FROM $table_order_goods WHERE CASE WHEN goods_revise_price>0 THEN (goods_revise_price-refund_amount)>0 ELSE (goods_pay_price-refund_amount)>0 END AND order_id IN (SELECT group_concat(id) FROM $table_order WHERE distribution_user_id=distributor.user_id AND state>=20 AND pay_name='online'
+        ((SELECT CASE WHEN goods_revise_price>0 THEN TRUNCATE(SUM((goods_revise_price-refund_amount)*distribution_ratio/100),2) ELSE TRUNCATE(SUM((goods_pay_price-refund_amount)*distribution_ratio/100),2) END FROM $table_order_goods WHERE CASE WHEN goods_revise_price>0 THEN (goods_revise_price-refund_amount)>0 ELSE (goods_pay_price-refund_amount)>0 END AND order_id IN (SELECT group_concat(id) FROM $table_order WHERE distribution_user_id=distributor.user_id AND state>=20 AND pay_name='online'
     AND distribution_settlement=1 AND CASE WHEN revise_amount>0 THEN (revise_amount-revise_freight_fee-refund_amount)>0 ELSE (amount-freight_fee-refund_amount)>0 END))) AS settlement_amount";
 
         $order = 'distributor.id desc';
