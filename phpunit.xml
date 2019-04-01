@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <phpunit bootstrap="vendor/autoload.php">
 	<!--<php>-->
-	<!--<var name="DB_DSN" value="mysql:dbname=fashop;host=47.75.164.76" />-->
-	<!--<var name="DB_USER" value="root" />-->
-	<!--<var name="DB_PASSWD" value='root' />-->
-	<!--<var name="DB_NAME" value="fashop" />-->
+	<!--<var name="DB_DSN" value="mysql:dbname=fashop;host=" />-->
+	<!--<var name="DB_USER" value="" />-->
+	<!--<var name="DB_PASSWD" value='' />-->
+	<!--<var name="DB_NAME" value="" />-->
 	<!--</php>-->
 	<testsuite>
 		<directory suffix="Test.php">./tests</directory>
