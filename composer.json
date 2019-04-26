@@ -12,6 +12,20 @@
         "name": "hanwenbo",
         "email": "9476400@qq.com"
     }],
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.laravel-china.org"
+        },
+        "hanwenbo/ezswoole":{
+            "type": "vcs",
+            "url": "https://github.com/hanwenbo/ezswoole"
+        },
+        "easyswoole/pay":{
+            "type": "vcs",
+            "url": "https://github.com/hanwenbo/pay"
+        }
+    },
     "require": {
         "php": "^7.2",
         "hanwenbo/ezswoole": "v3.x-dev",
@@ -26,7 +40,8 @@
         "phpoffice/phpspreadsheet":"^1.6.0",
         "easyswoole/curl": "^1.0",
         "hanwenbo/policy": "^1.0",
-        "hanwenbo/reflect": "^1.0"
+        "hanwenbo/reflect": "^1.0",
+        "easyswoole/mysqli": "dev-master"
     },
     "autoload": {
         "psr-4": {
@@ -38,24 +53,7 @@
         }
     },
     "require-dev": {
+        "ext-json": "^1.6",
         "easyswoole/swoole-ide-helper": "^1.2"
-    },
-    "repositories": {
-        "packagist": {
-            "type": "composer",
-            "url": "https://packagist.laravel-china.org"
-        },
-        "hanwenbo/ezswoole":{
-            "type": "vcs",
-            "url": "https://github.com/hanwenbo/ezswoole"
-        },
-        "easyswoole/mysqli":{
-            "type": "vcs",
-            "url": "https://github.com/hanwenbo/mysqli"
-        },
-        "easyswoole/pay":{
-            "type": "vcs",
-            "url": "https://github.com/hanwenbo/pay"
-        }
     }
 }
