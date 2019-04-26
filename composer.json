@@ -17,6 +17,10 @@
             "type": "composer",
             "url": "https://packagist.laravel-china.org"
         },
+        "easyswoole/mysqli":{
+            "type": "vcs",
+            "url": "https://github.com/hanwenbo/mysqli"
+        },
         "hanwenbo/ezswoole":{
             "type": "vcs",
             "url": "https://github.com/hanwenbo/ezswoole"
@@ -41,7 +45,7 @@
         "easyswoole/curl": "^1.0",
         "hanwenbo/policy": "^1.0",
         "hanwenbo/reflect": "^1.0",
-        "easyswoole/mysqli": "dev-master"
+        "easyswoole/mysqli": "dev-master as 1"
     },
     "autoload": {
         "psr-4": {
