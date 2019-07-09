@@ -1,17 +1,13 @@
 {
     "name": "fashop",
-    "description": "FaShop商城系统",
+    "description": "fashop",
     "type": "project",
-    "keywords": [
-        "fashop",
-        "shop",
-        "mojikeji"
+    "authors": [
+        {
+            "name": "hanwenbo",
+            "email": "9476400@qq.com"
+        }
     ],
-    "homepage": "http://www.fashop.cn/",
-    "authors": [{
-        "name": "hanwenbo",
-        "email": "9476400@qq.com"
-    }],
     "repositories": {
         "packagist": {
             "type": "composer",
@@ -28,6 +24,10 @@
         "easyswoole/pay":{
             "type": "vcs",
             "url": "https://github.com/hanwenbo/pay"
+        },
+        "jpush/jpush":{
+            "type": "vcs",
+            "url": "https://github.com/hanwenbo/jpush-api-php-client"
         }
     },
     "require": {
@@ -39,20 +39,22 @@
         "intervention/image": "^2.4",
         "overtrue/easy-sms": "^0.0.9",
         "hashids/hashids": "^2.0",
-        "yansongda/pay": "v2.6.1",
         "guzzlehttp/guzzle": "~6.0",
-        "phpoffice/phpspreadsheet":"^1.6.0",
+        "phpoffice/phpspreadsheet": "^1.6.0",
         "easyswoole/curl": "^1.0",
         "hanwenbo/policy": "^1.0",
         "hanwenbo/reflect": "^1.0",
-        "easyswoole/mysqli": "dev-master as 1"
+        "aliyuncs/oss-sdk-php": "^2.3",
+        "easyswoole/mysqli": "dev-master as 1",
+        "jpush/jpush": "*",
+        "easyswoole/socket": "^1.1"
     },
     "autoload": {
         "psr-4": {
             "App\\": "App/",
             "Model\\": "App/Model/",
             "Logic\\": "App/Logic/",
-            "FaShopTest\\":"tests/",
+            "FaShopTest\\": "tests/",
             "Install\\": "Install/"
         }
     },
