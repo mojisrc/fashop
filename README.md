@@ -53,39 +53,6 @@ App项目地址：[https://github.com/mojisrc/fashop-client-react-native](https:
 - 还有....如果您有什么需求，可以进群提出，说不定我们会优先处理， QQ交流群：632466687
 
 
-
-```bash
-# 每次做项目只需要执行一次，安装swoole环境
-docker-compose up swoole
-# 开启
-docker-compose start swoole
-# 进入swoolel的docker内部可以执行命令行
-docker-compose exec swoole bash
-
-# php依赖安装
-composer install
-# 第一次执行的话需要
-php vendor/bin/easyswoole install
-# 以后每次调试运行是
-php easyswoole start
-
-```
-虽然配置里的端口是9510，但那是docker内部的，映射出来是9511（可随意改）,docker-compose.yml定义了
-```bash
-swoole:
-    image: ezkuangren/swoole4
-    ports:
-      - "9511:9510"
-    volumes:
-      - ./:/var/www/project
-    stdin_open: true
-    tty: true
-    privileged: true
-```
-那么访问的端口号就是127.0.0.1:9511
-
-
-
 ## 后台界面
 <p>
 <img src="https://ws4.sinaimg.cn/large/006tNbRwgy1fvews9zi8kj31kw0ttgtr.jpg" width="260px">
