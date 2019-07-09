@@ -14,8 +14,6 @@ docker-compose exec swoole bash
 
 composer install
 
-php vendor/bin/easyswoole install
-
 php easyswoole start
 ```
 ## 访问

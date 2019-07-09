@@ -10,7 +10,6 @@ composer.lock
 # easySwoole
 /Log
 /Temp
-easyswoole
 easyswoole.install
 src/swoole_log.txt
 
